@@ -1,0 +1,97 @@
+.input_com_style {
+	border-color:#d6b77f #f6e8b2 #f6e8b2 #d6b77f;
+	border-width:1px;
+	font-family: Lucida Grande;
+    font-size: 15px;
+    font-weight:bold;
+	border-style:solid;
+	color:#754820;
+	background:  url(../../images/bg_white_opacity.png) top left repeat;
+}
+.t_a_r {
+	text-align:right;
+}
+/* Arena block the game   */
+.create_game .help {
+	background:  url(../../images/pregame/help_sign.png) top left no-repeat;
+	width:20px;
+	height:26px;
+	position:absolute;
+	left:530px;
+	cursor:pointer;
+	top:0px;
+}
+.create_game .textlink {
+	font-family: Lucida Grande;
+	color:#4b4b4b;
+	text-decoration:underline;
+}
+.textlink:hover {color:#ffa800; }
+.create_game .gmsheader {
+	font-family: Lucida Grande;
+    font-size: 15px;
+    font-weight:bold;
+    width:400px;
+    margin-right:140px;
+    float:left;
+    color:#754820;
+}
+.create_game form {
+	margin:0px 0px 10px 0px;
+}
+.create_game table {
+	margin:50px 0px 20px 80px;
+}
+.create_game table td {
+	padding:0px 5px 0px 0px;
+	font-family: Lucida Grande;
+    font-size: 15px;
+    font-weight:bold;
+    color:#754820;
+}
+.create_game .gmsheader .gamename {
+	color:#4b4b4b;
+	font-style:italic;
+	display:inline;
+}
+.create_game .gmstopheader {
+	padding:5px 0px 0px 107px;
+	font-size:26px;
+	width:360px;
+}
+.create_game .gmsunderlined {
+	border-bottom:1px solid #4b4b4b;
+	padding:0px 0px 4px 0px;
+	font-weight:bold;
+	line-height:25px;
+}
+.create_game .gmsunderlined .varo {
+	color:#4b4b4b;
+	display:inline;
+}
+.create_game .content {
+	overflow-y:scroll;
+	overflow-x:hidden;
+	float:left;
+	width:560px;
+	height:355px;
+}
+#spectators {
+	float:left;
+	width:540px;
+	height:90px;
+	padding:5px 0px 5px 0px;
+	overflow-x:scroll;
+	overflow-y:hidden;
+}
+
+.current_game .textlink {
+	float:left;  height:20px;
+	padding:5px 0px 0px 0px;
+}
+.loading{
+	text-decoration:none !important;
+	color: #515150;
+	border: 1px solid #515150;
+	background:  url(../../images/pregame/loading.gif) top left repeat;
+}

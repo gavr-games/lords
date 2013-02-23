@@ -1,0 +1,11 @@
+RewriteEngine on
+#RewriteRule  ^$ /lords/site/index.php
+RewriteRule  ^$ /site/index.php
+#RewriteRule  ^game/mode1$ /lords/game/mode1/game.php
+#RewriteRule  ^game/mode1/$ /lords/game/mode1/game.php
+RewriteRule  ^game/mode1$ /game/mode1/game.php
+RewriteRule  ^game/mode1/$ /game/mode1/game.php
+#RewriteRule  ^game/mode8$ /lords/game/mode8/game.php
+#RewriteRule  ^game/mode8/$ /lords/game/mode8/game.php
+RewriteRule  ^game/mode8$ /game/mode8/game.php
+RewriteRule  ^game/mode8/$ /game/mode8/game.php

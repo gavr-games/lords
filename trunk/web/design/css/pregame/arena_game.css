@@ -1,0 +1,158 @@
+.input_com_style {
+	border-color:#d6b77f #f6e8b2 #f6e8b2 #d6b77f;
+	border-width:1px;
+	border-style:solid;
+	background:  url(../../images/bg_white_opacity.png) top left repeat;
+}
+/* Arena block the game   */
+.current_game .help {
+	background:  url(../../images/pregame/help_sign.png) top left no-repeat;
+	width:20px;
+	height:26px;
+	position:absolute;
+	left:530px;
+	cursor:pointer;
+	top:0px;
+}
+.current_game .tip-wrap {
+	padding:3px;
+	background:  url(../../images/tip_opacity_bg.png) top left repeat;
+	font-family: Lucida Grande;
+    font-size: 14px;
+    position:absolute;
+    top:0px;
+    left:150px;
+    border:0px;
+    z-index:50;
+	-moz-border-radius: 1em;
+	border-radius: 1em;
+}
+.current_game .tip-wrap .tip {
+	width:250px;
+	float:left;
+	padding:20px 10px 20px 10px;
+    border:1px solid #ffd200;
+	-moz-border-radius: 1em;
+	border-radius: 1em;
+	color:#7f7f7f;
+	font-size:12px;
+}
+.current_game .textlink {
+	font-family: Lucida Grande;
+	color:#4b4b4b;
+	text-decoration:underline;
+}
+.textlink:hover {color:#ffa800; }
+.current_game .gmsheader {
+	font-family: Lucida Grande;
+    font-size: 15px;
+    font-weight:bold;
+    width:400px;
+    margin-right:140px;
+    float:left;
+    color:#754820;
+}
+.current_game .gmsheader .gamename {
+    color: #4B4B4B;
+    float: right;
+    font-style: italic;
+    margin-right: 40px;
+    overflow: hidden;
+    width: 200px;
+}
+.current_game .gmstopheader {
+	padding:5px 0px 0px 107px;
+	font-size:26px;
+	width:360px;
+}
+.current_game .gmsunderlined {
+	border-bottom:1px solid #4b4b4b;
+	padding:0px 0px 4px 0px;
+	font-weight:bold;
+	line-height:25px;
+}
+.current_game .gmsunderlined .varo {
+	color:#4b4b4b;
+	display:inline;
+}
+.current_game .content {
+	overflow-y:scroll;
+	overflow-x:hidden;
+	float:left;
+	width:560px;
+	height:355px;
+}
+#spectators {
+	float:left;
+	width:540px;
+	height:90px;
+	padding:5px 0px 5px 0px;
+	overflow-x:scroll;
+	overflow-y:hidden;
+}
+.player_in_game {
+	float:left;
+	width:77px;
+	height:17px;
+	color:#e2c88e;
+	font-size:10px;
+	text-align:center;
+	padding:55px 0px 0px 0px;
+	cursor:move;
+	background:  url(../../images/pregame/arena_game_pl_bg.png) bottom left no-repeat;
+}
+.player_in_game:hover {
+	background:  url(../../images/pregame/arena_game_pl_bg.png) top left no-repeat;
+}
+#trash {
+	background:  url(../../images/pregame/the_door.png) top left no-repeat;
+	width:69px;
+	height:100px;
+	position:absolute;
+	left:430px;
+	top:0px;
+        cursor: pointer;
+}
+
+#teams {
+	float:left; 
+	width:300px;
+	position:relative;
+	overflow-x:scroll;
+	padding:10px 0px 10px 0px;
+}
+#teams .game_team {
+	float:left; 
+	width:81px;
+	padding:2px 4px 0px 2px;
+	margin-right:5px;
+	color:#e2c88e;
+	font-size:10px;
+	text-align:center;
+	background:  url(../../images/pregame/team_header.png) top center no-repeat;
+}
+#teams .game_team .team_game_cont {
+	float:left; 
+	width:78px;
+	min-height:80px;
+	padding:10px 0px 0px 2px;
+	border:1px solid #754921;
+	border-top:none;
+}
+
+.current_game .content .features_cont {
+	float:right;
+	width:220px;
+	padding:10px 10px 0px 10px;
+	color:#754820;
+	font-size:13px;
+	font-family: Lucida Grande;
+}
+.current_game .content .features_cont .input_com_style {
+	width:20px;
+	margin-right:5px;
+}
+.current_game .textlink {
+	float:left;  height:20px;
+	padding:5px 0px 0px 0px;
+}

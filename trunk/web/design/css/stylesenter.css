@@ -1,0 +1,77 @@
+html, body {text-align:left;
+              margin:0px;
+              width:100%;
+              float:left;
+              }
+    body {background:  url(../images/origbg.jpg) top left repeat;
+          }
+  a, a:focus {outline:none;
+              text-decoration:none;}
+  ul {list-style:none;}
+ #topbg {background:  url(../images/origtopbg.jpg)  repeat-x;
+         height:20px;
+         width:100%;}
+ #wrap{width:834px;
+       margin-left:auto;
+       margin-right:auto;
+       }
+ #container {background:  url(../images/WelcomeRegcenter.png)  no-repeat;
+             float:left;
+             width:834px;
+             height:588px;
+             margin-top:5px;
+             }
+ 
+ #main {width:340px;
+        padding:450px 0px 100px 494px;
+        float:left;
+        }
+ #main form {width:334px;
+             font-family:Arial;
+             float:left;
+        }
+ #main .log {width:116px;
+             height:16px;
+             float:left;
+             border:0px;
+             padding:0px 2px 0px 2px;
+             margin:2px 5px 0px 2px;
+             _margin:0px 5px 0px 1px;
+             font-family:Arial;
+             background:none;
+             }
+ #main .pas {width:116px;
+             height:16px;
+             float:left;
+             border:0px;
+             margin-top:2px;
+             font-family:Arial;
+             padding:0px 2px 0px 2px;
+             background:none;
+             }
+ #main .ent {background:url(../images/enter.jpg) left top  no-repeat;
+             width:249px;
+             height:27px;
+             float:left;
+             border:0px;
+             margin-top:4px;
+             }
+ #main .ent:hover {background:url(../images/enter.jpg) left bottom  no-repeat;
+             }
+ #main .reg {font-family:Arial;
+             float:left;
+             color:#734D01;
+             font-size:11px;
+             margin-top:4px;
+             }
+ #main .reg:hover {color:#4B3201;
+                   text-decoration:underline;
+                   }
+        
+ #footer {width:800px;
+          float:left;
+          text-align:right;
+          color:white;
+          font-weight:bold;
+          padding-bottom:10px;
+          }

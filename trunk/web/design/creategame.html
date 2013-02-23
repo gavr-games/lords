@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<title>THE LORDS</title>
+	<link rel="stylesheet" type="text/css" href="css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="css/stylescreategame.css" />
+	<!--[if IE 6]>
+<script src="js/DD_belatedPNG.js"></script>
+<script>
+  /* EXAMPLE */
+  DD_belatedPNG.fix('#maintop');
+  DD_belatedPNG.fix('.header');
+  DD_belatedPNG.fix('.selhd');
+  /* string argument can be any CSS selector */
+  /* .png_bg example is unnecessary */
+  /* change it to what suits you! */
+</script>
+<![endif]--> 
+</head>
+<body>
+<div id="topbg"></div>
+   <div id="wrap">
+        <div id="container">
+           <div id="maintop">
+               <div class="header"></div>
+               <div id="name"></div>
+           </div>
+           
+           <div id="main">
+              <div class="concont">
+                   <div class="cont">
+<form action="" method="post" id="create_form">
+   <table>
+     <tr><td>Имя игры:</td><td><input class="gmed" type="text" name="title" value=""></td></tr>
+     <tr><td>Тип:</td><td><select class="gmsel" name="type"><option value="0">1 x 1</option><option value="1">2 x 2</option><option value="2">сам за себя</option></select></td></tr>
+
+     <tr><td>Время на ход:</td><td><select class="gmsel" name="time_restriction"><option value="0">не ограничено</option><option value="60">1 мин.</option><option value="120">2 мин.</option><option value="180">3 мин.</option><option value="240">4 мин.</option><option value="300">5 мин.</option></select></td></tr>
+     <tr><td>Пароль:</td><td><input class="gmed" type="password" name="pass" value=""></td></tr>
+     <tr><td>Подтверждение пароля:</td><td><input class="gmed" type="password" name="pass2" value=""></td></tr>
+   </table>
+     <a href="#" class="crtgm"></a>
+</form>
+<div style="color:red; clear:both;">Пароль не может быть пустым.</div>
+                   </div><!--cont-->
+                   <a href="#" class="ext"></a>
+              </div>
+           </div>
+           
+           <div id="chat">
+               <div id="game_chat">
+               </div>
+               <textarea name="chat_text" id="chat_text" onkeyup="if ((event.which && event.which == 13) || (event.keyCode && event.keyCode == 13)) sendChatMessage();"></textarea>
+               <a href="#" class="send"></a>
+           </div>
+
+             <div id="footer"> 
+                © 2009 "KISS" & "THE LORDS"<!----><!----><!----><!---->
+             </div><!-- /#footer -->
+             
+        </div><!-- /#conteiner -->
+    </div><!-- /#wrap -->
+                  
+
+</body>
+</html>

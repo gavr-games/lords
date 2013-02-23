@@ -1,0 +1,23 @@
+/*  custom scroll bar styles   */
+.scroll_vert{
+    position: absolute;
+    width: 13px;
+    z-index: 100;
+}
+.scroll_vert .scroll_arr1{
+    background: url(../../images/pregame/scroolbar_v_arr1.png) top left no-repeat;
+    height: 13px;
+}
+.scroll_vert .scroll_bar{
+    background: url(../../images/pregame/scroolbar_v_rep.png) top left repeat-y;
+}
+.scroll_vert .scroll_bar .scroll_handle{
+    background: url(../../images/pregame/scroolbar_v_handler.png) center no-repeat;  
+    height: 46px;
+    width: 13px;
+}
+.scroll_vert .scroll_arr2{
+    background: url(../../images/pregame/scroolbar_v_arr2.png) top left no-repeat;
+    height: 13px;
+}
+

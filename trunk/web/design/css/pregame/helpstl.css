@@ -1,0 +1,35 @@
+/*  help styles   */
+.help {
+	background:  url(../../images/pregame/help_sign.png) top left no-repeat;
+	width:20px;
+	height:26px;
+	position:absolute;
+	left:530px;
+	cursor:pointer;
+	top:0px;
+}
+.help:hover{background:  url(../../images/pregame/help_sign.png) bottom left no-repeat;}
+
+.tip-wrap {
+	padding:3px;
+	background:  url(../../images/tip_opacity_bg.png) top left repeat;
+	font-family: Lucida Grande;
+    font-size: 14px;
+    position:absolute;
+    top:0px;
+    left:150px;
+    border:0px;
+    z-index:50;
+	-moz-border-radius: 1em;
+	border-radius: 1em;
+}
+.tip-wrap .tip {
+	width:250px;
+	float:left;
+	padding:20px 10px 20px 10px;
+    border:1px solid #ffd200;
+	-moz-border-radius: 1em;
+	border-radius: 1em;
+	color:#7f7f7f;
+	font-size:12px;
+}

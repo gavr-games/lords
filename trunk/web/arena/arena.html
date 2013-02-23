@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<title>THE LORDS</title>
+	<link rel="icon" href="../../design/images/icon_lords.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="../design/css/pregame/reset.css?###REVISION###" />
+	<link rel="stylesheet" type="text/css" href="../design/css/pregame/arenamain.css?###REVISION###" />
+	<link rel="stylesheet" type="text/css" href="../design/css/pregame/scrollstl.css?###REVISION###" />
+	<link rel="stylesheet" type="text/css" href="../design/css/pregame/helpstl.css?###REVISION###" />
+	
+	<script type="text/javascript" src="../general_js/mootools.js?###REVISION###"></script>
+	<script type="text/javascript" src="../general_js/mootools-more.js?###REVISION###"></script>
+	<script type="text/javascript" src="js_libs/global_vars.js?###REVISION###"></script>
+	<script type="text/javascript" src="js_libs/custom_scroll.js?###REVISION###"></script>
+        <script type="text/javascript" src="js_libs/initialization.js?###REVISION###"></script>
+	<script type="text/javascript" src="../site/js_libs/static_libs.js?###REVISION###"></script>
+	<script type="text/javascript" src="api/api_players.js?###REVISION###"></script>
+	<script type="text/javascript" src="api/api_chat.js?###REVISION###"></script>
+	<script type="text/javascript" src="api/api_games.js?###REVISION###"></script>
+
+</head>
+<body onload="initialization();">
+	<div id="wrap">
+			<span class="topbutton exitbtn"><a href="#" onclick="exitArena();return false;">Выход</a></span>
+				<script type="text/javascript">
+					###JS_ARRAYS###
+				</script>
+				<div id="players_cont">
+					<a class="help" title="Двойной клик - приватный. Перетянуть в чат для создания группового чата." href="" onclick="return false;"></a>
+					<div id="players_list">
+						###PLAYERS###
+					</div>
+				</div>
+				<div class="chat">
+					<a class="help" title="Кликните на закладку чата, чтобы сделать его активным. Заголовок редактируется по двойному клику +ентер." href="" onclick="return false;"></a>
+					<div class="tickbar">
+						<span class="arrow l_arrow" id="l_arrow"></span>
+						<div class="con_ticks" id="con_ticks">
+							<div class="ticks" id="chats_ticks">
+								###CHAT_TOPICS_CONT###
+							</div>
+						</div>
+						<span class="arrow r_arrow" id="r_arrow"></span>
+					</div>
+					<div class="con_chat_field" id="chats_messages">
+						###CHAT_MESSAGES_CONT###
+					</div>
+					<textarea id="chat_text" class="chat_send_field" onkeyup="if ((event.which && event.which == 13) || (event.keyCode && event.keyCode == 13)) sendChatMessage();"></textarea>
+					<div class="tools">
+						<div class="lords_in_chat" id="chats_users">
+							<span class="btn_lrd">Лорды в чате<span>
+							###CHAT_USERS_CONT###
+						</div>
+						<div class="chat_sm">
+							<div class="smiles">
+								<div class="allsmiles">
+									###ALL_SMILES###
+								</div>
+							</div>
+						</div>
+						<a href="#" class="send_btn" onclick="sendChatMessage();return false;">Отправить</a>
+						
+					</div>
+                                </div>
+				<iframe src="###IFRAME_LINK###" id="i_frame" allowtransparency="true"></iframe>
+				<div id="commands" style="display:none;">
+				</div>
+	</div>
+	<div id="footer"> 
+	   	© 2013 "THE LORDS"
+	</div>
+</body>

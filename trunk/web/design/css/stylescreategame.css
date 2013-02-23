@@ -1,0 +1,139 @@
+html, body {text-align:left;
+              margin:0px;
+              width:100%;
+              float:left;
+              }
+    body {background:  url(../images/origbg.jpg) top left repeat;
+          }
+  a, a:focus {outline:none;
+              text-decoration:none;}
+  ul {list-style:none;}
+ #topbg {background:  url(../images/origtopbg.jpg)  repeat-x;
+         height:20px;
+         width:100%;}
+ #wrap{width:750px;
+       margin-left:auto;
+       margin-right:auto;
+       }
+ #container {
+             float:left;
+             width:750px;
+             margin-top:5px;
+             }
+ 
+ #maintop {width:750px;
+           height:137px;
+           background:  url(../images/gamtopbg.png)  no-repeat;
+           float:left;
+          }
+ #maintop .header {width:292px;
+                   height:34px;
+                   background:  url(../images/headcrtgm.png) right bottom  no-repeat;
+                   float:left;
+                   padding:70px 0px 0px 219px;
+                   }
+ #maintop #name {width:118px;
+                   height:27px;
+                   float:left;
+                   padding:6px 0px 0px 615px;
+                   margin-right:17px;
+                   font-family:Times New Roman;
+                   font-style:italic;
+                   font-weight:bold;
+                   overflow:hidden;
+                   font-size:16px;
+                   }                 
+ #main {width:750px;
+           background:  url(../images/gamrepbg.jpg) repeat-y;
+           float:left;
+          }
+ #main .concont {width:726px;
+                 height:350px;
+                 padding-left:24px;
+                 background:  url(../images/gambotbg.jpg) bottom left no-repeat;
+                 float:left;
+                 }
+ #main .concont .selhd {width:418px;
+                        height:17px;
+                        margin:0px 308px 2px 0px;
+                        background:  url(../images/selgamhd.png) right top  no-repeat;
+                        float:left;
+                        }
+ #main .concont .cont {width:686px;
+                       height:265px;
+                       float:left;
+                       margin-right:40px;
+                       padding:3px 0px 0px 0px;
+                       font-family:Times New Roman;
+                       font-style:italic;
+                       font-weight:bold;
+                       }
+ #main .concont .cont form {float:left;
+                            clear:both;
+                            }
+ #main .concont .cont form table td {text-align:right;
+                                     padding-right:5px;
+                                     }
+ #main .concont .cont form table td .gmed {border:none;
+                                           height:14px;
+                                           width:140px;
+                                           padding:3px 3px 3px 3px;
+                                           background:  url(../images/gmed.jpg) bottom left no-repeat;
+                                           }
+ #main .concont .cont form table td .gmsel {border:none;
+                                            height:20px;
+                                            width:146px;
+                                            padding:2px 3px 2px 3px;
+                                            background:  url(../images/gmed.jpg) bottom left no-repeat;
+                                            }
+ #main .concont .crtgm {width:179px;
+                      background:  url(../images/crtgm.jpg) left top  no-repeat;
+                                            height:20px;
+                                            float:left;
+                                            margin:28px 10px 0px 0px;
+                        }
+ #main .concont .crtgm:hover {background:  url(../images/crtgm.jpg) left bottom  no-repeat;}
+ #main .concont .ext {width:83px;
+                      background:  url(../images/logout.jpg) left top  no-repeat;
+                                            height:16px;
+                                            float:left;
+                                            margin:32px 0px 0px 0px;
+                                            overflow:hidden;
+                        }
+ #main .concont .ext:hover {background:  url(../images/logout.jpg) left bottom  no-repeat;
+                            background:  url(../images/logout.jpg) left -16px  no-repeat;}
+ #chat   {width:750px;
+           height:232px;
+           background:  url(../images/chatbg.jpg)  no-repeat;
+           float:left;
+           margin-top:20px;
+          }
+ #chat #game_chat  {width:733px;
+           height:174px;
+           float:left;
+           margin:17px 0px 0px 0px;
+           overflow-y: scroll;
+           overflow-x: hidden;
+          }
+ #chat #chat_text  {width:537px;
+           height:19px;
+           float:left;
+           margin:5px 3px 0px 0px;
+           border:none;
+           padding-left:16px;
+           background:none;
+          }
+ #chat .send {width:179px;
+                      background:  url(../images/send.jpg) left top  no-repeat;
+                                            height:23px;
+                                            float:left;
+                                            margin:3px 0px 0px 0px;
+                        }
+ #chat .send:hover {background:  url(../images/send.jpg) left bottom  no-repeat;}
+ #footer {width:750px;
+          float:left;
+          text-align:right;
+          color:white;
+          font-weight:bold;
+          padding-bottom:10px;
+          }
