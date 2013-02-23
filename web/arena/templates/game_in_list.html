@@ -1,0 +1,17 @@
+<div id="game_###game_id###" class="arena_game ###pass_class###">
+<span class="game_state"></span>
+ <span class="game_name">"###title###"</span>
+ <span id="game_players_###game_id###" class="game_players count" title="Количество игроков">###player_count###</span>
+ <span id="game_specs_###game_id###" class="game_specs count" title="Количество наблюдателей">###spectator_count###</span>
+ <p class="owner_name">###owner_name###,&nbsp;</p>
+ <p class="fame_mode">###mode_name###</p>
+ <div id="pass_###game_id###" style="display:none;" class="pass_inp">
+ 	<div class="inner">
+ 		<span class="text">Введите пароль к игре:</span>
+	 	<input type="password" id="gamepass_###game_id###" value=""/>
+	 	 <span class="topbutton"><a href="#" onclick="subEnterGame(###game_id###);return false;">Войти</a></span>
+	 	 <span class="topbutton"><a href="#" onclick="$(\\'pass_###game_id###\\').hide();return false;">X</a></span>
+	</div>
+ </div>
+ <a href="#" onclick="enterGame(###game_id###,###pass_flag###);return false;" class="textlink">Войти</a> 
+</div>

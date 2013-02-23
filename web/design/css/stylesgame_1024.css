@@ -1,0 +1,19 @@
+ #wrap{margin-left:20px;}
+ #container {margin-top:11px;}
+ #container .board {padding:8px 7px 3px 8px;}
+/*-----------------------лог игры-------------------------*/
+ #wrap .abscont #rightbar {top:0px;}
+  .left_wirt {position:absolute;
+             left:0px;
+             top:0px;
+             width:0px;
+             height:0px;
+             background:none;
+             }
+ .right_wirt {position:absolute;
+              top:0px;
+              right:0px;
+              width:0px;
+              height:0px;
+              background: none;
+              }

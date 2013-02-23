@@ -1,0 +1,4 @@
+<span id="topic_###chat_id###" class="tick back_tick" onclick="makeChatActive(###chat_id###);">
+    <input type="text" size="11" value="###topic###" id="topic_val_###chat_id###" onkeyup="if ((event.which && event.which == 13) || (event.keyCode && event.keyCode == 13)) changeChatTopic(###chat_id###);" ondblclick="this.toggleClass(\\'active\\')">
+    <p class="tick_cross" onclick="parent.sendLoggedProtocolCmd({action:\\'chat_exit\\',params:{chat_id:###chat_id###}});"></p>
+</span>

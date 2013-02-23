@@ -1,0 +1,298 @@
+html{min-height:100%;}
+body {
+	
+	min-height:100%;
+}
+#wind {
+	position:relative;
+	overflow:hidden;
+}
+#wind #panor {
+	background-repeat: repeat-x;
+	width:30000px;
+	position:relative;
+	position:absolute;
+	left:-15000px;
+}
+#wind #panor .rel {
+	float:left;
+	background:  url(../../images/pregame/topbar.png) top left  repeat-x;
+	width:30000px;
+	position:relative;
+        z-index:10;
+}
+#wind #panor .window {
+	position:absolute;
+        background-color: transparent;
+        border: none;
+}
+
+/*   Common    */
+#wrap {
+	margin-left:auto;
+	margin-right:auto;
+	position:relative;
+}
+#footer {
+	position:absolute;
+	right:0px;
+	bottom:0px;
+	text-shadow: white 1px 1px 1px;
+	font-weight:bold;
+}
+.link {
+	color:#edda78;
+	text-shadow: #bb9f0b 1px 1px 1px;
+}
+.topbutton {
+	border-color: #D5D5D5 #929292 #828282 #B9B9B9;
+    border-style: solid;
+    border-width: 1px;
+}
+.topbutton a {
+	float:left;
+	border-color: #C0C0C0 #7F7F7F #4E4E4E #B0B0B0;
+    border-style: solid;
+    border-width: 1px;
+	text-align:center;
+	text-shadow: white 1px 1px 1px;
+	color:#515150;
+	font-size:14px;
+	padding:5px 10px 7px 10px;
+	font-family:Lucida Grande;
+	text-decoration:none;
+}
+.topbutton a:hover {
+	color:#edda78;
+	text-shadow: #bb9f0b 1px 1px 1px;
+}
+.topbutton a.unactive {
+	color:#c3c3c3;
+	text-shadow: #9b9b9b 1px 1px 1px;
+}
+.header_line {
+	float:left;
+	text-shadow: white 1px 1px 1px;
+	font-weight:bold;
+	color:#515150;
+	
+	font-size:30px;
+	padding:0px 0px 20px 20px;
+	font-family:Lucida Grande;
+}
+ .logfields {
+	text-shadow: white 1px 1px 1px;
+	font-weight:bold;
+	color:#515150;
+	font-family:Lucida Grande;
+ }
+ .txtfield {
+ 	border-color: #4E4E4E #B0B0B0 #C0C0C0 #7F7F7F;
+	border-style: solid;
+    border-width: 1px;
+}
+.txtfield input {
+	border-color: #828282 #B9B9B9 #D5D5D5 #929292;
+    border-style: solid;
+    border-width: 1px;
+	background:  url(../../images/pregame/inp_bg.png) top left  repeat;
+	width:140px;
+}
+.button {
+	border-color: #4E4E4E #B0B0B0 #C0C0C0 #7F7F7F;
+	border-style: solid;
+    border-width: 1px;
+}
+.button .in_b_1 {
+	float:left;
+	border-color: #828282 #B9B9B9 #D5D5D5 #929292;
+    border-style: solid;
+    border-width: 1px;
+	padding:2px;
+}
+.button .in_b_1 .in_b_2 {
+	float:left;
+	border-color: #D5D5D5 #929292 #828282 #B9B9B9;
+    border-style: solid;
+    border-width: 1px;
+}
+.button .in_b_1 .in_b_2 a {
+	float:left;
+	border-color: #C0C0C0 #7F7F7F #4E4E4E #B0B0B0;
+    border-style: solid;
+    border-width: 1px;
+	text-align:center;
+	text-shadow: white 1px 1px 1px;
+	color:#515150;
+	font-family:Lucida Grande;
+	text-decoration:none;
+}
+.button .in_b_1 .in_b_2 a:hover {
+	color:#edda78;
+	text-shadow: #bb9f0b 1px 1px 1px;
+}
+.button .in_b_1 .in_b_2 a.unactive {
+	color:#c3c3c3;
+	text-shadow: #9b9b9b 1px 1px 1px;
+}
+.error_msg {
+	text-shadow: white 1px 1px 1px;
+	font-weight:bold;
+	color:#e20000;
+	font-size:15px;
+	font-family:Lucida Grande;
+	border-color: #4E4E4E #B0B0B0 #C0C0C0 #7F7F7F;
+	border-style: solid;
+    border-width: 1px;
+	padding:4px;
+	display:none;
+	background:  url(../../images/pregame/inp_bg.png) top left repeat;
+}
+.loading a {
+	background:  url(../../images/pregame/loading.gif) top left repeat;
+}
+
+
+/*  custom scroll bar styles   */
+.scroll_vert {
+	background:  url(../../images/pregame/scroolbar_v_arr1.png) top left repeat;
+}
+.scroll_vert .scroll_arr1 {
+	
+}
+.scroll_vert .scroll_bar {
+	
+}
+.scroll_vert .scroll_bar .scroll_handle {
+	
+}
+.scroll_vert .scroll_arr2 {
+	
+}
+/*  login page   */
+
+ #log_cont {
+	margin-left:auto;
+	margin-right:auto;
+	width:628px;
+	position:relative;
+	
+}
+ #log_cont #log_form  {
+	float:left;
+	width:598px;
+	height:136px;
+	padding:270px 0px 0px 30px;
+	background:  url(../../images/pregame/loginbg.png) top left  no-repeat;
+}
+ #log_cont .winter  {
+	background:  url(../../images/pregame/loginbg_winter.png) top left  no-repeat !important;
+}
+ #log_cont #log_form form  {
+	float:left;
+	width:398px;
+	padding:0px 100px 0px 100px;
+}
+ #log_cont #log_form .logfields {
+ 	float:left;
+	width:220px;
+	padding:0px 0px 2px 0px;
+ }
+ #log_cont #log_form .txtfield {
+ 	float:right;
+}
+#log_cont #log_form .txtfield input {
+	float:left;
+}
+#log_cont #log_form .reg {
+	float:left;
+	margin:30px 40px 0px 10px;
+}
+#log_cont #log_form .button {
+	float:right;
+}
+#log_cont #log_form .button .in_b_1 .in_b_2 a {
+	padding:7px 0px 7px 0px;
+	width:150px;
+}
+#log_cont #log_form .error_msg {
+ 	position:absolute;
+	top:327px;
+	left:267px;
+	width:300px;
+ }
+ 
+/*  registration page   */
+
+#reg_cont {
+	margin-left:auto;
+	margin-right:auto;
+	width:628px;
+	position:relative;
+}
+#reg_cont #regout_form  {
+	float:left;
+	width:598px;
+	height:276px;
+	padding:130px 0px 0px 30px;
+	background:  url(../../images/pregame/regbg.png) top left  no-repeat;
+}
+#reg_cont #regout_form form  {
+	float:left;
+	width:450px;
+	padding:0px 100px 0px 75px;
+}
+#reg_cont #regout_form .logfields {
+ 	float:left;
+	width:270px;
+	padding:0px 0px 2px 0px;
+}
+#reg_cont #regout_form .txtfield {
+ 	float:right;
+}
+#reg_cont #regout_form .txtfield input {
+	float:left;
+}
+#reg_cont #regout_form .register {
+ 	float:right;
+}
+#reg_cont #regout_form .register a {
+ 	width:150px;
+	padding:19px 0px;
+}
+#reg_cont #regout_form .back {
+ 	float:left;
+	margin:50px 0px 0px 20px;
+}
+#reg_cont #regout_form .back a {
+ 	float:left;
+	padding:3px 5px;
+}
+#reg_cont #regout_form .header_line {
+ 	padding:0px 0px 40px 20px;
+}
+#reg_cont #regout_form .error_msg {
+ 	position:absolute;
+	top:297px;
+	left:233px;
+	width:300px;
+}
+/*    map page   */
+.map {
+	background:  url(../../images/pregame/mapbg.png) top left  no-repeat;
+	width:976px;
+	height:435px;
+	padding:400px 0px 0px 100px;
+}
+.map .prof {
+	position:absolute;
+	top:7px;
+	left:0px;
+}
+.map .exitbtn {
+	position:absolute;
+	top:7px;
+	right:0px;
+}
+
+

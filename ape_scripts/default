@@ -1,0 +1,20 @@
+<Directory /var/www>
+	Order deny,Allow
+	Allow from all
+</Directory>
+
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+	
+	ServerName ape-test.local
+	ServerAlias ape.ape-test.local
+	ServerAlias *.ape.ape-test.local
+	
+	DocumentRoot /var/www
+</VirtualHost>
+
+<VirtualHost *:80>
+	ServerName localhost
+
+	DocumentRoot /var/www
+</VirtualHost>
