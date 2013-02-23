@@ -82,7 +82,7 @@ public class VampireAI extends UnitMovingAttackingAI
 			}
 
 			List<BoardCell> finalPath = pathsToTargets.get(highestPriorityTargets.get(new Random().nextInt(highestPriorityTargets.size())));
-			commands = getMoveAttackCommandsFromCellsList(finalPath);
+			commands = generateCommandsFromPath(finalPath);
 		}
 
 		if(commands.size() <= myUnit.getMoves())

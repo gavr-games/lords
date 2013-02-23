@@ -47,7 +47,7 @@ public class MultiTargetUnitAI extends UnitMovingAttackingAI {
             }
 
             finalPath = pathsToTargets.get(keysForShortestPaths.get(new Random().nextInt(keysForShortestPaths.size())));
-			commands = getMoveAttackCommandsFromCellsList(finalPath);
+			commands = generateCommandsFromPath(finalPath);
         }
 
         if(commands.size() < myUnit.getMoves())

@@ -1,14 +1,8 @@
 package ai.paths_finding;
 
-import ai.paths_finding.astar.AiBoard;
-import ai.paths_finding.astar.AiBoardObject;
-import ai.paths_finding.astar.Astar;
-import ai.paths_finding.astar.Cell;
+import ai.paths_finding.astar.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PathsFinder {
     private AiBoard aiBoard;

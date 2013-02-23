@@ -15,14 +15,17 @@ public class PlayerAiFactoryTest
         Game g = GameJsonFactory.getGameFromJson(jsonStrng);
 		g.setId(1);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(g,10);
-		assertTrue(ai instanceof EndTurningAI);
+		assertTrue(ai instanceof UnitMoveToTargetAI);
+		List<Command> cmds = ai.getCommands();
+		assertTrue(cmds.size() == 1);
+		assertTrue(cmds.get(0) instanceof EndTurnCommand);		
 		
 		//agred
 		BoardObject troll = g.getBoard().getUnitById(18);
 		troll.addFeature(new BoardObjectFeature("attack_target", "17")); //17 - a dragon nearby
 		ai = PlayerAIFactory.createPlayerAI(g,10);
 		assertTrue(ai instanceof MultiTargetUnitAI);
-		List<Command> cmds = ai.getCommands();
+		cmds = ai.getCommands();
 		assertTrue(cmds.size() == 2);
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);		
 		assertTrue(cmds.get(1) instanceof UnitAttackCommand);		
