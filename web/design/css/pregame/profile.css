@@ -1,0 +1,35 @@
+.profile {
+	background:  url(../../images/pregame/profile_mcont_bg.png) top left  no-repeat;
+	width:680px;
+	height:607px;
+	margin-top:26px;
+	padding:100px 0px 0px 50px;
+}
+.profile .back {
+	position:absolute;
+	top:-19px;
+	left:-60px;
+}
+.profile .exitbtn {
+	position:absolute;
+	top:-19px;
+	right:-10px;
+}
+.title {
+    font-family: Lucida Grande;
+    font-weight:bold;
+    float:left;
+    color:#754820;
+    padding:5px 0px 0px 157px;
+    font-size:26px;
+    width:420px;
+}
+.title .nick {
+    color: #4B4B4B;
+    font-style: italic;
+    overflow: hidden;
+    display:inline;
+}
+.profile_cont{
+  margin-top:10px;
+}
