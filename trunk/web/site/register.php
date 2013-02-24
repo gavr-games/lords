@@ -39,7 +39,7 @@
 	    
 	</div>
 	<div id="footer"> 
-    	© 2011 "THE LORDS"
+    	© 2013 "THE LORDS"
     </div>
 
 </body>

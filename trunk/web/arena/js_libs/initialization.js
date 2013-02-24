@@ -1,3 +1,24 @@
+// BUTTON LOADING PART BEGIN
+var loadingButton;
+var oldText = '';
+
+function doLoading(link) {
+    stopLoading();
+    if (link) {
+        loadingButton = link;
+        oldText = link.get('text');
+        link.set('text', 'Загрузка');
+        link.getParent().addClass('loading');
+    }
+}
+
+function stopLoading() {
+    if (loadingButton) {
+        loadingButton.set('text', oldText);
+        loadingButton.getParent().removeClass('loading');
+    }
+}
+// BUTTON LOADING PART END
 var scrolls = new Array();
 
 function initialization() {
