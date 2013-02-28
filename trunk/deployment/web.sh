@@ -12,7 +12,7 @@ cp $WEB_DIR/game/mode8/error*.* mode8/
 rm -r $WEB_DIR
 mkdir $WEB_DIR
 #checkout web part from svn
-svn co $WEB_SVN $WEB_DIR --username lordskoba --password Passw0rd!
+svn co $WEB_SVN $WEB_DIR --username lords_checkouter --password c2h5oh
 #get svn revision
 REVISION=$(svnversion $WEB_DIR)
 #set svn revision as config value for not caching
@@ -50,7 +50,7 @@ killall aped
 cd /home/skoba/web/
 rm -r ape/scripts/lords
 mkdir ape/scripts/lords
-svn co $APE_SVN ape/scripts/lords
+svn co $APE_SVN ape/scripts/lords --username lords_checkouter --password c2h5oh
 #chmod +x /usr/local/www/apache22/ape/bin/aped
 cd ape/bin/
 #clear log
