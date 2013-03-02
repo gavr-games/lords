@@ -51,9 +51,15 @@ function doReg(link) {
         if ($('login_i').get('value') == '') $('login_i').highlight('#A11D15');
     } else {
         $('reg_error').hide();
+	var user_email = "";
+	if ($('email').get('value')=="")
+	  user_email = 'null';
+	else
+	  user_email = '"'+parent.convertChars($('email').get('value'))+'"';
         parent.sendBaseProtocolCmd({action:'user_add',params:{
 		login: '"'+parent.convertChars($('login_i').get('value'))+'"',
-                pass:  '"'+$('pass_i').get('value').replace(new RegExp('"','g'),'\\"')+'"'
+                pass:  '"'+$('pass_i').get('value').replace(new RegExp('"','g'),'\\"')+'"',
+		email: user_email
 	}});
         doLoading(link);
     }
