@@ -35,9 +35,20 @@ if (isset($clear_user) && $clear_user==1) $_SESSION['user_id']='';
 
 if ($_SESSION['user_id'] != '') {
 	$query = 'call ' . $DB_conf['site'] . '.get_my_location(' . $_SESSION['user_id'] . ');'; //check where to redirect user
-	$res = $dataBase->query($query);
-	$row = mysqli_fetch_assoc($res);
-	mysqli_free_result($res);
+	 $result = $dataBase->multi_query($query);
+	 do {
+		/* store first result set */
+		if ($result = $mysqli->store_result()) {
+			while ($r = $result->fetch_assoc()) {
+			$row = $r;
+			}
+			$result->free();
+			$i++;
+		}
+		/* print divider */
+		if ($mysqli->more_results()) {
+		}
+	} while ($mysqli->next_result());
 
 	if ($row['player_num'] != '') { //go to started game
 		header('location:' . $SITE_conf['domen'] . 'game/mode' . $row['mode_id']);

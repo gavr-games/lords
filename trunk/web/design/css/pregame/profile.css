@@ -1,9 +1,9 @@
 .profile {
 	background:  url(../../images/pregame/profile_mcont_bg.png) top left  no-repeat;
-	width:680px;
+	width:588px;
 	height:607px;
 	margin-top:26px;
-	padding:100px 0px 0px 50px;
+	padding:100px 93px 0px 50px;
 }
 .profile .back {
 	position:absolute;
@@ -32,4 +32,25 @@
 }
 .profile_cont{
   margin-top:10px;
+  width:590px;
+}
+.profile_image img{
+  margin-left:20px;
+}
+h5{
+  color:#754820;
+  font-size:14px;
+  line-height:16px;
+}
+h3{
+  color:#754820;
+  font-size:18px;
+  line-height:20px;
+}
+.profile_image{
+  float:left;
+  width:200px;
+}
+.error{
+  color:red;
 }
