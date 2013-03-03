@@ -94,6 +94,9 @@ GRANT EXECUTE ON PROCEDURE `lords_site`.`get_my_location` TO 'lords_client'@'loc
 GRANT EXECUTE ON PROCEDURE `lords_site`.`user_authorize` TO 'lords_client'@'localhost';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`player_online_offline` TO 'lords_client'@'localhost';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`performance_statistics_add` TO 'lords_client'@'localhost';
+GRANT EXECUTE ON PROCEDURE `lords_site`.`user_profile_update` TO 'lords_client'@'localhost';
+GRANT EXECUTE ON PROCEDURE `lords_site`.`get_my_profile` TO 'lords_client'@'localhost';
+GRANT EXECUTE ON PROCEDURE `lords_site`.`get_user_profile` TO 'lords_client'@'localhost';
 
 
 GRANT SELECT ON lords.* TO 'lords_reader'@'localhost';
