@@ -29,7 +29,7 @@
                                 <a target="_blank" href="<?php echo $SITE_conf['domen']; ?>gallery">Галерея</a><br />
 			</div>
 		</div>
-				<span class="topbutton prof"><a href="#" id="profile_b" onclick="if (!parent.window_loading) {doLoading($('profile_b'));parent.load_window('site/profile.php?back=map','left');} return false;">Профиль</a></span>
+				<span class="topbutton prof"><a href="#" id="profile_b" onclick="if (!parent.window_loading) {doLoading($('profile_b'));parent.load_window('site/myprofile.php?back=map','left');} return false;">Профиль</a></span>
 				<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'));return false;">Выход</a></span>
 	</div>
 		<div id="footer"> 

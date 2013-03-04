@@ -93,16 +93,30 @@
 .player_in_game {
 	float:left;
 	width:77px;
-	height:17px;
+	height:72px;
 	color:#e2c88e;
 	font-size:10px;
-	text-align:center;
-	padding:55px 0px 0px 0px;
+	text-align:left;
 	cursor:move;
 	background:  url(../../images/pregame/arena_game_pl_bg.png) bottom left no-repeat;
 }
+.player_in_game a{
+  color:#e2c88e;
+  text-decoration:none;
+  outline:none;
+}
 .player_in_game:hover {
 	background:  url(../../images/pregame/arena_game_pl_bg.png) top left no-repeat;
+}
+.player_in_game span{
+  width:77px;
+  height:17px;
+  position: absolute;
+  margin-top:55px;
+  text-align:center;
+}
+.player_in_game img{
+  margin-left:1px;
 }
 #trash {
 	background:  url(../../images/pregame/the_door.png) top left no-repeat;

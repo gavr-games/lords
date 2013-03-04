@@ -193,6 +193,11 @@ body {
     width:100%;
     background:  url(../../images/pregame/arena_pl_sep.png) bottom center no-repeat;
 }
+#players_cont #players_list .arena_player a{
+  text-decoration:none;
+  color:#4b4b4b;
+  outline:none;
+}
 #players_cont #players_list	.arena_player:hover{
 	background:  url(../../images/pregame/pl_hover.png) bottom center no-repeat;
 }

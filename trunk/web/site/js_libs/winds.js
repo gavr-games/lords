@@ -33,7 +33,7 @@ window.addEvent('domready', function() {
 	$('wind').setStyle('min-height',screen_size.y);
 	$('wind').setStyle('width',screen_size.x);
 	$('panor').setStyle('height',screen_size.y);
-	$('panor').setStyle('background-image','url("design/images/pregame/panorama/'+season+'/'+daytime+'_'+scr_size+'_Q8.jpg")');
+	$('panor').setStyle('background-image','url("'+site_domen+'design/images/pregame/panorama/'+season+'/'+daytime+'_'+scr_size+'_Q8.jpg")');
         $('panor').setStyle('background-position',Number.random(0, 10000)+"px 0px");
 	$('rel').setStyle('min-height',screen_size.y);
 	current_window = new Element('iframe', {

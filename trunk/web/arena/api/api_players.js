@@ -1,4 +1,4 @@
-function arena_player_add(user_id, nick, status_id) {
+function arena_player_add(user_id, nick, avatar_filename, status_id) {
     last_executed_api = 'arena_player_add(' + user_id + ',' + nick + ',' + status_id + ')';
     //eval("$('players_list').set('html',$('players_list').get('html')+"+player_in_playerslist+");");
     var players_str = '';
@@ -51,6 +51,7 @@ function arena_player_add(user_id, nick, status_id) {
     users[user_id] = new Array();
     users[user_id]['user_id'] = user_id;
     users[user_id]['nick'] = nick;
+    users[user_id]['avatar_filename'] = avatar_filename;
     users[user_id]['status_id'] = status_id;
     var dt = new Date();
     dt = dt.getTime();
