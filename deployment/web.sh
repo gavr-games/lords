@@ -38,6 +38,7 @@ chmod 777 $WEB_DIR/game/mode8/js_libs/static_libs.js
 chmod 777 $WEB_DIR/site/js_libs/static_libs.js
 chmod 777 $WEB_DIR/game/mode1/
 chmod 777 $WEB_DIR/game/mode8/
+chmod 777 $WEB_DIR/design/images/profile/
 cd $WEB_DIR/cron/
 php generate_static_js_libs.php
 php generate_static_js_libs_site.php
