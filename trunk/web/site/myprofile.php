@@ -109,7 +109,7 @@
 			    </div>
 			  </div>
 			  <br /><br /><br /><br /><br />
-			  <input style="float:right;" type="submit" value="Подать прошение" /> <br />
+			  <input style="float:right;" type="submit" value="Обновить" /> <br />
 			  <span class="error"><?php echo $avatar_error; ?></span>
 		  </form>
 		</div>
