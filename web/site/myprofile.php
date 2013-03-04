@@ -28,8 +28,8 @@
 	}else
 	if ($_FILES["pic"]["tmp_name"]!="")
 	{
-	    move_uploaded_file($_FILES["pic"]["tmp_name"], "../design/images/profile/" . $_FILES["pic"]["name"]);
-	    $avatar = new cImage("../design/images/profile/" . $_FILES["pic"]["name"]);
+	    move_uploaded_file($_FILES["pic"]["tmp_name"], "../design/images/profile/temp/" . $_FILES["pic"]["name"]);
+	    $avatar = new cImage("../design/images/profile/temp/" . $_FILES["pic"]["name"]);
 	    if ($avatar->type){
 	      //del old avatar
 	      if ($user['avatar_filename']!="" && file_exists("../design/images/profile/".$user['avatar_filename']))
@@ -58,7 +58,7 @@
 	    } else {
 	      $avatar_error = 'Неверное расширение файла герба';
 	    }
-	    unlink("../design/images/profile/" . $_FILES["pic"]["name"]);
+	    unlink("../design/images/profile/temp/" . $_FILES["pic"]["name"]);
 	}
 	//print_r($user);
 	//avatar path

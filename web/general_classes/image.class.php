@@ -34,13 +34,13 @@ class cImage {
 					$success = imagejpeg($img, $NEW_FILENAME.".".$this->fileext, 90); //90 = степень сжатия
 					break;
 				case IMAGETYPE_PNG:
-					$img = imagecreatefrompng($this->fileorig); break;
+					$img = imagecreatefrompng($this->fileorig); 
 					$img = $this->ChangeImageSizeWithAlpha($img, $this->width, $this->height, $NEW_WIDTH, $NEW_HEIGHT);
-					$success = imagepng($img, $NEW_FILENAME.".".$this->fileext);
+					$success = imagepng($img, $NEW_FILENAME.".".$this->fileext);break;
 				case IMAGETYPE_GIF:
-					$img = imagecreatefromgif($this->fileorig); break;
+					$img = imagecreatefromgif($this->fileorig); 
 					$img = $this->ChangeImageSizeWithAlpha($img, $this->width, $this->height, $NEW_WIDTH, $NEW_HEIGHT);
-					$success = imagegif($img, $NEW_FILENAME.".".$this->fileext);
+					$success = imagegif($img, $NEW_FILENAME.".".$this->fileext);break;
 	}
 	if($success){
 	  $this->filenew = $NEW_FILENAME.".".$this->fileext;
