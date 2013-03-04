@@ -28,7 +28,9 @@ rm -r mode1
 rm -r mode8
 #restore avatars
 chmod 777 $WEB_DIR/design/images/profile/
+chmod 777 $WEB_DIR/design/images/profile/temp/
 cp profiles/*.* $WEB_DIR/design/images/profile/
+rm -r profiles
 #minimize size of js files
 yui-compressor -o '.js$:.js' $WEB_DIR/arena/api/*.js
 yui-compressor -o '.js$:.js' $WEB_DIR/arena/js_libs/*.js
