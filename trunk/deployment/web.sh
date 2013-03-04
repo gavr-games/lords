@@ -8,6 +8,9 @@ mkdir mode1
 mkdir mode8
 cp $WEB_DIR/game/mode1/error*.* mode1/
 cp $WEB_DIR/game/mode8/error*.* mode8/
+#save avatars
+mkdir profiles
+cp $WEB_DIR/design/images/profile/*.* profiles
 #svn
 rm -r $WEB_DIR
 mkdir $WEB_DIR
@@ -23,6 +26,9 @@ cp mode1/error*.* $WEB_DIR/game/mode1/
 cp mode8/error*.* $WEB_DIR/game/mode8/
 rm -r mode1
 rm -r mode8
+#restore avatars
+chmod 777 $WEB_DIR/design/images/profile/
+cp profiles/*.* $WEB_DIR/design/images/profile/
 #minimize size of js files
 yui-compressor -o '.js$:.js' $WEB_DIR/arena/api/*.js
 yui-compressor -o '.js$:.js' $WEB_DIR/arena/js_libs/*.js
@@ -38,7 +44,6 @@ chmod 777 $WEB_DIR/game/mode8/js_libs/static_libs.js
 chmod 777 $WEB_DIR/site/js_libs/static_libs.js
 chmod 777 $WEB_DIR/game/mode1/
 chmod 777 $WEB_DIR/game/mode8/
-chmod 777 $WEB_DIR/design/images/profile/
 cd $WEB_DIR/cron/
 php generate_static_js_libs.php
 php generate_static_js_libs_site.php
