@@ -12,7 +12,7 @@
 							$replace[] = $value;
 				}
 			//checkbox feature
-			if($feature['feature_type']=='bool')	{
+			if($feature['feature_type']=='mbool')	{
 				if ($feature['in_game']==1) $checked = 'checked="checked"';
 				else $checked = '';
 				$search[]  = "###checked###";
@@ -64,8 +64,12 @@
 						$search = $replace = array();
 						foreach($row as $key=>$value)	{
 							$search[]  = '###'.$key.'###';
+							if ($key=="avatar_filename") $value = $SITE_conf['domen']."design/images/profile/".$value;
 							$replace[] = $value;
 						}
+						$search[] = "###display###";
+						if ($row['avatar_filename']=="") $replace[] = "none"; else $replace[] = "block";
+						
 						if ($row['spectator_flag']==1) //spectator
 							$spectators.= str_replace($search,$replace,$templates['player_in_game']);
 						else

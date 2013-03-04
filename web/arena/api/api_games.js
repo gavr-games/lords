@@ -92,6 +92,12 @@ function arena_game_add_player(game_id,user_id)	{
 			var player_cont = 'spectators';
 			var player_str = '';
 			var name = users[user_id]['nick'];
+			var avatar_filename = users[user_id]['avatar_filename'];
+			var display = "none";
+			if (avatar_filename!=""){
+			  avatar_filename = parent.site_domen+"design/images/profile/"+users[user_id]['avatar_filename'];
+			  display = "block";
+			}
 			eval('player_str = '+player_in_game);
 			var els = $('i_frame').contentWindow.Elements.from(player_str);
 			$('i_frame').contentWindow.$(player_cont).adopt(els);
