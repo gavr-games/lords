@@ -563,7 +563,7 @@ Ape.addEvent("init", function () {
                     if (!channel) channel = Ape.mkChan('arenachat_0');
                     if ($chk(ans.data_result)) {
                         channel.pipe.sendRaw('protocol_raw', {
-                            commands: encodeURIComponent('arena_player_add(' + infos.user.user_id + ', "' + decodeURIComponent(ans.data_result.nick) + '", 1);')
+                            commands: encodeURIComponent('arena_player_add(' + infos.user.user_id + ', "' + decodeURIComponent(ans.data_result.nick) + '", "' + decodeURIComponent(ans.data_result.avatar_filename) + '", 1);')
                         });
                     }
                     eval_cmds += encodeURIComponent('parent.load_window("arena/arena.php", "right");');
