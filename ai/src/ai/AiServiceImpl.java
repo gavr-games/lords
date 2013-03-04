@@ -24,6 +24,8 @@ public class AiServiceImpl implements AiService
         try
         {
             String gameDataJson = UrlContentsLoader.load(gameDataRetrieveURL);
+			log.log(Level.INFO, gameDataJson);
+			
             game = GameJsonFactory.getGameFromJson(gameDataJson);
 			game.setId(gameId);
 			
