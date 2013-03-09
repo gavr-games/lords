@@ -62,7 +62,7 @@
 			      <img src="<?php echo $SITE_conf['domen'].$prof_img;?>?cache=<?php echo time(); ?>" alt="Герб" />
 			    </div>
 			    <div class="profile_stats">
-			    <h5 style="float:left">E-mail:</h5> <?php echo $user['email']; ?>
+			    
 			    </div>
 			  </div>
 		  </form>
