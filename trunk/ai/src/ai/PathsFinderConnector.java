@@ -21,16 +21,9 @@ class PathsFinderConnector {
         for(BoardObject target : targets)
             targets_id.add(target.getId());
 
-        return convertPathsToGameTypes(pathsFinder.searchPaths(myUnit.getId(), targets_id, myUnit.checkFeature("knight")), board);
-    }
+        Map<Integer, List<Cell>> foundPaths = pathsFinder.searchPaths(myUnit.getId(), targets_id, myUnit.checkFeature("knight"));
 
-    private static AiBoardObject convertBoardObjectToAiBoardObject(BoardObject boardObject) {
-
-        List<Cell> AiBoardObjectCells = new ArrayList<>();
-        for(BoardCell boardCell : boardObject.getCells())
-            AiBoardObjectCells.add(new Cell(boardCell.x, boardCell.y));
-
-        return new AiBoardObject(boardObject.getId(), AiBoardObjectCells);
+        return convertPathsToGameTypes(foundPaths, board);
     }
 
     private static List<AiBoardObject> convertListOfBoardObjectsToListOfAiBoardObjects(List<BoardObject> boardObjects) {
@@ -40,6 +33,15 @@ class PathsFinderConnector {
             aiBoardObjects.add(convertBoardObjectToAiBoardObject(boardObject));
 
         return aiBoardObjects;
+    }
+
+    private static AiBoardObject convertBoardObjectToAiBoardObject(BoardObject boardObject) {
+
+        List<Cell> AiBoardObjectCells = new ArrayList<>();
+        for(BoardCell boardCell : boardObject.getCells())
+            AiBoardObjectCells.add(new Cell(boardCell.x, boardCell.y));
+
+        return new AiBoardObject(boardObject.getId(), AiBoardObjectCells);
     }
 
     private static Map<BoardObject, List<BoardCell>> convertPathsToGameTypes(Map<Integer, List<Cell>> paths, Board board) {

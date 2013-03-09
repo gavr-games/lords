@@ -2,6 +2,8 @@ package ai;
 
 public abstract class Command
 {
+    public abstract BoardCell getFrom();
+    public abstract BoardCell getTo();
 	public abstract String toString(int gameId, int playerNum);
 }
 
@@ -18,11 +20,13 @@ class UnitMoveCommand extends Command
         this.to = to;
     }
 
+    @Override
 	public BoardCell getFrom()
 	{
 		return from;
 	}
 
+    @Override
 	public BoardCell getTo()
 	{
 		return to;
@@ -46,11 +50,13 @@ class UnitAttackCommand extends Command
         this.to = to;
     }
 
+    @Override
 	public BoardCell getFrom()
 	{
 		return from;
 	}
 
+    @Override
 	public BoardCell getTo()
 	{
 		return to;
@@ -65,6 +71,19 @@ class UnitAttackCommand extends Command
 
 class EndTurnCommand extends Command
 {
+
+    @Override
+    public BoardCell getFrom()
+    {
+        return null;
+    }
+
+    @Override
+    public BoardCell getTo()
+    {
+        return null;
+    }
+
     @Override
     public String toString(int gameId, int playerNum)
     {
