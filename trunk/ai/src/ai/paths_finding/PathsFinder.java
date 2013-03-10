@@ -23,6 +23,7 @@ public class PathsFinder {
 
         for(AiBoardObject target : targets) {
             paths.put(target.getId(), new Astar(aiBoard, aiBoard.getObjectById(myUnit_id), target, knightMoving).search());
+            aiBoard.restore();
         }
 
 

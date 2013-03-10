@@ -72,4 +72,10 @@ public class AiBoard {
     public Offset calculateOffsetBetweenCellsCoordinates(Cell a, Cell b) {
         return new Offset(b.x - a.x, b.y - a.y);
     }
+
+    public void restore() {
+        for(int x=0; x< size_x; x++)
+            for(int y=0; y< size_y; y++)
+                map[x][y].reset();
+    }
 }
