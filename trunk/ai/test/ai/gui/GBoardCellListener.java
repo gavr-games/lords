@@ -1,11 +1,11 @@
 package ai.gui;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class CellListener extends MouseAdapter {
+public class GBoardCellListener extends MouseAdapter {
     private boolean flag = false;
 
     @Override
@@ -13,11 +13,11 @@ public class CellListener extends MouseAdapter {
         JPanel b = (JPanel)e.getSource();
         if(!flag) {
             if(TesterGUI.myUnit.isSelected())
-                b.setBackground(TesterGUI.MY_UNIT);
+                b.setBackground(GBoard.MY_UNIT);
             else if(TesterGUI.obstacles.isSelected())
-                b.setBackground(TesterGUI.OBSTACLE);
+                b.setBackground(GBoard.OBSTACLE);
             else if(TesterGUI.target.isSelected())
-                b.setBackground(TesterGUI.ENEMY);
+                b.setBackground(GBoard.ENEMY);
             flag = true;
         }
         else {

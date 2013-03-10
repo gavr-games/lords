@@ -6,20 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class TesterGUI extends JFrame {
-    public static final Color MY_UNIT = Color.BLUE;
-    public static final Color OBSTACLE = Color.BLACK;
-    public static final Color ENEMY = Color.RED;
 
     private static int screenWidth;
     private static int screenHeight;
-    private static Board board;
-    private static JPanel optionsPanel;
+    private static GBoard gBoard;
 
     public static JRadioButton myUnit;
     public static JRadioButton obstacles;
     public static JRadioButton target;
 
 
+    @SuppressWarnings("MagicConstant")
     public TesterGUI() {
         setTitle("LordsAITester alpha");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,17 +46,23 @@ public class TesterGUI extends JFrame {
     private void generateGUI() {
         setLayout(new GridBagLayout());
 
-        board = new Board();
+        gBoard = new GBoard();
 
-        optionsPanel = new JPanel(new GridBagLayout());
+        JPanel optionsPanel = new JPanel(new GridBagLayout());
         JPanel objectTypeSelectionPanel = new JPanel(new GridBagLayout());
         JPanel testPropertiesPanel = new JPanel(new GridBagLayout());
 
         JButton startTestButton = new JButton("Start test!");
         startTestButton.addActionListener(new ActionListener() {
             @Override
+            public void actionPerformed(ActionEvent e) { LordsAITester.runTest(gBoard.getTestProperties()); }
+        });
+
+        JButton clearGBoardButton = new JButton("Clear");
+        clearGBoardButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                LordsAITester.runTest(board.getTestProperties());
+                gBoard.clear();
             }
         });
 
@@ -99,20 +102,22 @@ public class TesterGUI extends JFrame {
                 GridBagConstraints.CENTER, GridBagConstraints.CENTER, new Insets(0,0,0,0), 0,0));
         testPropertiesPanel.add(startTestButton, new GridBagConstraints(1,0, 1,1, 1.0,1.0,
                 GridBagConstraints.WEST, GridBagConstraints.CENTER, new Insets(0,0,0,0), 0,0));
+        testPropertiesPanel.add(clearGBoardButton, new GridBagConstraints(0,1, 2,1, 1.0,1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.CENTER, new Insets(0,0,0,0), 0,0));
 
-        optionsPanel.add(objectTypeSelectionPanel, new GridBagConstraints(0,0, 1,1, 1.0,1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0,0));
-        optionsPanel.add(testPropertiesPanel, new GridBagConstraints(0,1, 1,1, 1.0,1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0,0));
+        optionsPanel.add(objectTypeSelectionPanel, new GridBagConstraints(0, 0, 1, 1, 0.2, 0.2,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        optionsPanel.add(testPropertiesPanel, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-        add(board, new GridBagConstraints(0,0, 1,1, 1.0, 1.0,
+        add(gBoard, new GridBagConstraints(0,0, 1,1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         add(optionsPanel, new GridBagConstraints(1,0, 1,1, 0.25,0.25,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0,0));
     }
 
-    public Board getBoard() {
-        return board;
+    public GBoard getBoard() {
+        return gBoard;
     }
 }
 

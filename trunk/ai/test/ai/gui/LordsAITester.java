@@ -1,10 +1,9 @@
 package ai.gui;
 
-import ai.*;
+import ai.Command;
+import ai.MultiTargetUnitAI;
 import ai.Board;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LordsAITester {
@@ -19,24 +18,17 @@ public class LordsAITester {
 
     public static void runTest(TestProperties testProperties) {
         if(testProperties != null) {
-            List<BoardObject> objects = new ArrayList<>();
-            objects.add(testProperties.me);
-            objects.addAll(testProperties.obstacles);
-            objects.addAll(testProperties.enemies);
-            Board board = new Board(20,20, objects);
-            ai.MultiTargetUnitAI ai = new MultiTargetUnitAI(board, testProperties.me, testProperties.enemies);
-
-            visualizeCommands(ai.getCommands());
+            Board board = new Board(20,20, testProperties.getAllObjects());
+            ai.MultiTargetUnitAI ai = new MultiTargetUnitAI(board, testProperties.getMyUnit(), testProperties.getEnemies());
+            visualizePath(ai.getCommands());
         }
     }
 
-    private static void visualizeCommands(List<Command> commands) {
-        Component[] boardComponents = testerGUI.getBoard().getComponents();
-        int componentNumber = 0;
+    private static void visualizePath(List<Command> commands) {
+        GBoard GBoard = testerGUI.getBoard();
         for(int i =0; i<commands.size()-1; i++) {
-            componentNumber = commands.get(i).getTo().x*20 + commands.get(i).getTo().y;
-            boardComponents[componentNumber].setBackground(Color.CYAN);
+            ai.BoardCell pathCell = commands.get(i).getTo();
+            GBoard.markPathCell(pathCell.x, pathCell.y);
         }
-
     }
 }
