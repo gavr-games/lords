@@ -54,4 +54,8 @@ public class BoardCell {
         isObstacle = false;
     }
 
+    public void reset() {
+        parent = null;
+        isClosed = false;
+    }
 }
