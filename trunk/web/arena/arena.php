@@ -130,6 +130,9 @@
 	$markers['###JS_ARRAYS###'] .= $js_arrays;
 	$markers['###IFRAME_LINK###'] = $iframe_link;
         $markers['###REVISION###'] = $SITE_conf['revision'];
+		$copyYear = 2010; 
+		$curYear = date('Y'); 
+		$markers['###COPY###'] ='© '.$copyYear . (($copyYear != $curYear) ? '-' . $curYear : '') . ' "THE LORDS"';
 	
 	//print template of html page
 	$replace = $values = array();

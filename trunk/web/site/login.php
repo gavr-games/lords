@@ -38,6 +38,10 @@
 			</div>
 		</div>
 		<div id="footer"> 
-	    	© 2013 "THE LORDS"
+	    	© <?php 
+		$copyYear = 2010; 
+		$curYear = date('Y'); 
+		echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
+		?> "THE LORDS"
 	    </div>
 </body>

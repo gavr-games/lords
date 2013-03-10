@@ -3,21 +3,24 @@
 	include_once('../general_classes/image.class.php');
 	
 	//get user info
-	  $query = 'call ' . $DB_conf['site'] . '.get_user_profile(' . $_GET['user_id'] . ');'; //get  data
-	  $result = $dataBase->multi_query($query);
-	  do {
-		/* store first result set */
-		if ($result = $mysqli->store_result()) {
-			while ($r = $result->fetch_assoc()) {
-			$user = $r;
+	$user_info = array('user_info','stats');
+	$query = 'call '.$DB_conf['site'].'.get_user_profile('.$_GET['user_id'].');';
+	$res = $dataBase->multi_query($query);
+	foreach($user_info as $info) {
+			$result = $mysqli->store_result();
+			while ($row = mysqli_fetch_assoc($result))	{
+				switch($info){
+					case 'user_info':
+						$user=$row;
+					break;
+					case 'stats':
+						$stats[]=$row;
+					break;
+				}
 			}
 			$result->free();
-			$i++;
-		}
-		/* print divider */
-		if ($mysqli->more_results()) {
-		}
-	  } while ($mysqli->next_result());
+			$mysqli->next_result();
+	}
 	$user['id'] = $_GET['user_id'];
 	
 	//avatar path
@@ -62,7 +65,40 @@
 			      <img src="<?php echo $SITE_conf['domen'].$prof_img;?>?cache=<?php echo time(); ?>" alt="Герб" />
 			    </div>
 			    <div class="profile_stats">
-			    
+			    <table>
+			    <tr>
+			      <td><h5>Дата последней игры:</h5></td><td> <?php echo $user['last_played_game']; ?></td>
+			    </tr>
+			    </table>
+			    <br />
+			    <h3>Статистика</h3>
+			    <table class="stats">
+			    <tr>
+			      <td><h5>Мод</h5></td>
+			      <td><h5>Всего игр</h5></td>
+			      <td><h5>Победы</h5></td>
+			      <td><h5>Поражения</h5></td>
+			      <td><h5>Ничьи</h5></td>
+			      <td><h5>Вышел из игры</h5></td>
+			    </tr>
+			    <tr>
+			      <?php
+			      if (isset($stats))
+				foreach($stats as $stat){
+				  echo '
+				  <tr>
+				  <td>'.$stat['mode_id'].'</td>
+				  <td>'.$stat['games_played'].'</td>
+				  <td>'.$stat['win'].'</td>
+				  <td>'.$stat['lose'].'</td>
+				  <td>'.$stat['draw'].'</td>
+				  <td>'.$stat['exit'].'</td>
+				  </tr>
+				  ';
+				}
+			      ?>
+			    </tr>
+			    </table>
 			    </div>
 			  </div>
 		  </form>
@@ -70,6 +106,10 @@
 
 	</div>
 		<div id="footer"> 
-	    	© 2013 "THE LORDS"
+	    	© <?php 
+		$copyYear = 2010; 
+		$curYear = date('Y'); 
+		echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
+		?> "THE LORDS"
 	    </div>
 </body>
