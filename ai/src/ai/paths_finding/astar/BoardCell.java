@@ -57,5 +57,9 @@ public class BoardCell {
     public void reset() {
         parent = null;
         isClosed = false;
+        isGoal = false;
+        pathLength = 0;
+        pathCost = Integer.MAX_VALUE;
+        heuristicDistanceToGoal = 0;
     }
 }
