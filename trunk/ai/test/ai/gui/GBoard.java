@@ -6,7 +6,7 @@ import ai.BoardObjectType;
 import ai.Player;
 
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -32,23 +32,15 @@ public class GBoard extends JPanel {
     private void fill() {
         for(int x = 0; x < 20; x++)
             for(int y = 0; y < 20; y++) {
-                GBoardCell cell = createGBoardCell(x, y);
+                GBoardCell cell = new GBoardCell(x, y);
                 add(cell, getGridBagConstraintsFor(cell));
                 gBoardCells.add(cell);
             }
     }
 
-    private GBoardCell createGBoardCell(int x, int y) {
-        GBoardCell cell = new GBoardCell(x, y);
-        cell.setBackground(DEFAULT);
-        cell.setPreferredSize(new Dimension(5,5));
-        cell.addMouseListener(new GBoardCellListener());
-        return cell;
-    }
-
     private GridBagConstraints getGridBagConstraintsFor(GBoardCell cell) {
         return new GridBagConstraints(cell.x,cell.y,1,1,1.0,1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1,1,1,1), 0, 0);
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0, 0);
     }
 
     public TestProperties getTestProperties() {
@@ -66,7 +58,7 @@ public class GBoard extends JPanel {
         List<BoardCell> myUnitCells = getMyUnitCells();
 
         if(!myUnitCells.isEmpty())
-            return new BoardObject(0, BoardObjectType.UNIT, myPlayer, getMyUnitCells(), 200);
+            return new BoardObject(0, BoardObjectType.UNIT, myPlayer, getMyUnitCells(), 20000);
         else
             return null;
     }
@@ -96,7 +88,7 @@ public class GBoard extends JPanel {
 
     private List<BoardObject> getEnemies() {
         List<BoardObject> enemies = new ArrayList<>();
-        int i = 100;
+        int i = 1000;
         for(GBoardCell gbc : gBoardCells) {
             if(gbc.getBackground() == ENEMY) {
                 enemies.add(new BoardObject(i++, BoardObjectType.UNIT, enemyPlayer,
@@ -112,8 +104,14 @@ public class GBoard extends JPanel {
         getComponents()[componentNumber].setBackground(Color.CYAN);
     }
 
-    public void clear() {
+    public void clearAll() {
         for(GBoardCell gbc : gBoardCells)
             gbc.setBackground(DEFAULT);
+    }
+
+    public void clearPath() {
+        for(GBoardCell gbc : gBoardCells)
+            if(gbc.getBackground() == Color.CYAN)
+                gbc.setBackground(DEFAULT);
     }
 }

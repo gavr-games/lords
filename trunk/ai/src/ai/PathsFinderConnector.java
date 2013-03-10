@@ -48,10 +48,10 @@ class PathsFinderConnector {
 
         Map<BoardObject, List<BoardCell>> convertedPaths = new HashMap<>();
         for(int key : paths.keySet()) {
-            List<BoardCell> boardObjectCells = new ArrayList<>();
+            List<BoardCell> pathCells = new ArrayList<>();
             for(Cell cell : paths.get(key)) {
-                boardObjectCells.add(new BoardCell(cell.x, cell.y));
-                convertedPaths.put(board.getUnitById(key), boardObjectCells);
+                pathCells.add(new BoardCell(cell.x, cell.y));
+                convertedPaths.put(board.getUnitById(key), pathCells);
             }
         }
 

@@ -58,11 +58,18 @@ public class TesterGUI extends JFrame {
             public void actionPerformed(ActionEvent e) { LordsAITester.runTest(gBoard.getTestProperties()); }
         });
 
-        JButton clearGBoardButton = new JButton("Clear");
+        JButton clearGBoardButton = new JButton("Clear all");
         clearGBoardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gBoard.clear();
+                gBoard.clearAll();
+            }
+        });
+        JButton clearPathButton = new JButton("Clear path");
+        clearPathButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gBoard.clearPath();
             }
         });
 
@@ -102,7 +109,9 @@ public class TesterGUI extends JFrame {
                 GridBagConstraints.CENTER, GridBagConstraints.CENTER, new Insets(0,0,0,0), 0,0));
         testPropertiesPanel.add(startTestButton, new GridBagConstraints(1,0, 1,1, 1.0,1.0,
                 GridBagConstraints.WEST, GridBagConstraints.CENTER, new Insets(0,0,0,0), 0,0));
-        testPropertiesPanel.add(clearGBoardButton, new GridBagConstraints(0,1, 2,1, 1.0,1.0,
+        testPropertiesPanel.add(clearGBoardButton, new GridBagConstraints(0,1, 1,1, 1.0,1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.CENTER, new Insets(0,0,0,0), 0,0));
+        testPropertiesPanel.add(clearPathButton, new GridBagConstraints(1,1, 1,1, 1.0,1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.CENTER, new Insets(0,0,0,0), 0,0));
 
         optionsPanel.add(objectTypeSelectionPanel, new GridBagConstraints(0, 0, 1, 1, 0.2, 0.2,
