@@ -17,7 +17,8 @@ public class GBoard extends JPanel {
     public static final Color MY_UNIT = Color.BLUE;
     public static final Color OBSTACLE = Color.BLACK;
     public static final Color ENEMY = Color.RED;
-    public static final Color DEFAULT = new Color(60, 182, 22);
+    public static final Color EMPTY = new Color(60, 182, 22);
+    public static final Color PATH_CELL = Color.CYAN;
     private static Player myPlayer;
     private static Player enemyPlayer;
 
@@ -67,7 +68,7 @@ public class GBoard extends JPanel {
         List<BoardCell> myUnitCells = new ArrayList<>();
 
         for(GBoardCell gbc : gBoardCells)
-            if (gbc.getBackground() == MY_UNIT)
+            if (gbc.getType() == GBoardCellType.MY_UNIT)
                 myUnitCells.add(new BoardCell(gbc.x, gbc.y));
 
         return myUnitCells;
@@ -77,7 +78,7 @@ public class GBoard extends JPanel {
         List<BoardObject> obstacles = new ArrayList<>();
         int i = 10;
         for(GBoardCell gbc : gBoardCells) {
-            if(gbc.getBackground() == OBSTACLE) {
+            if(gbc.getType() == GBoardCellType.OBSTACLE) {
                 obstacles.add(new BoardObject(i++, BoardObjectType.OBSTACLE, enemyPlayer,
                         Collections.singletonList(new ai.BoardCell(gbc.x, gbc.y)), 0));
             }
@@ -90,7 +91,7 @@ public class GBoard extends JPanel {
         List<BoardObject> enemies = new ArrayList<>();
         int i = 1000;
         for(GBoardCell gbc : gBoardCells) {
-            if(gbc.getBackground() == ENEMY) {
+            if(gbc.getType() == GBoardCellType.ENEMY) {
                 enemies.add(new BoardObject(i++, BoardObjectType.UNIT, enemyPlayer,
                         Collections.singletonList(new ai.BoardCell(gbc.x, gbc.y)), 0));
             }
@@ -101,17 +102,26 @@ public class GBoard extends JPanel {
 
     public void markPathCell(int x, int y) {
         int componentNumber = x*20 + y;
-        getComponents()[componentNumber].setBackground(Color.CYAN);
+        GBoardCell gbc = gBoardCells.get(componentNumber);
+        gbc.setType(GBoardCellType.PATH);
     }
 
     public void clearAll() {
-        for(GBoardCell gbc : gBoardCells)
-            gbc.setBackground(DEFAULT);
+        for(GBoardCell gbc : gBoardCells) {
+            gbc.setType(GBoardCellType.EMPTY);
+        }
     }
 
     public void clearPath() {
         for(GBoardCell gbc : gBoardCells)
-            if(gbc.getBackground() == Color.CYAN)
-                gbc.setBackground(DEFAULT);
+            if(gbc.getType() == GBoardCellType.PATH) {
+                gbc.setType(GBoardCellType.EMPTY);
+            }
+    }
+
+    public void shadePreviousPaths() {
+        for(GBoardCell gbc : gBoardCells)
+            if(gbc.getType() == GBoardCellType.PATH)
+                gbc.setBackground(new Color(14, 197, 158));
     }
 }

@@ -25,10 +25,11 @@ public class LordsAITester {
     }
 
     private static void visualizePath(List<Command> commands) {
-        GBoard GBoard = testerGUI.getBoard();
+        GBoard gBoard = testerGUI.getBoard();
+        gBoard.shadePreviousPaths();
         for(int i =0; i<commands.size()-1; i++) {
             ai.BoardCell pathCell = commands.get(i).getTo();
-            GBoard.markPathCell(pathCell.x, pathCell.y);
+            gBoard.markPathCell(pathCell.x, pathCell.y);
         }
     }
 }
