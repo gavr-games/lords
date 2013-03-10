@@ -99,7 +99,7 @@ public class GBoard extends JPanel {
         int i = 100;
         for(GBoardCell gbc : gBoardCells) {
             if(gbc.getBackground() == ENEMY) {
-                enemies.add(new BoardObject(i++, BoardObjectType.OBSTACLE, enemyPlayer,
+                enemies.add(new BoardObject(i++, BoardObjectType.UNIT, enemyPlayer,
                         Collections.singletonList(new ai.BoardCell(gbc.x, gbc.y)), 0));
             }
         }
