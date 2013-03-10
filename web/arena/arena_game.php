@@ -12,7 +12,7 @@
 							$replace[] = $value;
 				}
 			//checkbox feature
-			if($feature['feature_type']=='mbool')	{
+			if($feature['feature_type']=='bool')	{
 				if ($feature['in_game']==1) $checked = 'checked="checked"';
 				else $checked = '';
 				$search[]  = "###checked###";
