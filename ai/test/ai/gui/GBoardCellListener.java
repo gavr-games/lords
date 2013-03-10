@@ -11,7 +11,7 @@ public class GBoardCellListener extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         mousePressed = true;
         GBoardCell gbc = (GBoardCell)e.getSource();
-        if(gbc.getBackground() == GBoard.DEFAULT) {
+        if(gbc.getType() == GBoardCellType.EMPTY) {
             mark((GBoardCell)e.getSource());
             flag = true;
         }
@@ -40,14 +40,14 @@ public class GBoardCellListener extends MouseAdapter {
 
     private void mark(GBoardCell gbc) {
         if(TesterGUI.myUnit.isSelected())
-            gbc.setBackground(GBoard.MY_UNIT);
+            gbc.setType(GBoardCellType.MY_UNIT);
         else if(TesterGUI.obstacles.isSelected())
-            gbc.setBackground(GBoard.OBSTACLE);
+            gbc.setType(GBoardCellType.OBSTACLE);
         else if(TesterGUI.target.isSelected())
-            gbc.setBackground(GBoard.ENEMY);
+            gbc.setType(GBoardCellType.ENEMY);
     }
 
     private void unmark(GBoardCell gbc) {
-        gbc.setBackground(GBoard.DEFAULT);
+        gbc.setType(GBoardCellType.EMPTY);
     }
 }
