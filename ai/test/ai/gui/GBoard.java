@@ -18,14 +18,15 @@ public class GBoard extends JPanel {
     public static final Color OBSTACLE = Color.BLACK;
     public static final Color ENEMY = Color.RED;
     public static final Color EMPTY = new Color(60, 182, 22);
-    public static final Color PATH_CELL = Color.CYAN;
+    public static final Color PATH = Color.CYAN;
+    public static final Color ATTACKED = new Color(193, 0, 193);
     private static Player myPlayer;
     private static Player enemyPlayer;
 
-    private List<GBoardCell> gBoardCells = new ArrayList<>();
+    private static List<GBoardCell> gBoardCells = new ArrayList<>();
 
     public GBoard() {
-        setLayout(new GridBagLayout());
+        setLayout(new GridLayout(20,20));
         setBackground(new Color(73, 73, 73));
         fill();
     }
@@ -34,17 +35,12 @@ public class GBoard extends JPanel {
         for(int x = 0; x < 20; x++)
             for(int y = 0; y < 20; y++) {
                 GBoardCell cell = new GBoardCell(x, y);
-                add(cell, getGridBagConstraintsFor(cell));
+                add(cell);
                 gBoardCells.add(cell);
             }
     }
 
-    private GridBagConstraints getGridBagConstraintsFor(GBoardCell cell) {
-        return new GridBagConstraints(cell.x,cell.y,1,1,1.0,1.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0, 0);
-    }
-
-    public TestProperties getTestProperties() {
+    public static TestProperties getTestProperties() {
         myPlayer = new Player(0,0,0);
         enemyPlayer = new Player(1,1,1);
         BoardObject myUnit = getMyUnit();
@@ -55,7 +51,7 @@ public class GBoard extends JPanel {
             return null;
     }
 
-    private BoardObject getMyUnit() {
+    private static BoardObject getMyUnit() {
         List<BoardCell> myUnitCells = getMyUnitCells();
 
         if(!myUnitCells.isEmpty())
@@ -64,7 +60,7 @@ public class GBoard extends JPanel {
             return null;
     }
 
-    private List<BoardCell> getMyUnitCells() {
+    private static List<BoardCell> getMyUnitCells() {
         List<BoardCell> myUnitCells = new ArrayList<>();
 
         for(GBoardCell gbc : gBoardCells)
@@ -74,7 +70,7 @@ public class GBoard extends JPanel {
         return myUnitCells;
     }
 
-    private List<BoardObject> getObstacles() {
+    private static List<BoardObject> getObstacles() {
         List<BoardObject> obstacles = new ArrayList<>();
         int i = 10;
         for(GBoardCell gbc : gBoardCells) {
@@ -87,7 +83,7 @@ public class GBoard extends JPanel {
         return obstacles;
     }
 
-    private List<BoardObject> getEnemies() {
+    private static List<BoardObject> getEnemies() {
         List<BoardObject> enemies = new ArrayList<>();
         int i = 1000;
         for(GBoardCell gbc : gBoardCells) {
@@ -100,28 +96,36 @@ public class GBoard extends JPanel {
         return enemies;
     }
 
-    public void markPathCell(int x, int y) {
+    public static void markPathCell(int x, int y) {
         int componentNumber = x*20 + y;
         GBoardCell gbc = gBoardCells.get(componentNumber);
-        gbc.setType(GBoardCellType.PATH);
+        if(gbc.getType() == GBoardCellType.ENEMY)
+            gbc.setBackground(ATTACKED);
+        else gbc.setType(GBoardCellType.PATH);
     }
 
-    public void clearAll() {
+    public static void clearAll() {
         for(GBoardCell gbc : gBoardCells) {
             gbc.setType(GBoardCellType.EMPTY);
         }
     }
 
-    public void clearPath() {
-        for(GBoardCell gbc : gBoardCells)
+    public static void clearPath() {
+        for(GBoardCell gbc : gBoardCells) {
             if(gbc.getType() == GBoardCellType.PATH) {
                 gbc.setType(GBoardCellType.EMPTY);
             }
+            else if(gbc.getType() == GBoardCellType.ENEMY) {
+                gbc.setBackground(ENEMY);
+            }
+        }
     }
 
-    public void shadePreviousPaths() {
+    public static void shadePreviousPaths() {
         for(GBoardCell gbc : gBoardCells)
             if(gbc.getType() == GBoardCellType.PATH)
                 gbc.setBackground(new Color(14, 197, 158));
     }
+
+
 }

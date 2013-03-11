@@ -33,7 +33,7 @@ public class GBoardCell extends JPanel {
                 setBackground(GBoard.ENEMY);
                 break;
             case PATH:
-                setBackground(GBoard.PATH_CELL);
+                setBackground(GBoard.PATH);
                 break;
             case EMPTY:
                 setBackground(GBoard.EMPTY);
