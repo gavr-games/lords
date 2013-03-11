@@ -75,8 +75,8 @@ public class TesterGUI extends JFrame {
 
 
         myUnit = new JRadioButton();
+        myUnit.setSelected(true);
         obstacles = new JRadioButton();
-        obstacles.setSelected(true);
         target = new JRadioButton();
 
         JLabel myUnitRadioButtonLabel = new JLabel("myUnit");

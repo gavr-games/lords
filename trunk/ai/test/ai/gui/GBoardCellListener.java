@@ -12,11 +12,11 @@ public class GBoardCellListener extends MouseAdapter {
         mousePressed = true;
         GBoardCell gbc = (GBoardCell)e.getSource();
         if(gbc.getType() == GBoardCellType.EMPTY) {
-            mark((GBoardCell)e.getSource());
+            mark(gbc);
             flag = true;
         }
         else {
-            unmark((GBoardCell)e.getSource());
+            unmark(gbc);
             flag = false;
         }
     }
@@ -31,9 +31,9 @@ public class GBoardCellListener extends MouseAdapter {
         if(mousePressed) {
             GBoardCell gbc = (GBoardCell)e.getSource();
             if(flag)
-                mark((GBoardCell)e.getSource());
+                mark(gbc);
             else {
-                unmark((GBoardCell)e.getSource());
+                unmark(gbc);
             }
         }
     }
