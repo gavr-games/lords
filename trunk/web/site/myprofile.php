@@ -137,7 +137,7 @@
 				foreach($stats as $stat){
 				  echo '
 				  <tr>
-				  <td>'.$stat['mode_id'].'</td>
+				  <td>'.$stat['mode_name'].'</td>
 				  <td>'.$stat['games_played'].'</td>
 				  <td>'.$stat['win'].'</td>
 				  <td>'.$stat['lose'].'</td>
