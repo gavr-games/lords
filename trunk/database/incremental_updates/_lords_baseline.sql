@@ -28942,7 +28942,7 @@ BEGIN
   DECLARE user_id INT;
   DECLARE mode_id INT;
   DECLARE game_type_id INT;
-  DECLARE cmd_log VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_independent_message($p_num,"$log_building ࠧ襭")';
+  DECLARE cmd_log VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_independent_message($p_num,"$log_building разрушен")';
 
   SELECT game_id,player_num INTO g_id,p2_num FROM board_buildings WHERE id=board_castle_id LIMIT 1;
 
@@ -28974,7 +28974,7 @@ BEGIN
 /*spectator*/
   UPDATE players SET owner=0 WHERE game_id=g_id AND player_num=p2_num;
 
-  SELECT p.user_id INTO user_id FROM players p WHERE game_id=g_id AND player_num=p_num;
+  SELECT p.user_id INTO user_id FROM players p WHERE game_id=g_id AND player_num=p2_num;
   UPDATE lords_site.arena_game_players agp SET agp.spectator_flag=1 WHERE agp.user_id=user_id;
 
   CALL cmd_delete_player(g_id,p2_num);
