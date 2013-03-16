@@ -97,6 +97,10 @@
 			background-color:black;
 		}
 	</style>
+	<script>
+	 function eval(){
+	 }
+	</script>
 </head>
 <body>
 	<div id="wrap" class="profile">
