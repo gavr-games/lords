@@ -75,6 +75,7 @@ function load_window(src,dir)	{
 	setTimeout("move_window('"+dir+"');",1000);
 }
 function move_window(dir) {
+  /* //Mootools variant
         var o = {};
         var p = {};
         var pan_x = Math.ceil(screen_size.x/5);
@@ -112,5 +113,19 @@ function move_window(dir) {
 	var myMorph = new Fx.Morph('panor', { 'duration': 3000 });
 	var newPos  = $('panor').getStyle('background-position').replace('px 0px','').toInt() + ((dir=='right')?(-pan_x):(pan_x)) + 'px 0px';
 	myMorph.start({ 'background-position': newPos });
-
+	*/
+    //$fx variant
+    var wind_step = 22;
+    var panor_step = 4;
+    var pan_x = Math.ceil(screen_size.x/wind_step*panor_step);
+    old_window.contentWindow.document.body.style.overflow = "hidden";
+    
+    $fx(old_window).fxAdd({type: 'left', to:old_window.getStyle('left').toInt() + ((dir=='right')?(-screen_size.x):(screen_size.x)), step: ((dir=='right')?(-wind_step):(wind_step)), delay: 20}).fxRun(null,1);
+    $fx(current_window).fxAdd({type: 'left', to:current_window.getStyle('left').toInt() + ((dir=='right')?(-screen_size.x):(screen_size.x)), step: ((dir=='right')?(-wind_step):(wind_step)), delay: 20}).fxRun(null,1);
+	
+    $fx('#panor').fxAdd({type: 'backgroundx', to:$('panor').getStyle('background-position').replace('px 0px','').toInt() + ((dir=='right')?(-pan_x):(pan_x)), step: ((dir=='right')?(-panor_step):(panor_step)), delay: 20}).fxRun(finishedMovement,1);
+}
+function finishedMovement(){
+  old_window.destroy();
+  window_loading = false;
 }

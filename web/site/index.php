@@ -9,6 +9,7 @@
 	<link id="site_icon" rel="icon" href="design/images/icon_lords.ico" type="image/x-icon" />
 	<script type="text/javascript" src="general_js/mootools.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="general_js/mootools-more.js?<?php echo $SITE_conf['revision']; ?>"></script>
+	<script type="text/javascript" src="general_js/fx.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="site/js_libs/winds.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="site/js_libs/static_libs.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="general_js/ape/Build/uncompressed/apeClientJS.js?<?php echo $SITE_conf['revision']; ?>">"></script>
