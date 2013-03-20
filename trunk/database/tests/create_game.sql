@@ -8,7 +8,7 @@ call arena_enter(2);
 call arena_enter(3);
 call arena_enter(4);
 
-call arena_game_create(1,'test_game',null,0,1);
+call arena_game_create(1,'test_game',null,0,8);
 
 call arena_game_feature_set(1,1,1,1);
 call arena_game_feature_set(1,1,4,1);
