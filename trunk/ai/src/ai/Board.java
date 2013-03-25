@@ -34,9 +34,8 @@ public class Board
 	{
 		for(BoardObject bo:objects)
 		{
-			//if(bo.getId() == id && bo.getType() == BoardObjectType.UNIT) return bo;
-            if(bo.getId() == id) return bo;
+			if(bo.getId() == id && bo.getType() == BoardObjectType.UNIT) return bo;
 		}
-		return null;
+		throw new IllegalArgumentException("Unit with id = "+id+" was not found");
 	}
 }
