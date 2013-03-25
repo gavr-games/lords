@@ -1,9 +1,11 @@
 package ai;
 
-import java.util.List;
 import org.json.simple.parser.ParseException;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 public class PlayerAiFactoryTest
 {
@@ -54,5 +56,4 @@ public class PlayerAiFactoryTest
 		List<Command> cmds = ai.getCommands();
 		assertTrue(cmds.size() > 0);
 	}
-	
 }

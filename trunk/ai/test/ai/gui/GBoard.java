@@ -76,7 +76,7 @@ public class GBoard extends JPanel {
         for(GBoardCell gbc : gBoardCells) {
             if(gbc.getType() == GBoardCellType.OBSTACLE) {
                 obstacles.add(new BoardObject(i++, BoardObjectType.OBSTACLE, enemyPlayer,
-                        Collections.singletonList(new ai.BoardCell(gbc.x, gbc.y)), 0));
+                        Collections.singletonList(new BoardCell(gbc.x, gbc.y)), 0));
             }
         }
 
@@ -89,7 +89,7 @@ public class GBoard extends JPanel {
         for(GBoardCell gbc : gBoardCells) {
             if(gbc.getType() == GBoardCellType.ENEMY) {
                 enemies.add(new BoardObject(i++, BoardObjectType.UNIT, enemyPlayer,
-                        Collections.singletonList(new ai.BoardCell(gbc.x, gbc.y)), 0));
+                        Collections.singletonList(new BoardCell(gbc.x, gbc.y)), 0));
             }
         }
 
