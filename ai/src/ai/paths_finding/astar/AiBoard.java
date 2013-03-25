@@ -30,10 +30,10 @@ public class AiBoard {
         return map[x][y];
     }
 
-    public AiBoardObject getObjectById(int id) {
+    public AiBoardObject getObjectByHash(int hash) {
 
         for(AiBoardObject object : objects)
-            if (id == object.getId())
+            if (hash == object.getHash())
                 return object;
 
         return null;

@@ -11,19 +11,28 @@ import java.util.List;
 import java.util.Map;
 
 class PathsFinderConnector {
+    private static Map<Integer, BoardObject> hashMapOfTargets;
+
     public static Map<BoardObject, List<BoardCell>> getPaths(Board board, BoardObject myUnit, List<BoardObject> targets) {
+
+        hashMapOfTargets = getHashMapOfBoardObjects(targets);
 
         PathsFinder pathsFinder =
                 new PathsFinder(board.getSizeX(), board.getSizeY(),
                         convertListOfBoardObjectsToListOfAiBoardObjects(board.getObjects()));
 
-        List<Integer> targets_id = new ArrayList<>();
-        for(BoardObject target : targets)
-            targets_id.add(target.getId());
+        List<Integer> targets_hashes = new ArrayList<>(hashMapOfTargets.keySet());
 
-        Map<Integer, List<Cell>> foundPaths = pathsFinder.searchPaths(myUnit.getId(), targets_id, myUnit.checkFeature("knight"));
+        Map<Integer, List<Cell>> foundPaths = pathsFinder.searchPaths(myUnit.hashCode(), targets_hashes, myUnit.checkFeature("knight"));
 
         return convertPathsToGameTypes(foundPaths, board);
+    }
+
+    private static Map<Integer, BoardObject> getHashMapOfBoardObjects(List<BoardObject> targets) {
+        Map<Integer, BoardObject> map = new HashMap<>();
+        for(BoardObject target : targets)
+            map.put(target.hashCode(), target);
+        return map;
     }
 
     private static List<AiBoardObject> convertListOfBoardObjectsToListOfAiBoardObjects(List<BoardObject> boardObjects) {
@@ -41,7 +50,7 @@ class PathsFinderConnector {
         for(BoardCell boardCell : boardObject.getCells())
             AiBoardObjectCells.add(new Cell(boardCell.x, boardCell.y));
 
-        return new AiBoardObject(boardObject.getId(), AiBoardObjectCells);
+        return new AiBoardObject(boardObject.hashCode(), AiBoardObjectCells);
     }
 
     private static Map<BoardObject, List<BoardCell>> convertPathsToGameTypes(Map<Integer, List<Cell>> paths, Board board) {
@@ -51,7 +60,7 @@ class PathsFinderConnector {
             List<BoardCell> pathCells = new ArrayList<>();
             for(Cell cell : paths.get(key)) {
                 pathCells.add(new BoardCell(cell.x, cell.y));
-                convertedPaths.put(board.getUnitById(key), pathCells);
+                convertedPaths.put(hashMapOfTargets.get(key), pathCells);
             }
         }
 

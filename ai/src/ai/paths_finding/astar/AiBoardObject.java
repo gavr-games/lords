@@ -3,16 +3,16 @@ package ai.paths_finding.astar;
 import java.util.List;
 
 public class AiBoardObject {
-    private int id;
+    private int hash;
     private List<Cell> cells;
 
-    public AiBoardObject(int id, List<Cell> cells) {
-        this.id = id;
+    public AiBoardObject(int hash, List<Cell> cells) {
+        this.hash = hash;
         this.cells = cells;
     }
 
-    public int getId() {
-        return id;
+    public int getHash() {
+        return hash;
     }
 
     public List<Cell> getCells() {

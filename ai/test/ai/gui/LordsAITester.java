@@ -3,6 +3,7 @@ package ai.gui;
 import ai.Command;
 import ai.MultiTargetUnitAI;
 import ai.Board;
+import ai.BoardCell;
 
 import javax.swing.*;
 import java.util.List;
@@ -38,13 +39,12 @@ public class LordsAITester {
     }
 
     private static void visualizePath(List<Command> commands) {
-        GBoard gBoard = testerGUI.getBoard();
-        gBoard.shadePreviousPaths();
+        GBoard.shadePreviousPaths();
         for(Command command : commands) {
             if(command instanceof ai.ActionCommand) {
                 ai.ActionCommand acmd = (ai.ActionCommand)command;
-                ai.BoardCell pathCell = acmd.getTo();
-                gBoard.markPathCell(pathCell.x, pathCell.y);
+                BoardCell pathCell = acmd.getTo();
+                GBoard.markPathCell(pathCell.x, pathCell.y);
             }
         }
     }

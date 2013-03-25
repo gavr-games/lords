@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -40,7 +41,7 @@ public class MultiTargetUnitAITest
 	
 	private BoardObject getMe(int x, int y, int moves)
 	{
-		BoardObject me = new BoardObject(1,BoardObjectType.UNIT,myPlayer,Collections.singletonList(new BoardCell(x,y)),moves);
+		BoardObject me = new BoardObject(1, BoardObjectType.UNIT,myPlayer,Collections.singletonList(new BoardCell(x,y)),moves);
 		return me;
 	}
 

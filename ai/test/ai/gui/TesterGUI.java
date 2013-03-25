@@ -55,21 +55,21 @@ public class TesterGUI extends JFrame {
         JButton startTestButton = new JButton("Start test!");
         startTestButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { LordsAITester.runTest(gBoard.getTestProperties()); }
+            public void actionPerformed(ActionEvent e) { LordsAITester.runTest(GBoard.getTestProperties()); }
         });
 
         JButton clearGBoardButton = new JButton("Clear all");
         clearGBoardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gBoard.clearAll();
+                GBoard.clearAll();
             }
         });
         JButton clearPathButton = new JButton("Clear path");
         clearPathButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gBoard.clearPath();
+                GBoard.clearPath();
             }
         });
 
