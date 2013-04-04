@@ -15,7 +15,11 @@ INSERT INTO unit_level_up_experience(unit_id,level,experience)
 SELECT u.id,1,u.attack + u.health FROM units u;
 
 INSERT INTO unit_level_up_experience(unit_id,level,experience)
-SELECT u.id,2,u.attack + u.health + 1 FROM units u;
+SELECT u.id,2,u.attack + u.health + 1 + prev.experience
+FROM units u
+JOIN (SELECT unit_id, experience FROM unit_level_up_experience prev_lvl WHERE prev_lvl.level = 1) prev ON (u.id = prev.unit_id);
 
 INSERT INTO unit_level_up_experience(unit_id,level,experience)
-SELECT u.id,3,u.attack + u.health + 2 FROM units u;
+SELECT u.id,3,u.attack + u.health + 2 + prev.experience
+FROM units u
+JOIN (SELECT unit_id, experience FROM unit_level_up_experience prev_lvl WHERE prev_lvl.level = 2) prev ON (u.id = prev.unit_id);
