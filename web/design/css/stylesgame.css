@@ -645,3 +645,30 @@ html, body {text-align:left;
 .error_window a:hover{
 	text-decoration:none;
 }
+.levelup_choose{
+  z-index:2152;
+  width:25px;
+  height:60px;
+  background-color:black;
+  position:absolute;
+  top:100px;
+  left:500px;
+  border:1px solid #e8dd52;
+}
+.levelup_choose a{
+  display:block;
+  width:25px;
+  height:20px;
+}
+.levelup_choose .lvl_attack{
+  background:  url(../images/pic_attk.gif) 30% 50% no-repeat;
+}
+.levelup_choose .lvl_moves{
+  background:  url(../images/pic_move.gif) 30% 50% no-repeat;
+}
+.levelup_choose .lvl_health{
+  background:  url(../images/pic_health.gif) 30% 50% no-repeat;
+}
+.levelup_choose a:hover{
+  background-position: 66% 50%;
+}

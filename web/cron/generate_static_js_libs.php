@@ -11,6 +11,7 @@
 		error_reporting(E_ALL);
 	//$mysqli = new mysqli($DB_conf['server'], 'lord', 'D^Dhf88Y_]', $DB_conf['name']);
 	$mysqli = new mysqli($DB_conf['server'], 'lords_reader', 'D^Dhf88Y_]', $DB_conf['name']);
+// 	$mysqli = new mysqli($DB_conf['server'], 'root', 'mypass', $DB_conf['name']);
 	if (mysqli_connect_errno()) {
 		    printf("Connect failed: %s\n", mysqli_connect_error());
 		    die();
@@ -64,7 +65,8 @@
 	  Array('db_name'=>'mode_config','js_name'=>'mode_config'),
 	  Array('db_name'=>'vw_mode_unit_default_features','js_name'=>'unit_features_usage'),
 	  Array('db_name'=>'vw_mode_building_default_features','js_name'=>'building_default_features'),
-	  Array('db_name'=>'vw_mode_unit_phrases','js_name'=>'dic_unit_phrases')
+	  Array('db_name'=>'vw_mode_unit_phrases','js_name'=>'dic_unit_phrases'),
+	  Array('db_name'=>'vw_mode_unit_level_up_experience','js_name'=>'units_levels')
 	);
 	//get modes
 	$res = $dataBase->select('id','modes');
@@ -73,6 +75,7 @@
 			$js_arrays = '';
 			if (file_exists('../game/mode'.$mode['id']))	{
 					foreach($mode_tables as $table)	{ //get tables for mode
+						$old_unit_id = 0;
 						$first = true;
 						$res_table = $dataBase->select('*',$table['db_name'],'mode_id='.$mode['id']);
 						if ($res_table)	{
@@ -83,8 +86,16 @@
 									$js_arrays .= chr(13).'var '.$table['js_name'].' = new Array();'.chr(13);
 									$first = false;
 								}
+								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
+								  if ($row['unit_id']!=$old_unit_id)
+								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].'] = new Array();'.chr(13);
+								  $old_unit_id = $row['unit_id'];
+								}
 								if ($table['db_name']=='mode_config'){
 								  $js_arrays .= $table['js_name'].'["'.$row['param'].'"] = '.$row['value'].';'.chr(13);
+								} else 
+								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
+								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].']['.$row['level'].'] = '.$row['experience'].';'.chr(13);
 								} else {
 								  $js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.chr(13);
 								  foreach($row as $field=>$value)	{

@@ -22,7 +22,10 @@
                                 padding:0px 0px 3px 0px;
                                 
                                 }
-  .hintTip .tip .tip-title ul .name {color:#ffee91; padding:0px 0px 3px 4px; border-bottom:1px solid #ffee91;}
+  .hintTip .tip .tip-title ul .level .lvl {display:block;position:absolute;padding:1px; background-color:#ffee91;color:black;font-size:8px; width:9px;height:9px;text-align:center;}
+  .hintTip .tip .tip-title ul .level .full_exp {display:block;margin-left:15px; width:70px;height:2px;background-color:#F80000;}
+  .hintTip .tip .tip-title ul .level .cur_exp {display:block;height:2px;background-color:#33FF33;}
+  .hintTip .tip .tip-title ul .name {color:#ffee91; padding:0px 0px 3px 4px;}
   .hintTip .tip .tip-title ul .attk {background:  url(../images/pic_attk.gif) bottom left no-repeat !important;
                                       padding:0px 0px 0px 15px;
                                       margin-left:30%;
