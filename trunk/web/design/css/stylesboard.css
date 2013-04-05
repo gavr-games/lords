@@ -300,3 +300,15 @@
             width:34px;
             height:34px;
 }
+.level-star{
+  display:block;
+  background:  url(../images/star.png) top left no-repeat !important;
+  position:absolute;
+  right:0;
+  top:0;
+  width:10px;
+  height:10px;
+}
+.level-star:hover{
+  background:  url(../images/star2.png) top left no-repeat !important;
+}
