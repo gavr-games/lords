@@ -2,6 +2,35 @@
 
 DELIMITER $$
 
+DROP FUNCTION IF EXISTS `lords`.`building_feature_get_id_by_code` $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `building_feature_get_id_by_code`(feature_code VARCHAR(45)) RETURNS int(11)
+    DETERMINISTIC
+BEGIN
+  DECLARE result INT;
+  SELECT bf.id INTO result FROM building_features bf WHERE bf.code=feature_code;
+  RETURN result;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `lords`.`building_feature_set` $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `building_feature_set`(board_building_id INT, feature_code VARCHAR(45),param_value INT)
+BEGIN
+  IF(building_feature_check(board_building_id,feature_code)=0)THEN /*feature not set*/
+    INSERT INTO board_buildings_features(board_building_id,feature_id,param) SELECT board_building_id,bf.id,param_value FROM building_features bf WHERE bf.code=feature_code;
+  ELSE /*feature is set - update param*/
+    UPDATE board_buildings_features bbf
+      SET bbf.param=param_value
+      WHERE bbf.board_building_id=board_building_id AND bbf.feature_id=building_feature_get_id_by_code(feature_code);
+  END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
 DROP PROCEDURE IF EXISTS `lords`.`put_building` $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `put_building`(g_id INT,p_num INT,player_deck_id INT,x INT,y INT,rotation INT,flip INT)
 BEGIN
@@ -51,12 +80,12 @@ BEGIN
           UNION
           SELECT building_feature_get_param(bb.id,'summon_team')
           FROM board_buildings bb WHERE bb.game_id=g_id AND building_feature_check(bb.id,'summon_team')=1) a)
-        WHERE bbf.board_building_id=new_building_id AND bbf.feature_id=6;
+        WHERE bbf.board_building_id=new_building_id AND bbf.feature_id=building_feature_get_id_by_code('summon_team');
 
 /*barracks*/
         IF(building_feature_check(new_building_id,'ally') = 1)THEN
           SELECT p.team INTO player_team FROM players p WHERE p.game_id=g_id AND p.player_num=p_num;
-          CALL unit_feature_set(new_building_id,'summon_team',player_team);
+          CALL building_feature_set(new_building_id,'summon_team',player_team);
         END IF;
 
         CALL count_income(new_building_id);
@@ -91,14 +120,13 @@ BEGIN
   DECLARE dice INT;
 
   SELECT COUNT(*) INTO cops_count FROM board_units bu WHERE bu.game_id=g_id AND unit_feature_check(bu.id,'parent_building')=1 AND unit_feature_get_param(bu.id,'parent_building')=board_building_id;
-  SET dice = POW(6,CASE WHEN frogs_count IN(0,1,2,3) THEN 1 ELSE cops_count-2 END);
+  SET dice = POW(6,CASE WHEN cops_count IN(0,1,2,3) THEN 1 ELSE cops_count-2 END);
   IF(FLOOR(1 + (RAND() * dice))=1)THEN
     CALL summon_one_creature_by_config(board_building_id);
   END IF;
 END $$
 
 DELIMITER ;
-
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS `lords`.`end_turn` $$

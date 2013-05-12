@@ -10,3 +10,5 @@ SET @c_id = @@last_insert_id;
 
 insert into modes_cards(mode_id,card_id,quantity)
 values(8,@c_id,1);
+
+insert into cards_procedures(card_id,procedure_id) values(@c_id,6);
