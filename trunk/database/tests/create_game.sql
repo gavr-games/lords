@@ -24,3 +24,5 @@ call arena_game_player_team_set(1,1,3,0);
 call arena_game_player_team_set(1,1,4,0);
 
 call arena_game_start(1,1);
+
+use lords;
