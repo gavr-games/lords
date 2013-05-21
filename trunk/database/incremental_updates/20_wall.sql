@@ -43,3 +43,28 @@ insert into error_dictionary(description) values('Это не ваше здан�
 insert into error_dictionary(description) values('Здание заблокировано');
 insert into error_dictionary(description) values('Здание это не умеет :-P');
 insert into error_dictionary(description) values('Здание уже действовало в этот ход');
+
+ALTER TABLE board_buildings_features 
+ADD CONSTRAINT `board_buildings_features_board_buildings` 
+FOREIGN KEY (`board_building_id`)
+REFERENCES `board_buildings` (`id`)
+ON DELETE CASCADE;
+
+ALTER TABLE board_buildings_features 
+ADD CONSTRAINT `board_buildings_features_building_features` 
+FOREIGN KEY (`feature_id`)
+REFERENCES `building_features` (`id`)
+ON DELETE CASCADE;
+
+ALTER TABLE board_units_features 
+ADD CONSTRAINT `board_units_features_board_units` 
+FOREIGN KEY (`board_unit_id`)
+REFERENCES `board_units` (`id`)
+ON DELETE CASCADE;
+
+ALTER TABLE board_units_features 
+ADD CONSTRAINT `board_units_features_unit_features` 
+FOREIGN KEY (`feature_id`)
+REFERENCES `unit_features` (`id`)
+ON DELETE CASCADE;
+
