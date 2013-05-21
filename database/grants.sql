@@ -64,6 +64,8 @@ GRANT EXECUTE ON PROCEDURE `lords`.`catapult_shoot` TO 'lords_client'@'localhost
 GRANT EXECUTE ON PROCEDURE `lords`.`unit_level_up_attack` TO 'lords_client'@'localhost';
 GRANT EXECUTE ON PROCEDURE `lords`.`unit_level_up_health` TO 'lords_client'@'localhost';
 GRANT EXECUTE ON PROCEDURE `lords`.`unit_level_up_moves` TO 'lords_client'@'localhost';
+GRANT EXECUTE ON PROCEDURE `lords`.`wall_open` TO 'lords_client'@'localhost';
+GRANT EXECUTE ON PROCEDURE `lords`.`wall_close` TO 'lords_client'@'localhost';
 
 /*F5*/
 GRANT EXECUTE ON PROCEDURE `lords`.`get_all_game_info` TO 'lords_client'@'localhost';
