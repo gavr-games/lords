@@ -6,8 +6,10 @@ WEB_SVN=https://subversion.assembla.com/svn/the-lords/trunk/web/
 #save_errors
 mkdir mode1
 mkdir mode8
+mkdir mode9
 cp $WEB_DIR/game/mode1/error*.* mode1/
 cp $WEB_DIR/game/mode8/error*.* mode8/
+cp $WEB_DIR/game/mode8/error*.* mode9/
 #save avatars
 mkdir profiles
 cp $WEB_DIR/design/images/profile/*.* profiles
@@ -24,8 +26,10 @@ eval $CONFIG_CMD
 #copy errors back
 cp mode1/error*.* $WEB_DIR/game/mode1/
 cp mode8/error*.* $WEB_DIR/game/mode8/
+cp mode9/error*.* $WEB_DIR/game/mode9/
 rm -r mode1
 rm -r mode8
+rm -r mode9
 #restore avatars
 chmod 777 $WEB_DIR/design/images/profile/
 chmod 777 $WEB_DIR/design/images/profile/temp/
@@ -37,15 +41,18 @@ yui-compressor -o '.js$:.js' $WEB_DIR/arena/js_libs/*.js
 yui-compressor -o '.js$:.js' $WEB_DIR/site/js_libs/*.js
 yui-compressor -o '.js$:.js' $WEB_DIR/game/mode1/js_libs/*.js
 yui-compressor -o '.js$:.js' $WEB_DIR/game/mode8/js_libs/*.js
+yui-compressor -o '.js$:.js' $WEB_DIR/game/mode9/js_libs/*.js
 #minimize size of css files
 yui-compressor -o '.css$:.css' $WEB_DIR/design/css/*.css
 yui-compressor -o '.css$:.css' $WEB_DIR/design/css/pregame/*.css
 #chmod for static libs and errors
 chmod 777 $WEB_DIR/game/mode1/js_libs/static_libs.js
 chmod 777 $WEB_DIR/game/mode8/js_libs/static_libs.js
+chmod 777 $WEB_DIR/game/mode9/js_libs/static_libs.js
 chmod 777 $WEB_DIR/site/js_libs/static_libs.js
 chmod 777 $WEB_DIR/game/mode1/
 chmod 777 $WEB_DIR/game/mode8/
+chmod 777 $WEB_DIR/game/mode9/
 cd $WEB_DIR/cron/
 php generate_static_js_libs.php
 php generate_static_js_libs_site.php
