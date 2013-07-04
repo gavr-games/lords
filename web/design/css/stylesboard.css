@@ -62,6 +62,88 @@
             width:38px;
             height:39px;
             }
+/*--------------------------------дерево--------------------------------------*/
+.building_tree {background:  url(../images/buildings/tree.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:38px;
+            height:48px;
+            }
+/*--------------------------------казармы--------------------------------------*/
+.building_barracks {background:  url(../images/buildings/barracks.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:38px;
+            height:33px;
+            }
+/*--------------------------------ров-------------------------------------*/
+.building_moat {background:  url(../images/buildings/moat.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:34px;
+            height:34px;
+            }
+/*--------------------------------мост--------------------------------------*/
+.building_bridge_0_0_1 {background:  url(../images/buildings/bridge_top_left.png) top left no-repeat !important;
+            position:absolute;
+            top:0px;
+            left:-34px;
+            width:69px;
+            height:69px;
+            }
+.building_bridge_1_0_2 {background:  url(../images/buildings/bridge_top_right.png) top left no-repeat !important;
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:69px;
+            height:69px;
+            }
+.building_bridge_3_0_1 {background:  url(../images/buildings/bridge_bottom_left.png) top left no-repeat !important;
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:69px;
+            height:69px;
+            }
+.building_bridge_2_0_2 {background:  url(../images/buildings/bridge_bottom_right.png) top left no-repeat !important;
+            position:absolute;
+            top:0px;
+            left:-34px;
+            width:69px;
+            height:69px;
+            }
+/*--------------------------------разрушенный мост--------------------------------------*/
+.building_destroyed_bridge_0_0_1 {background:  url(../images/buildings/destroyed_bridge_top_left.png) top left no-repeat !important;
+            position:absolute;
+            top:0px;
+            left:-34px;
+            width:69px;
+            height:69px;
+            }
+.building_destroyed_bridge_1_0_2 {background:  url(../images/buildings/destroyed_bridge_top_right.png) top left no-repeat !important;
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:69px;
+            height:69px;
+            }
+.building_destroyed_bridge_3_0_1 {background:  url(../images/buildings/destroyed_bridge_bottom_left.png) top left no-repeat !important;
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:69px;
+            height:69px;
+            }
+.building_destroyed_bridge_2_0_2 {background:  url(../images/buildings/destroyed_bridge_bottom_right.png) top left no-repeat !important;
+            position:absolute;
+            top:0px;
+            left:-34px;
+            width:69px;
+            height:69px;
+            }
 /*--------------------------------озеро--------------------------------------*/
 .building_lake_0_0_1 {background:  url(../images/buildings/lake.png) top left no-repeat !important;
             position:absolute;
