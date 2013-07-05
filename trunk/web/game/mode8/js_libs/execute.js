@@ -532,7 +532,46 @@ function execute_resurrect(card_id) {
     execute_procedure('player_resurrect');
 }
 
-function execute_building(id) {}
+function execute_building(x,y) {
+  var id = board[x][y]["ref"];
+    var i = 0;
+
+    if ($chk(board_buildings[id])) if (board_buildings[id]['player_num'].toInt() == my_player_num && turn_state == MY_TURN && game_state == 'WAITTING') {
+        cancel_execute();
+        $('board_' + x + '_' + y).addClass('activeUnit');
+        building = x + ',' + y;
+        pre_defined_param = 'building';
+        i = 0;
+        var default_proc = '';
+        procedures = Array();
+        buildings_procedures_1.each(function (item, index) {
+            if (item) if (item['building_id'] == board_buildings[id]['building_id']) {
+                procedures[i] = procedures_mode_1[item['procedure_id']];
+                procedures[i]['description'] = item["description"];
+		console.log(item["description"]);
+                i++;
+            }
+        });
+	//console.log(buildings_procedures_1,id,procedures);
+        //if (i != 0) if (i == 1) execute_procedure(procedures[0]['name']);
+        //else //1 procedure for unit
+        //many procedures for unit
+       // {
+            clearActions();
+            procedures.each(function (item, index) {
+                if (item) {
+                    var myA = new Element('a', {
+                        'href': '#',
+                        'class': 'act act_' + item['ui_action_name'],
+                        'onclick': 'setPreDefinedParam(\'building\');setGameState(\'WAITTING\');execute_procedure(\'' + item['name'] + '\');return false;'
+                    });
+                    $('actions').grab(myA, 'bottom');
+                }
+            });
+            addCancelAction();
+        //}
+    }
+}
 
 function execute_exit() {
     cancel_execute();
@@ -790,6 +829,22 @@ function post_player_move_unit() {
     var uy = coords[1].toInt();
     if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
     if ($('board_' + (ux + 1) + '_' + (uy + 1))) $$('#board_' + (ux + 1) + '_' + (uy + 1) + ' .unitdiv').removeClass('activeUnit');
+}
+function post_wall_open(){
+  if (building!="") {
+	var coords = building.toString().split(',');
+	var ux = coords[0].toInt();
+	var uy = coords[1].toInt();
+	if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
+	}
+}
+function post_wall_close(){
+  if (building!="") {
+	var coords = building.toString().split(',');
+	var ux = coords[0].toInt();
+	var uy = coords[1].toInt();
+	if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
+	}
 }
 function post_archer_shoot(){
   post_arbalester_shoot();
