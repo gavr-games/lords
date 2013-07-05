@@ -78,6 +78,22 @@
             width:38px;
             height:33px;
             }
+/*--------------------------------стена закрытая--------------------------------------*/
+.building_wall_closed{background:  url(../images/buildings/wall_closed.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:34px;
+            height:34px;
+            }
+/*--------------------------------стена открытая--------------------------------------*/
+.building_wall_opened{background:  url(../images/buildings/wall_opened.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:34px;
+            height:34px;
+            }
 /*--------------------------------ров-------------------------------------*/
 .building_moat {background:  url(../images/buildings/moat.png) top left no-repeat !important;
             position:absolute;

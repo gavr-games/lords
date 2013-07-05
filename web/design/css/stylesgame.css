@@ -524,6 +524,8 @@ html, body {text-align:left;
   .ctrl_block .block .main_cont .acts .act_necromancer_resurrect {background:  url(../images/act_resur.png) top  no-repeat;}
   .ctrl_block .block .main_cont .acts .act_necromancer_sacrifice {background:  url(../images/act_sacrifice.png) top  no-repeat;}
   .ctrl_block .block .main_cont .acts .act_turn {background:  url(../images/act_turn.png) top  no-repeat;}
+  .ctrl_block .block .main_cont .acts .act_wall_open {background:  url(../images/act_wall_open.png) top  no-repeat;}
+  .ctrl_block .block .main_cont .acts .act_wall_close {background:  url(../images/act_wall_close.png) top  no-repeat;}
   
   .ctrl_block .block .main_cont .acts .act:hover {background-position:bottom;}
   
