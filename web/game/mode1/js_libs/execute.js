@@ -93,7 +93,6 @@ function send_procedure(name, params) {
         proc_params: params,
         'proc_uid': proc_uid
     });
-    //console.log(start_proc_time);
 }
 
 function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) {
@@ -210,6 +209,24 @@ function board_clicked(x, y) {
                 selected_params++;
                 target_unit = x.toString() + ',' + y.toString();
                 if (eval("typeof on_target_unit_select == 'function'")) eval('on_target_unit_select();'); //call on_param_select function if exists
+                $('board_' + x + '_' + y).removeClass('attackUnit');
+                execute_procedure(executable_procedure);
+            }
+        } else if (game_state == 'SELECTING_TARGET_UNIT_IN_DISTANCE_2_4') {
+            if (board[x] && board[x][y]) if (board[x][y]['type'] == 'unit') {
+                game_state = 'SELECTED_TARGET_UNI_INT_DISTANCE_2_4';
+                selected_params++;
+                target_unit_in_distance_2_4 = x.toString() + ',' + y.toString();
+                if (eval("typeof on_target_unit_in_distance_2_4_select == 'function'")) eval('on_target_unit_in_distance_2_4_select();'); //call on_param_select function if exists
+                $('board_' + x + '_' + y).removeClass('attackUnit');
+                execute_procedure(executable_procedure);
+            }
+        } else if (game_state == 'SELECTING_TARGET_BUILDING_IN_DISTANCE_2_5') {
+            if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') {
+                game_state = 'SELECTED_TARGET_UNI_INT_DISTANCE_2_5';
+                selected_params++;
+                target_building_in_distance_2_5 = x.toString() + ',' + y.toString();
+                if (eval("typeof on_target_building_in_distance_2_5_select == 'function'")) eval('on_target_building_in_distance_2_5_select();'); //call on_param_select function if exists
                 $('board_' + x + '_' + y).removeClass('attackUnit');
                 execute_procedure(executable_procedure);
             }
@@ -515,7 +532,46 @@ function execute_resurrect(card_id) {
     execute_procedure('player_resurrect');
 }
 
-function execute_building(id) {}
+function execute_building(x,y) {
+  var id = board[x][y]["ref"];
+    var i = 0;
+
+    if ($chk(board_buildings[id])) if (board_buildings[id]['player_num'].toInt() == my_player_num && turn_state == MY_TURN && game_state == 'WAITTING') {
+        cancel_execute();
+        $('board_' + x + '_' + y).addClass('activeUnit');
+        building = x + ',' + y;
+        pre_defined_param = 'building';
+        i = 0;
+        var default_proc = '';
+        procedures = Array();
+        buildings_procedures_1.each(function (item, index) {
+            if (item) if (item['building_id'] == board_buildings[id]['building_id']) {
+                procedures[i] = procedures_mode_1[item['procedure_id']];
+                procedures[i]['description'] = item["description"];
+		console.log(item["description"]);
+                i++;
+            }
+        });
+	//console.log(buildings_procedures_1,id,procedures);
+        //if (i != 0) if (i == 1) execute_procedure(procedures[0]['name']);
+        //else //1 procedure for unit
+        //many procedures for unit
+       // {
+            clearActions();
+            procedures.each(function (item, index) {
+                if (item) {
+                    var myA = new Element('a', {
+                        'href': '#',
+                        'class': 'act act_' + item['ui_action_name'],
+                        'onclick': 'setPreDefinedParam(\'building\');setGameState(\'WAITTING\');execute_procedure(\'' + item['name'] + '\');return false;'
+                    });
+                    $('actions').grab(myA, 'bottom');
+                }
+            });
+            addCancelAction();
+        //}
+    }
+}
 
 function execute_exit() {
     cancel_execute();
@@ -604,6 +660,49 @@ function pre_put_building() {
     $('actions').grab(myA, 'bottom');
 }
 
+function pre_archer_shoot(){
+  pre_arbalester_shoot();
+}
+function pre_arbalester_shoot(){
+  var coords = unit.toString().split(',');
+		var ux = coords[0].toInt();
+		var uy = coords[1].toInt();
+  show_shoot_radius(ux,uy,2,4);
+}
+function pre_catapult_shoot(){
+  var coords = unit.toString().split(',');
+		var ux = coords[0].toInt();
+		var uy = coords[1].toInt();
+  show_shoot_radius(ux,uy,2,5);
+}
+function show_shoot_radius(ux,uy,from,to){
+  for (d=0;d<to-from+1;d++){ 
+    for (x=ux-from-d;x<(ux+from+1+d);x++){
+	var addAim = true;
+	var y = uy-from-d;
+	if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'obstacle' || board[x][y]['type'] == 'castle') addAim = false;
+	if (x<0 || x>19 || y<0 || y>19)  addAim = false;
+	if (addAim) $('board_' + x + '_' + y).addClass('aim'+d);
+	addAim = true;
+	y = uy+from+d;
+	if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'obstacle' || board[x][y]['type'] == 'castle') addAim = false;
+	if (x<0 || x>19 || y<0 || y>19)  addAim = false;
+	if (addAim) $('board_' + x + '_' + y).addClass('aim'+d);
+    }
+    for (y=uy-from+1-d;y<(uy+from+d);y++){
+	var addAim = true;
+	var x = ux-from-d;
+	if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'obstacle' || board[x][y]['type'] == 'castle') addAim = false;
+	if (x<0 || x>19 || y<0 || y>19)  addAim = false;
+	if (addAim) $('board_' + x + '_' + y).addClass('aim'+d);
+	addAim = true;
+	x = ux+from+d;
+	if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'obstacle' || board[x][y]['type'] == 'castle') addAim = false;
+	if (x<0 || x>19 || y<0 || y>19)  addAim = false;
+	if (addAim) $('board_' + x + '_' + y).addClass('aim'+d);
+    }
+  }
+}
 //POST functions
 function post_send_procedure() {
     $('anim').removeClass('anim');
@@ -674,6 +773,30 @@ function post_wizard_heal() {
     $('board_' + ux + '_' + uy).removeClass('activeUnit');
 }
 
+function post_archer_shoot() {
+    //clear green class
+    var coords = unit.toString().split(',');
+    var ux = coords[0].toInt();
+    var uy = coords[1].toInt();
+    $('board_' + ux + '_' + uy).removeClass('activeUnit');
+}
+
+function post_arbalester_shoot() {
+    //clear green class
+    var coords = unit.toString().split(',');
+    var ux = coords[0].toInt();
+    var uy = coords[1].toInt();
+    $('board_' + ux + '_' + uy).removeClass('activeUnit');
+}
+
+function post_catapult_shoot() {
+    //clear green class
+    var coords = unit.toString().split(',');
+    var ux = coords[0].toInt();
+    var uy = coords[1].toInt();
+    $('board_' + ux + '_' + uy).removeClass('activeUnit');
+}
+
 function post_wizard_fireball() {
     //clear green class
     var coords = unit.toString().split(',');
@@ -706,6 +829,70 @@ function post_player_move_unit() {
     var uy = coords[1].toInt();
     if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
     if ($('board_' + (ux + 1) + '_' + (uy + 1))) $$('#board_' + (ux + 1) + '_' + (uy + 1) + ' .unitdiv').removeClass('activeUnit');
+}
+function post_wall_open(){
+  if (building!="") {
+	var coords = building.toString().split(',');
+	var ux = coords[0].toInt();
+	var uy = coords[1].toInt();
+	if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
+	}
+}
+function post_wall_close(){
+  if (building!="") {
+	var coords = building.toString().split(',');
+	var ux = coords[0].toInt();
+	var uy = coords[1].toInt();
+	if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
+	}
+}
+function post_archer_shoot(){
+  post_arbalester_shoot();
+}
+function post_arbalester_shoot(){
+  var coords = unit.toString().split(',');
+		var ux = coords[0].toInt();
+		var uy = coords[1].toInt();
+  hide_shoot_radius(ux,uy,2,4);
+      if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
+    if ($('board_' + (ux + 1) + '_' + (uy + 1))) $$('#board_' + (ux + 1) + '_' + (uy + 1) + ' .unitdiv').removeClass('activeUnit');
+    if (target_unit_in_distance_2_4!=''){
+      var coords = target_unit_in_distance_2_4.toString().split(',');
+		  var tx = coords[0].toInt();
+		  var ty = coords[1].toInt();
+      $('overboard_' + tx + '_' + ty).removeClass('cursor_attack');
+    }
+}
+function post_catapult_shoot(){
+  var coords = unit.toString().split(',');
+		var ux = coords[0].toInt();
+		var uy = coords[1].toInt();
+  hide_shoot_radius(ux,uy,2,5);
+      if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
+    if ($('board_' + (ux + 1) + '_' + (uy + 1))) $$('#board_' + (ux + 1) + '_' + (uy + 1) + ' .unitdiv').removeClass('activeUnit');
+    if (target_building_in_distance_2_5!=''){
+      var coords = target_building_in_distance_2_5.toString().split(',');
+		  var tx = coords[0].toInt();
+		  var ty = coords[1].toInt();
+      $('overboard_' + tx + '_' + ty).removeClass('cursor_attack');
+    }
+}
+function hide_shoot_radius(ux,uy,from,to){
+    for (d=0;d<to-from+1;d++){ 
+    for (x=ux-from-d;x<(ux+from+1+d);x++){
+	var y = uy-from-d;
+	if (x>=0 && x<=19 && y>=0 && y<=19) $('board_' + x + '_' + y).removeClass('aim'+d);
+	  y = uy+from+d;
+	if (x>=0 && x<=19 && y>=0 && y<=19) $('board_' + x + '_' + y).removeClass('aim'+d);
+    }
+    for (y=uy-from+1-d;y<(uy+from+d);y++){
+	var addAim = true;
+	var x = ux-from-d;
+	if (x>=0 && x<=19 && y>=0 && y<=19) $('board_' + x + '_' + y).removeClass('aim'+d);
+	  x = ux+from+d;
+	if (x>=0 && x<=19 && y>=0 && y<=19) $('board_' + x + '_' + y).removeClass('aim'+d);
+    }
+  }
 }
 //ON functions
 function on_player_select() {
