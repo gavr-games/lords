@@ -30,6 +30,38 @@
             width:70px;
             height:72px;
             }
+/*--------------------------------левые верхние руины--------------------------------------*/
+.ruins_0_0 {background:  url(../images/buildings/ruins_0.png) top left no-repeat !important;
+            position:absolute;
+            left:-4px;
+            top:-16px;
+            width:70px;
+            height:83px;
+            }
+/*--------------------------------правые верхние руины--------------------------------------*/
+.ruins_18_0 {background:  url(../images/buildings/ruins_1.png) top left no-repeat !important;
+            position:absolute;
+            right:-39px;
+            top:-16px;
+            width:73px;
+            height:80px;
+            }
+/*--------------------------------правые нижние руины--------------------------------------*/
+.ruins_19_18 {background:  url(../images/buildings/ruins_2.png) top left no-repeat !important;
+            position:absolute;
+            right:-5px;
+            top:-0px;
+            width:73px;
+            height:72px;
+            }
+/*--------------------------------левые нижние руины--------------------------------------*/
+.ruins_0_18 {background:  url(../images/buildings/ruins_3.png) top left no-repeat !important;
+            position:absolute;
+            left:-3px;
+            top:0px;
+            width:70px;
+            height:72px;
+            }
 /*--------------------------------телепорт--------------------------------------*/
 .building_teleport {background:  url(../images/buildings/teleport.png) top left no-repeat !important;
             position:absolute;
