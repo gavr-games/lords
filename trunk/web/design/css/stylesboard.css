@@ -95,12 +95,68 @@
             height:39px;
             }
 /*--------------------------------дерево--------------------------------------*/
-.building_tree {background:  url(../images/buildings/tree.png) top left no-repeat !important;
+.tree_0_0 {background:  url(../images/buildings/tree_00.png) top left no-repeat !important;
             position:absolute;
             bottom:0px;
             right:0px;
-            width:38px;
-            height:48px;
+            width:44px;
+            height:58px;
+            }
+.tree_0_1 {background:  url(../images/buildings/tree_01.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:44px;
+            height:58px;
+            }
+.tree_0_2 {background:  url(../images/buildings/tree_02.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:44px;
+            height:58px;
+            }
+.tree_1_0 {background:  url(../images/buildings/tree_10.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:44px;
+            height:58px;
+            }
+.tree_1_1 {background:  url(../images/buildings/tree_11.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:44px;
+            height:58px;
+            }
+.tree_1_2 {background:  url(../images/buildings/tree_12.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:44px;
+            height:58px;
+            }
+.tree_2_0 {background:  url(../images/buildings/tree_20.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:44px;
+            height:58px;
+            }
+.tree_2_1 {background:  url(../images/buildings/tree_21.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:44px;
+            height:58px;
+            }
+.tree_2_2 {background:  url(../images/buildings/tree_22.png) top left no-repeat !important;
+            position:absolute;
+            bottom:0px;
+            right:0px;
+            width:44px;
+            height:58px;
             }
 /*--------------------------------казармы--------------------------------------*/
 .building_barracks {background:  url(../images/buildings/barracks.png) top left no-repeat !important;
