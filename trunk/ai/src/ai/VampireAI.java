@@ -26,7 +26,12 @@ public class VampireAI extends UnitMovingAttackingAI
 		int myTeam = myUnit.getPlayer().getTeam();
 		for(BoardObject bo:board.getObjects())
 		{
-			if(bo.getType() != BoardObjectType.OBSTACLE && (bo.getPlayer() == null || bo.getPlayer().getTeam() != myTeam)) targets.add(bo);
+			if(bo.getType() != BoardObjectType.OBSTACLE && 
+				(bo.getPlayer() == null || bo.getPlayer().getTeam() != myTeam) && 
+				!bo.checkFeature("not_interesting_for_npc"))
+			{
+				targets.add(bo);
+			}
 		}
 
         List<Command> commands;

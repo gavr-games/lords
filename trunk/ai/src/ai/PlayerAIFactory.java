@@ -106,7 +106,7 @@ public class PlayerAIFactory
 		{
 			log.info(String.format("Game %s player %s No targets for unit found. Start searching a 'home'.",String.valueOf(g.getId()),String.valueOf(playerNum)));
 			for(BoardObject bo : g.getBoard().getObjects()) {
-                if(bo.checkFeature("summon_team") && Integer.parseInt(bo.getFeatureValue("summon_team")) == myPlayer.getTeam() && !bo.checkFeature("not_interesting_for_npc")) {
+                if(bo.checkFeature("summon_team") && Integer.parseInt(bo.getFeatureValue("summon_team")) == myPlayer.getTeam()) {
                     targets.add(bo);
                     return new UnitMoveToTargetAI(g.getBoard(), myUnit, targets);
                 }
