@@ -51,7 +51,7 @@ $error_com_num = 0;
 		  /* print divider */
 		  if ($mysqli->more_results()) {
 		  }
-		} while ($mysqli->next_result());
+		} while ($mysqli->more_results() && $mysqli->next_result());
 		
 		//check for errors in query
 		$error_msg = mysqli_error($dataBase->dbLink);
@@ -84,7 +84,7 @@ $error_com_num = 0;
 		  /* print divider */
 		  if ($mysqli->more_results()) {
 		  }
-		} while ($mysqli->next_result());
+		} while ($mysqli->more_results() && $mysqli->next_result());
 		
 		//check for errors in query
 		$error_msg = mysqli_error($dataBase->dbLink);

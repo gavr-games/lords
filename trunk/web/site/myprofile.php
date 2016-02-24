@@ -57,7 +57,7 @@
 		      /* print divider */
 		      if ($mysqli->more_results()) {
 		      }
-		} while ($mysqli->next_result());
+		} while ($mysqli->more_results() && $mysqli->next_result());
 		
 	      } else
 	      $avatar_error = 'Не удалось изменить размер герба';

@@ -60,7 +60,7 @@
 	    /* print divider */
 		  if ($mysqli->more_results()) {
 		  }
-	} while ($mysqli->next_result());
+	} while ($mysqli->more_results() && $mysqli->next_result());
 	//check for errors in query
 	$error = mysqli_error($dataBase->dbLink);
 	if ($error!='')

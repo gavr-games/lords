@@ -48,7 +48,7 @@ if ($_SESSION['user_id'] != '') {
 		/* print divider */
 		if ($mysqli->more_results()) {
 		}
-	} while ($mysqli->next_result());
+	} while ($mysqli->more_results() && $mysqli->next_result());
 
 	if ($row['player_num'] != '') { //go to started game
 		header('location:' . $SITE_conf['domen'] . 'game/mode' . $row['mode_id']);
