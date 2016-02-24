@@ -1,0 +1,15 @@
+- name: Copy lords_db_init script
+  template:
+    src: lords_db_init.sh.j2
+    dest: /tmp/lords_db_init.sh
+    owner: vagrant
+    group: vagrant
+    mode: 0777
+
+- name: Run lords_db_init
+  shell: "{{item}}"
+  args:
+    executable: /bin/bash
+    chdir: /tmp
+  with_items:
+  - ./lords_db_init.sh
