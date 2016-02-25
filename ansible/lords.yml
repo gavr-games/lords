@@ -29,5 +29,7 @@
   roles:
     - { role: geerlingguy.apache }
     - { role: geerlingguy.php }
-    #- { role: geerlingguy.mysql }
-    #- { role: lords.database_init }
+    - { role: geerlingguy.mysql }
+    - { role: lords.database_init }
+    - { role: achaussier.openjdk-jdk }
+    - { role: achaussier.openjdk-jre }

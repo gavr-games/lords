@@ -1,0 +1,28 @@
+---
+galaxy_info:
+  author: Alexandre Chaussier
+  description: Install openjdk-jre package
+  company: Infopen (http://infopen.pro)
+  license: MIT
+  min_ansible_version: 1.4
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - precise
+        - quantal
+        - raring
+        - saucy
+        - trusty
+        - utopic
+        - vivid
+    - name: Debian
+      versions:
+        - squeeze
+        - wheezy
+        - jessie
+  categories:
+    - development
+    - web
+
+dependencies: []

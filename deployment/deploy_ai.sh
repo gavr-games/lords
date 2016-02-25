@@ -1,7 +1,12 @@
 #!/bin/bash
 URL=https://subversion.assembla.com/svn/the-lords/trunk/ai/
+VAGRANT=${1:-not_vagrant}
 
 killall java
+
+if [ "$VAGRANT" = "vagrant" ]; then
+cd /tmp
+fi
 
 rm -r ai
 mkdir ai
@@ -9,8 +14,12 @@ mkdir ai
 rm -r ai_bin
 mkdir ai_bin
 
-svn co $URL ./ai --username lords_checkouter --password c2h5oh
-svnversion ./ai > ./ai_bin/revision.txt
+if [ "$VAGRANT" = "vagrant" ]; then
+    cp -R /var/www/lords/ai /tmp
+else
+    svn co $URL ./ai --username lords_checkouter --password c2h5oh
+    svnversion ./ai > ./ai_bin/revision.txt
+fi
 
 
 javac -cp ./ai/lib/json-simple-1.1.1.jar:./ai_bin -d ./ai_bin ./ai/src/ai/paths_finding/astar/*.java
