@@ -1,0 +1,7 @@
+---
+
+# Defaults file for openjdk-jre
+
+openjdk_jre_package_state  : present
+
+openjdk_jre_version : 7

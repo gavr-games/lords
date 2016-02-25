@@ -1,0 +1,11 @@
+---
+
+# Tests for openjdk-jre role
+
+- hosts : localhost
+  remote_user : root
+  roles :
+    - ansible-role-openjdk-jre
+  post_tasks :
+    - include : ./common_tests.yml
+

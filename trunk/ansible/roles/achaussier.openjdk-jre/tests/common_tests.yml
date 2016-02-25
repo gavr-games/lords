@@ -1,0 +1,21 @@
+---
+
+# Common tests between local Vagrant and Travis
+
+- name : Openjdk-jre package should installed
+  apt :
+    name  : "{{ item }}"
+    state : "{{ openjdk_jre_package_state }}"
+    update_cache     : True
+    cache_valid_time : 3600
+  register   : openjdk_jre_packages_test
+  with_items : "{{ openjdk_jre_packages }}"
+  when :
+    - ansible_os_family == "Debian"
+
+- name : Fail if openjdk-jre packages not installed
+  fail :
+    msg : "Openjdk-jre packages not installed"
+  when :
+    - openjdk_jre_packages_test.changed
+
