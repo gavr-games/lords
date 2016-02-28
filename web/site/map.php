@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="../general_js/mootools-more.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="js_libs/site.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="js_libs/static_libs.js?<?php echo $SITE_conf['revision']; ?>"></script>
-        <link rel="stylesheet" type="text/css" href="../design/css/pregame/reset.css?<?php echo $SITE_conf['revision']; ?>" />
+    <link rel="stylesheet" type="text/css" href="../design/css/pregame/reset.css?<?php echo $SITE_conf['revision']; ?>" />
 	<link rel="stylesheet" type="text/css" href="../design/css/pregame/main.css?<?php echo $SITE_conf['revision']; ?>" />
 	<style>
 		.mask {
@@ -24,13 +24,19 @@
 	<div id="wrap" class="map">
 		<div id="map">
 			<div id="opened_map">
-				<a href="arena/" onclick="enterArena();return false;">Арена</a> <br />
-				<a target="_blank" href="https://docs.google.com/document/pub?id=1Hrs05cfYbibReAGZbKd3UG17zpmZfeZM15XDDr-qtK8">Библиотека</a><br />
-                                <a target="_blank" href="<?php echo $SITE_conf['domen']; ?>gallery">Галерея</a><br />
+				<a href="arena/" onclick="enterArena();return false;">
+					<img src="/design/images/pregame/arena.png" alt="Арена">
+				</a><br />
+				<a target="_blank" href="https://docs.google.com/document/pub?id=1Hrs05cfYbibReAGZbKd3UG17zpmZfeZM15XDDr-qtK8">
+					<img src="/design/images/pregame/library.png" alt="Библиотека">
+				</a><br />
+				<a target="_blank" href="<?php echo $SITE_conf['domen']; ?>gallery">
+					<img src="/design/images/pregame/gallery.png" alt="Галерея">
+				</a>
 			</div>
 		</div>
-				<span class="topbutton prof"><a href="#" id="profile_b" onclick="if (!parent.window_loading) {doLoading($('profile_b'));parent.load_window('site/myprofile.php?back=map','left');} return false;">Профиль</a></span>
-				<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'));return false;">Выход</a></span>
+		<span class="topbutton prof"><a href="#" id="profile_b" onclick="if (!parent.window_loading) {doLoading($('profile_b'));parent.load_window('site/myprofile.php?back=map','left');} return false;">Профиль</a></span>
+		<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'));return false;">Выход</a></span>
 	</div>
 		<div id="footer"> 
 	    	© <?php 
