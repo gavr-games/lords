@@ -294,3 +294,13 @@ body {
 	top:7px;
 	right:0px;
 }
+#opened_map{
+	width: 880px;
+	text-align:center;
+}
+#opened_map a{
+	opacity: 0.8;
+}
+#opened_map a:hover{
+	opacity: 1;
+}
