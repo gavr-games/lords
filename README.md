@@ -22,7 +22,7 @@ Next steps
 
 Once you have all of those installed you should:
 - Checkout latest Lords code from SVN.
-- You should see Vagrantfile in the root of project. Next `cd` to the project's folder and run `vagrant up` in console. This will make Vagrant to create Virtual Machine, download Ubuntu image and install it to VM. Next Ansible will be called to install Apache/Php/Mysql/Java etc to VM and fully configure it. The first launch can take from 5 to 10 minutes. Pe patient.
+- You should see Vagrantfile in the root of project. Next `cd` to the project's folder and run `vagrant up` in console. This will make Vagrant create Virtual Machine, download Ubuntu image and install it to VM. Next Ansible will be called to install Apache/Php/Mysql/Java etc to VM and fully configure it. The first launch can take from 5 to 10 minutes. Pe patient.
 - Now you have Lords installed inside VM and available from you PC via http://the-lords.org (Vagrant modified your /etc/hosts file).
 - Next you need to login to VM and launch Ape and AI daemons. To login run `vagrant ssh`
 - Once you are logged in, go to `cd /var/www/lords/ape_scripts/bin` and run `./aped`. This will start APE (Ajax Push Engine) daemon.
@@ -33,7 +33,7 @@ Other
 ---------------
 
 - To stop VM you should run `vagrant halt` in the project's root folder. To launch VM again run `vagrant up` (it won't install software each time, just once).
-- All you files in the project's root are automatically synced with VM's `/var/www/lords` folder. So you can work in IDE on your local machine and all code will be synced to VM.
+- All your files in the project's root are automatically synced with VM's `/var/www/lords` folder. So you can work in IDE on your local machine and all code will be synced to VM.
 - You should launch APE and AI daemons manually each time you bring VM up. I was lazy to make them autostarted :(
 - To restart Apache: `vagrant ssh` -> `sudo service apache2 restart`.
 - To restart APE: `vagrant ssh` -> `killall aped` -> `cd /var/www/lords/ape_scripts/bin` -> `./aped`
