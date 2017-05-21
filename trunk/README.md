@@ -22,7 +22,7 @@ Next steps
 
 Once you have all of those installed you should:
 - Checkout latest Lords code from SVN.
-- You should see Vagrantfile in the root of project. Next `cd` to the project's folder and run `vagrant up` in console. This will make Vagrant create Virtual Machine, download Ubuntu image and install it to VM. Next Ansible will be called to install Apache/Php/Mysql/Java etc to VM and fully configure it. The first launch can take from 5 to 10 minutes. Pe patient.
+- You should see Vagrantfile in the root of project. Next `cd` to the project's folder and run `vagrant up` in console. This will make Vagrant create Virtual Machine, download Ubuntu image and install it to VM. Next Ansible will be called to install Apache/Php/Mysql/Java etc to VM and fully configure it. The first launch can take from 5 to 10 minutes. Be patient.
 - Now you have Lords installed inside VM and available from you PC via http://the-lords.org (Vagrant modified your /etc/hosts file).
 - Next you need to login to VM and launch Ape and AI daemons. To login run `vagrant ssh`
 - Once you are logged in, go to `cd /var/www/lords/ape_scripts/bin` and run `./aped`. This will start APE (Ajax Push Engine) daemon.
