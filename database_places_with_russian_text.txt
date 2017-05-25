@@ -1,0 +1,36 @@
+TABLES:
+
+attack_bonus
+building_features
+buildings
+cards
+dic_owner
+dic_statistic_measures
+dic_unit_phrases
+error_dictionary
+games_features
+nonfinished_actions_dictionary
+player_features
+procedures_params
+statistic_charts
+statistic_tabs
+statistic_values_config
+summon_cfg
+unit_features
+units
+videos
+dic_player_status
+error_dictionary
+
+LOG MESSAGES
+
+8910:      DECLARE mad_name VARCHAR(45) CHARSET utf8 DEFAULT 'Сумасшедший $u_name';
+9484:            SET cmd_log=REPLACE(cmd_log,'")',CONCAT('. ',log_unit(board_unit_id),' такой ',log_unit(board_unit_id),'")'));
+
+player has left the game??? :
+9753:  DECLARE cmd_log VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_independent_message($p_num,"$log_player 襫  ")';
+
+11614:  DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT 'Вампир $u_name';
+11678:  DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT 'Вампир $u_name';
+12177:  DECLARE zombie_name VARCHAR(45) CHARSET utf8 DEFAULT 'Зомби $u_name';
+
