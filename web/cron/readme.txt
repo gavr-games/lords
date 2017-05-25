@@ -1,2 +1,3 @@
-PHP скрипты стартуемые службой крона.
-Например скрипт по удалению неактивных игроков.
+PHP scripts that are started by cron
+for example, script for removing inactive players
+

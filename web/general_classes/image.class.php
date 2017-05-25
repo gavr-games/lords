@@ -11,7 +11,7 @@ class cImage {
   function __construct($fileorig) {
     if (file_exists($fileorig)){
 	$this->fileorig = $fileorig;
-	list($this->width, $this->height, $this->type, $this->attr) = getimagesize($fileorig); //$attr в общем-то не нужен
+	list($this->width, $this->height, $this->type, $this->attr) = getimagesize($fileorig); //$attr is actually not necessary
 	switch($this->type){
 	  case IMAGETYPE_JPEG:
 		  $this->fileext = 'jpg'; break;
@@ -31,7 +31,7 @@ class cImage {
 				case IMAGETYPE_JPEG:
 					$img = imagecreatefromjpeg($this->fileorig);
 					$img = $this->ChangeImageSizeWithAlpha($img, $this->width, $this->height, $NEW_WIDTH, $NEW_HEIGHT);
-					$success = imagejpeg($img, $NEW_FILENAME.".".$this->fileext, 90); //90 = степень сжатия
+					$success = imagejpeg($img, $NEW_FILENAME.".".$this->fileext, 90); //90-compression quality (100 best)
 					break;
 				case IMAGETYPE_PNG:
 					$img = imagecreatefrompng($this->fileorig); 
@@ -54,7 +54,7 @@ class cImage {
 	  $nImg = imagecreatetruecolor($nWidth, $nHeight);
 	  imagealphablending($nImg, false);
 	  imagesavealpha($nImg, true);
-	  imagealphablending($oImg, true); //Эти 3 строчки для сохранения прозрачности, иначе будет черный фон
+	  imagealphablending($oImg, true); //These 3 lines are to keep transpatency, otherwise there will be black background
 	  imagecopyresampled($nImg, $oImg, 0, 0, 0, 0, $nWidth, $nHeight, $oWidth, $oHeight);
 	  return $nImg;
   }
