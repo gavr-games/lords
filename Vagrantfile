@@ -37,4 +37,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ansible playbook provision
   ansible_playbook_provision(config, 'ansible/lords.yml')
+
+  # Start Ajax Push Engine (APE) and AI
+  config.vm.provision :shell, inline: "cd /var/www/lords/ape_scripts/bin ; chmod 755 ./aped ; ./aped", run: 'always'
+  config.vm.provision :shell, inline: "cd /var/www/lords/deployment ; chmod 755 ./deploy_ai.sh ; ./deploy_ai.sh vagrant", run: 'always'
 end
