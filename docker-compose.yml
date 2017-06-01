@@ -8,3 +8,11 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
      - ./database:/database
+
+  ape:
+    image: "i386/ubuntu:17.10"
+    ports:
+     - "6969:6969"
+    volumes:
+     - ./ape_scripts:/ape_scripts
+    command: bash -c "cd /ape_scripts/bin ; chmod 755 ./aped ; ./aped"

@@ -1,0 +1,5 @@
+2017-06-01 21:05:29 - src/entry.c:188 - APE starting up - pid : 13
+2017-06-01 21:05:29 - src/entry.c:251 - Starting daemon
+2017-06-01 21:09:58 - src/entry.c:188 - APE starting up - pid : 12
+2017-06-01 21:10:07 - src/sock.c:279 - events_poll() : Interrupted system call
+2017-06-01 21:12:25 - src/entry.c:188 - APE starting up - pid : 8
