@@ -1,7 +1,0 @@
----
-
-# Debian family specific vars
-
-openjdk_jdk_packages :
-  - "openjdk-{{ openjdk_jdk_version }}-jdk"
-

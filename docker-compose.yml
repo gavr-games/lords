@@ -30,3 +30,15 @@ services:
       - ./log:/var/log/apache2
     links:
       - db
+      - ai
+
+  ai:
+    image: "java:7"
+    ports:
+      - "5600:5600"
+    volumes:
+      - ./deployment:/deployment
+      - ./ai:/ai
+    command: bash -c "cd /deployment ; chmod 755 ./deploy_ai.sh ; ./deploy_ai.sh docker"
+    external_links:
+      - web

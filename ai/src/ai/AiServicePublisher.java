@@ -10,7 +10,7 @@ public class AiServicePublisher
 
     public static void main(String[] args)
     {
-		String url = "http://localhost:5600/ai";
+		String url = "http://0.0.0.0:5600/ai";
 		log.info("Lords AI service started on url "+url);
         Endpoint.publish(url, new AiServiceImpl());
     }

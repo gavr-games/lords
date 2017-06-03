@@ -1,7 +1,0 @@
----
-
-# Defaults file for openjdk-jdk
-
-openjdk_jdk_package_state : present
-openjdk_jdk_version : 7
-

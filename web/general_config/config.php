@@ -13,5 +13,5 @@
 	//$SITE_conf['domen'] = 'http://ape-test.local/lords/';
 	$SITE_conf['domen'] = 'http://the-lords.org/';
 	$SITE_conf['mantis'] = 'http://mantis.kissdesign.com.ua';
-	$SITE_conf['ai_service'] = 'http://localhost:5600/ai?wsdl';
-    $SITE_conf['revision'] = "revision_";
+	$SITE_conf['ai_service'] = 'http://ai:5600/ai?wsdl';
+  $SITE_conf['revision'] = "revision_";

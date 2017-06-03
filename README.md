@@ -73,11 +73,12 @@ Once you have all of those installed you should:
 127.0.0.1 38.ape.the-lords.org
 127.0.0.1 39.ape.the-lords.org
 ```
+- Now you should have a running set of docker containers. Check all of them are working using `docker ps` command. The game should be available via http://the-lords.org
 
 Everyday Usage
 ---------------
-- to launch services run `docker-compose up -d`
-- to stop services run `docker-compose stop`
+- to launch containers run `docker-compose up -d`
+- to stop containers run `docker-compose stop`
 - to run command inside running container `docker exec web COMMAND`
 - to login into container `docker-compose exec web /bin/bash`
 - to run command in separate container instance `docker-compose run web COMMAND`
