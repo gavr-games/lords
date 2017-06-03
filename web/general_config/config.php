@@ -7,8 +7,8 @@
 	$DB_conf['pass']   = 'T3p4Jw~@=)';
 	$DB_conf['name']   = 'lords';
 	$DB_conf['site']   = 'lords_site';
-	$DB_conf['server'] = 'localhost';
-	
+	$DB_conf['server'] = 'db';
+
 	//site
 	//$SITE_conf['domen'] = 'http://ape-test.local/lords/';
 	$SITE_conf['domen'] = 'http://the-lords.org/';

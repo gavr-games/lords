@@ -7,7 +7,7 @@ var APE = {
 	},
 
 	Client: function(core) {
-			if(core) this.core = core;	
+			if(core) this.core = core;
 	}
 }
 APE.Client.prototype.eventProxy = [];
@@ -31,15 +31,15 @@ APE.Client.prototype.removeEvent = function(type, fn) {
 }
 
 APE.Client.prototype.onRaw = function(type, fn, internal) {
-		this.addEvent('raw_' + type.toLowerCase(), fn, internal); 
+		this.addEvent('raw_' + type.toLowerCase(), fn, internal);
 }
 
 APE.Client.prototype.onCmd = function(type, fn, internal) {
-		this.addEvent('cmd_' + type.toLowerCase(), fn, internal); 
+		this.addEvent('cmd_' + type.toLowerCase(), fn, internal);
 }
 
 APE.Client.prototype.onError = function(type, fn, internal) {
-		this.addEvent('error_' + type, fn, internal); 
+		this.addEvent('error_' + type, fn, internal);
 }
 
 APE.Client.prototype.cookie = {};
@@ -134,8 +134,8 @@ APE.Client.prototype.load = function(config){
 		doc.close();
 	} else {
 		iframe.setAttribute('src',(config.secure ? 'https': 'http') + '://' + config.frequency + '.' + config.server + '/?[{"cmd":"script","params":{"domain":"' + document.domain +'","scripts":["' + config.scripts.join('","') + '"]}}]');
-		if (navigator.product == 'Gecko') { 
-			//Firefox fix, see bug #356558 
+		if (navigator.product == 'Gecko') {
+			//Firefox fix, see bug #356558
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=356558
 			iframe.contentWindow.location.href = iframe.getAttribute('src');
 		}
@@ -170,14 +170,14 @@ if (Function.prototype.create == null) {
  * APE JSF Setup
  */
 
-/*APE.Config.baseUrl = 'http://ape-test.local/lords/general_js/ape'; //APE JSF 
-APE.Config.domain = 'ape-test.local'; 
+/*APE.Config.baseUrl = 'http://ape-test.local/lords/general_js/ape'; //APE JSF
+APE.Config.domain = 'ape-test.local';
 APE.Config.server = 'ape.ape-test.local:80'; //APE server URL*/
 
 
-APE.Config.baseUrl = 'http://the-lords.org/general_js/ape'; //APE JSF 
-APE.Config.domain = 'the-lords.org'; 
-APE.Config.server = 'ape.the-lords.org:80'; //APE server URL
+APE.Config.baseUrl = 'http://the-lords.org/general_js/ape'; //APE JSF
+APE.Config.domain = 'the-lords.org';
+APE.Config.server = 'ape.the-lords.org:6969'; //APE server URL
 
 (function(){
 	for (var i = 0; i < arguments.length; i++)

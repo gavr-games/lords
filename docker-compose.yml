@@ -3,16 +3,30 @@ services:
   db:
     image: "mysql:5.5"
     ports:
-     - "3306:3306"
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
     volumes:
-     - ./database:/database
+      - ./database:/database
 
   ape:
     image: "i386/ubuntu:17.10"
     ports:
-     - "6969:6969"
+      - "6969:6969"
     volumes:
-     - ./ape_scripts:/ape_scripts
+      - ./ape_scripts:/ape_scripts
     command: bash -c "cd /ape_scripts/bin ; chmod 755 ./aped ; ./aped"
+    links:
+      - web
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./web:/var/www/html
+      - ./log:/var/log/apache2
+    links:
+      - db

@@ -26,6 +26,63 @@ Once you have all of those installed you should:
 - cd to project's root folder and run `docker-compose build`. It will build all Dockerfiles and create images for containers.
 - run `docker-compose up -d` to start all services.
 - Setup db with the next command `docker-compose exec db /database/bin/lords_db_init.sh`
+- Add the lines below to you `/etc/hosts`:
+```
+# Lords
+127.0.0.1 the-lords.org
+127.0.0.1 ape-test.local
+127.0.0.1 ape.the-lords.org
+127.0.0.1 0.ape.the-lords.org
+127.0.0.1 1.ape.the-lords.org
+127.0.0.1 2.ape.the-lords.org
+127.0.0.1 3.ape.the-lords.org
+127.0.0.1 4.ape.the-lords.org
+127.0.0.1 5.ape.the-lords.org
+127.0.0.1 6.ape.the-lords.org
+127.0.0.1 7.ape.the-lords.org
+127.0.0.1 8.ape.the-lords.org
+127.0.0.1 9.ape.the-lords.org
+127.0.0.1 10.ape.the-lords.org
+127.0.0.1 11.ape.the-lords.org
+127.0.0.1 12.ape.the-lords.org
+127.0.0.1 13.ape.the-lords.org
+127.0.0.1 14.ape.the-lords.org
+127.0.0.1 15.ape.the-lords.org
+127.0.0.1 16.ape.the-lords.org
+127.0.0.1 17.ape.the-lords.org
+127.0.0.1 18.ape.the-lords.org
+127.0.0.1 19.ape.the-lords.org
+127.0.0.1 20.ape.the-lords.org
+127.0.0.1 21.ape.the-lords.org
+127.0.0.1 22.ape.the-lords.org
+127.0.0.1 23.ape.the-lords.org
+127.0.0.1 24.ape.the-lords.org
+127.0.0.1 25.ape.the-lords.org
+127.0.0.1 26.ape.the-lords.org
+127.0.0.1 27.ape.the-lords.org
+127.0.0.1 28.ape.the-lords.org
+127.0.0.1 29.ape.the-lords.org
+127.0.0.1 30.ape.the-lords.org
+127.0.0.1 31.ape.the-lords.org
+127.0.0.1 32.ape.the-lords.org
+127.0.0.1 33.ape.the-lords.org
+127.0.0.1 34.ape.the-lords.org
+127.0.0.1 35.ape.the-lords.org
+127.0.0.1 36.ape.the-lords.org
+127.0.0.1 37.ape.the-lords.org
+127.0.0.1 38.ape.the-lords.org
+127.0.0.1 39.ape.the-lords.org
+```
 
-Other
+Everyday Usage
 ---------------
+- to launch services run `docker-compose up -d`
+- to stop services run `docker-compose stop`
+- to run command inside running container `docker exec web COMMAND`
+- to login into container `docker-compose exec web /bin/bash`
+- to run command in separate container instance `docker-compose run web COMMAND`
+- to completely remove container `docker-compose kill web` + `docker-compose remove web` (it could be useful to recreate container when something went wrong).
+
+
+You can change `web` to any container name, see `docker-compose.yml`.
+Each container syncs required folders in both directions (see `docker-compose.yml` -> `volumes` sections).
