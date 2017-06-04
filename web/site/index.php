@@ -14,6 +14,10 @@
 	<script type="text/javascript" src="site/js_libs/static_libs.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="general_js/ape/Build/uncompressed/apeClientJS.js?<?php echo $SITE_conf['revision']; ?>">"></script>
 	<script type="text/javascript" src="site/js_libs/ape.js?<?php echo $SITE_conf['revision']; ?>"></script>
+	<script type="text/javascript" src="general_js/jquery-3.2.1.min.js?<?php echo $SITE_conf['revision']; ?>"></script>
+	<script>
+		jQuery.noConflict();
+	</script>
         <?php //if (getSeason()=='winter') echo '<script type="text/javascript" src="general_js/snowstorm.js?'.$SITE_conf['revision'].'"></script>';?>
         <link rel="stylesheet" type="text/css" href="design/css/pregame/reset.css?<?php echo $SITE_conf['revision']; ?>" />
 	<link rel="stylesheet" type="text/css" href="design/css/pregame/main.css?<?php echo $SITE_conf['revision']; ?>" />
@@ -45,9 +49,9 @@
 </head>
 <body onload="setTimeout('myApeInit()',100);">
 	<div id="wind">
-		<div id="panor"> 
+		<div id="panor">
 				<div class="rel" id="rel">
-				
+
     			</div><!--.rel-->
     	</div><!--#panor-->
     </div><!--#wind-->

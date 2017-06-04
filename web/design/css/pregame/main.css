@@ -1,6 +1,6 @@
 html{min-height:100%;}
 body {
-	
+
 	min-height:100%;
 }
 #wind {
@@ -13,6 +13,12 @@ body {
 	position:relative;
 	position:absolute;
 	left:-15000px;
+  transition:all 3s ease-in-out;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 #wind #panor .rel {
 	float:left;
@@ -23,8 +29,14 @@ body {
 }
 #wind #panor .window {
 	position:absolute;
-        background-color: transparent;
-        border: none;
+  background-color: transparent;
+  border: none;
+	transition:all 3s ease-in-out;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 /*   Common    */
@@ -75,7 +87,7 @@ body {
 	text-shadow: white 1px 1px 1px;
 	font-weight:bold;
 	color:#515150;
-	
+
 	font-size:30px;
 	padding:0px 0px 20px 20px;
 	font-family:Lucida Grande;
@@ -158,16 +170,16 @@ body {
 	background:  url(../../images/pregame/scroolbar_v_arr1.png) top left repeat;
 }
 .scroll_vert .scroll_arr1 {
-	
+
 }
 .scroll_vert .scroll_bar {
-	
+
 }
 .scroll_vert .scroll_bar .scroll_handle {
-	
+
 }
 .scroll_vert .scroll_arr2 {
-	
+
 }
 /*  login page   */
 
@@ -176,7 +188,7 @@ body {
 	margin-right:auto;
 	width:628px;
 	position:relative;
-	
+
 }
  #log_cont #log_form  {
 	float:left;
@@ -221,7 +233,7 @@ body {
 	left:267px;
 	width:300px;
  }
- 
+
 /*  registration page   */
 
 #reg_cont {
