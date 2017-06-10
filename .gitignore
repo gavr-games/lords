@@ -2,3 +2,4 @@ log/*
 ape.log
 deployment/ai
 deployment/ai_bin
+.idea

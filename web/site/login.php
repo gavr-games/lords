@@ -28,14 +28,16 @@
 				<form action="ajax/authorize_user.php" method="post" id="login_form" onsubmit="return false;">
 					<p class="error_msg" id="login_error"> </p>
 					<div style="float:left; width:220px;">
-		               <span class="logfields">Логин:<p class="txtfield"><input class="log" type="text" name="login" id="login_i"></p></span>
-		               <span class="logfields">Пароль:<p class="txtfield"><input class="pas" type="password" name="pass" id="pass_i"></p></span>
+		               <span class="logfields"><?= L::login_login ?>:<p class="txtfield"><input class="log" type="text" name="login" id="login_i"></p></span>
+		               <span class="logfields"><?= L::login_password ?>:<p class="txtfield"><input class="pas" type="password" name="pass" id="pass_i"></p></span>
 		    		</div>	
-		    			<div class="button"><span class="in_b_1"><p class="in_b_2"><a id="login_b" href="#" class="" onclick="doLogin($('login_b'));return false;">Войти</a></p></span></div>
+		    			<div class="button"><span class="in_b_1"><p class="in_b_2"><a id="login_b" href="#" class="" onclick="doLogin($('login_b'), '<?= L::login_fields_blank ?>', '<?= L::loading ?>');return false;"><?= L::login_enter ?></a></p></span></div>
 		    		
 		        </form>
-		        <a class="link reg" href="#" onclick="if (!parent.window_loading) parent.load_window('site/register.php','right'); return false;">Желаете зарегистрироваться?</a>
+		        <a class="link reg" href="#" onclick="if (!parent.window_loading) parent.load_window('site/register.php','right'); return false;"><?= L::login_want_signup ?></a>
 			</div>
+			<span class="topbutton en"><a href="/site/lang.php?lang=en">EN</a></span>
+			<span class="topbutton ru"><a href="/site/lang.php?lang=ru">RU</a></span>
 		</div>
 		<div id="footer"> 
 	    	© <?php 
