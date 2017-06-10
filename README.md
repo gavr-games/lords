@@ -87,3 +87,8 @@ Everyday Usage
 
 You can change `web` to any container name, see `docker-compose.yml`.
 Each container syncs required folders in both directions (see `docker-compose.yml` -> `volumes` sections).
+
+Connecting to the database
+---------------
+To connect to the database running inside the docker container use TCP/IP connection localhost:3306 user:root, password:root
+
