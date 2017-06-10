@@ -1,0 +1,53 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "57e6663bf6f0399678c9dd095c20c0d0",
+    "content-hash": "70a460bf889342b280268a348f55c60a",
+    "packages": [
+        {
+            "name": "philipp15b/php-i18n",
+            "version": "v3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Philipp15b/php-i18n.git",
+                "reference": "1d4b49f19ef7b1ee671d0af55af5cdb2fefa0404"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Philipp15b/php-i18n/zipball/1d4b49f19ef7b1ee671d0af55af5cdb2fefa0404",
+                "reference": "1d4b49f19ef7b1ee671d0af55af5cdb2fefa0404",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "i18n.class.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC BY-SA 3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp Schröer",
+                    "email": "github@philworld.de"
+                }
+            ],
+            "description": "Simple i18n class for PHP",
+            "homepage": "https://github.com/Philipp15b/php-i18n",
+            "time": "2015-02-12 06:28:30"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

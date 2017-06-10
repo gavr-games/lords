@@ -2,12 +2,12 @@
 var loadingButton;
 var oldText = '';
 
-function doLoading(link) {
+function doLoading(link, text) {
     stopLoading();
     if (link) {
         loadingButton = link;
         oldText = link.get('text');
-        link.set('text', 'Загрузка');
+        link.set('text', text);
         link.getParent().addClass('loading');
     }
 }
@@ -44,9 +44,9 @@ function loginAnswer(answer) {
     }
 }
 
-function doLogin(link) {
+function doLogin(link, validation_msg, loading_msg) {
     if ($('pass_i').get('value') == '' || $('login_i').get('value') == '') {
-        $('login_error').set('text', 'Не все поля заполнены.');
+        $('login_error').set('text', validation_msg);
         $('login_error').show();
         if ($('pass_i').get('value') == '') $('pass_i').highlight('#A11D15');
         if ($('login_i').get('value') == '') $('login_i').highlight('#A11D15');
@@ -57,15 +57,15 @@ function doLogin(link) {
 		login: '"'+parent.convertChars($('login_i').get('value'))+'"',
                 pass:  '"'+$('pass_i').get('value').replace(new RegExp('"','g'),'\\"')+'"'
 	    }});
-            doLoading(link);
+            doLoading(link, loading_msg);
         }
     }
 }
 
-function doLogout(link) {
+function doLogout(link, loading_msg) {
     if (!parent.window_loading) { //another window is not loading
         parent.sendLoggedProtocolCmd({action:'logout',params:{}});
-        doLoading(link);
+        doLoading(link, loading_msg);
     }
 }
 

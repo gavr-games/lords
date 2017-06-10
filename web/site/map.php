@@ -35,8 +35,10 @@
 				</a>
 			</div>
 		</div>
-		<span class="topbutton prof"><a href="#" id="profile_b" onclick="if (!parent.window_loading) {doLoading($('profile_b'));parent.load_window('site/myprofile.php?back=map','left');} return false;">Профиль</a></span>
-		<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'));return false;">Выход</a></span>
+		<span class="topbutton prof"><a href="#" id="profile_b" onclick="if (!parent.window_loading) {doLoading($('profile_b'), '<?= L::loading ?>');parent.load_window('site/myprofile.php?back=map','left');} return false;">Профиль</a></span>
+		<span class="topbutton en"><a href="/site/lang.php?lang=en">EN</a></span>
+		<span class="topbutton ru"><a href="/site/lang.php?lang=ru">RU</a></span>
+		<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'), '<?= L::loading ?>');return false;">Выход</a></span>
 	</div>
 		<div id="footer"> 
 	    	© <?php 

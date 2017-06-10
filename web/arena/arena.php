@@ -21,6 +21,7 @@
 	$mysqli->next_result();
 	
 	//arena f5 info
+	$markers['###LOADING###'] = L::loading;
 	$arena_info = array('players');
 	$markers['###JS_ARRAYS###'] .= 'var users = new Array();'.chr(13);
 	$markers['###JS_ARRAYS###'] .= 'var chats = new Array();'.chr(13);

@@ -2,12 +2,12 @@
 var loadingButton;
 var oldText = '';
 
-function doLoading(link) {
+function doLoading(link, text) {
     stopLoading();
     if (link) {
         loadingButton = link;
         oldText = link.get('text');
-        link.set('text', 'Загрузка');
+        link.set('text', text);
         link.getParent().addClass('loading');
     }
 }

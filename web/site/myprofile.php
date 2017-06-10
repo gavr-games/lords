@@ -160,8 +160,10 @@
 			  <span class="error"><?php echo $avatar_error; ?></span>
 		  </form>
 		</div>
-		<span class="topbutton back"><a href="#" id="back_b" onclick="if (!parent.window_loading) {doLoading($('back_b'));parent.load_window('<?php echo $back_url; ?>','right');} return false;">Назад</a></span>
-		<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'));return false;">Выход</a></span>
+		<span class="topbutton back"><a href="#" id="back_b" onclick="if (!parent.window_loading) {doLoading($('back_b'), '<?= L::loading ?>');parent.load_window('<?php echo $back_url; ?>','right');} return false;">Назад</a></span>
+		<span class="topbutton en"><a href="/site/lang.php?lang=en">EN</a></span>
+		<span class="topbutton ru"><a href="/site/lang.php?lang=ru">RU</a></span>
+		<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'), '<?= L::loading ?>');return false;">Выход</a></span>
 	</div>
 		<div id="footer"> 
 	    	© <?php 

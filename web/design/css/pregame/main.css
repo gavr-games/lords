@@ -306,6 +306,19 @@ body {
 	top:7px;
 	right:0px;
 }
+
+.topbutton.en {
+	position:absolute;
+	top:7px;
+	right:260px;
+}
+
+.topbutton.ru {
+	position:absolute;
+	top:7px;
+	right:210px;
+}
+
 #opened_map{
 	width: 880px;
 	text-align:center;

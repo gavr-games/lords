@@ -15,6 +15,19 @@
 	top:-19px;
 	right:-10px;
 }
+
+.profile .en {
+    position:absolute;
+    top:-19px;
+    right:260px;
+}
+
+.profile .ru {
+    position:absolute;
+    top:-19px;
+    right:210px;
+}
+
 .title {
     font-family: Lucida Grande;
     font-weight:bold;

@@ -2,12 +2,12 @@
 var loadingButton;
 var oldText = '';
 
-function doLoading(link) {
+function doLoading(link, text) {
     stopLoading();
     if (link) {
         loadingButton = link;
         oldText = link.get('text');
-        link.set('text', 'Загрузка');
+        link.set('text', text);
         link.getParent().addClass('loading');
     }
 }
@@ -18,14 +18,6 @@ function stopLoading() {
         loadingButton.getParent().removeClass('loading');
     }
 }
-// BUTTON LOADING PART END
-window.addEvent('domready', function () {
-    $('reg_form').addEvent('keydown:keys(enter)', function () {
-        doReg($('do_reg'));
-        return false;
-    });
-    //$('login_i').focus();
-});
 
 function regAnswer(answer) {
     stopLoading();
@@ -38,14 +30,14 @@ function regAnswer(answer) {
     }
 }
 
-function doReg(link) {
+function doReg(link, pass_mismatch, fields_blank, loading_text) {
     if ($('pass_i').get('value') != $('pass2_i').get('value')) {
-        $('reg_error').set('text', 'Пароли не совпадают');
+        $('reg_error').set('text', pass_mismatch);
         $('reg_error').show();
         $('pass_i').highlight('#A11D15');
         $('pass2_i').highlight('#A11D15');
     } else if ($('pass_i').get('value') == '' || $('login_i').get('value') == '') {
-        $('reg_error').set('text', 'Не все поля заполнены.');
+        $('reg_error').set('text', fields_blank);
         $('reg_error').show();
         if ($('pass_i').get('value') == '') $('pass_i').highlight('#A11D15');
         if ($('login_i').get('value') == '') $('login_i').highlight('#A11D15');
@@ -61,7 +53,7 @@ function doReg(link) {
                 pass:  '"'+$('pass_i').get('value').replace(new RegExp('"','g'),'\\"')+'"',
 		email: user_email
 	}});
-        doLoading(link);
+        doLoading(link, loading_text);
     }
 }
 
