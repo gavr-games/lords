@@ -1,13 +1,13 @@
 TABLES:
 
-attack_bonus
+attack_bonus - only comments, not used anywhere
 building_features
 buildings
 cards
 dic_owner
 dic_statistic_measures
 dic_unit_phrases
-error_dictionary
+error_dictionary (lords)
 games_features
 nonfinished_actions_dictionary
 player_features
@@ -19,8 +19,6 @@ summon_cfg
 unit_features
 units
 videos
-dic_player_status
-error_dictionary
 
 LOG MESSAGES
 
