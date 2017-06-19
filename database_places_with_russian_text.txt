@@ -1,24 +1,25 @@
 TABLES:
 
 attack_bonus - only comments, not used anywhere
-building_features
-buildings
-cards
+building_features*
+buildings*
+cards*
 dic_owner
 dic_statistic_measures
-dic_unit_phrases
-error_dictionary (lords)
-games_features
+dic_unit_phrases*
+error_dictionary* (lords)
 nonfinished_actions_dictionary
 player_features
-procedures_params
+procedures_params*
 statistic_charts
 statistic_tabs
 statistic_values_config
 summon_cfg
-unit_features
-units
+unit_features*
+units*
 videos
+
+* = in static libs
 
 LOG MESSAGES
 
