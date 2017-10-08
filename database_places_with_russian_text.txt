@@ -7,7 +7,6 @@ nonfinished_actions_dictionary
 player_features
 
 2) Used in static libs
-building_features
 buildings
 cards
 dic_unit_phrases
