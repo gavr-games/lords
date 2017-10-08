@@ -1,27 +1,32 @@
 TABLES:
 
-attack_bonus - only comments, not used anywhere
-building_features*
-buildings*
-cards*
+1) With russian text, but not used anywhere:
+attack_bonus 
 dic_owner
-dic_statistic_measures
-dic_unit_phrases*
-error_dictionary* (lords)
 nonfinished_actions_dictionary
 player_features
-procedures_params*
+
+2) Used in static libs
+building_features
+buildings
+cards
+dic_unit_phrases
+procedures_params
+unit_features
+units
+
+3) For statistics:
+dic_statistic_measures
 statistic_charts
 statistic_tabs
 statistic_values_config
-summon_cfg
-unit_features*
-units*
+
+4) Other:
+summon_cfg - goes into player name
 videos
 
-* = in static libs
 
-LOG MESSAGES
+ALL LOG MESSAGES
 
 8910:      DECLARE mad_name VARCHAR(45) CHARSET utf8 DEFAULT 'Сумасшедший $u_name';
 9484:            SET cmd_log=REPLACE(cmd_log,'")',CONCAT('. ',log_unit(board_unit_id),' такой ',log_unit(board_unit_id),'")'));
