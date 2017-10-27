@@ -11,7 +11,6 @@ buildings
 cards
 dic_unit_phrases
 procedures_params
-unit_features
 units
 
 3) For statistics:
@@ -24,6 +23,8 @@ statistic_values_config
 summon_cfg - goes into player name
 videos
 
+TODO:
+log messages for unit_features
 
 ALL LOG MESSAGES
 
