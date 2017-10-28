@@ -10,7 +10,6 @@ player_features
 buildings
 cards
 dic_unit_phrases
-procedures_params
 units
 
 3) For statistics:
