@@ -9,8 +9,9 @@ CREATE TABLE `building_features_i18n` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `feature_id` int(10) unsigned NOT NULL,
   `language_id` int(10) unsigned NOT NULL,
-  `description` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  `description` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`feature_id`) REFERENCES `building_features` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

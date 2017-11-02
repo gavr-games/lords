@@ -29,7 +29,8 @@ CREATE TABLE `dic_player_status_i18n` (
   `player_status_id` int(10) unsigned NOT NULL,
   `language_id` int(10) unsigned NOT NULL,
   `description` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`player_status_id`) REFERENCES `dic_player_status` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

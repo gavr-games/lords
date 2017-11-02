@@ -18,7 +18,8 @@ CREATE TABLE `unit_features_i18n` (
   `feature_id` int(10) unsigned NOT NULL,
   `language_id` int(10) unsigned NOT NULL,
   `description` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`feature_id`) REFERENCES `unit_features` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

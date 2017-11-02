@@ -76,7 +76,8 @@ CREATE TABLE `error_dictionary_i18n` (
   `error_id` int(10) unsigned NOT NULL,
   `language_id` int(10) unsigned NOT NULL,
   `description` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`error_id`) REFERENCES `error_dictionary` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
