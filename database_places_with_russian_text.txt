@@ -8,7 +8,6 @@ player_features
 
 2) Used in static libs
 buildings
-cards
 dic_unit_phrases
 units
 
