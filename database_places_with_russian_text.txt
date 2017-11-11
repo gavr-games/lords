@@ -9,7 +9,6 @@ player_features
 2) Used in static libs
 buildings
 dic_unit_phrases
-units
 
 3) For statistics:
 dic_statistic_measures
