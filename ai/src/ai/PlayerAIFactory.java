@@ -44,7 +44,12 @@ public class PlayerAIFactory
 		}
 
 		List<BoardObject> targets = new ArrayList<>();
-		
+
+		if(myUnit.checkFeature("paralich"))
+		{
+			return new EndTurningAI();
+		}
+
 		//mad
 		if(myUnit.checkFeature("madness"))
 		{
