@@ -53,14 +53,6 @@ DELIMITER ;
 
 DROP procedure IF EXISTS `cmd_log_add_independent_message_for_other_player`;
 
-DELIMITER $$
-CREATE PROCEDURE `cmd_log_add_independent_message_for_other_player` (g_id INT, p_num INT, p2_num INT, log_msg_code VARCHAR(50) CHARSET utf8, params VARCHAR(50) CHARSET utf8)
-BEGIN
-  CALL cmd_log_general_message(g_id, p_num, p2_num, 'log_add_independent_message', log_msg_code, params, 0);
-END$$
-
-DELIMITER ;
-
 DROP procedure IF EXISTS `cmd_log_add_container`;
 
 DELIMITER $$
@@ -72,12 +64,4 @@ END$$
 DELIMITER ;
 
 DROP procedure IF EXISTS `cmd_log_add_container_for_other_player`;
-
-DELIMITER $$
-CREATE PROCEDURE `cmd_log_add_container_for_other_player` (g_id INT, p_num INT, p2_num INT, log_msg_code VARCHAR(50) CHARSET utf8, params VARCHAR(50) CHARSET utf8)
-BEGIN
-  CALL cmd_log_general_message(g_id, p_num, p2_num, 'log_add_container', log_msg_code, params, 0);
-END$$
-
-DELIMITER ;
 
