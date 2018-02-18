@@ -2219,8 +2219,6 @@ BEGIN
   DECLARE sacr_health INT;
   DECLARE damage_bonus INT DEFAULT 1;
 
-  DECLARE cmd_log VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_message("$log_unit1 жертвует $log_unit2_rod_pad за $log_unit3_rod_pad")';
-
   SET err_code=check_unit_can_do_action(g_id,p_num,x,y,'necromancer_sacrifice'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE

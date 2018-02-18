@@ -1,0 +1,26 @@
+TABLES:
+
+1) With russian text, but not used anywhere:
+attack_bonus 
+dic_owner
+nonfinished_actions_dictionary
+player_features
+
+2) Used in static libs
+dic_unit_phrases
+
+3) For statistics:
+dic_statistic_measures
+statistic_charts
+statistic_tabs
+statistic_values_config
+
+4) Other:
+summon_cfg - goes into player name
+videos
+
+DECLARE mad_name VARCHAR(45) CHARSET utf8 DEFAULT 'Сумасшедший $u_name';
+DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT 'Вампир $u_name';
+DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT 'Вампир $u_name';
+DECLARE zombie_name VARCHAR(45) CHARSET utf8 DEFAULT 'Зомби $u_name';
+
