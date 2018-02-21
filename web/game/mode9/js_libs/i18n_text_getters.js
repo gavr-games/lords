@@ -16,6 +16,14 @@ function unit_description(unit_id) {
     return unit_names[USER_LANGUAGE][unit_id]["description"];
 }
 
+function unit_log_name(unit_id) {
+    return unit_names[USER_LANGUAGE][unit_id]["log_short_name"] || unit_names[USER_LANGUAGE][unit_id]["name"];
+}
+
+function unit_log_name_akk(unit_id) {
+    return unit_names[USER_LANGUAGE][unit_id]["log_name_accusative"];
+}
+
 function unit_feature_description(feature_id) {
     return unit_feature_names[USER_LANGUAGE][feature_id]["description"];
 }
@@ -26,6 +34,10 @@ function building_name(building_id) {
 
 function building_description(building_id) {
     return building_names[USER_LANGUAGE][building_id]["description"];
+}
+
+function building_log_name(building_id) {
+    return building_names[USER_LANGUAGE][building_id]["log_short_name"] || building_names[USER_LANGUAGE][building_id]["name"];
 }
 
 function error_message(error_id) {

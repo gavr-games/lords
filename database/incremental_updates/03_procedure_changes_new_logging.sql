@@ -260,7 +260,6 @@ BEGIN
   DECLARE p_num INT; 
   DECLARE p2_num INT; 
   DECLARE u_id,aim_object_id INT;
-  DECLARE aim_short_name VARCHAR(45) CHARSET utf8;
   DECLARE health_before_hit,health_after_hit,experience INT;
   DECLARE aim_card_id INT;
   DECLARE aim_x,aim_y INT;
@@ -271,9 +270,11 @@ BEGIN
   DECLARE damage INT;
   DECLARE attack_success,critical INT;
 
+  DECLARE cmd_log_unit VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_attack_unit_message($x,$y,$x2,$y2,$p_num,$unit_id,$p2_num,$aim_unit_id,$attack_success,$critical,$damage)';
+  DECLARE cmd_log_building VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_attack_building_message($x,$y,$x2,$y2,$p_num,$unit_id,$p2_num,$aim_building_id,$attack_success,$critical,$damage)';
   DECLARE cmd_log VARCHAR(1000) CHARSET utf8;
 
-  SET cmd_log='log_add_attack_message($x,$y,$x2,$y2,$p_num,$p2_num,$attack_success,$critical,$damage)';
+  SET cmd_log='log_add_attack_unit_message($x,$y,$x2,$y2,$p_num,$p2_num,$attack_success,$critical,$damage)';
 
   SELECT bu.game_id,bu.player_num,bu.unit_id INTO g_id,p_num,u_id FROM board_units bu JOIN games g ON (bu.game_id=g.id) WHERE bu.id=board_unit_id LIMIT 1;
 
@@ -283,18 +284,19 @@ BEGIN
       SELECT bu.player_num,bu.unit_id,bu.health,bu.card_id,shield INTO p2_num,aim_object_id,health_before_hit,aim_card_id,aim_shield FROM board_units bu WHERE bu.id=aim_board_id LIMIT 1;
       SET aim_goes_to_deck = unit_feature_check(aim_board_id,'goes_to_deck_on_death');
       SELECT MIN(b.x),MIN(b.y) INTO aim_x,aim_y FROM board b WHERE b.game_id=g_id AND b.`type`=aim_type AND b.ref=aim_board_id;
-      SELECT ui_code INTO aim_short_name FROM units WHERE id=aim_object_id LIMIT 1;
+      SET cmd_log = REPLACE(cmd_log_unit, '$aim_unit_id', aim_object_id);
     END;
     WHEN aim_type='building' OR aim_type='castle' THEN
     BEGIN
       SELECT bb.player_num,bb.building_id,bb.health INTO p2_num,aim_object_id,health_before_hit FROM board_buildings bb WHERE bb.id=aim_board_id LIMIT 1;
       SELECT b.x,b.y INTO aim_x,aim_y FROM board b WHERE b.game_id=g_id AND b.`type`=aim_type AND b.ref=aim_board_id LIMIT 1;
-      SELECT ui_code INTO aim_short_name FROM buildings WHERE id=aim_object_id LIMIT 1;
+      SET cmd_log = REPLACE(cmd_log_building, '$aim_building_id', aim_object_id);
     END;
   END CASE;
 
   CALL calculate_attack_damage(board_unit_id,aim_type,aim_board_id,attack_success,damage,critical);
 
+      SET cmd_log=REPLACE(cmd_log,'$unit_id',u_id);
       SET cmd_log=REPLACE(cmd_log,'$x,$y',(SELECT CONCAT(b.x,',',b.y) FROM board b WHERE b.`type`='unit' AND b.ref=board_unit_id LIMIT 1));
       SET cmd_log=REPLACE(cmd_log,'$x2,$y2',(SELECT CONCAT(aim_x,',',aim_y) FROM DUAL));
 
@@ -2110,7 +2112,7 @@ BEGIN
   DECLARE delta_x,delta_y INT;
   DECLARE u_id INT;
 
-  DECLARE cmd_log VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_move_message($x,$y,$x2,$y2,$p_num)';
+  DECLARE cmd_log VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_move_message($x,$y,$x2,$y2,$p_num,$unit_id)';
 
   SELECT bu.game_id,bu.player_num,bu.unit_id INTO g_id,p_num,u_id FROM board_units bu WHERE bu.id=board_unit_id LIMIT 1;
   SELECT MIN(b.x),MIN(b.y) INTO x,y FROM board b WHERE b.`type`='unit' AND b.ref=board_unit_id;
@@ -2120,10 +2122,11 @@ BEGIN
 
   CALL cmd_move_unit(g_id,p_num,x,y,x2,y2);
 
-      SET cmd_log=REPLACE(cmd_log,'$p_num',p_num);
-      SET cmd_log=REPLACE(cmd_log,'$x,$y',CONCAT(x,',',y));
-      SET cmd_log=REPLACE(cmd_log,'$x2,$y2',CONCAT(x2,',',y2));
-      INSERT INTO command (game_id,player_num,command) VALUES (g_id,p_num,cmd_log);
+  SET cmd_log=REPLACE(cmd_log,'$p_num',p_num);
+  SET cmd_log=REPLACE(cmd_log,'$unit_id',u_id);
+  SET cmd_log=REPLACE(cmd_log,'$x,$y',CONCAT(x,',',y));
+  SET cmd_log=REPLACE(cmd_log,'$x2,$y2',CONCAT(x2,',',y2));
+  INSERT INTO command (game_id,player_num,command) VALUES (g_id,p_num,cmd_log);
 
 END$$
 
@@ -3098,7 +3101,9 @@ BEGIN
     OR
     command.command LIKE 'log_add_move_message%'
     OR
-    command.command LIKE 'log_add_attack_message%';
+    command.command LIKE 'log_add_attack_unit_message%'
+    OR
+    command.command LIKE 'log_add_attack_building_message%';
 
   SELECT p.user_id, command, hidden_flag
   FROM command c LEFT JOIN players p ON (c.game_id=p.game_id AND c.player_num=p.player_num);
