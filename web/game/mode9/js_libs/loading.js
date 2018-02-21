@@ -61,6 +61,8 @@ function showRandomPhrase()	{
 			Asset.javascript('../../general_js/Carousel.js?'+revision, {onLoad: function(){removeLoadingItem('car_script');}});
 			addLoadingItem('Статические библиотеки','slibs_script');
 			Asset.javascript('js_libs/static_libs.js?'+revision, {onLoad: function(){removeLoadingItem('slibs_script');}});
+			addLoadingItem('Поддержка интернационализации','i18n_text_getters');
+			Asset.javascript('js_libs/i18n_text_getters.js?'+revision, {onLoad: function(){removeLoadingItem('i18n_text_getters');}});
 			addLoadingItem('Скрипт Execute','exec_script');
 			Asset.javascript('js_libs/execute.js?'+revision, {onLoad: function(){removeLoadingItem('exec_script');}});
 			addLoadingItem('API функции клиента','api_script');
