@@ -104,10 +104,10 @@ BEGIN
 
           INSERT INTO statistic_game_actions(game_id,player_num,`action`) VALUES(g_id,p_num,'unit_attack');
           IF miss=1 THEN
-            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_unit_miss', CONCAT_WS(',', board_unit_id, aim_bu_id));
+            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_unit_miss', CONCAT_WS(',', log_unit(board_unit_id), log_unit(aim_bu_id)));
             INSERT INTO statistic_game_actions(game_id,player_num,`action`) VALUES(g_id,p_num,'miss_attack');
           ELSE
-            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_unit', CONCAT_WS(',', board_unit_id, aim_bu_id, damage));
+            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_unit', CONCAT_WS(',', log_unit(board_unit_id), log_unit(aim_bu_id), damage));
 
             SELECT bu.health INTO health_before_hit FROM board_units bu WHERE bu.id=aim_bu_id LIMIT 1;
             CALL hit_unit(aim_bu_id,p_num,damage);
@@ -218,10 +218,10 @@ BEGIN
 
           INSERT INTO statistic_game_actions(game_id,player_num,`action`) VALUES(g_id,p_num,'unit_attack');
           IF miss=1 THEN
-            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_unit_miss', CONCAT_WS(',', board_unit_id, aim_bu_id));
+            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_unit_miss', CONCAT_WS(',', log_unit(board_unit_id), log_unit(aim_bu_id)));
             INSERT INTO statistic_game_actions(game_id,player_num,`action`) VALUES(g_id,p_num,'miss_attack');
           ELSE
-            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_unit', CONCAT_WS(',', board_unit_id, aim_bu_id, damage));
+            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_unit', CONCAT_WS(',', log_unit(board_unit_id), log_unit(aim_bu_id), damage));
 
             SELECT bu.health INTO health_before_hit FROM board_units bu WHERE bu.id=aim_bu_id LIMIT 1;
             CALL hit_unit(aim_bu_id,p_num,damage);
@@ -444,7 +444,7 @@ BEGIN
     UPDATE board_buildings SET health=health+health_repair WHERE id=board_building_id;
     CALL cmd_building_set_health(g_id,p_num,board_building_id);
 
-    CALL cmd_log_add_independent_message(g_id, p_num, 'building_repair', CONCAT_WS(',', board_building_id, health_repair));
+    CALL cmd_log_add_independent_message(g_id, p_num, 'building_repair', CONCAT_WS(',', log_building(board_building_id), health_repair));
 
   END IF;
 
@@ -520,7 +520,7 @@ BEGIN
           CALL zombies_change_player_to_nec(board_unit_id);
         END IF;
 
-        CALL cmd_log_add_message(g_id, p_num, log_msg_code, CONCAT_WS(',', board_unit_id, p_num));
+        CALL cmd_log_add_message(g_id, p_num, log_msg_code, CONCAT_WS(',', log_unit(board_unit_id), p_num));
 
       END IF;
 
@@ -642,7 +642,6 @@ BEGIN
   DECLARE board_building_id INT;
   DECLARE p2_num INT;
   DECLARE building_id INT;
-  DECLARE building_name VARCHAR(45) CHARSET utf8;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
@@ -660,7 +659,6 @@ BEGIN
         ELSE
           IF building_feature_check(board_building_id,'not_movable')=1 THEN
             SELECT bb.building_id INTO building_id FROM board_buildings bb WHERE bb.id=board_building_id;
-            SELECT b.ui_code INTO building_name FROM buildings b WHERE b.id=building_id;
             SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=43;
           ELSE
             CALL user_action_begin();
@@ -829,7 +827,7 @@ BEGIN
       SELECT ref INTO board_unit_id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit' LIMIT 1;
 
       IF (SELECT FLOOR(1 + (RAND() * 6)) as `dice` FROM DUAL)<6 THEN
-        CALL cmd_log_add_message(g_id, p_num, 'miss_rus_rul', board_unit_id);
+        CALL cmd_log_add_message(g_id, p_num, 'miss_rus_rul', log_unit(board_unit_id));
       ELSE
         CALL kill_unit(board_unit_id,p_num);
       END IF;
@@ -976,7 +974,7 @@ BEGIN
 
         CALL cmd_add_unit_by_id(g_id,new_player,new_unit_id);
         
-        CALL cmd_log_add_message(g_id, p_num, 'unit_appears_in_cell', CONCAT_WS(',', new_unit_id, log_cell(x,y)));
+        CALL cmd_log_add_message(g_id, p_num, 'unit_appears_in_cell', CONCAT_WS(',', log_unit(new_unit_id), log_cell(x,y)));
 
         CALL finish_playing_card(g_id,p_num);
         CALL end_cards_phase(g_id,p_num);
@@ -986,13 +984,6 @@ BEGIN
     END IF;
   END IF;
 
-END$$
-
-DROP FUNCTION IF EXISTS `lords`.`log_cell` $$
-
-CREATE FUNCTION `log_cell`(x INT,  y INT) RETURNS varchar(10) CHARSET utf8
-BEGIN
-  RETURN CONCAT_WS(';', x, y);
 END$$
 
 DROP PROCEDURE IF EXISTS `lords`.`cast_vred_main` $$
@@ -1150,7 +1141,6 @@ BEGIN
   DECLARE board_building_id INT;
   DECLARE p2_num INT;
   DECLARE building_id INT;
-  DECLARE building_name VARCHAR(45) CHARSET utf8;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
@@ -1168,8 +1158,7 @@ BEGIN
         ELSE
           IF building_feature_check(board_building_id,'not_movable')=1 THEN
             SELECT bb.building_id INTO building_id FROM board_buildings bb WHERE bb.id=board_building_id;
-            SELECT b.ui_code INTO building_name FROM buildings b WHERE b.id=building_id;
-            SELECT 0 AS `success`, ed.id as `error_code`, building_name as `error_params` FROM error_dictionary ed WHERE id=43;
+            SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=43;
           ELSE
             CALL user_action_begin();
 
@@ -1301,10 +1290,10 @@ BEGIN
 
           INSERT INTO statistic_game_actions(game_id,player_num,`action`) VALUES(g_id,p_num,'unit_attack');
           IF miss=1 THEN
-            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_building_miss', CONCAT_WS(',', board_unit_id, aim_bb_id));
+            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_building_miss', CONCAT_WS(',', log_unit(board_unit_id), log_building(aim_bb_id)));
             INSERT INTO statistic_game_actions(game_id,player_num,`action`) VALUES(g_id,p_num,'miss_attack');
           ELSE
-            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_building', CONCAT_WS(',', board_unit_id, aim_bb_id, damage));
+            CALL cmd_log_add_message(g_id, p_num, 'unit_shoots_building', CONCAT_WS(',', log_unit(board_unit_id), log_building(aim_bb_id), damage));
 
             SELECT bb.health INTO health_before_hit FROM board_buildings bb WHERE bb.id=aim_bb_id LIMIT 1;
 
@@ -1345,9 +1334,9 @@ DROP PROCEDURE IF EXISTS `lords`.`cmd_magic_resistance_log` $$
 CREATE PROCEDURE `cmd_magic_resistance_log`(g_id INT, p_num INT,  board_unit_id INT)
 BEGIN
   IF((SELECT current_procedure FROM active_players WHERE game_id=g_id LIMIT 1)='end_turn')THEN
-    CALL cmd_log_add_independent_message(g_id, p_num, 'unit_magic_resistance', board_unit_id);
+    CALL cmd_log_add_independent_message(g_id, p_num, 'unit_magic_resistance', log_unit(board_unit_id));
   ELSE
-    CALL cmd_log_add_message(g_id, p_num, 'unit_magic_resistance', board_unit_id);
+    CALL cmd_log_add_message(g_id, p_num, 'unit_magic_resistance', log_unit(board_unit_id));
   END IF;
 END$$
 
@@ -1356,9 +1345,9 @@ DROP PROCEDURE IF EXISTS `lords`.`cmd_mechanical_log` $$
 CREATE PROCEDURE `cmd_mechanical_log`(g_id INT, p_num INT,  board_unit_id INT)
 BEGIN
   IF((SELECT current_procedure FROM active_players WHERE game_id=g_id LIMIT 1)='end_turn')THEN
-    CALL cmd_log_add_independent_message(g_id, p_num, 'unit_mechanical', board_unit_id);
+    CALL cmd_log_add_independent_message(g_id, p_num, 'unit_mechanical', log_unit(board_unit_id));
   ELSE
-    CALL cmd_log_add_message(g_id, p_num, 'unit_mechanical', board_unit_id);
+    CALL cmd_log_add_message(g_id, p_num, 'unit_mechanical', log_unit(board_unit_id));
   END IF;
 END$$
 
@@ -1374,9 +1363,9 @@ BEGIN
   SELECT player_num INTO p_num FROM active_players WHERE game_id=g_id LIMIT 1;
 
   IF (obj_type='unit') THEN
-    CALL cmd_log_add_message(g_id, p_num, 'miss_unit', obj_id);
+    CALL cmd_log_add_message(g_id, p_num, 'miss_unit', log_unit(obj_id));
   ELSE
-    CALL cmd_log_add_message(g_id, p_num, 'miss_building', obj_id);
+    CALL cmd_log_add_message(g_id, p_num, 'miss_building', log_building(obj_id));
   END IF;
 
   INSERT INTO statistic_game_actions(game_id,player_num,`action`) VALUES(g_id,p_num,'miss_attack');
@@ -1394,7 +1383,7 @@ BEGIN
   DECLARE board_unit_id INT;
 
   SELECT MAX(bu.id) INTO board_unit_id FROM board_units bu WHERE bu.game_id=g_id AND bu.player_num=p_num AND bu.card_id=crd_id;
-  CALL cmd_log_add_message(g_id, p_num, 'resurrect', CONCAT_WS(',', p_num, board_unit_id));
+  CALL cmd_log_add_message(g_id, p_num, 'resurrect', CONCAT_WS(',', p_num, log_unit(board_unit_id)));
 
 END$$
 
@@ -1415,7 +1404,7 @@ BEGIN
   SET cmd=REPLACE(cmd,'$param',IFNULL(unit_feature_get_param(board_unit_id,eff),''));
 
   SELECT uf.log_key_add INTO log_key_add_effect FROM unit_features uf WHERE uf.code = eff LIMIT 1;
-  CALL cmd_log_add_message(g_id, p2_num, log_key_add_effect, board_unit_id);
+  CALL cmd_log_add_message(g_id, p2_num, log_key_add_effect, log_unit(board_unit_id));
     
   INSERT INTO command (game_id,player_num,command) VALUES (g_id,p2_num,cmd);
 
@@ -1439,9 +1428,9 @@ BEGIN
   SELECT uf.log_key_remove INTO log_key_remove_effect FROM unit_features uf WHERE uf.code = eff LIMIT 1;
 
   IF((SELECT current_procedure FROM active_players WHERE game_id=g_id LIMIT 1)='end_turn')THEN
-    CALL cmd_log_add_independent_message(g_id, p2_num, log_key_remove_effect, board_unit_id);
+    CALL cmd_log_add_independent_message(g_id, p2_num, log_key_remove_effect, log_unit(board_unit_id));
   ELSE
-    CALL cmd_log_add_message(g_id, p2_num, log_key_remove_effect, board_unit_id);
+    CALL cmd_log_add_message(g_id, p2_num, log_key_remove_effect, log_unit(board_unit_id));
   END IF;
 
   INSERT INTO command (game_id,player_num,command) VALUES (g_id,p2_num,cmd);
@@ -1459,7 +1448,7 @@ BEGIN
 
   SELECT game_id INTO g_id FROM board_buildings WHERE id=board_b_id LIMIT 1;
 
-  CALL cmd_log_add_message(g_id, p_num, 'building_destroyed', board_b_id);
+  CALL cmd_log_add_message(g_id, p_num, 'building_destroyed', log_building(board_b_id));
 
   IF EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.`type`='obstacle' AND b.ref=board_b_id) THEN
     SET reward=0; 
@@ -1508,7 +1497,7 @@ BEGIN
   SELECT game_id,player_num INTO g_id,p2_num FROM board_buildings WHERE id=board_castle_id LIMIT 1;
   SELECT g.mode_id INTO g_mode FROM games g WHERE g.id=g_id LIMIT 1;
 
-  CALL cmd_log_add_independent_message(g_id, p2_num, 'castle_destroyed', board_castle_id);
+  CALL cmd_log_add_independent_message(g_id, p2_num, 'castle_destroyed', log_building(board_castle_id));
 
   INSERT INTO statistic_game_actions(game_id,player_num,`action`,`value`) VALUES(g_id,p_num,'destroy_building',p2_num);
 
@@ -1588,7 +1577,7 @@ BEGIN
       CALL cmd_unit_set_health(g_id,p_num,board_unit_id);
     END IF;
 
-    CALL cmd_log_add_message(g_id, p_num, 'unit_drinks_health', CONCAT_WS(',', board_unit_id, drink_health_amt));
+    CALL cmd_log_add_message(g_id, p_num, 'unit_drinks_health', CONCAT_WS(',', log_unit(board_unit_id), drink_health_amt));
 
   END IF;
 
@@ -1921,9 +1910,9 @@ BEGIN
   CALL cmd_unit_set_health(g_id,p_num,board_unit_id);
 
   IF((SELECT current_procedure FROM active_players WHERE game_id=g_id LIMIT 1)='end_turn')THEN
-    CALL cmd_log_add_independent_message(g_id, p_num, 'unit_restores_health', CONCAT_WS(',', board_unit_id, hp));
+    CALL cmd_log_add_independent_message(g_id, p_num, 'unit_restores_health', CONCAT_WS(',', log_unit(board_unit_id), hp));
   ELSE
-    CALL cmd_log_add_message(g_id, p_num, 'unit_restores_health', CONCAT_WS(',', board_unit_id, hp));
+    CALL cmd_log_add_message(g_id, p_num, 'unit_restores_health', CONCAT_WS(',', log_unit(board_unit_id), hp));
   END IF;
 
 END$$
@@ -1943,7 +1932,7 @@ BEGIN
 
   SELECT game_id,player_num,card_id,unit_id INTO g_id,p2_num,crd_id,u_id FROM board_units WHERE id=bu_id LIMIT 1;
 
-  CALL cmd_log_add_message(g_id, p_num, 'unit_killed', bu_id);
+  CALL cmd_log_add_message(g_id, p_num, 'unit_killed', log_unit(bu_id));
 
   IF crd_id IS NOT NULL THEN
     IF unit_feature_check(bu_id,'goes_to_deck_on_death') = 1 THEN
@@ -1993,13 +1982,11 @@ BEGIN
 END$$
 
 DROP FUNCTION IF EXISTS `lords`.`log_attack` $$
-DROP FUNCTION IF EXISTS `lords`.`log_building` $$
 DROP FUNCTION IF EXISTS `lords`.`log_damage` $$
 DROP FUNCTION IF EXISTS `lords`.`log_gold` $$
 DROP FUNCTION IF EXISTS `lords`.`log_health` $$
 DROP FUNCTION IF EXISTS `lords`.`log_moves` $$
 DROP FUNCTION IF EXISTS `lords`.`log_player` $$
-DROP FUNCTION IF EXISTS `lords`.`log_unit` $$
 DROP FUNCTION IF EXISTS `lords`.`log_unit_rod_pad` $$
 
 DROP PROCEDURE IF EXISTS `lords`.`magical_damage` $$
@@ -2041,9 +2028,9 @@ BEGIN
 
     CASE aim_type
       WHEN 'building' THEN
-        CALL cmd_log_add_message(g_id, p_num, 'building_damage', CONCAT_WS(',', aim_id, damage_final));
+        CALL cmd_log_add_message(g_id, p_num, 'building_damage', CONCAT_WS(',', log_building(aim_id), damage_final));
       WHEN 'unit' THEN
-        CALL cmd_log_add_message(g_id, p_num, 'unit_damage', CONCAT_WS(',', aim_id, damage_final));
+        CALL cmd_log_add_message(g_id, p_num, 'unit_damage', CONCAT_WS(',', log_unit(aim_id), damage_final));
     END CASE;
 
   END IF;
@@ -2097,7 +2084,7 @@ BEGIN
     END;
     END IF;
   ELSE
-    CALL cmd_log_add_message(g_id, p_num, 'unit_already_mad', board_unit_id);
+    CALL cmd_log_add_message(g_id, p_num, 'unit_already_mad', log_unit(board_unit_id));
   END IF;
 
 END$$
@@ -2194,7 +2181,7 @@ BEGIN
 
             INSERT INTO statistic_game_actions(game_id,player_num,`action`,`value`) VALUES(g_id,p_num,'resurrect_unit',u2_id);
 
-            CALL cmd_log_add_message(g_id, p_num, 'unit_resurrects', CONCAT_WS(',', board_unit_id, new_unit_id));
+            CALL cmd_log_add_message(g_id, p_num, 'unit_resurrects', CONCAT_WS(',', log_unit(board_unit_id), log_unit(new_unit_id)));
 
             IF (check_all_units_moved(g_id,p_num) = 1) THEN
               CALL finish_moving_units(g_id,p_num);
@@ -2249,9 +2236,9 @@ BEGIN
           CALL cmd_unit_set_moves_left(g_id,p_num,board_unit_id);
 
 
-          CALL cmd_log_add_message(g_id, p_num, 'sacrifice', CONCAT_WS(',', board_unit_id, sacr_bu_id, target_bu_id));
+          CALL cmd_log_add_message(g_id, p_num, 'sacrifice', CONCAT_WS(',', log_unit(board_unit_id), log_unit(sacr_bu_id), log_unit(target_bu_id)));
           IF(sacr_bu_id=target_bu_id) THEN
-            CALL cmd_log_add_message(g_id, p_num, 'unit_is_such_a_unit', board_unit_id);
+            CALL cmd_log_add_message(g_id, p_num, 'unit_is_such_a_unit', log_unit(board_unit_id));
           END IF;
 
           IF (unit_feature_check(sacr_bu_id,'magic_immunity')=1) THEN 
@@ -2494,7 +2481,7 @@ BEGIN
               CALL resurrect(g_id,p_num,grave_id);
 
               SELECT MAX(id) INTO new_bu_id FROM board_units bu WHERE bu.game_id=g_id AND bu.player_num=p_num;
-              CALL cmd_log_add_independent_message(g_id, p_num, 'resurrect', CONCAT_WS(',', p_num, new_bu_id));
+              CALL cmd_log_add_independent_message(g_id, p_num, 'resurrect', CONCAT_WS(',', p_num, log_unit(new_bu_id)));
 
               CALL end_cards_phase(g_id,p_num);
 
@@ -2521,7 +2508,7 @@ BEGIN
   REPEAT
     FETCH cur INTO board_building_id;
     IF NOT done THEN
-      CALL cmd_log_add_message(g_id, p_num, 'building_completely_repaired', board_building_id);
+      CALL cmd_log_add_message(g_id, p_num, 'building_completely_repaired', log_building(board_building_id));
       UPDATE board_buildings SET health=max_health WHERE id=board_building_id;
       CALL cmd_building_set_health(g_id,p_num,board_building_id);
     END IF;
@@ -2586,7 +2573,7 @@ BEGIN
   UPDATE board_units SET shield=shield-1 WHERE id=board_unit_id;
   CALL cmd_unit_set_shield(g_id,p_num,board_unit_id);
 
-  CALL cmd_log_add_message(g_id, p_num, 'loses_magic_shield', board_unit_id);
+  CALL cmd_log_add_message(g_id, p_num, 'loses_magic_shield', log_unit(board_unit_id));
 
 END$$
 
@@ -2603,9 +2590,9 @@ BEGIN
   CALL cmd_unit_set_shield(g_id,p_num,board_unit_id);
 
   IF((SELECT current_procedure FROM active_players WHERE game_id=g_id LIMIT 1)='end_turn')THEN
-    CALL cmd_log_add_independent_message(g_id, p_num, 'gets_magic_shield', board_unit_id);
+    CALL cmd_log_add_independent_message(g_id, p_num, 'gets_magic_shield', log_unit(board_unit_id));
   ELSE
-    CALL cmd_log_add_message(g_id, p_num, 'gets_magic_shield', board_unit_id);
+    CALL cmd_log_add_message(g_id, p_num, 'gets_magic_shield', log_unit(board_unit_id));
   END IF;
 
 
@@ -2623,7 +2610,7 @@ BEGIN
   UPDATE board_units SET shield=(SELECT shield FROM units u WHERE u.id=u_id LIMIT 1) WHERE id=board_unit_id;
   CALL cmd_unit_set_shield(g_id,p_num,board_unit_id);
 
-  CALL cmd_log_add_message(g_id, p_num, 'restore_magic_shield', board_unit_id);
+  CALL cmd_log_add_message(g_id, p_num, 'restore_magic_shield', log_unit(board_unit_id));
 
 END$$
 
@@ -2635,7 +2622,7 @@ BEGIN
 
   SELECT game_id INTO g_id FROM board_buildings WHERE id=bb_id LIMIT 1;
 
-  CALL cmd_log_add_message(g_id, p_num, 'building_sinks', bb_id);
+  CALL cmd_log_add_message(g_id, p_num, 'building_sinks', log_building(bb_id));
 
   CALL remove_building_from_board(bb_id,p_num);
 END$$
@@ -2648,7 +2635,7 @@ BEGIN
 
   SELECT game_id INTO g_id FROM board_units WHERE id=bu_id LIMIT 1;
 
-  CALL cmd_log_add_message(g_id, p_num, 'unit_drowns', bu_id);
+  CALL cmd_log_add_message(g_id, p_num, 'unit_drowns', log_unit(bu_id));
 
   CALL unit_feature_set(bu_id,'goes_to_deck_on_death',null);
   CALL kill_unit(bu_id,p_num);
@@ -2690,9 +2677,9 @@ BEGIN
     CALL cmd_add_unit_by_id(g_id,new_player,new_unit_id);
 
     IF((SELECT current_procedure FROM active_players WHERE game_id=g_id LIMIT 1)='end_turn')THEN
-      CALL cmd_log_add_independent_message(g_id, new_player, 'unit_appears_in_cell', CONCAT_WS(new_unit_id, log_cell(x,y)));
+      CALL cmd_log_add_independent_message(g_id, new_player, 'unit_appears_in_cell', CONCAT_WS(',', log_unit(new_unit_id), log_cell(x,y)));
     ELSE
-      CALL cmd_log_add_message(g_id, new_player, 'unit_appears_in_cell', CONCAT_WS(new_unit_id, log_cell(x,y)));
+      CALL cmd_log_add_message(g_id, new_player, 'unit_appears_in_cell', CONCAT_WS(',', log_unit(new_unit_id), log_cell(x,y)));
     END IF;
 
 END$$
@@ -2705,6 +2692,7 @@ BEGIN
   DECLARE subsidy_amt INT;
   DECLARE subsidy_damage INT;
   DECLARE board_castle_id INT;
+  DECLARE health_remaining INT;
 
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id=g_id LIMIT 1;
   SELECT cfg.`value` INTO subsidy_amt FROM mode_config cfg WHERE cfg.param='subsidy amount' AND cfg.mode_id=mode_id;
@@ -2725,11 +2713,13 @@ BEGIN
         UPDATE players SET gold=gold+subsidy_amt WHERE game_id=g_id AND player_num=p_num;
         UPDATE board_buildings SET health=health-subsidy_damage WHERE id=board_castle_id;
         UPDATE active_players SET subsidy_flag=1 WHERE game_id=g_id;
+        
+        SELECT health INTO remaining_healh FROM board_buildings WHERE id=board_castle_id;
 
         CALL cmd_player_set_gold(g_id,p_num);
         CALL cmd_building_set_health(g_id,p_num,board_castle_id);
 
-        CALL cmd_log_add_independent_message(g_id, p_num, 'take_subsidy', NULL);
+        CALL cmd_log_add_independent_message(g_id, p_num, 'take_subsidy', CONCAT_WS(',', log_building(board_castle_id), remaining_healh));
 
         CALL user_action_end();
       END IF;
@@ -2769,7 +2759,7 @@ BEGIN
 
         CALL unit_feature_set(board_unit_id,'bind_target',aim_bu_id);
 
-        CALL cmd_log_add_message(g_id, p_num, 'unit_attaches', CONCAT_WS(board_unit_id, aim_bu_id));
+        CALL cmd_log_add_message(g_id, p_num, 'unit_attaches', CONCAT_WS(',', log_unit(board_unit_id), log_unit(aim_bu_id)));
 
         IF (check_all_units_moved(g_id,p_num) = 1) THEN
           CALL finish_moving_units(g_id,p_num);
@@ -2797,7 +2787,7 @@ BEGIN
   FROM board_units bu JOIN units u ON (bu.unit_id=u.id) WHERE bu.id=board_unit_id LIMIT 1;
 
   IF((unit_feature_check(board_unit_id,'paralich')=0)AND(unit_feature_check(board_unit_id,'madness')=0)AND(hp_minus<=0)AND(shield_minus<=0))THEN
-      CALL cmd_log_add_message(g_id, p_num, 'unit_healed', board_unit_id);
+      CALL cmd_log_add_message(g_id, p_num, 'unit_healed', log_unit(board_unit_id));
   END IF;
 
   IF (unit_feature_check(board_unit_id,'paralich')=1) THEN
@@ -2830,7 +2820,7 @@ BEGIN
 
   UPDATE board_units SET attack=attack+qty WHERE id=board_unit_id;
   CALL cmd_unit_set_attack(g_id,p_num,board_unit_id);
-  CALL cmd_log_add_message(g_id, p_num, 'unit_gets_attack', CONCAT_WS(',', board_unit_id, qty));
+  CALL cmd_log_add_message(g_id, p_num, 'unit_gets_attack', CONCAT_WS(',', log_unit(board_unit_id), qty));
 
 END$$
 
@@ -2847,7 +2837,7 @@ BEGIN
   CALL cmd_unit_set_max_health(g_id,p_num,board_unit_id);
   CALL cmd_unit_set_health(g_id,p_num,board_unit_id);
 
-  CALL cmd_log_add_message(g_id, p_num, 'unit_gets_health', CONCAT_WS(',', board_unit_id, qty));
+  CALL cmd_log_add_message(g_id, p_num, 'unit_gets_health', CONCAT_WS(',', log_unit(board_unit_id), qty));
 
 END$$
 
@@ -2864,7 +2854,7 @@ BEGIN
   CALL cmd_unit_set_moves_left(g_id,p_num,board_unit_id);
   CALL cmd_unit_set_moves(g_id,p_num,board_unit_id);
 
-  CALL cmd_log_add_message(g_id, p_num, 'unit_gets_moves', CONCAT_WS(',', board_unit_id, qty));
+  CALL cmd_log_add_message(g_id, p_num, 'unit_gets_moves', CONCAT_WS(',', log_unit(board_unit_id), qty));
 END$$
 
 DROP PROCEDURE IF EXISTS `lords`.`unit_level_up` $$
@@ -2916,7 +2906,7 @@ BEGIN
               END;
             END CASE;
             
-            CALL cmd_log_add_message(g_id, p_num, CONCAT(log_msg_code_part, stat), CONCAT_WS(',', board_unit_id, level_up_bonus));
+            CALL cmd_log_add_message(g_id, p_num, CONCAT(log_msg_code_part, stat), CONCAT_WS(',', log_unit(board_unit_id), level_up_bonus));
             
             SET cmd=REPLACE(cmd,'$stat',stat);
             SET cmd=REPLACE(cmd,'$x',x);
@@ -3061,7 +3051,7 @@ BEGIN
   IF(success=1)THEN
 
     SELECT bu.player_num INTO p_num FROM board_units bu WHERE bu.id=board_unit_id_1 LIMIT 1;
-    CALL cmd_log_add_message(g_id, p_num, 'unit_pushes', CONCAT_WS(',', board_unit_id_1, board_unit_id_2));
+    CALL cmd_log_add_message(g_id, p_num, 'unit_pushes', CONCAT_WS(',', log_unit(board_unit_id_1), log_unit(board_unit_id_2)));
     
     OPEN cur;
     REPEAT
@@ -3153,7 +3143,7 @@ BEGIN
     CALL cmd_add_unit(g_id,new_player,new_unit_id);
     CALL cmd_remove_from_grave(g_id,p_num,grave_id);
 
-    CALL cmd_log_add_message(g_id, p_num, 'unit_becomes_vampire', new_unit_id);
+    CALL cmd_log_add_message(g_id, p_num, 'unit_becomes_vampire', log_unit(new_unit_id));
 
   END IF;
 
@@ -3198,7 +3188,7 @@ BEGIN
     CALL cmd_add_player(g_id,new_player);
     CALL cmd_add_unit_by_id(g_id,new_player,new_unit_id);
 
-    CALL cmd_log_add_message(g_id, p_num, 'unit_becomes_vampire', new_unit_id);
+    CALL cmd_log_add_message(g_id, p_num, 'unit_becomes_vampire', log_unit(new_unit_id));
 
   END IF;
 
@@ -3297,7 +3287,7 @@ BEGIN
 
       CALL building_feature_set(board_building_id,'turn_when_changed',current_turn);
 
-      CALL cmd_log_add_message(g_id, p_num, 'building_closes', board_building_id);
+      CALL cmd_log_add_message(g_id, p_num, 'building_closes', log_building(board_building_id));
 
       CALL user_action_end();
     END IF;
@@ -3355,7 +3345,7 @@ BEGIN
 
       CALL building_feature_set(board_building_id,'turn_when_changed',current_turn);
 
-      CALL cmd_log_add_message(g_id, p_num, 'building_opens', board_building_id);
+      CALL cmd_log_add_message(g_id, p_num, 'building_opens', log_building(board_building_id));
 
       CALL user_action_end();
     END IF;
@@ -3392,13 +3382,13 @@ BEGIN
         UPDATE board_units bu SET bu.moves_left=0 WHERE bu.id=board_unit_id;
         CALL cmd_unit_set_moves_left(g_id,p_num,board_unit_id);
 
-        CALL cmd_log_add_message(g_id, p_num, 'unit_casts_fb', CONCAT_WS(board_unit_id, aim_bu_id));
+        CALL cmd_log_add_message(g_id, p_num, 'unit_casts_fb', CONCAT_WS(',', log_unit(board_unit_id), log_unit(aim_bu_id)));
 
         SELECT FLOOR(1 + (RAND() * 6)) INTO dice FROM DUAL;
 
         IF dice=1 THEN 
           IF (SELECT FLOOR(1 + (RAND() * 6)) as `dice` FROM DUAL)<6 THEN
-            CALL cmd_log_add_message(g_id, p_num, 'miss_rus_rul', board_unit_id);
+            CALL cmd_log_add_message(g_id, p_num, 'miss_rus_rul', log_unit(board_unit_id));
           ELSE
             CALL kill_unit(board_unit_id,p_num);
           END IF;
@@ -3469,7 +3459,7 @@ BEGIN
         UPDATE board_units bu SET bu.moves_left=0 WHERE bu.id=board_unit_id;
         CALL cmd_unit_set_moves_left(g_id,p_num,board_unit_id);
 
-        CALL cmd_log_add_message(g_id, p_num, 'unit_heals', CONCAT_WS(board_unit_id, aim_bu_id));
+        CALL cmd_log_add_message(g_id, p_num, 'unit_heals', CONCAT_WS(',', log_unit(board_unit_id), log_unit(aim_bu_id)));
 
         CALL magical_heal(g_id,p_num,x2,y2,hp_heal);
 
@@ -3485,4 +3475,39 @@ BEGIN
 
 END$$
 
+DROP FUNCTION IF EXISTS `lords`.`log_cell` $$
+
+CREATE FUNCTION `log_cell`(x INT,  y INT) RETURNS varchar(50) CHARSET utf8
+BEGIN
+  RETURN CONCAT('{"type":"cell","x":', x, ',"y":' y, '}');
+END$$
+
+DROP FUNCTION IF EXISTS `lords`.`log_unit` $$
+
+CREATE FUNCTION `log_unit`(board_unit_id INT) RETURNS varchar(200) CHARSET utf8
+BEGIN
+  DECLARE u_id INT;
+  DECLARE p_num INT;
+  DECLARE x INT;
+  DECLARE y INT;
+  
+  SELECT unit_id, player_num INTO u_id, p_num FROM board_units bu WHERE bu.id = board_unit_id;
+  SELECT b.x, b.y INTO x, y FROM board b WHERE b.type = 'unit' AND b.ref = board_unit_id LIMIT 1;
+  RETURN CONCAT('{"type":"unit","board_id":', board_unit_id, '"player_num":', p_num, ',"unit_id":', u_id, ',"x":', x, ',"y":' y, '}');
+END$$
+
+DROP FUNCTION IF EXISTS `lords`.`log_building` $$
+
+CREATE FUNCTION `log_building`(board_building_id INT) RETURNS varchar(200) CHARSET utf8
+BEGIN
+  DECLARE b_id INT;
+  DECLARE p_num INT;
+  DECLARE x INT;
+  DECLARE y INT;
+  DECLARE obj_type VARCHAR(45);
+  
+  SELECT building_id, player_num INTO b_id, p_num FROM board_buildings bb WHERE bb.id = board_building_id;
+  SELECT b.x, b.y, b.type INTO x, y, obj_type FROM board b WHERE b.type != 'unit' AND b.ref = board_building_id LIMIT 1;
+  RETURN CONCAT('{"type":"', obj_type, '","board_id":', board_building_id, '"player_num":', p_num, ',"building_id":', b_id, ',"x":', x, ',"y":' y, '}');
+END$$
 
