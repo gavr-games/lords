@@ -118,7 +118,9 @@ function myApeInit() {
 		 return -1;
 		}
 		raw.data.commands = decodeURIComponent(raw.data.commands);
-                //console.log(raw.data.commands);
+		//handling ' (apostrophe) symmetric to game_protocol.php
+		raw.data.commands = raw.data.commands.replace(/\\u0027/g, "'");
+		//console.log(raw.data.commands);
 		showHint = false;
 		wasError = false;
 		try {
