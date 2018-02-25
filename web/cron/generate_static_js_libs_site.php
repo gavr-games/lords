@@ -52,12 +52,12 @@
 		if ($res)	{
 			while ($row = mysqli_fetch_assoc($res))	{
 				if ($first) {
-					$each_mode_js_arrays .= chr(13).'var '.$table['js_name'].' = new Array();'.chr(13);
+					$each_mode_js_arrays .= chr(13).'var '.$table['js_name'].' = new Array();'.PHP_EOL;
 					$first = false;
 				}
-				$each_mode_js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.chr(13);
+				$each_mode_js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.PHP_EOL;
 				foreach($row as $field=>$value)	{
-					$each_mode_js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.$value.'";'.chr(13);
+					$each_mode_js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.$value.'";'.PHP_EOL;
 				}
 			}
 		}

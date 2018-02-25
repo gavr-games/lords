@@ -63,19 +63,19 @@
 			$key_column_names = explode(',', $keys);
 			$previous_keys = array_fill(0, sizeof($key_column_names), '');
 			
-			$each_mode_js_arrays .= chr(13).'var '.$js_name.' = new Array();'.chr(13);
+			$each_mode_js_arrays .= chr(13).'var '.$js_name.' = new Array();'.PHP_EOL;
 			while ($row = mysqli_fetch_assoc($res))	{
 				$current_keys = Array();
 				foreach($key_column_names as $i=>$key_col) {
 					array_push($current_keys, $row[$key_col]);
 					if ($row[$key_col] != $previous_keys[$i]) {
-						$each_mode_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"] = new Array();'.chr(13);
+						$each_mode_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"] = new Array();'.PHP_EOL;
 					}
 				}
 				
 				foreach($row as $field=>$value)	{
-					$each_mode_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"]["'.$field.'"] = "'.str_replace('"',"'",$value).'";'.chr(13);
-					if ($table['name']=='procedures_params' && $field=='code') $params .= 'var '.$value.'="";'.chr(13);
+					$each_mode_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"]["'.$field.'"] = "'.str_replace('"',"'",$value).'";'.PHP_EOL;
+					if ($table['name']=='procedures_params' && $field=='code') $params .= 'var '.$value.'="";'.PHP_EOL;
 				}
 				$previous_keys = $current_keys;
 			}
@@ -112,23 +112,23 @@
 							while ($row = mysqli_fetch_assoc($res_table))	{
 							if (! isset($row['id'])) $row['id'] = $i;
 								if ($first) {
-									$js_arrays .= chr(13).'var '.$table['js_name'].' = new Array();'.chr(13);
+									$js_arrays .= chr(13).'var '.$table['js_name'].' = new Array();'.PHP_EOL;
 									$first = false;
 								}
 								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
 								  if ($row['unit_id']!=$old_unit_id)
-								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].'] = new Array();'.chr(13);
+								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].'] = new Array();'.PHP_EOL;
 								  $old_unit_id = $row['unit_id'];
 								}
 								if ($table['db_name']=='mode_config'){
-								  $js_arrays .= $table['js_name'].'["'.$row['param'].'"] = '.$row['value'].';'.chr(13);
+								  $js_arrays .= $table['js_name'].'["'.$row['param'].'"] = '.$row['value'].';'.PHP_EOL;
 								} else 
 								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
-								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].']['.$row['level'].'] = '.$row['experience'].';'.chr(13);
+								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].']['.$row['level'].'] = '.$row['experience'].';'.PHP_EOL;
 								} else {
-								  $js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.chr(13);
+								  $js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.PHP_EOL;
 								  foreach($row as $field=>$value)	{
-									  $js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.addslashes($value).'";'.chr(13);
+									  $js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.addslashes($value).'";'.PHP_EOL;
 								  }
 								}
 								$i++;
