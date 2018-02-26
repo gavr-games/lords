@@ -15,12 +15,3 @@ statistic_charts
 statistic_tabs
 statistic_values_config
 
-4) Other:
-summon_cfg - goes into player name
-videos
-
-DECLARE mad_name VARCHAR(45) CHARSET utf8 DEFAULT 'Сумасшедший $u_name';
-DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT 'Вампир $u_name';
-DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT 'Вампир $u_name';
-DECLARE zombie_name VARCHAR(45) CHARSET utf8 DEFAULT 'Зомби $u_name';
-

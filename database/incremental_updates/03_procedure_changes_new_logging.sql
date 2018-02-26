@@ -3680,6 +3680,18 @@ BEGIN
   RETURN result;
 END$$
 
+DROP PROCEDURE IF EXISTS `lords`.`cmd_play_video` $$
+
+CREATE PROCEDURE `cmd_play_video`(g_id INT,p_num INT,video_code VARCHAR(45),hidden INT)
+BEGIN
+  DECLARE cmd VARCHAR(1000) CHARSET utf8 DEFAULT 'play_video("$code","$filename")';
+
+  SET cmd=REPLACE(cmd,'$code',(SELECT v.code FROM videos v WHERE v.code=video_code LIMIT 1));
+  SET cmd=REPLACE(cmd,'$filename',(SELECT v.filename FROM videos v WHERE v.code=video_code LIMIT 1));
+  INSERT INTO command (game_id,player_num,command,hidden_flag) VALUES (g_id,p_num,cmd,hidden);
+
+END$$
+
 DROP PROCEDURE IF EXISTS `lords`.`mode_copy` $$
 
 CREATE PROCEDURE `mode_copy`(old_mode_id INT, mode_name VARCHAR(45) CHARSET utf8, copy_cards_units_buildings INT)
@@ -3707,9 +3719,6 @@ BEGIN
 
 	INSERT INTO mode_config(param,`value`,mode_id)
 	SELECT c.param,c.`value`,new_mode_id FROM mode_config c WHERE c.mode_id = old_mode_id;
-
-	INSERT INTO videos(code,filename,title,mode_id)
-	SELECT v.code,v.filename,v.title,new_mode_id FROM videos v WHERE v.mode_id = old_mode_id;
 
 	INSERT INTO statistic_values_config(player_num,chart_id,measure_id,color,name,mode_id)
 	SELECT c.player_num,c.chart_id,c.measure_id,c.color,c.name,new_mode_id FROM statistic_values_config c WHERE c.mode_id = old_mode_id;

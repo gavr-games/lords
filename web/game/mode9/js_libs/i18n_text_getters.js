@@ -52,6 +52,10 @@ function log_message_text(message_code) {
 	return log_message_texts[USER_LANGUAGE][message_code]["message"];
 }
 
+function video_title(video_code) {
+	return videos_titles[USER_LANGUAGE][video_code]["title"];
+}
+
 function npc_player_name(player_name) {
 	return npc_player_name_with_params(player_name);
 }
