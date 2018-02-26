@@ -265,13 +265,14 @@ BEGIN
   DECLARE aim_x,aim_y INT;
   DECLARE aim_shield INT DEFAULT 0;
   DECLARE aim_goes_to_deck INT;
+  DECLARE aim_cannot_be_vampired INT;
   DECLARE grave_id INT;
 
   DECLARE damage INT;
   DECLARE attack_success,critical INT;
 
-  DECLARE cmd_log_unit VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_attack_unit_message($x,$y,$x2,$y2,$p_num,$unit_id,$p2_num,$aim_unit_id,$attack_success,$critical,$damage)';
-  DECLARE cmd_log_building VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_attack_building_message($x,$y,$x2,$y2,$p_num,$unit_id,$p2_num,$aim_building_id,$attack_success,$critical,$damage)';
+  DECLARE cmd_log_unit VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_attack_unit_message($x,$y,$x2,$y2,$p_num,$unit_id,$p2_num,$aim_unit_id,$attack_success,$critical,$damage,"$npc_name","$npc2_name")';
+  DECLARE cmd_log_building VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_attack_building_message($x,$y,$x2,$y2,$p_num,$unit_id,$p2_num,$aim_building_id,$attack_success,$critical,$damage,"$npc_name")';
   DECLARE cmd_log VARCHAR(1000) CHARSET utf8;
 
   SET cmd_log='log_add_attack_unit_message($x,$y,$x2,$y2,$p_num,$p2_num,$attack_success,$critical,$damage)';
@@ -283,8 +284,14 @@ BEGIN
     BEGIN
       SELECT bu.player_num,bu.unit_id,bu.health,bu.card_id,shield INTO p2_num,aim_object_id,health_before_hit,aim_card_id,aim_shield FROM board_units bu WHERE bu.id=aim_board_id LIMIT 1;
       SET aim_goes_to_deck = unit_feature_check(aim_board_id,'goes_to_deck_on_death');
+      SET aim_cannot_be_vampired = unit_feature_check(aim_board_id,'mechanical') + unit_feature_check(aim_board_id,'magic_immunity');
       SELECT MIN(b.x),MIN(b.y) INTO aim_x,aim_y FROM board b WHERE b.game_id=g_id AND b.`type`=aim_type AND b.ref=aim_board_id;
       SET cmd_log = REPLACE(cmd_log_unit, '$aim_unit_id', aim_object_id);
+      IF ((SELECT p.owner FROM players p WHERE p.game_id = g_id AND p.player_num = p2_num LIMIT 1) <> 1) THEN
+        SET cmd_log=REPLACE(cmd_log,'$npc2_name', (SELECT p.name FROM players p WHERE p.game_id = g_id AND p.player_num = p2_num LIMIT 1));
+      ELSE
+        SET cmd_log=REPLACE(cmd_log,'$npc2_name', '');
+      END IF;
     END;
     WHEN aim_type='building' OR aim_type='castle' THEN
     BEGIN
@@ -306,6 +313,11 @@ BEGIN
       SET cmd_log=REPLACE(cmd_log,'$attack_success',attack_success);
       SET cmd_log=REPLACE(cmd_log,'$critical',critical);
       SET cmd_log=REPLACE(cmd_log,'$damage',CASE WHEN aim_shield=0 THEN damage ELSE 0 END);
+      IF ((SELECT p.owner FROM players p WHERE p.game_id = g_id AND p.player_num = p_num LIMIT 1) <> 1) THEN
+        SET cmd_log=REPLACE(cmd_log,'$npc_name', (SELECT p.name FROM players p WHERE p.game_id = g_id AND p.player_num = p_num LIMIT 1));
+      ELSE
+        SET cmd_log=REPLACE(cmd_log,'$npc_name', '');
+      END IF;
 
       INSERT INTO command (game_id,player_num,command) VALUES (g_id,p_num,cmd_log);
 
@@ -351,7 +363,7 @@ BEGIN
           END IF;
 
 
-          IF (unit_feature_check(board_unit_id,'vamp')=1) AND (health_after_hit = 0) THEN
+          IF (unit_feature_check(board_unit_id,'vamp')=1) AND (health_after_hit = 0) AND (aim_cannot_be_vampired = 0) THEN
             IF (aim_card_id IS NOT NULL AND aim_goes_to_deck=0) THEN
               SELECT gc.grave_id INTO grave_id FROM graves g JOIN grave_cells gc ON g.id=gc.grave_id WHERE g.game_id=g_id AND g.card_id=aim_card_id AND gc.x=aim_x AND gc.y=aim_y LIMIT 1;
               CALL vampire_resurrect_by_card(board_unit_id,grave_id);
@@ -520,7 +532,7 @@ BEGIN
           CALL zombies_change_player_to_nec(board_unit_id);
         END IF;
 
-        CALL cmd_log_add_message(g_id, p_num, log_msg_code, CONCAT_WS(';', log_unit(board_unit_id), p_num));
+        CALL cmd_log_add_message(g_id, p_num, log_msg_code, CONCAT_WS(';', log_unit(board_unit_id), log_player(g_id, p_num)));
 
       END IF;
 
@@ -797,7 +809,7 @@ BEGIN
       UPDATE players SET gold=CASE WHEN gold<pooring_sum THEN 0 ELSE gold-pooring_sum END WHERE game_id=g_id AND player_num=p2_num;
       CALL cmd_player_set_gold(g_id,p2_num);
 
-      CALL cmd_log_add_message(g_id, p_num, 'player_loses_gold', CONCAT_WS(';', p2_num, pooring_sum));
+      CALL cmd_log_add_message(g_id, p_num, 'player_loses_gold', CONCAT_WS(';', log_player(g_id, p2_num), pooring_sum));
 
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
@@ -863,7 +875,7 @@ BEGIN
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
-      CALL cmd_log_add_message(g_id, p_num, 'players_cards', p2_num);
+      CALL cmd_log_add_message(g_id, p_num, 'players_cards', log_player(g_id, p2_num));
 
       OPEN cur;
       REPEAT
@@ -961,7 +973,7 @@ BEGIN
         SELECT CASE WHEN MAX(p.player_num)<10 THEN 10 ELSE MAX(p.player_num)+1 END INTO new_player FROM players p WHERE p.game_id=g_id;
 
         SELECT vu.id INTO vamp_u_id FROM vw_mode_units vu WHERE vu.mode_id=mode_id AND vu.ui_code=vamp_ui_code;
-        SELECT ui_code INTO vamp_name FROM units WHERE id=vamp_u_id LIMIT 1;
+        SET vamp_name = CONCAT('{', vamp_u_id, '}');
 
         INSERT INTO players(game_id,player_num,name,gold,owner,team) VALUES(g_id,new_player,vamp_name,0,vamp_owner,team);
         CALL cmd_add_player(g_id,new_player);
@@ -1383,7 +1395,7 @@ BEGIN
   DECLARE board_unit_id INT;
 
   SELECT MAX(bu.id) INTO board_unit_id FROM board_units bu WHERE bu.game_id=g_id AND bu.player_num=p_num AND bu.card_id=crd_id;
-  CALL cmd_log_add_message(g_id, p_num, 'resurrect', CONCAT_WS(';', p_num, log_unit(board_unit_id)));
+  CALL cmd_log_add_message(g_id, p_num, 'resurrect', CONCAT_WS(';', log_player(g_id, p_num), log_unit(board_unit_id)));
 
 END$$
 
@@ -2066,9 +2078,9 @@ BEGIN
 
     BEGIN
       DECLARE new_player,team INT;
-      DECLARE mad_name VARCHAR(45) CHARSET utf8 DEFAULT 'Сумасшедший $u_name';
+      DECLARE mad_name VARCHAR(45) CHARSET utf8 DEFAULT '{mad} {$u_id}';
 
-      SET mad_name=REPLACE(mad_name,'$u_name',(SELECT ui_code FROM units WHERE id=u_id LIMIT 1));
+      SET mad_name=REPLACE(mad_name,'$u_id', u_id);
       SELECT MAX(p.team)+1 INTO team FROM players p WHERE p.game_id=g_id;
       SELECT CASE WHEN MAX(p.player_num)<10 THEN 10 ELSE MAX(p.player_num)+1 END INTO new_player FROM players p WHERE p.game_id=g_id;
 
@@ -2099,7 +2111,7 @@ BEGIN
   DECLARE delta_x,delta_y INT;
   DECLARE u_id INT;
 
-  DECLARE cmd_log VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_move_message($x,$y,$x2,$y2,$p_num,$unit_id)';
+  DECLARE cmd_log VARCHAR(1000) CHARSET utf8 DEFAULT 'log_add_move_message($x,$y,$x2,$y2,$p_num,$unit_id,"$npc_name")';
 
   SELECT bu.game_id,bu.player_num,bu.unit_id INTO g_id,p_num,u_id FROM board_units bu WHERE bu.id=board_unit_id LIMIT 1;
   SELECT MIN(b.x),MIN(b.y) INTO x,y FROM board b WHERE b.`type`='unit' AND b.ref=board_unit_id;
@@ -2113,6 +2125,11 @@ BEGIN
   SET cmd_log=REPLACE(cmd_log,'$unit_id',u_id);
   SET cmd_log=REPLACE(cmd_log,'$x,$y',CONCAT(x,',',y));
   SET cmd_log=REPLACE(cmd_log,'$x2,$y2',CONCAT(x2,',',y2));
+  IF ((SELECT p.owner FROM players p WHERE p.game_id = g_id AND p.player_num = p_num LIMIT 1) <> 1) THEN
+    SET cmd_log=REPLACE(cmd_log,'$npc_name', (SELECT p.name FROM players p WHERE p.game_id = g_id AND p.player_num = p_num LIMIT 1));
+  ELSE
+    SET cmd_log=REPLACE(cmd_log,'$npc_name', '');
+  END IF;
   INSERT INTO command (game_id,player_num,command) VALUES (g_id,p_num,cmd_log);
 
 END$$
@@ -2315,10 +2332,10 @@ BEGIN
     SELECT p.owner INTO owner FROM players p WHERE p.game_id=g_id AND p.player_num=p_num LIMIT 1;
 
     IF moved_units=1 OR owner<>1 THEN
-      CALL cmd_log_add_message(g_id, p_num, 'end_turn', p_num);
+      CALL cmd_log_add_message(g_id, p_num, 'end_turn', log_player(g_id, p_num));
       CALL finish_moving_units(g_id,p_num);
     ELSE
-      CALL cmd_log_add_independent_message(g_id, p_num, 'end_turn', p_num);
+      CALL cmd_log_add_independent_message(g_id, p_num, 'end_turn', log_player(g_id, p_num));
     END IF;
 
     
@@ -2363,10 +2380,10 @@ BEGIN
     CALL user_action_begin();
 
     IF(SELECT units_moves_flag FROM active_players WHERE game_id=g_id)=1 THEN
-      CALL cmd_log_add_message(g_id, p_num, 'end_turn_timeout', p_num);
+      CALL cmd_log_add_message(g_id, p_num, 'end_turn_timeout', log_player(g_id, p_num));
       CALL finish_moving_units(g_id,p_num);
     ELSE
-      CALL cmd_log_add_independent_message(g_id, p_num, 'end_turn_timeout', p_num);
+      CALL cmd_log_add_independent_message(g_id, p_num, 'end_turn_timeout', log_player(g_id, p_num));
     END IF;
 
     CALL end_turn(g_id,p_num);
@@ -2395,7 +2412,7 @@ BEGIN
   SELECT p.id,p.owner,p.user_id INTO p_id,owner,user_id FROM players p WHERE game_id=g_id AND player_num=p_num;
 
   IF (SELECT g.status_id FROM games g WHERE g.id=g_id LIMIT 1)<>finished_game_status AND (owner=1) THEN
-    CALL cmd_log_add_independent_message(g_id, p_num, 'player_exit', p_num);
+    CALL cmd_log_add_independent_message(g_id, p_num, 'player_exit', log_player(g_id, p_num));
 
     CALL delete_player_objects(g_id,p_num);
 
@@ -2481,7 +2498,7 @@ BEGIN
               CALL resurrect(g_id,p_num,grave_id);
 
               SELECT MAX(id) INTO new_bu_id FROM board_units bu WHERE bu.game_id=g_id AND bu.player_num=p_num;
-              CALL cmd_log_add_independent_message(g_id, p_num, 'resurrect', CONCAT_WS(';', p_num, log_unit(new_bu_id)));
+              CALL cmd_log_add_independent_message(g_id, p_num, 'resurrect', CONCAT_WS(';', log_player(g_id, p_num), log_unit(new_bu_id)));
 
               CALL end_cards_phase(g_id,p_num);
 
@@ -2552,7 +2569,7 @@ BEGIN
         CALL cmd_player_set_gold(g_id,p_num);
         CALL cmd_player_set_gold(g_id,p2_num);
 
-        CALL cmd_log_add_independent_message(g_id, p_num, 'send_money', CONCAT_WS(';', p2_num, amount));
+        CALL cmd_log_add_independent_message(g_id, p_num, 'send_money', CONCAT_WS(';', log_player(g_id, p2_num), amount));
 
         CALL user_action_end();
       END IF;
@@ -2655,14 +2672,15 @@ END$$
 
 DROP PROCEDURE IF EXISTS `lords`.`summon_creature` $$
 
-CREATE PROCEDURE `summon_creature`(g_id INT,  cr_player_name VARCHAR(45) CHARSET utf8,  cr_owner INT , cr_unit_id INT , x INT , y INT,  parent_building_id INT)
+CREATE PROCEDURE `summon_creature`(g_id INT, cr_owner INT ,cr_unit_id INT ,x INT ,y INT, parent_building_id INT)
 BEGIN
   DECLARE new_player,team INT;
   DECLARE new_unit_id INT;
+  DECLARE cr_player_name VARCHAR(45) CHARSET utf8;
 
     SELECT CASE WHEN MAX(p.player_num)<10 THEN 10 ELSE MAX(p.player_num)+1 END INTO new_player FROM players p WHERE p.game_id=g_id;
     SET team=building_feature_get_param(parent_building_id,'summon_team');
-
+    SET cr_player_name = CONCAT('{', cr_unit_id, '}');
 
     INSERT INTO players(game_id,player_num,name,gold,owner,team) VALUES(g_id,new_player,cr_player_name,0,cr_owner,team);
 
@@ -2681,6 +2699,56 @@ BEGIN
     ELSE
       CALL cmd_log_add_message(g_id, new_player, 'unit_appears_in_cell', CONCAT_WS(';', log_unit(new_unit_id), log_cell(x,y)));
     END IF;
+
+END$$
+
+DROP PROCEDURE IF EXISTS `lords`.`summon_creatures` $$
+
+CREATE PROCEDURE `summon_creatures`(board_building_id INT)
+BEGIN
+  DECLARE g_id INT;
+  DECLARE g_mode INT;
+  DECLARE bld_id INT;
+  DECLARE cr_count INT;
+  DECLARE x,y INT;
+  DECLARE cr_owner INT;
+  DECLARE cr_unit_id INT;
+
+  SELECT game_id,building_id INTO g_id,bld_id FROM board_buildings WHERE id=board_building_id LIMIT 1;
+
+  SELECT mode_id INTO g_mode FROM games WHERE id=g_id LIMIT 1;
+
+  SELECT sc.unit_id,sc.`count`,sc.owner INTO cr_unit_id,cr_count,cr_owner FROM summon_cfg sc WHERE building_id=bld_id AND mode_id=g_mode LIMIT 1;
+
+  WHILE (cr_count>0 AND EXISTS(SELECT DISTINCT a.x,a.y FROM allcoords a, board b WHERE b.game_id=g_id AND b.`type`<>'unit' AND b.ref=board_building_id AND a.mode_id=g_mode AND (ABS(b.x-a.x)<=1 AND ABS(b.y-a.y)<=1) AND NOT EXISTS(SELECT b2.id FROM board b2 WHERE b2.x=a.x AND b2.y=a.y) LIMIT 1)) DO
+    SELECT DISTINCT a.x,a.y INTO x,y FROM allcoords a, board b WHERE b.game_id=g_id AND b.`type`<>'unit' AND b.ref=board_building_id AND a.mode_id=g_mode AND (ABS(b.x-a.x)<=1 AND ABS(b.y-a.y)<=1) AND NOT EXISTS(SELECT b2.id FROM board b2 WHERE b2.x=a.x AND b2.y=a.y) ORDER BY RAND() LIMIT 1;
+    SET cr_count=cr_count-1;
+    CALL summon_creature(g_id,cr_owner,cr_unit_id,x,y,board_building_id);
+  END WHILE;
+
+END$$
+
+DROP PROCEDURE IF EXISTS `lords`.`summon_one_creature_by_config` $$
+
+CREATE PROCEDURE `summon_one_creature_by_config`(board_building_id INT)
+BEGIN
+  DECLARE g_id INT;
+  DECLARE g_mode INT;
+  DECLARE bld_id INT;
+  DECLARE x,y INT;
+  DECLARE cr_owner INT;
+  DECLARE cr_unit_id INT;
+
+  SELECT game_id,building_id INTO g_id,bld_id FROM board_buildings WHERE id=board_building_id LIMIT 1;
+
+  SELECT mode_id INTO g_mode FROM games WHERE id=g_id LIMIT 1;
+
+  SELECT sc.unit_id,sc.owner INTO cr_unit_id,cr_owner FROM summon_cfg sc WHERE building_id=bld_id AND mode_id=g_mode LIMIT 1;
+
+  IF EXISTS(SELECT DISTINCT a.x,a.y FROM allcoords a, board b WHERE b.game_id=g_id AND b.`type`<>'unit' AND b.ref=board_building_id AND a.mode_id=g_mode AND (ABS(b.x-a.x)<=1 AND ABS(b.y-a.y)<=1) AND NOT EXISTS(SELECT b2.id FROM board b2 WHERE b2.x=a.x AND b2.y=a.y) LIMIT 1) THEN
+    SELECT DISTINCT a.x,a.y INTO x,y FROM allcoords a, board b WHERE b.game_id=g_id AND b.`type`<>'unit' AND b.ref=board_building_id AND a.mode_id=g_mode AND (ABS(b.x-a.x)<=1 AND ABS(b.y-a.y)<=1) AND NOT EXISTS(SELECT b2.id FROM board b2 WHERE b2.x=a.x AND b2.y=a.y) ORDER BY RAND() LIMIT 1;
+    CALL summon_creature(g_id,cr_owner,cr_unit_id,x,y,board_building_id);
+  END IF;
 
 END$$
 
@@ -3116,7 +3184,7 @@ BEGIN
   DECLARE new_player INT;
   DECLARE new_unit_id INT;
   DECLARE u_id INT;
-  DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT 'Вампир $u_name';
+  DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT '{vampire} {$u_id}';
 
   IF ((SELECT FLOOR(1 + (RAND() * dice_max)) FROM DUAL)>chance) THEN 
     SELECT bu.game_id,bu.player_num,p.team INTO g_id,p_num,team FROM board_units bu JOIN players p ON (bu.game_id=p.game_id AND bu.player_num=p.player_num) WHERE bu.id=vamp_board_id LIMIT 1;
@@ -3126,7 +3194,7 @@ BEGIN
     SELECT g.card_id INTO dead_card_id FROM graves g WHERE id=grave_id;
     SELECT c.ref INTO u_id FROM cards c WHERE c.id=dead_card_id LIMIT 1;
 
-    SET vamp_name=REPLACE(vamp_name,'$u_name',(SELECT ui_code FROM units WHERE id=u_id LIMIT 1));
+    SET vamp_name=REPLACE(vamp_name,'$u_id', u_id);
 
     INSERT INTO players(game_id,player_num,name,gold,owner,team) VALUES(g_id,new_player,vamp_name,0,vamp_owner,team);
 
@@ -3163,7 +3231,7 @@ BEGIN
   DECLARE new_player INT;
   DECLARE new_unit_id INT;
   DECLARE size INT;
-  DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT 'Вампир $u_name';
+  DECLARE vamp_name VARCHAR(45) CHARSET utf8 DEFAULT '{vampire} {$u_id}';
 
   IF ((SELECT FLOOR(1 + (RAND() * dice_max)) FROM DUAL)>chance) THEN 
     SELECT bu.game_id,bu.player_num,p.team INTO g_id,p_num,team FROM board_units bu JOIN players p ON (bu.game_id=p.game_id AND bu.player_num=p.player_num) WHERE bu.id=vamp_board_id LIMIT 1;
@@ -3171,7 +3239,7 @@ BEGIN
 
     SELECT CASE WHEN MAX(p.player_num)<10 THEN 10 ELSE MAX(p.player_num)+1 END INTO new_player FROM players p WHERE p.game_id=g_id;
 
-    SET vamp_name=REPLACE(vamp_name,'$u_name',(SELECT ui_code FROM units WHERE id=u_id LIMIT 1));
+    SET vamp_name=REPLACE(vamp_name,'$u_id', u_id);
 
     INSERT INTO players(game_id,player_num,name,gold,owner,team) VALUES(g_id,new_player,vamp_name,0,vamp_owner,team);
 
@@ -3216,8 +3284,8 @@ BEGIN
         CALL cmd_add_card(g_id,p_num,player_deck_id);
         CALL cmd_remove_card(g_id,p2_num,player_deck_id);
 
-        CALL cmd_log_add_message_hidden(g_id, p_num, 'vred_got_card_from', CONCAT_WS(';', p2_num, random_card));
-        CALL cmd_log_add_message_hidden(g_id, p2_num, 'vred_gave_card_to', CONCAT_WS(';', p_num, random_card));
+        CALL cmd_log_add_message_hidden(g_id, p_num, 'vred_got_card_from', CONCAT_WS(';', log_player(g_id, p2_num), random_card));
+        CALL cmd_log_add_message_hidden(g_id, p2_num, 'vred_gave_card_to', CONCAT_WS(';', log_player(g_id, p_num), random_card));
       END IF;
     UNTIL done END REPEAT;
     CLOSE cur;
@@ -3232,7 +3300,7 @@ BEGIN
 
   UPDATE players SET gold=CASE WHEN gold<pooring_sum THEN 0 ELSE gold-pooring_sum END WHERE game_id=g_id AND player_num=p_num;
   CALL cmd_player_set_gold(g_id,p_num);
-  CALL cmd_log_add_message(g_id, p_num, 'player_loses_gold', CONCAT_WS(';', p_num, pooring_sum));
+  CALL cmd_log_add_message(g_id, p_num, 'player_loses_gold', CONCAT_WS(';', log_player(g_id, p_num), pooring_sum));
 
 END$$
 
@@ -3475,6 +3543,84 @@ BEGIN
 
 END$$
 
+DROP PROCEDURE IF EXISTS `lords`.`put_building` $$
+
+CREATE PROCEDURE `put_building`(g_id INT,p_num INT,player_deck_id INT,x INT,y INT,rotation INT,flip INT)
+BEGIN
+  DECLARE crd_id INT;
+  DECLARE err_code INT;
+  DECLARE x_len,y_len INT;
+  DECLARE x2,y2 INT; 
+  DECLARE new_building_id INT;
+  DECLARE card_cost INT;
+  DECLARE player_team INT;
+
+  SET err_code=check_play_card(g_id,p_num,player_deck_id,'put_building');
+  IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
+  ELSE
+    SELECT card_id INTO crd_id FROM player_deck WHERE id=player_deck_id;
+    SELECT b.x_len,b.y_len INTO x_len,y_len FROM cards c JOIN buildings b ON (c.ref=b.id) WHERE c.`type`='b' AND c.id=crd_id LIMIT 1;
+    IF rotation=0 OR rotation=2 THEN
+      SET x2=x+x_len-1;
+      SET y2=y+y_len-1;
+    ELSE
+      SET x2=x+y_len-1;
+      SET y2=y+x_len-1;
+    END IF;
+    IF (quart(x,y)<>p_num) OR (quart(x2,y2)<>p_num) THEN
+      SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=11;
+    ELSE
+      CALL user_action_begin();
+
+      INSERT INTO board_buildings(game_id,player_num,card_id,rotation,flip)VALUES (g_id,p_num,crd_id,rotation,flip);
+      SET new_building_id=@@last_insert_id;
+
+      CALL place_building_on_board(new_building_id,x,y,rotation,flip);
+
+      IF NOT EXISTS(SELECT id FROM board WHERE game_id=g_id AND `type`<>'unit' AND ref=new_building_id) THEN 
+        DELETE FROM board_buildings WHERE id=new_building_id;
+        SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=12;
+      ELSE
+
+        INSERT INTO board_buildings_features(board_building_id,feature_id,param) SELECT new_building_id,bfu.feature_id,bfu.param FROM board_buildings bb JOIN building_default_features bfu ON (bb.building_id=bfu.building_id) WHERE bb.id=new_building_id;
+
+        UPDATE board_buildings_features bbf
+        SET param=
+          (SELECT MAX(a.team)+1
+          FROM
+          (SELECT p.team as `team` FROM players p WHERE p.game_id=g_id
+          UNION
+          SELECT building_feature_get_param(bb.id,'summon_team')
+          FROM board_buildings bb WHERE bb.game_id=g_id AND building_feature_check(bb.id,'summon_team')=1) a)
+        WHERE bbf.board_building_id=new_building_id AND bbf.feature_id=building_feature_get_id_by_code('summon_team');
+
+
+        IF(building_feature_check(new_building_id,'ally') = 1)THEN
+          SELECT p.team INTO player_team FROM players p WHERE p.game_id=g_id AND p.player_num=p_num;
+          CALL building_feature_set(new_building_id,'summon_team',player_team);
+        END IF;
+
+        CALL count_income(new_building_id);
+
+        CALL play_card_actions(g_id,p_num,player_deck_id); 
+
+
+        CALL cmd_put_building_by_card(g_id,p_num,new_building_id);
+
+
+        IF EXISTS(SELECT sc.id FROM summon_cfg sc WHERE sc.building_id=(SELECT bb.building_id FROM board_buildings bb WHERE id=new_building_id)) THEN
+          CALL summon_creatures(new_building_id);
+        END IF;
+
+        CALL finish_playing_card(g_id,p_num);
+        CALL end_cards_phase(g_id,p_num);
+
+        CALL user_action_end();
+      END IF;
+    END IF;
+  END IF;
+END$$
+
 DROP FUNCTION IF EXISTS `lords`.`log_cell` $$
 
 CREATE FUNCTION `log_cell`(x INT,  y INT) RETURNS varchar(50) CHARSET utf8
@@ -3487,13 +3633,17 @@ DROP FUNCTION IF EXISTS `lords`.`log_unit` $$
 CREATE FUNCTION `log_unit`(board_unit_id INT) RETURNS varchar(200) CHARSET utf8
 BEGIN
   DECLARE u_id INT;
+  DECLARE g_id INT;
   DECLARE p_num INT;
   DECLARE x INT;
   DECLARE y INT;
+  DECLARE p_name VARCHAR(45);
   
-  SELECT unit_id, player_num INTO u_id, p_num FROM board_units bu WHERE bu.id = board_unit_id;
+  SELECT unit_id, game_id, player_num INTO u_id, g_id, p_num FROM board_units bu WHERE bu.id = board_unit_id;
   SELECT b.x, b.y INTO x, y FROM board b WHERE b.type = 'unit' AND b.ref = board_unit_id LIMIT 1;
-  RETURN CONCAT('{"type":"unit","board_id":', board_unit_id, ',"player_num":', p_num, ',"unit_id":', u_id, ',"x":', x, ',"y":', y, '}');
+  SELECT p.name INTO p_name FROM players p WHERE p.game_id = g_id AND p.player_num = p_num LIMIT 1;
+  RETURN CONCAT('{"type":"unit","board_id":', board_unit_id, ',"player_num":', p_num, ',"unit_id":', u_id, ',"x":', x, ',"y":', y,
+                CASE WHEN p_num >= 10 THEN CONCAT(',"npc_player_name":"', p_name, '"') ELSE '' END, '}');
 END$$
 
 DROP FUNCTION IF EXISTS `lords`.`log_building` $$
@@ -3504,10 +3654,358 @@ BEGIN
   DECLARE p_num INT;
   DECLARE x INT;
   DECLARE y INT;
-  DECLARE obj_type VARCHAR(45);
+  DECLARE obj_type VARCHAR(45) CHARSET utf8;
   
   SELECT building_id, player_num INTO b_id, p_num FROM board_buildings bb WHERE bb.id = board_building_id;
   SELECT b.x, b.y, b.type INTO x, y, obj_type FROM board b WHERE b.type != 'unit' AND b.ref = board_building_id LIMIT 1;
   RETURN CONCAT('{"type":"', obj_type, '","board_id":', board_building_id, ',"player_num":', p_num, ',"building_id":', b_id, ',"x":', x, ',"y":', y, '}');
 END$$
 
+DROP FUNCTION IF EXISTS `lords`.`log_player` $$
+
+CREATE FUNCTION `log_player`(g_id INT, p_num INT) RETURNS varchar(200) CHARSET utf8
+BEGIN
+  DECLARE p_name VARCHAR(45) CHARSET utf8;
+  SELECT p.name INTO p_name FROM players p WHERE p.game_id = g_id AND p.player_num = p_num LIMIT 1;
+  RETURN CONCAT('{"player_num":', p_num, ',"name":"', p_name, '"',
+                CASE WHEN p_num >= 10 THEN CONCAT(',"unit":', log_unit(get_npc_board_unit_id(g_id, p_num))) ELSE '' END, '}');
+END$$
+
+DROP FUNCTION IF EXISTS `lords`.`get_npc_board_unit_id` $$
+
+CREATE FUNCTION `get_npc_board_unit_id`(g_id INT, p_num INT) RETURNS INT
+BEGIN
+  DECLARE result INT;
+  SELECT bu.id INTO result FROM board_units bu WHERE bu.game_id = g_id AND bu.player_num = p_num LIMIT 1;
+  RETURN result;
+END$$
+
+DROP PROCEDURE IF EXISTS `lords`.`mode_copy` $$
+
+CREATE PROCEDURE `mode_copy`(old_mode_id INT, mode_name VARCHAR(45) CHARSET utf8, copy_cards_units_buildings INT)
+BEGIN
+	DECLARE new_mode_id INT;
+
+	INSERT INTO modes(name,min_players,max_players)
+	SELECT mode_name,m.min_players,m.max_players FROM modes m WHERE m.id = old_mode_id;
+	SET new_mode_id = @@last_insert_id;
+
+	INSERT INTO player_start_gold_config(player_num,quantity,mode_id)
+	SELECT c.player_num,c.quantity,new_mode_id FROM player_start_gold_config c WHERE c.mode_id = old_mode_id;
+
+	INSERT INTO player_start_deck_config(player_num,quantity,`type`,mode_id)
+	SELECT c.player_num,c.quantity,c.`type`,new_mode_id FROM player_start_deck_config c WHERE c.mode_id = old_mode_id;
+
+	INSERT INTO modes_other_procedures(mode_id,procedure_id)
+	SELECT new_mode_id,m.procedure_id FROM modes_other_procedures m WHERE m.mode_id = old_mode_id;
+
+	INSERT INTO allcoords(x,y,mode_id)
+	SELECT a.x,a.y,new_mode_id FROM allcoords a WHERE a.mode_id = old_mode_id;
+
+	INSERT INTO appear_points(player_num,x,y,direction_into_board_x,direction_into_board_y,mode_id)
+	SELECT a.player_num,a.x,a.y,a.direction_into_board_x,a.direction_into_board_y,new_mode_id FROM appear_points a WHERE a.mode_id = old_mode_id;
+
+	INSERT INTO mode_config(param,`value`,mode_id)
+	SELECT c.param,c.`value`,new_mode_id FROM mode_config c WHERE c.mode_id = old_mode_id;
+
+	INSERT INTO videos(code,filename,title,mode_id)
+	SELECT v.code,v.filename,v.title,new_mode_id FROM videos v WHERE v.mode_id = old_mode_id;
+
+	INSERT INTO statistic_values_config(player_num,chart_id,measure_id,color,name,mode_id)
+	SELECT c.player_num,c.chart_id,c.measure_id,c.color,c.name,new_mode_id FROM statistic_values_config c WHERE c.mode_id = old_mode_id;
+
+	IF(copy_cards_units_buildings = 0)THEN
+		INSERT INTO modes_cards(mode_id,card_id,quantity)
+		SELECT new_mode_id,mc.card_id,mc.quantity FROM modes_cards mc WHERE mc.mode_id=old_mode_id;
+
+		INSERT INTO put_start_buildings_config(player_num,x,y,rotation,flip,building_id,mode_id)
+		SELECT c.player_num,c.x,c.y,c.rotation,c.flip,c.building_id,new_mode_id FROM put_start_buildings_config c WHERE c.mode_id=old_mode_id;
+
+		INSERT INTO modes_cardless_buildings(mode_id,building_id)
+		SELECT new_mode_id,cb.building_id FROM modes_cardless_buildings cb WHERE cb.mode_id=old_mode_id;
+
+		INSERT INTO put_start_units_config(player_num,x,y,unit_id,mode_id)
+		SELECT c.player_num,c.x,c.y,c.unit_id,new_mode_id FROM put_start_units_config c WHERE c.mode_id=old_mode_id;
+
+		INSERT INTO modes_cardless_units(mode_id,unit_id)
+		SELECT new_mode_id,cu.unit_id FROM modes_cardless_units cu WHERE cu.mode_id=old_mode_id;
+
+		INSERT INTO summon_cfg(building_id,unit_id,`count`,owner,mode_id)
+		SELECT c.building_id,c.unit_id,c.`count`,c.owner,new_mode_id FROM summon_cfg c WHERE c.mode_id=old_mode_id;
+
+		INSERT INTO attack_bonus(mode_id,unit_id,aim_type,aim_id,dice_max,chance,critical_chance,damage_bonus,critical_bonus,priority,`comment`)
+		SELECT new_mode_id,ab.unit_id,ab.aim_type,ab.aim_id,ab.dice_max,ab.chance,ab.critical_chance,ab.damage_bonus,ab.critical_bonus,ab.priority,ab.`comment` FROM attack_bonus ab WHERE ab.mode_id = old_mode_id;
+
+	ELSE
+	BEGIN
+		DECLARE card_id_old INT;
+		DECLARE card_id_new INT;
+		DECLARE card_image VARCHAR(45) CHARSET utf8;
+		DECLARE card_cost INT;
+		DECLARE card_type VARCHAR(45) CHARSET utf8;
+		DECLARE card_ref INT;
+
+		DECLARE building_id_old INT;
+		DECLARE building_id_new INT;
+		DECLARE building_health INT;
+		DECLARE building_radius INT;
+		DECLARE building_x_len INT;
+		DECLARE building_y_len INT;
+		DECLARE building_shape VARCHAR(400) CHARSET utf8;
+		DECLARE building_type VARCHAR(45) CHARSET utf8;
+		DECLARE building_ui_code VARCHAR(45) CHARSET utf8;
+
+		DECLARE unit_id_old INT;
+		DECLARE unit_id_new INT;
+		DECLARE unit_moves INT;
+		DECLARE unit_health INT;
+		DECLARE unit_attack INT;
+		DECLARE unit_size INT;
+		DECLARE unit_shield INT;
+		DECLARE unit_ui_code VARCHAR(45) CHARSET utf8;
+
+		DECLARE done INT DEFAULT 0;
+		DECLARE cur_cards CURSOR FOR SELECT c.id,c.image,c.cost,c.`type`,c.ref FROM vw_mode_cards c WHERE c.mode_id=old_mode_id;
+		DECLARE cur_buildings CURSOR FOR SELECT b.id,b.health,b.radius,b.x_len,b.y_len,b.shape, b.`type`,b.ui_code FROM vw_mode_buildings b WHERE b.mode_id=old_mode_id;
+		DECLARE cur_units CURSOR FOR SELECT u.id,u.moves,u.health,u.attack,u.size,u.shield,u.ui_code FROM vw_mode_units u WHERE u.mode_id=old_mode_id;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+		CREATE TEMPORARY TABLE cards_ids (id_old INT,id_new INT);
+		CREATE TEMPORARY TABLE buildings_ids (id_old INT,id_new INT);
+		CREATE TEMPORARY TABLE units_ids (id_old INT,id_new INT);
+
+		OPEN cur_cards;
+		REPEAT
+			FETCH cur_cards INTO card_id_old,card_image,card_cost,card_type,card_ref;
+			IF NOT done THEN
+				INSERT INTO cards(image,cost,`type`,ref,name,description)
+				VALUES(card_image,card_cost,card_type,card_ref,card_name,card_description);
+				SET card_id_new = @@last_insert_id;
+
+				INSERT INTO cards_ids(id_old,id_new) VALUES(card_id_old,card_id_new);
+
+				INSERT INTO cards_procedures(card_id,procedure_id)
+				SELECT card_id_new,cp.procedure_id FROM cards_procedures cp WHERE cp.card_id=card_id_old;
+
+				INSERT INTO modes_cards(mode_id,card_id,quantity)
+				SELECT new_mode_id,card_id_new,mc.quantity FROM modes_cards mc WHERE mc.mode_id=old_mode_id AND mc.card_id=card_id_old;
+				
+				INSERT INTO cards_i18n(card_id,language_id,name,description)
+				SELECT card_id_new, ci.language_id, ci.name, ci.description FROM cards_i18n ci WHERE ci.card_id = card_id_old;
+			END IF;
+		UNTIL done END REPEAT;
+		CLOSE cur_cards;
+		SET done=0;
+
+		OPEN cur_buildings;
+		REPEAT
+			FETCH cur_buildings INTO building_id_old,building_health,building_radius,building_x_len,building_y_len,building_shape,building_type,building_ui_code;
+			IF NOT done THEN
+				INSERT INTO buildings(health,radius,x_len,y_len,shape,`type`,ui_code)
+				VALUES(building_health,building_radius,building_x_len,building_y_len,building_shape,building_type,building_ui_code);
+				SET building_id_new = @@last_insert_id;
+
+				INSERT INTO buildings_ids(id_old,id_new) VALUES(building_id_old,building_id_new);
+
+				INSERT INTO buildings_procedures(building_id,procedure_id)
+				SELECT building_id_new,bp.procedure_id FROM buildings_procedures bp WHERE bp.building_id=building_id_old;
+
+				INSERT INTO building_default_features(building_id,feature_id,param)
+				SELECT building_id_new,f.feature_id,f.param FROM building_default_features f WHERE f.building_id=building_id_old;
+
+				INSERT INTO put_start_buildings_config(player_num,x,y,rotation,flip,building_id,mode_id)
+				SELECT c.player_num,c.x,c.y,c.rotation,c.flip,building_id_new,new_mode_id FROM put_start_buildings_config c WHERE c.mode_id=old_mode_id AND c.building_id=building_id_old;
+
+				INSERT INTO modes_cardless_buildings(mode_id,building_id)
+				SELECT new_mode_id,building_id_new FROM modes_cardless_buildings cb WHERE cb.mode_id=old_mode_id AND cb.building_id=building_id_old;
+
+				INSERT INTO buildings_i18n(building_id, language_id, name, description, log_short_name)
+				SELECT building_id_new, bi.language_id, bi.name, bi.description, bi.log_short_name FROM buildings_i18n bi WHERE bi.building_id = building_id_old;
+			END IF;
+		UNTIL done END REPEAT;
+		CLOSE cur_buildings;
+		SET done=0;
+
+		OPEN cur_units;
+		REPEAT
+			FETCH cur_units INTO unit_id_old,unit_moves,unit_health,unit_attack,unit_size,unit_shield,unit_ui_code;
+			IF NOT done THEN
+				INSERT INTO units(moves,health,attack,size,shield,ui_code)
+				VALUES(unit_moves,unit_health,unit_attack,unit_size,unit_shield,unit_ui_code);
+				SET unit_id_new = @@last_insert_id;
+
+				INSERT INTO units_ids(id_old,id_new) VALUES(unit_id_old,unit_id_new);
+
+				INSERT INTO units_procedures(unit_id,procedure_id,`default`)
+				SELECT unit_id_new,up.procedure_id,up.`default` FROM units_procedures up WHERE up.unit_id=unit_id_old;
+
+				INSERT INTO unit_default_features(unit_id,feature_id,param)
+				SELECT unit_id_new,f.feature_id,f.param FROM unit_default_features f WHERE f.unit_id=unit_id_old;
+
+				INSERT INTO put_start_units_config(player_num,x,y,unit_id,mode_id)
+				SELECT c.player_num,c.x,c.y,unit_id_new,new_mode_id FROM put_start_units_config c WHERE c.mode_id=old_mode_id AND c.unit_id=unit_id_old;
+
+				INSERT INTO modes_cardless_units(mode_id,unit_id)
+				SELECT new_mode_id,unit_id_new FROM modes_cardless_units cu WHERE cu.mode_id=old_mode_id AND cu.unit_id=unit_id_old;
+
+				INSERT INTO dic_unit_phrases(unit_id,phrase)
+				SELECT unit_id_new,p.phrase FROM dic_unit_phrases p WHERE p.unit_id=unit_id_old;
+
+				INSERT INTO unit_level_up_experience(unit_id,level,experience)
+				SELECT unit_id_new,l.level,l.experience FROM unit_level_up_experience l WHERE l.unit_id=unit_id_old;
+
+				INSERT INTO units_i18n(unit_id, language_id, name, description, log_short_name, log_name_accusative)
+				SELECT unit_id_new, ui.language_id, ui.name, ui.description, ui.log_short_name, ui.log_name_accusative FROM units_i18n ui WHERE ui.unit_id = unit_id_old;
+			END IF;
+		UNTIL done END REPEAT;
+		CLOSE cur_units;
+
+		UPDATE cards,cards_ids,buildings_ids
+		SET cards.ref=buildings_ids.id_new
+		WHERE cards.id=cards_ids.id_new AND cards.`type`='b' AND cards.ref=buildings_ids.id_old;
+
+		UPDATE cards,cards_ids,units_ids
+		SET cards.ref=units_ids.id_new
+		WHERE cards.id=cards_ids.id_new AND cards.`type`='u' AND cards.ref=units_ids.id_old;
+
+		INSERT INTO summon_cfg(building_id,unit_id,`count`,owner,mode_id)
+		SELECT b.id_new,u.id_new,c.`count`,c.owner,new_mode_id
+		FROM summon_cfg c
+		JOIN buildings_ids b ON c.building_id=b.id_old
+		JOIN units_ids u ON c.unit_id=u.id_old
+		WHERE c.mode_id=old_mode_id;
+
+		INSERT INTO attack_bonus(mode_id,unit_id,aim_type,aim_id,dice_max,chance,critical_chance,damage_bonus,critical_bonus,priority,`comment`)
+		SELECT new_mode_id,u.id_new,a.aim_type,a.aim_id,a.dice_max,a.chance,a.critical_chance,a.damage_bonus,a.critical_bonus,a.priority,a.`comment`
+		FROM attack_bonus a
+		LEFT JOIN units_ids u ON a.unit_id=u.id_old
+		WHERE a.mode_id=old_mode_id AND a.aim_type IS NULL;
+
+		INSERT INTO attack_bonus(mode_id,unit_id,aim_type,aim_id,dice_max,chance,critical_chance,damage_bonus,critical_bonus,priority,`comment`)
+		SELECT new_mode_id,u.id_new,a.aim_type,a.aim_id,a.dice_max,a.chance,a.critical_chance,a.damage_bonus,a.critical_bonus,a.priority,a.`comment`
+		FROM attack_bonus a
+		LEFT JOIN units_ids u ON a.unit_id=u.id_old
+		WHERE a.mode_id=old_mode_id AND a.aim_type='unit';
+
+		UPDATE attack_bonus,units_ids
+		SET aim_id=units_ids.id_new
+		WHERE mode_id=new_mode_id AND aim_type='unit' AND attack_bonus.aim_id=units_ids.id_old;
+
+		INSERT INTO attack_bonus(mode_id,unit_id,aim_type,aim_id,dice_max,chance,critical_chance,damage_bonus,critical_bonus,priority,`comment`)
+		SELECT new_mode_id,u.id_new,a.aim_type,aim_b.id_new,a.dice_max,a.chance,a.critical_chance,a.damage_bonus,a.critical_bonus,a.priority,a.`comment`
+		FROM attack_bonus a
+		LEFT JOIN units_ids u ON a.unit_id=u.id_old
+		JOIN buildings_ids aim_b ON a.aim_id=aim_b.id_old
+		WHERE a.mode_id=old_mode_id AND a.aim_type IS NOT NULL AND a.aim_type<>'unit';
+
+		DROP TEMPORARY TABLE cards_ids;
+		DROP TEMPORARY TABLE buildings_ids;
+		DROP TEMPORARY TABLE units_ids;
+
+	END;
+	END IF;
+
+
+END$$
+
+DROP PROCEDURE IF EXISTS `lords`.`zombies_make_mad` $$
+
+CREATE PROCEDURE `zombies_make_mad`(g_id INT,nec_board_id INT)
+BEGIN
+  DECLARE zombie_board_id INT;
+  DECLARE zombie_u_id INT;
+  DECLARE zombie_p_num INT;
+  DECLARE new_player,team INT;
+  DECLARE zombie_name_template VARCHAR(45) CHARSET utf8 DEFAULT '{zombie} {$u_id}';
+  DECLARE zombie_name VARCHAR(45) CHARSET utf8;
+
+  DECLARE done INT DEFAULT 0;
+  DECLARE cur CURSOR FOR
+    SELECT buf.board_unit_id,bu.player_num,bu.unit_id
+    FROM board_units_features buf JOIN board_units bu ON (buf.board_unit_id=bu.id)
+    WHERE buf.feature_id=unit_feature_get_id_by_code('under_control') AND buf.param=nec_board_id;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+
+  SELECT p.team INTO team FROM board_units bu JOIN players p ON (bu.game_id=p.game_id AND bu.player_num=p.player_num) WHERE bu.id=nec_board_id LIMIT 1;
+
+  IF (team IS NULL) THEN
+    SELECT MAX(p.team)+1 INTO team FROM players p WHERE p.game_id=g_id;
+    SET done=0; 
+  END IF;
+
+  OPEN cur;
+  REPEAT
+    FETCH cur INTO zombie_board_id,zombie_p_num,zombie_u_id;
+    IF NOT done THEN
+
+
+      IF EXISTS(SELECT bu.id FROM board_units bu WHERE bu.game_id=g_id AND bu.player_num=zombie_p_num AND bu.id<>zombie_board_id LIMIT 1)
+        OR EXISTS(SELECT bb.id FROM board_buildings bb WHERE bb.game_id=g_id AND bb.player_num=zombie_p_num LIMIT 1)
+      THEN
+
+        SET zombie_name=REPLACE(zombie_name_template,'$u_id', zombie_u_id);
+        SELECT CASE WHEN MAX(p.player_num)<10 THEN 10 ELSE MAX(p.player_num)+1 END INTO new_player FROM players p WHERE p.game_id=g_id;
+
+        INSERT INTO players(game_id,player_num,name,gold,owner,team) VALUES(g_id,new_player,zombie_name,0,2,team); 
+        CALL cmd_add_player(g_id,new_player);
+
+        UPDATE board_units SET player_num=new_player WHERE id=zombie_board_id;
+        CALL cmd_unit_set_owner(g_id,zombie_p_num,zombie_board_id);
+
+      END IF;
+    END IF;
+  UNTIL done END REPEAT;
+  CLOSE cur;
+
+END$$
+
+DROP PROCEDURE IF EXISTS `lords`.`zombies_change_player_to_nec` $$
+
+CREATE PROCEDURE `zombies_change_player_to_nec`(nec_board_id INT)
+BEGIN
+  DECLARE g_id INT;
+  DECLARE zombie_board_id INT;
+  DECLARE nec_p_num,zombie_p_num INT;
+  DECLARE npc_gold INT;
+
+  DECLARE done INT DEFAULT 0;
+  DECLARE cur CURSOR FOR
+    SELECT buf.board_unit_id,bu.player_num
+    FROM board_units_features buf JOIN board_units bu ON (buf.board_unit_id=bu.id)
+    WHERE buf.feature_id=unit_feature_get_id_by_code('under_control') AND buf.param=nec_board_id AND bu.player_num<>nec_p_num;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  SELECT bu.game_id,bu.player_num INTO g_id,nec_p_num FROM board_units bu WHERE bu.id=nec_board_id LIMIT 1;
+
+    OPEN cur;
+    REPEAT
+      FETCH cur INTO zombie_board_id,zombie_p_num;
+      IF NOT done THEN
+
+          UPDATE board_units SET player_num=nec_p_num,moves_left=0 WHERE id=zombie_board_id;
+          CALL cmd_unit_set_owner(g_id,nec_p_num,zombie_board_id);
+          CALL cmd_unit_set_moves_left(g_id,nec_p_num,zombie_board_id);
+
+          IF ((SELECT owner FROM players WHERE game_id=g_id AND player_num=zombie_p_num LIMIT 1)<>1)
+            AND NOT EXISTS (SELECT id FROM board_units WHERE game_id=g_id AND player_num=zombie_p_num)
+            AND NOT EXISTS (SELECT id FROM board_buildings WHERE game_id=g_id AND player_num=zombie_p_num)
+          THEN
+            SELECT gold INTO npc_gold FROM players WHERE game_id=g_id AND player_num=zombie_p_num LIMIT 1; 
+            IF(npc_gold>0)THEN
+              UPDATE players SET gold=gold+riching_sum WHERE game_id=g_id AND player_num=nec_p_num;
+              CALL cmd_player_set_gold(g_id,nec_p_num);
+            END IF;
+
+            DELETE FROM players WHERE game_id=g_id AND player_num=zombie_p_num; 
+            CALL cmd_delete_player(g_id,zombie_p_num);
+          END IF;
+
+      END IF;
+    UNTIL done END REPEAT;
+    CLOSE cur;
+
+
+END$$
+
+DELIMITER ;

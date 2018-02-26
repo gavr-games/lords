@@ -41,6 +41,7 @@
 		Array('name'=>'cards_i18n', 'js_name'=>'card_names', 'keys'=>'language_id,card_id'),
 		Array('name'=>'buildings_i18n', 'js_name'=>'building_names', 'keys'=>'language_id,building_id'),
 		Array('name'=>'buildings_features_i18n', 'js_name'=>'buildings_feature_names', 'keys'=>'language_id,feature_id'),
+		Array('name'=>'npc_player_name_modificators_i18n', 'js_name'=>'npc_player_name_modificators', 'keys'=>'language_id,code'),
 		Array('name'=>'log_message_text_i18n', 'js_name'=>'log_message_texts', 'keys'=>'language_id,code')
 	);
 	$each_mode_js_arrays = $params = '';
