@@ -774,7 +774,7 @@ BEGIN
       ELSE
             CALL user_action_begin();
 
-            CALL units_from_zone(g_id,zone);
+            CALL units_from_zone(g_id, p_num, zone);
 
             UPDATE active_players SET nonfinished_action_id=0 WHERE game_id=g_id AND player_num=p_num;
 
@@ -1042,7 +1042,7 @@ BEGIN
 
         CALL cmd_log_add_message(g_id, p_num, 'vred_move_units_to_random_zone', NULL);
         SELECT FLOOR(RAND() * 4) INTO zone FROM DUAL;
-        CALL units_to_zone(g_id,zone);
+        CALL units_to_zone(g_id, p_num, zone);
       END;
 
       WHEN 5 THEN 
@@ -1763,7 +1763,7 @@ BEGIN
 
       SELECT FLOOR(RAND() * 4) INTO zone FROM DUAL;
 
-      CALL units_from_zone(g_id,zone);
+      CALL units_from_zone(g_id, p_num, zone);
     END;
 
     WHEN 3 THEN 
@@ -4019,12 +4019,12 @@ END$$
 
 DROP PROCEDURE IF EXISTS `lords`.`units_to_zone` $$
 
-CREATE PROCEDURE `units_to_zone`(g_id INT, zone INT)
+CREATE PROCEDURE `units_to_zone`(g_id INT, p_num INT, zone INT)
 BEGIN
   DECLARE mode_id INT;
   DECLARE u_x,u_y,new_x,new_y INT;
   DECLARE board_unit_id INT;
-  DECLARE p_num INT;
+  DECLARE bu_p_num INT;
   DECLARE size INT;
 
   DECLARE done INT DEFAULT 0;
@@ -4033,16 +4033,16 @@ BEGIN
     FROM board b
     JOIN board_units bu ON (b.ref=bu.id)
     JOIN units u ON (bu.unit_id=u.id)
-    WHERE b.`type`='unit' AND b.game_id=g_id AND unit_feature_check(bu.id,'magic_immunity')=0 
-    GROUP BY b.ref,u.size
-    HAVING quart(MIN(b.x),MIN(b.y))<>zone;
+    WHERE b.`type`='unit' AND b.game_id=g_id AND unit_feature_check(bu.id,'magic_immunity')=0
+    AND quart(b.x,b.y)<>zone
+    GROUP BY b.ref,u.size;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id=g_id LIMIT 1;
 
     OPEN cur;
     REPEAT
-      FETCH cur INTO board_unit_id,u_x,u_y,size,p_num;
+      FETCH cur INTO board_unit_id,u_x,u_y,size,bu_p_num;
       IF NOT done THEN
         IF size=1 THEN 
           SELECT a.x,a.y INTO new_x,new_y FROM allcoords a
@@ -4051,13 +4051,20 @@ BEGIN
           ORDER BY ((u_x-a.x)*(u_x-a.x)+(u_y-a.y)*(u_y-a.y)) LIMIT 1;
         ELSE 
           SELECT a.x,a.y INTO new_x,new_y FROM allcoords a
-          WHERE a.mode_id=mode_id AND quart(a.x,a.y)=zone
-          AND NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x BETWEEN a.x AND a.x+size-1 AND b.y BETWEEN a.y AND a.y+size-1 LIMIT 1)
+          WHERE a.mode_id=mode_id AND quart(a.x,a.y)=zone AND quart(a.x+size-1,a.y+size-1)=zone AND quart(a.x,a.y+size-1)=zone AND quart(a.x+size-1,a.y)=zone
+          AND NOT EXISTS
+              (SELECT b.id FROM board b
+                  WHERE b.game_id=g_id
+                    AND NOT (b.`type`='unit' AND b.ref = board_unit_id)
+                    AND b.x BETWEEN a.x AND a.x+size-1
+                    AND b.y BETWEEN a.y AND a.y+size-1 LIMIT 1)
           ORDER BY ((u_x-a.x)*(u_x-a.x)+(u_y-a.y)*(u_y-a.y)) LIMIT 1;
         END IF;
         CALL move_unit(board_unit_id,new_x,new_y);
-        UPDATE board_units SET moves_left=0 WHERE id=board_unit_id;
-        CALL cmd_unit_set_moves_left(g_id,p_num,board_unit_id);
+        IF bu_p_num = p_num THEN
+          UPDATE board_units SET moves_left=0 WHERE id=board_unit_id;
+          CALL cmd_unit_set_moves_left(g_id,p_num,board_unit_id);
+        END IF;
       END IF;
     UNTIL done END REPEAT;
     CLOSE cur;
@@ -4066,12 +4073,12 @@ END$$
 
 DROP PROCEDURE IF EXISTS `lords`.`units_from_zone` $$
 
-CREATE PROCEDURE `units_from_zone`(g_id INT, zone INT)
+CREATE PROCEDURE `units_from_zone`(g_id INT, p_num INT, zone INT)
 BEGIN
   DECLARE mode_id INT;
   DECLARE u_x,u_y,new_x,new_y INT;
   DECLARE board_unit_id INT;
-  DECLARE p_num INT;
+  DECLARE bu_p_num INT;
   DECLARE size INT;
 
   DECLARE done INT DEFAULT 0;
@@ -4080,16 +4087,15 @@ BEGIN
     FROM board b
     JOIN board_units bu ON (b.ref=bu.id)
     JOIN units u ON (bu.unit_id=u.id)
-    WHERE b.`type`='unit' AND b.game_id=g_id
-    GROUP BY b.ref,u.size
-    HAVING quart(MIN(b.x),MIN(b.y))=zone;
+    WHERE b.`type`='unit' AND b.game_id=g_id AND quart(b.x,b.y)=zone
+    GROUP BY b.ref,u.size;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id=g_id LIMIT 1;
 
     OPEN cur;
     REPEAT
-      FETCH cur INTO board_unit_id,u_x,u_y,size,p_num;
+      FETCH cur INTO board_unit_id,u_x,u_y,size,bu_p_num;
       IF NOT done THEN
         IF size=1 THEN 
           SELECT a.x,a.y INTO new_x,new_y FROM allcoords a
@@ -4098,13 +4104,20 @@ BEGIN
           ORDER BY ((u_x-a.x)*(u_x-a.x)+(u_y-a.y)*(u_y-a.y)) LIMIT 1;
         ELSE 
           SELECT a.x,a.y INTO new_x,new_y FROM allcoords a
-          WHERE a.mode_id=mode_id AND quart(a.x,a.y)<>zone
-          AND NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x BETWEEN a.x AND a.x+size-1 AND b.y BETWEEN a.y AND a.y+size-1 LIMIT 1)
+          WHERE a.mode_id=mode_id AND quart(a.x,a.y)<>zone AND quart(a.x+size-1,a.y+size-1)<>zone AND quart(a.x,a.y+size-1)<>zone AND quart(a.x+size-1,a.y)<>zone
+          AND NOT EXISTS
+              (SELECT b.id FROM board b
+                  WHERE b.game_id=g_id
+                    AND NOT (b.`type`='unit' AND b.ref = board_unit_id)
+                    AND b.x BETWEEN a.x AND a.x+size-1
+                    AND b.y BETWEEN a.y AND a.y+size-1 LIMIT 1)
           ORDER BY ((u_x-a.x)*(u_x-a.x)+(u_y-a.y)*(u_y-a.y)) LIMIT 1;
         END IF;
         CALL move_unit(board_unit_id,new_x,new_y);
-        UPDATE board_units SET moves_left=0 WHERE id=board_unit_id;
-        CALL cmd_unit_set_moves_left(g_id,p_num,board_unit_id);
+        IF bu_p_num = p_num THEN
+          UPDATE board_units SET moves_left=0 WHERE id=board_unit_id;
+          CALL cmd_unit_set_moves_left(g_id,p_num,board_unit_id);
+        END IF;
       END IF;
     UNTIL done END REPEAT;
     CLOSE cur;
