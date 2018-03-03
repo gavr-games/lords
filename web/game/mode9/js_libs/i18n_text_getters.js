@@ -1,5 +1,3 @@
-var USER_LANGUAGE = 1;
-
 function card_name(card_id) {
 	return card_names[USER_LANGUAGE][card_id]["name"];
 }
