@@ -104,7 +104,7 @@ function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) 
 	var temp_params = executable_params;
         if (suc == 0) {
 	  if ($chk(error_dictionary[error_code])) {
-	    error_txt = error_dictionary[error_code]['description'];
+	    error_txt = error_message(error_code);
 	    showWindow('Извините', error_txt, 200, 100, false);
             error_msg = error_txt;
             error_procedure = executable_procedure;
@@ -419,7 +419,6 @@ function execute_card(pd_id,id) {
             cards_procedures_1.each(function (item, index) {
                 if (item) if (item['card_id'] == id) {
                     procedures[i] = procedures_mode_1[item['procedure_id']];
-                    //procedures[i]['description'] = item["description"];
                     i++;
                 }
             });
@@ -497,8 +496,7 @@ function execute_unit(x, y) {
         units_procedures_1.each(function (item, index) {
             if (item) if (item['unit_id'] == board_units[id]['unit_id']) {
                 procedures[i] = procedures_mode_1[item['procedure_id']];
-                procedures[i]['description'] = item["description"];
-                procedures[i]['default'] = item["default"];
+                procedures[i]['default'] = item['default'];
                 i++;
             }
         });
@@ -547,8 +545,6 @@ function execute_building(x,y) {
         buildings_procedures_1.each(function (item, index) {
             if (item) if (item['building_id'] == board_buildings[id]['building_id']) {
                 procedures[i] = procedures_mode_1[item['procedure_id']];
-                procedures[i]['description'] = item["description"];
-		console.log(item["description"]);
                 i++;
             }
         });

@@ -21,34 +21,65 @@
 	$message = '';
 	
 	//get each mode data
+	// 'keys' control hierarchical structure of the js array.
+	// For example, 'keys'=>'language_id,code' means that
+	// first index of js aray should be language_id, second - code,
+	// and then all other fields:
+	// log_message_texts[1]['resurrect']['message'] = '{player0} resurrects {unit1}'
+	//
+	// if omitted, defaults to 'id'
 	$tables = Array(
-		Array('name'=>'procedures_params','rule'=>''),
-		Array('name'=>'unit_features','rule'=>''),
-		Array('name'=>'building_features','rule'=>''),
-		Array('name'=>'error_dictionary','rule'=>''),
-		Array('name'=>'dic_colors','rule'=>'')
+		Array('name'=>'procedures_params'),
+		Array('name'=>'procedures_params_i18n', 'js_name'=>'procedures_params_descriptions', 'keys'=>'language_id,param_id'),
+		Array('name'=>'unit_features'),
+		Array('name'=>'building_features'),
+		Array('name'=>'error_dictionary'),
+		Array('name'=>'error_dictionary_i18n', 'js_name'=>'error_dictionary_messages', 'keys'=>'language_id,error_id'),
+		Array('name'=>'dic_colors', 'keys'=>'code'),
+		Array('name'=>'units_i18n', 'js_name'=>'unit_names', 'keys'=>'language_id,unit_id'),
+		Array('name'=>'unit_features_i18n', 'js_name'=>'unit_feature_names', 'keys'=>'language_id,feature_id'),
+		Array('name'=>'cards_i18n', 'js_name'=>'card_names', 'keys'=>'language_id,card_id'),
+		Array('name'=>'buildings_i18n', 'js_name'=>'building_names', 'keys'=>'language_id,building_id'),
+		Array('name'=>'buildings_features_i18n', 'js_name'=>'buildings_feature_names', 'keys'=>'language_id,feature_id'),
+		Array('name'=>'npc_player_name_modificators_i18n', 'js_name'=>'npc_player_name_modificators', 'keys'=>'language_id,code'),
+		Array('name'=>'videos_i18n', 'js_name'=>'videos_titles', 'keys'=>'language_id,code'),
+		Array('name'=>'log_message_text_i18n', 'js_name'=>'log_message_texts', 'keys'=>'language_id,code')
 	);
 	$each_mode_js_arrays = $params = '';
 	foreach($tables as $table)	{
 		$first = true;
-		$res = $dataBase->select('*',$table['name'],$table['rule']);
-		if ($res)	{
+		$where = '';
+		if (array_key_exists('keys', $table)) {
+			$keys = $table['keys'];
+		} else {
+			$keys = 'id';
+		}
+		if (array_key_exists('js_name', $table)) {
+			$js_name = $table['js_name'];
+		} else {
+			$js_name = $table['name'];
+		}
+		
+		$res = $dataBase->select('*', $table['name'], $where, $keys);
+		if ($res) {
+			$key_column_names = explode(',', $keys);
+			$previous_keys = array_fill(0, sizeof($key_column_names), '');
+			
+			$each_mode_js_arrays .= chr(13).'var '.$js_name.' = new Array();'.PHP_EOL;
 			while ($row = mysqli_fetch_assoc($res))	{
-				if ($first) {
-					$each_mode_js_arrays .= chr(13).'var '.$table['name'].' = new Array();'.chr(13);
-					$first = false;
+				$current_keys = Array();
+				foreach($key_column_names as $i=>$key_col) {
+					array_push($current_keys, $row[$key_col]);
+					if ($row[$key_col] != $previous_keys[$i]) {
+						$each_mode_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"] = new Array();'.PHP_EOL;
+					}
 				}
-				if ($table['name']=='dic_colors')
-				$each_mode_js_arrays .= $table['name'].'["'.$row['code'].'"] = new Array();'.chr(13);
-				else
-				$each_mode_js_arrays .= $table['name'].'['.$row['id'].'] = new Array();'.chr(13);
+				
 				foreach($row as $field=>$value)	{
-					if ($table['name']=='dic_colors')
-					$each_mode_js_arrays .= $table['name'].'["'.$row['code'].'"]["'.$field.'"] = "'.$value.'";'.chr(13);
-					else
-					$each_mode_js_arrays .= $table['name'].'['.$row['id'].']["'.$field.'"] = "'.str_replace('"',"'",$value).'";'.chr(13);
-					if ($table['name']=='procedures_params' && $field=='code') $params .= 'var '.$value.'="";'.chr(13);
+					$each_mode_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"]["'.$field.'"] = "'.str_replace('"',"'",$value).'";'.PHP_EOL;
+					if ($table['name']=='procedures_params' && $field=='code') $params .= 'var '.$value.'="";'.PHP_EOL;
 				}
+				$previous_keys = $current_keys;
 			}
 		}
 	}
@@ -83,23 +114,23 @@
 							while ($row = mysqli_fetch_assoc($res_table))	{
 							if (! isset($row['id'])) $row['id'] = $i;
 								if ($first) {
-									$js_arrays .= chr(13).'var '.$table['js_name'].' = new Array();'.chr(13);
+									$js_arrays .= chr(13).'var '.$table['js_name'].' = new Array();'.PHP_EOL;
 									$first = false;
 								}
 								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
 								  if ($row['unit_id']!=$old_unit_id)
-								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].'] = new Array();'.chr(13);
+								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].'] = new Array();'.PHP_EOL;
 								  $old_unit_id = $row['unit_id'];
 								}
 								if ($table['db_name']=='mode_config'){
-								  $js_arrays .= $table['js_name'].'["'.$row['param'].'"] = '.$row['value'].';'.chr(13);
+								  $js_arrays .= $table['js_name'].'["'.$row['param'].'"] = '.$row['value'].';'.PHP_EOL;
 								} else 
 								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
-								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].']['.$row['level'].'] = '.$row['experience'].';'.chr(13);
+								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].']['.$row['level'].'] = '.$row['experience'].';'.PHP_EOL;
 								} else {
-								  $js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.chr(13);
+								  $js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.PHP_EOL;
 								  foreach($row as $field=>$value)	{
-									  $js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.addslashes($value).'";'.chr(13);
+									  $js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.addslashes($value).'";'.PHP_EOL;
 								  }
 								}
 								$i++;

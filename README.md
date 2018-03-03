@@ -73,7 +73,7 @@ Once you have all of those installed you should:
 127.0.0.1 38.ape.the-lords.org
 127.0.0.1 39.ape.the-lords.org
 ```
-- Now you should have a running set of docker containers. Check all of them are working using `docker ps` command. The game should be available via http://the-lords.org
+- Now you should have a running set of docker containers. Check all of them are working using `docker-compose ps` command. The game should be available via http://the-lords.org
 
 Everyday Usage
 ---------------
