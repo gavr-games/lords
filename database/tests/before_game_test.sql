@@ -1,9 +1,10 @@
-﻿USE lords_site;
+use lords_site;
 
 call reset();
 call lords.reset();
 
-call user_authorize('1','1');
+call user_get_pass_hash('1');
+call user_get_info('1');
 
 call arena_enter(1);
 call arena_exit(1);
