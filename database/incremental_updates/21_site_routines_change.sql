@@ -117,7 +117,7 @@ BEGIN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=3;
   ELSE
     SELECT 1 AS `success`, null as `error_code`, null as `error_params` FROM DUAL;
-    SELECT pass_hash FROM DUAL;
+    SELECT 'pass_hash' AS `name`, pass_hash as `value` FROM DUAL;
   END IF;
 END$$
 
