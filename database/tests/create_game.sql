@@ -1,4 +1,4 @@
-﻿USE lords_site;
+use lords_site;
 
 call reset();
 call lords.reset();

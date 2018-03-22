@@ -1,8 +1,8 @@
-﻿/*re-create privileges*/
+# re-create privileges
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'lords_client'@'%';
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'lords_reader'@'%';
 
-/*client*/
+# client
 GRANT EXECUTE ON PROCEDURE `lords`.`player_end_turn` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`send_money` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`buy_card` TO 'lords_client'@'%';
@@ -67,12 +67,12 @@ GRANT EXECUTE ON PROCEDURE `lords`.`unit_level_up_moves` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`wall_open` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`wall_close` TO 'lords_client'@'%';
 
-/*F5*/
+# F5
 GRANT EXECUTE ON PROCEDURE `lords`.`get_all_game_info` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`get_game_statistic` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`get_all_game_info_ai` TO 'lords_client'@'%';
 
-/*lords_site*/
+# lords_site
 GRANT EXECUTE ON PROCEDURE `lords_site`.`user_add` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`chat_user_add` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`arena_game_feature_set` TO 'lords_client'@'%';
@@ -96,7 +96,8 @@ GRANT EXECUTE ON PROCEDURE `lords_site`.`get_create_game_features` TO 'lords_cli
 GRANT EXECUTE ON PROCEDURE `lords_site`.`get_create_game_modes` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`get_current_game_info` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`get_my_location` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords_site`.`user_authorize` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords_site`.`user_get_pass_hash` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords_site`.`user_get_info` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`player_online_offline` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`performance_statistics_add` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`user_profile_update` TO 'lords_client'@'%';

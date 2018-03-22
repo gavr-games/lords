@@ -47,12 +47,12 @@ function doReg(link, pass_mismatch, fields_blank, loading_text) {
 	if ($('email').get('value')=="")
 	  user_email = 'null';
 	else
-	  user_email = '"'+parent.convertChars($('email').get('value'))+'"';
+	    user_email = '"'+parent.convertChars($('email').get('value'))+'"';
         parent.sendBaseProtocolCmd({action:'user_add',params:{
-		login: '"'+parent.convertChars($('login_i').get('value'))+'"',
-                pass:  '"'+$('pass_i').get('value').replace(new RegExp('"','g'),'\\"')+'"',
-		email: user_email
-	}});
+		    login: '"'+parent.convertChars($('login_i').get('value'))+'"',
+            pass:  '"'+$('pass_i').get('value').replace(new RegExp('"','g'),'\\"')+'"',
+		    email: user_email
+	    }});
         doLoading(link, loading_text);
     }
 }
@@ -72,12 +72,12 @@ function loginAnswer(answer) {
 }
 
 function doLogin() {
-        if (!parent.window_loading) { //another window is not loading
+    if (!parent.window_loading) { //another window is not loading
 	    parent.sendBaseProtocolCmd({action:'user_authorize',params:{
 		login: '"'+parent.convertChars($('login_i').get('value'))+'"',
                 pass:  '"'+$('pass_i').get('value').replace(new RegExp('"','g'),'\\"')+'"'
 	    }});
-        }
+    }
 }
 
 function goToLocation(loc) {
