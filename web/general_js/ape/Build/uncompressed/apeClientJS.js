@@ -170,14 +170,10 @@ if (Function.prototype.create == null) {
  * APE JSF Setup
  */
 
-/*APE.Config.baseUrl = 'http://ape-test.local/lords/general_js/ape'; //APE JSF
-APE.Config.domain = 'ape-test.local';
-APE.Config.server = 'ape.ape-test.local:80'; //APE server URL*/
-
-
-APE.Config.baseUrl = 'http://the-lords.org/general_js/ape'; //APE JSF
-APE.Config.domain = 'the-lords.org';
-APE.Config.server = 'ape.the-lords.org:6969'; //APE server URL
+APE.Config.baseUrl = 'http://' + window.location.hostname + '/general_js/ape'; //APE JSF
+APE.Config.domain = window.location.hostname;
+APE.Config.server = 'ape.' + window.location.hostname + ':6969'; //APE server URL
+console.log(window.location.host);
 
 (function(){
 	for (var i = 0; i < arguments.length; i++)

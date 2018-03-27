@@ -23,6 +23,7 @@ Next steps
 
 Once you have all of those installed you should:
 - Checkout latest Lords code from GitHub. You should see `docker-compose.yml` file in the root defining all services.
+- create `.env` file from `.env.example`
 - cd to project's root folder and run `docker-compose build`. It will build all Dockerfiles and create images for containers.
 - run `docker-compose up -d` to start all services.
 - Setup db with the next command `docker-compose exec db /database/bin/lords_db_init.sh`

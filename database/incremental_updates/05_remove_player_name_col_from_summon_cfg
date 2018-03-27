@@ -1,4 +1,0 @@
-use lords;
-
-ALTER TABLE `summon_cfg` DROP `player_name`;
-

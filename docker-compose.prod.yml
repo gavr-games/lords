@@ -3,14 +3,17 @@ version: '3.4'
 services:
   db:
     image: "mysql:5.5"
-    ports:
-      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - ./database:/database
+      - mysql-data:/var/lib/mysql # persist db
     networks:
       - lords-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 
   ape:
     image: "i386/ubuntu:17.10"
@@ -21,11 +24,14 @@ services:
     command: bash -c "cd /ape_scripts/bin ; chmod 755 ./aped ; ./aped"
     networks:
       - lords-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: 127.0.0.1:5000/demo # local registry
+    build: .
     ports:
       - "80:80"
     environment:
@@ -36,17 +42,30 @@ services:
       - ./log:/var/log/apache2
     networks:
       - lords-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 
   ai:
     image: "java:7"
     ports:
-      - "5600:5600"
+      - "5600" # not shared to host
     volumes:
       - ./deployment:/deployment
       - ./ai:/ai
     command: bash -c "cd /deployment ; chmod 755 ./deploy_ai.sh ; ./deploy_ai.sh docker"
     networks:
       - lords-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  mysql-data:
 
 networks:
   lords-network:
+    driver: overlay
+    attachable: true
