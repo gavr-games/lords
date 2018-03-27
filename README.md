@@ -93,3 +93,11 @@ Connecting to the database
 ---------------
 To connect to the database running inside the docker container use TCP/IP connection localhost:3306 user:root, password:root
 
+Deploy
+---------------
+- install Docker and Docker Compose
+- clone code
+- create `.env` file
+- create `log` directory
+- run `./deployment/deploy_swarm.sh`
+
