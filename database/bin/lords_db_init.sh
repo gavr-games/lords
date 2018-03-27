@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PATH_TO_SCRIPTS=/database
-MYSQL_ROOT_PASS=root
+MYSQL_ROOT_PASS=$MYSQL_ROOT_PASSWORD
 
 echo Running $PATH_TO_SCRIPTS/create_users.sql
 mysql < $PATH_TO_SCRIPTS/create_users.sql -u root --password=$MYSQL_ROOT_PASS --default-character-set=utf8
