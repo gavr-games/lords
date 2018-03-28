@@ -100,7 +100,7 @@ Deploy
 - create `.env` file
 - create `log` directory
 - add permissions for lang cache `chmod 0777 web/lang/cache`
-- run `./deployment/deploy_swarm.sh`
+- run `./deployment/deploy.sh`
 
 Validate deployed services:
 - `docker stack services lords` - replicas should be 1/1, not 0/1
