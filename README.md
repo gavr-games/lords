@@ -99,5 +99,12 @@ Deploy
 - clone code
 - create `.env` file
 - create `log` directory
+- add permissions for lang cache `chmod 0777 web/lang/cache`
 - run `./deployment/deploy_swarm.sh`
+
+Validate deployed services:
+- `docker stack services lords` - replicas should be 1/1, not 0/1
+- rum migrations `docker exec -it $(docker ps -q -f name=lords_db) /database/bin/lords_db_migrate.sh`
+- see the list of containers with errors `docker stack ps lords --no-trunc`
+
 
