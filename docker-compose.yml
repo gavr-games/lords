@@ -44,7 +44,7 @@ services:
     volumes:
       - ./deployment:/deployment
       - ./ai:/ai
-    command: bash -c "cd /deployment ; chmod 755 ./deploy_ai.sh ; ./deploy_ai.sh docker"
+    command: bash -c "cd /deployment ; chmod 755 ./deploy_ai.sh ; ./deploy_ai.sh"
     networks:
       - lords-network
 
