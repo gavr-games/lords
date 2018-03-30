@@ -1,0 +1,16 @@
+steps:
+  - command: docker service create --name registry --publish published=5000,target=5000 registry:2
+  - command: docker service rm registry
+    mode: defer
+  - command: docker-compose -f docker-compose.prod.yml build
+  - command: docker-compose -f docker-compose.prod.yml push
+  - command: docker stack deploy --compose-file docker-compose.prod.yml --resolve-image=never lords
+  - command: docker service ls | grep db | awk '/ / { print $4 }'
+    mode: until
+    contains: 1/1
+    retries: 36
+    delay: 5000
+    shell: true
+  - command: docker exec $(docker ps -q -f name=lords_db) /database/bin/lords_db_migrate.sh
+    shell: true
+  - command: docker stack services lords

@@ -96,6 +96,7 @@ To connect to the database running inside the docker container use TCP/IP connec
 Deploy
 ---------------
 - install Docker and Docker Compose
+- install [tci](https://github.com/sergey-koba-mobidev/tci/releases/tag/latest)
 - clone code
 - create `.env` file
 - create `log` directory
