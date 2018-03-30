@@ -6,8 +6,7 @@
 	session_start();
 	include ('../general_config/config.php');
 	include ('../general_classes/sql.class.php');
-	$mysqli = new mysqli($DB_conf['server'], 'lord', 'D^Dhf88Y_]');
-	//$mysqli = new mysqli($DB_conf['server'], 'root', 'mypass');
+	$mysqli = new mysqli($DB_conf['server'], 'root', 'mypass');
 	if (mysqli_connect_errno()) {
 		    printf("Connect failed: %s\n", mysqli_connect_error());
 		    die();

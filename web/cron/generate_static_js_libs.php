@@ -9,9 +9,7 @@
 	include ('../general_config/config.php');
 	include ('../general_classes/sql.class.php');
 		error_reporting(E_ALL);
-	//$mysqli = new mysqli($DB_conf['server'], 'lord', 'D^Dhf88Y_]', $DB_conf['name']);
-	$mysqli = new mysqli($DB_conf['server'], 'lords_reader', 'D^Dhf88Y_]', $DB_conf['name']);
-// 	$mysqli = new mysqli($DB_conf['server'], 'root', 'mypass', $DB_conf['name']);
+	$mysqli = new mysqli($DB_conf['server'], 'lords_reader', $_ENV['MYSQL_READER_PASSWORD'], $DB_conf['name']);
 	if (mysqli_connect_errno()) {
 		    printf("Connect failed: %s\n", mysqli_connect_error());
 		    die();

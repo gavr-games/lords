@@ -15,4 +15,4 @@ done
 echo Running $PATH_TO_SCRIPTS/grants.sql
 mysql < $PATH_TO_SCRIPTS/grants.sql -u root --password=$MYSQL_ROOT_PASS --default-character-set=utf8
 
-echo DONE.
+echo DB Update done.

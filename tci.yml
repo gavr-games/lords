@@ -11,6 +11,6 @@ steps:
     retries: 36
     delay: 5000
     shell: true
-  - command: docker exec $(docker ps -q -f name=lords_db) /database/bin/lords_db_migrate.sh
+  - command: docker exec $(docker ps -q -f name=lords_db) /database/bin/lords_db_update.sh
     shell: true
   - command: docker stack services lords
