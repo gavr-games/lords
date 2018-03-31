@@ -104,7 +104,7 @@ Deploy
 
 Validate deployed services:
 - `docker stack services lords` - replicas should be 1/1, not 0/1
-- rum database updates `docker exec -it $(docker ps -q -f name=lords_db) /database/bin/lords_db_update.sh`
+- run database updates `docker exec -it $(docker ps -q -f name=lords_db) /database/bin/lords_db_update.sh`
 - see the list of containers with errors `docker stack ps lords --no-trunc`
 
 
