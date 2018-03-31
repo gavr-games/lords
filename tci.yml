@@ -1,4 +1,6 @@
 steps:
+  - command: docker exec $(docker ps -q -f name=lords_db) /database/bin/create_dump.sh
+    shell: true
   - command: docker service create --name registry --publish published=5000,target=5000 registry:2
   - command: docker service rm registry
     mode: defer
