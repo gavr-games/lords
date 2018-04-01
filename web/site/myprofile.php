@@ -30,7 +30,7 @@
 	//here process new avatar if needed (delete old, check new, save unique new, resize new)
 
 	if ($_FILES["pic"]["error"] > 0){
-	  $avatar_error = 'Не удалось загрузить герб';
+	  $avatar_error = L::profile_upload_avatar_error;
 	}else
 	if ($_FILES["pic"]["tmp_name"]!="")
 	{
@@ -60,9 +60,9 @@
 		} while ($mysqli->more_results() && $mysqli->next_result());
 		
 	      } else
-	      $avatar_error = 'Не удалось изменить размер герба';
+	      $avatar_error = L::profile_change_avatar_size_error;
 	    } else {
-	      $avatar_error = 'Неверное расширение файла герба';
+	      $avatar_error = L::profile_avatar_extension_error;
 	    }
 	    unlink("../design/images/profile/temp/" . $_FILES["pic"]["name"]);
 	}
@@ -106,13 +106,13 @@
 	<div id="wrap" class="profile">
 		<div id="profile">
 		  <form action="" method="post" enctype="multipart/form-data">
-			  <span class="title"> - Великий Лорд <p class="nick"><?php echo $user['login']; ?></p></span>
+			  <span class="title"> - <?= L::profile_great_lord ?> <p class="nick"><?php echo $user['login']; ?></p></span>
 			  <br clear="all" />
 			  <div class="profile_cont">
 			    <div class="profile_image">
-			      <h3 style="margin-left:14px;">Герб лорда</h3>
+			      <h3 style="margin-left:14px;"><?= L::profile_coat_of_arms ?></h3>
 			      <img src="<?php echo $SITE_conf['domen'].$prof_img;?>?cache=<?php echo time(); ?>" alt="Герб" />
-			      <h5>Выбрать новый герб (75x55)</h5>
+			      <h5><?= L::profile_new_coat_of_arms ?> (75x55)</h5>
 			      <p><input type="file" name="pic"></p>
 			    </div>
 			    <div class="profile_stats">
@@ -121,19 +121,19 @@
 			      <td><h5>E-mail:</h5></td><td> <?php echo $private_info['email']; ?></td>
 			    </tr>
 			    <tr>
-			      <td><h5>Дата последней игры:</h5></td><td> <?php echo $user['last_played_game']; ?></td>
+			      <td><h5><?= L::profile_last_game_date ?>:</h5></td><td> <?php echo $user['last_played_game']; ?></td>
 			    </tr>
 			    </table>
 			    <br />
-			    <h3>Статистика</h3>
+			    <h3><?= L::profile_statistics ?></h3>
 			    <table class="stats">
 			    <tr>
-			      <td><h5>Мод</h5></td>
-			      <td><h5>Всего игр</h5></td>
-			      <td><h5>Победы</h5></td>
-			      <td><h5>Поражения</h5></td>
-			      <td><h5>Ничьи</h5></td>
-			      <td><h5>Вышел из игры</h5></td>
+			      <td><h5><?= L::profile_mode ?></h5></td>
+			      <td><h5><?= L::profile_total_games ?></h5></td>
+			      <td><h5><?= L::profile_victories ?></h5></td>
+			      <td><h5><?= L::profile_defeats ?></h5></td>
+			      <td><h5><?= L::profile_draws ?></h5></td>
+			      <td><h5><?= L::profile_left_the_game ?></h5></td>
 			    </tr>
 			    <tr>
 			      <?php
@@ -156,11 +156,11 @@
 			    </div>
 			  </div>
 			  <br /><br /><br /><br /><br />
-			  <input style="float:right;" type="submit" value="Обновить" /> <br />
+			  <input style="float:right;" type="submit" value="<?= L::update ?>" /> <br />
 			  <span class="error"><?php echo $avatar_error; ?></span>
 		  </form>
 		</div>
-		<span class="topbutton back"><a href="#" id="back_b" onclick="if (!parent.window_loading) {doLoading($('back_b'), '<?= L::loading ?>');parent.load_window('<?php echo $back_url; ?>','right');} return false;">Назад</a></span>
+		<span class="topbutton back"><a href="#" id="back_b" onclick="if (!parent.window_loading) {doLoading($('back_b'), '<?= L::loading ?>');parent.load_window('<?php echo $back_url; ?>','right');} return false;"><?= L::back ?></a></span>
 		<span class="topbutton en"><a href="/site/lang.php?lang=en">EN</a></span>
 		<span class="topbutton ru"><a href="/site/lang.php?lang=ru">RU</a></span>
 		<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'), '<?= L::loading ?>');return false;"><?= L::do_exit ?></a></span>
