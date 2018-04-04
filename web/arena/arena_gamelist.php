@@ -45,16 +45,16 @@
 </head>
 <body onload="initialization();">
 <a class="help" title="В начатые можно войти только наблюдателем." href="" onclick="return false;"></a>
-<span class="gmsheader gmstopheader"> - Список игр</span><br /><br />
-<span class="gmsheader gmsunderlined">Новые:</span><br />
+<span class="gmsheader gmstopheader"> - <?= L::arena_gamelist_game_list ?></span><br /><br />
+<span class="gmsheader gmsunderlined"><?= L::arena_gamelist_new_games ?>:</span><br />
 	<div id="game_list">
 	<?php echo $games; ?>
 	</div>
 		
-	<span class="gmsheader gmsunderlined">Начатые:</span>
+	<span class="gmsheader gmsunderlined"><?= L::arena_gamelist_started_games ?>:</span>
 	<div id="started_game_list">
 	<?php echo $started_games; ?>
 	</div>
-<a href="arena_creategame.php" class="textlink">Создать игру</a>
+<a href="arena_creategame.php" class="textlink"><?= L::arena_gamelist_create_game ?></a>
 </body>
 </html>
