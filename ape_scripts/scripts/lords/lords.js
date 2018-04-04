@@ -857,7 +857,7 @@ socket.onAccept = function(client) {
 	//client.close();
 	var i =0;
 	for (i=0;i<2;i++) {
-	 var phrequest = new Http(lords_domain + '/game/mode1/ajax/get_unit_phrase.php');
+	 var phrequest = new Http(lords_domain + '/game/mode9/ajax/get_unit_phrase.php');
         phrequest.set('method', 'POST');
         phrequest.writeObject({
             'game_id': 3

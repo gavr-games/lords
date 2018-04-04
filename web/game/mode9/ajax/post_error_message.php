@@ -83,5 +83,5 @@ $html_code .= '
 	fclose($fh);
 	echo '<b>Сообщение успешно отправлено.</b><br />
 	Для скорейшего исправления зарегестрируйте и опишите свою ошибку в <a target="_blank" href="'.$SITE_conf['mantis'].'">нашей системе</a>.<br />
-	<b>Ссылка на Вашу ошибку:</b> <a target="_blank" href="'.$SITE_conf['domen'].'game/mode1/'.$myFile.'">'.$SITE_conf['domen'].'game/mode1/'.$myFile.'</a>';
+	<b>Ссылка на Вашу ошибку:</b> <a target="_blank" href="'.$SITE_conf['domen'].'game/mode9/'.$myFile.'">'.$SITE_conf['domen'].'game/mode9/'.$myFile.'</a>';
 ?>

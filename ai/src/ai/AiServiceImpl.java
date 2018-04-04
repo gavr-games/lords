@@ -17,7 +17,7 @@ public class AiServiceImpl implements AiService
     {
 		log.log(Level.INFO, "Entering makeMove({0},{1})", new Object[]{gameId, playerNum});
 
-        String gameDataRetrieveURL = String.format("http://web/game/mode1/ajax/get_all_game_info_ai.php?g_id=%s&p_num=%s",String.valueOf(gameId),String.valueOf(playerNum));
+        String gameDataRetrieveURL = String.format("http://web/game/mode9/ajax/get_all_game_info_ai.php?g_id=%s&p_num=%s",String.valueOf(gameId),String.valueOf(playerNum));
 
 		Game game;
 		PlayerAI ai;
