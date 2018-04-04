@@ -5,6 +5,8 @@ services:
     image: "mysql:5.5"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_CLIENT_PASSWORD: ${MYSQL_CLIENT_PASSWORD}
+      MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
     volumes:
       - ./database:/database
       - mysql-data:/var/lib/mysql # persist db
@@ -37,6 +39,8 @@ services:
     environment:
       LORDS_DOMAIN: ${LORDS_DOMAIN}
       REVISION: ${REVISION}
+      MYSQL_CLIENT_PASSWORD: ${MYSQL_CLIENT_PASSWORD}
+      MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
     volumes:
       - ./web:/var/www/html
       - ./log:/var/log/apache2
