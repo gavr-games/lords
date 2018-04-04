@@ -33,6 +33,7 @@ class BaseProtocol {
                     $res = self::execCmd('user_get_info', [$params['login']]);
                     if ($res['results']['header_result']['success']=='1'){
                         $_SESSION['user_id'] = $res['results']['data_result']['user_id'];
+						$_SESSION['lang'] = $res['results']['data_result']['user_language_code'] == 'RU' ? 'ru' : 'en';
                     }
                     return $res;
                 } else {
