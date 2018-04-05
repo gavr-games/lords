@@ -44,7 +44,7 @@
 	<script type="text/javascript" src="js_libs/list.js?<?php echo $SITE_conf['revision']; ?>"></script>
 </head>
 <body onload="initialization();">
-<a class="help" title="В начатые можно войти только наблюдателем." href="" onclick="return false;"></a>
+<a class="help" title="<?= L::arena_gamelist_help ?>" href="" onclick="return false;"></a>
 <span class="gmsheader gmstopheader"> - <?= L::arena_gamelist_game_list ?></span><br /><br />
 <span class="gmsheader gmsunderlined"><?= L::arena_gamelist_new_games ?>:</span><br />
 	<div id="game_list">

@@ -61,7 +61,7 @@ $chats = array();
 $markers['###JS_ARRAYS###'] .= 'chats[0] = new Array();' . chr(13);
 $chats[0]['chat_id'] = 0;
 $markers['###JS_ARRAYS###'] .= 'chats[0]["chat_id"] = 0;' . chr(13);
-$chats[0]['topic'] = 'Арена';
+$chats[0]['topic'] = L::arena_chat_arena;
 $markers['###JS_ARRAYS###'] .= 'chats[0]["topic"] = "Арена";' . chr(13);
 $chats[0]['users'] = '';
 $markers['###JS_ARRAYS###'] .= 'chats[0]["users"] = new Array();' . chr(13);
@@ -147,5 +147,5 @@ foreach ($markers as $key => $value) {
     $replace[] = $key;
     $values[] = $value;
 }
-echo str_replace($replace, $values, file_get_contents('arena.html'));
+echo LangUtils::replaceTemplateMarkers(str_replace($replace, $values, file_get_contents('arena.html')));
 ?>

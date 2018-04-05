@@ -45,7 +45,7 @@
      <tr><td class="t_a_r"><?= L::arena_creategame_password ?> * :</td><td><input class="gmed input_com_style" type="password" name="pass" value="" id="pass_i"></td></tr>
      <tr><td class="t_a_r"><?= L::arena_creategame_repeat_password ?> * :</td><td><input class="gmed input_com_style" type="password" name="pass2" value="" id="pass2_i"></td></tr>
    </table>
-     <a href="#" id="crgame_button" onclick="validateForm($('crgame_button'));return false;" class="crtgm textlink"><?= L::arena_creategame_create ?></a>
+     <a href="#" id="crgame_button" onclick="validateForm($('crgame_button'), '<?= L::signup_pass_mismatch ?>', '<?= L::login_fields_blank ?>');return false;" class="crtgm textlink"><?= L::arena_creategame_create ?></a>
      	<input type="hidden" class="textlink" name="create_game" value="<?= L::arena_creategame_create_game ?>">
 </form>
 		 <a href="arena_gamelist.php" class="textlink"><?= L::arena_creategame_back_to_list ?></a>

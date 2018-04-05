@@ -1,16 +1,16 @@
-function validateForm(button) {
+function validateForm(button, pass_mismatch, fields_blank) {
 	var noError = true;
 	$('game_error').hide();
 	
 	if ($('game_title').get('value')=='')	{
 		noError = false;
-		$('game_error').set('text','Не все поля заполнены.');
+		$('game_error').set('text', fields_blank);
 	    $('game_error').show();
 	    if ($('game_title').get('value')=='') $('game_title').highlight('#A11D15');
 	}else 
 	if ($('pass_i').get('value')!=$('pass2_i').get('value') && $('pass_i').get('value')!='')	{
 		noError = false;
-		$('game_error').set('text','Пароли не совпадают');
+		$('game_error').set('text', pass_mismatch);
 	    $('game_error').show();
 	    $('pass_i').highlight('#A11D15');
 	    $('pass2_i').highlight('#A11D15');
