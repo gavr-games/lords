@@ -154,7 +154,7 @@
 	parent.parent.apeJoinChanels(['arenagame_'+cur_game_id]);
 </script>
 <div class="current_game">
-	<a class="help" title="Создайте команды, перетяните туда игроков, выберите особенности игры. Жмите начать игру." href="" onclick="return false;"></a>
+	<a class="help" title="<?= L::arena_game_help ?>" href="" onclick="return false;"></a>
         <?php  echo $cur_game; ?>
 		<div id="trash" onclick="exitGame();return false;"></div>
 		<div class="content" id="ingame_content">
@@ -168,14 +168,14 @@
 				<div class="features_cont">
 					<?php if ($cur_game_row['owner_id']==$_SESSION['user_id']) { //I'm owner?>
 					<div class="select_game_features">
-						<b>Управление особенностями:</b><br />
+						<b><?= L::arena_game_features ?>:</b><br />
 						<?php echoFeatures($features); ?>
 					</div>
-					<a href="#" onclick="startGame();return false;">Начать игру</a>
+					<a href="#" onclick="startGame();return false;"><?= L::arena_game_start ?></a>
 					
 					<?php } ?>
 					<br/>
-					<b>Выбранные особенности:</b><br />
+					<b><?= L::arena_game_selected_features ?>:</b><br />
 					<div id="game_features">
 						<?php echo $selected_features; ?>
 					</div>

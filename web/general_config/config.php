@@ -2,6 +2,7 @@
 
 include_once(dirname(__FILE__) . '/../vendor/autoload.php');
 include_once(dirname(__FILE__) . '/../general_classes/logger.class.php');
+include_once(dirname(__FILE__) . '/../general_classes/lang_utils.class.php');
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 // DB
 $DB_conf['user']   = 'lords_client';

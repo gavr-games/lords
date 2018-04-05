@@ -23,8 +23,9 @@
 		if (strlen($file)>3)	{//no "." or ".."
 			$name = explode('.',$file);
 			if ($name[1]=='html')	{//no readme.txt or smth else
-				$templates[$name[0]] = str_replace(array('\\'),array(''),file_get_contents($path.$file)); //for php templating
-				$template = str_replace(array(chr(13),chr(10),chr(9),'"'),array('','','','\\"'),file_get_contents($path.$file)); //delete new lines, tab, add bslash
+				$template_contents = LangUtils::replaceTemplateMarkers(file_get_contents($path.$file));
+				$templates[$name[0]] = str_replace(array('\\'), array(''), $template_contents); //for php templating
+				$template = str_replace(array(chr(13),chr(10),chr(9),'"'), array('','','','\\"'), $template_contents); //delete new lines, tab, add bslash
 				$template = "'".preg_replace("/###([^#]*)###/","'+\\1+'",$template)."'";
 				$js_arrays .= 'var '.$name[0].' = "'.$template.'";'; //for js templating
 			}
