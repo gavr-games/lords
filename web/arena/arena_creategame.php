@@ -42,8 +42,8 @@
      <tr><td class="t_a_r"><?= L::arena_creategame_mode ?> :</td><td><?php echoModes($modes); ?></td></tr>
 
      <tr><td class="t_a_r"><?= L::arena_creategame_turn_time ?> :</td><td><select class="gmsel input_com_style" name="time_restriction" id="time_restriction"><option value="0"><?= L::arena_creategame_no_limit ?></option><option value="60">1 <?= L::arena_creategame_minute ?>.</option><option value="120">2 <?= L::arena_creategame_minute ?>.</option><option value="180">3 <?= L::arena_creategame_minute ?>.</option><option value="240">4 <?= L::arena_creategame_minute ?>.</option><option value="300">5 <?= L::arena_creategame_minute ?>.</option></select></td></tr>
-     <tr><td class="t_a_r"><?= L::arena_creategame_password ?> * :</td><td><input class="gmed input_com_style" type="password" name="pass" value="" id="pass_i"></td></tr>
-     <tr><td class="t_a_r"><?= L::arena_creategame_repeat_password ?> * :</td><td><input class="gmed input_com_style" type="password" name="pass2" value="" id="pass2_i"></td></tr>
+     <tr><td class="t_a_r"><?= L::arena_creategame_password ?> :</td><td><input class="gmed input_com_style" type="password" name="pass" value="" id="pass_i"></td></tr>
+     <tr><td class="t_a_r"><?= L::arena_creategame_repeat_password ?> :</td><td><input class="gmed input_com_style" type="password" name="pass2" value="" id="pass2_i"></td></tr>
    </table>
      <a href="#" id="crgame_button" onclick="validateForm($('crgame_button'), '<?= L::signup_pass_mismatch ?>', '<?= L::login_fields_blank ?>');return false;" class="crtgm textlink"><?= L::arena_creategame_create ?></a>
      	<input type="hidden" class="textlink" name="create_game" value="<?= L::arena_creategame_create_game ?>">
