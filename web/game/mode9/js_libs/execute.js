@@ -24,7 +24,7 @@ function execute_procedure(name) {
                 if (exec_procedure['params'] == "") { //send procedure without params
                     executable_procedure = name;
                     if (eval("typeof pre_" + name + " == 'function'")) eval('pre_' + name + '();'); //call pre-function if it exists
-		    executable_params = '';
+		            executable_params = '';
                     send_procedure(name, '');
                     return 1;
                 } else { //begin of proccess
@@ -60,10 +60,10 @@ function execute_procedure(name) {
                     if (params_arr.length == selected_params) {
                         var params_str = "";
                         params_arr.each(function (item, index) {
-			    if (item=='card') item = 'player_deck_id';
+			                if (item == 'card') item = 'player_deck_id';
                             if (item) eval('params_str+=","+' + item + ';');
                         });
-			executable_params = params_str;
+			            executable_params = params_str;
                         send_procedure(name, params_str);
                         game_state = 'WAITTING';
                     } else {
@@ -100,31 +100,35 @@ function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) 
     php_time = php_time || 0;
     if (pr_uid == proc_uid) {
         proc_uid = 0;
-	var temp_name = executable_procedure;
-	var temp_params = executable_params;
+	    var temp_name = executable_procedure;
+	    var temp_params = executable_params;
         if (suc == 0) {
-	  if ($chk(error_dictionary[error_code])) {
-	    error_txt = error_message(error_code);
-	    showWindow('Извините', error_txt, 200, 100, false);
-            error_msg = error_txt;
-            error_procedure = executable_procedure;
-	  }
-	  else
-	    parent.showError(error_code,error_params);
-	  //error_txt = decodeURIComponent(error_txt);
+	        if ($chk(error_dictionary[error_code])) {
+	            error_txt = error_message(error_code);
+	            showWindow('Извините', error_txt, 200, 100, false);
+                error_msg = error_txt;
+                error_procedure = executable_procedure;
+	        } else {
+	            parent.showError(error_code,error_params);
+                //error_txt = decodeURIComponent(error_txt);
+            }
         } else {
             error_msg = '';
             error_procedure = '';
-	    start_proc_time = $time()-start_proc_time;
-	    parent.sendSimpleApeCmd('perfomance', {
-		'name':executable_procedure,
-		'js_time':start_proc_time/1000,
-		'ape_time':ape_time/1000,
-		'php_time':php_time
-	    });
+            start_proc_time = $time()-start_proc_time;
+            parent.sendSimpleApeCmd('perfomance', {
+                'name':executable_procedure,
+                'js_time':start_proc_time/1000,
+                'ape_time':ape_time/1000,
+                'php_time':php_time
+            });
+            if (playingCard) {
+                deactivate_buy_ressurect_play_card();
+            }
         }
 
         try {
+            playingCard = false;
             cancel_execute();
             post_send_procedure();
         } catch (e) {
@@ -412,7 +416,8 @@ function execute_card(pd_id,id) {
             cancel_execute()
             pre_defined_param = '';
             card = id;
-	    player_deck_id = pd_id;
+            player_deck_id = pd_id;
+            playingCard = true;
             i = 0;
             hideSliders();
             procedures = Array();
@@ -712,6 +717,14 @@ function post_send_money() {
 
 function post_put_building() {
     $('actions').set('html', '');
+}
+
+function post_buy_card() {
+    setTimeout("deactivate_buy_ressurect_play_card();",1000);
+}
+
+function post_player_resurrect() {
+    setTimeout("deactivate_buy_ressurect_play_card();",1000);
 }
 
 function post_player_exit() {

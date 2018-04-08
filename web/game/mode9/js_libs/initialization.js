@@ -73,6 +73,7 @@ var remindTime = 20000;
 
 var my_castle_id;
 var movedUnits = false;
+var playingCard = false;
 
 var inisize;
 var mySortables;
@@ -118,7 +119,7 @@ function initialization() {
         else document.body.style.overflow = "visible";
         var cur_client_time = Math.floor($time() / 1000);
         time_delay_from_server = cur_client_time - server_time;
-	//console.log(Math.floor($time() / 1000) + '---'+ cur_client_time+'---'+server_time+'---'+time_delay_from_server);
+	    //console.log(Math.floor($time() / 1000) + '---'+ cur_client_time+'---'+server_time+'---'+time_delay_from_server);
         winTitle = document.title;
         loadCookies();
 
@@ -258,7 +259,7 @@ function initialization() {
             active_players.each(function (item, index) {
                 if (item) {
                     active_players = item;
-                    set_active_player(active_players['player_num'], active_players['last_end_turn'], active_players['turn'],0, active_players['units_moves_flag'],1);
+                    set_active_player(active_players['player_num'], active_players['last_end_turn'], active_players['turn'],0, active_players['units_moves_flag'], active_players["card_played_flag"], active_players["subsidy_flag"], 1);
                 }
             });
             //cards_procedures_1.each(function(item,index)	{

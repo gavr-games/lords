@@ -78,23 +78,24 @@ function myApeInit() {
 	  removeLoadingItem('ape_script');
 	}
 
-        client.addEvent('multiPipeCreate', function (pipe, options) {
-            //chats_pipes[pipe.pipe.properties.name.toString()] = pipe.pipe.pubid;
-            client.core.pipes_names[pipe.pipe.properties.name] = pipe.pipe.pubid;
-            //console.log(pipe.pipe.properties.name);
-        });
-        //-----SERVER'S ANSWERS-----
-        //Protocol answer
-        client.onRaw('protocol_raw', function (raw, pipe) {
-            if (current_window.contentWindow.$) {
-                //console.log(decodeURIComponent(raw.data.commands));
-                try {
-                    current_window.contentWindow.eval(decodeURIComponent(raw.data.commands));
-                } catch (e) {
-                    displayLordsError(e, decodeURIComponent(raw.data.commands) + '<br />Commands:' + current_window.contentWindow.last_executed_procedure + '<br />Last API:' + current_window.contentWindow.last_executed_api);
-                }
+    client.addEvent('multiPipeCreate', function (pipe, options) {
+        //chats_pipes[pipe.pipe.properties.name.toString()] = pipe.pipe.pubid;
+        client.core.pipes_names[pipe.pipe.properties.name] = pipe.pipe.pubid;
+        //console.log(pipe.pipe.properties.name);
+    });
+
+    //-----SERVER'S ANSWERS-----
+    //Protocol answer
+    client.onRaw('protocol_raw', function (raw, pipe) {
+        if (current_window.contentWindow.$) {
+            //console.log(decodeURIComponent(raw.data.commands));
+            try {
+                current_window.contentWindow.eval(decodeURIComponent(raw.data.commands));
+            } catch (e) {
+                displayLordsError(e, decodeURIComponent(raw.data.commands) + '<br />Commands:' + current_window.contentWindow.last_executed_procedure + '<br />Last API:' + current_window.contentWindow.last_executed_api);
             }
-        });
+        }
+    });
 	//game info answer
 	client.onRaw('game_info_raw', function (raw) {
 	  raw.data.commands = convertFromChars(raw.data.commands);
@@ -108,9 +109,9 @@ function myApeInit() {
 			displayLordsError(e, raw.data.commands + after_commands + '<br />Last executed_procedure:' + last_executed_procedure + '<br />Last API:' + last_executed_api);
 		    }
 		}
-        });
+    });
 	//Game answer
-        client.onRaw('game_raw', function (raw, pipe) {
+    client.onRaw('game_raw', function (raw, pipe) {
 		if (!recieve_cmds) 
 		  return -1;
 		if (!exec_commands_now){
@@ -125,18 +126,21 @@ function myApeInit() {
 		wasError = false;
 		try {
 		    if (DEBUG_MODE) {
-			last_commands[last_commands_i] = raw.data.commands;
-			last_commands_i++;
-			if (last_commands_i > 9) last_commands_i = 0;
+                last_commands[last_commands_i] = raw.data.commands;
+                last_commands_i++;
+                if (last_commands_i > 9) last_commands_i = 0;
 		    }
 		    no_backlight = true;
 		    commands_executing = true;
 		    eval(raw.data.commands);
 		    commands_executing = false;
 		    no_backlight = false;
-		    after_commands += 'last_moved_unit = 0;showHint = true;';
-		    if (anim_is_running) post_move_anims += after_commands;
-		    else eval(after_commands);
+            after_commands += 'last_moved_unit = 0; showHint = true;';
+		    if (anim_is_running) {
+                post_move_anims += after_commands;
+            } else  { 
+                eval(after_commands);
+            }
 		    eval(after_commands_anims);
 		    after_commands = '';
 		    after_commands_anims = '';
@@ -146,38 +150,38 @@ function myApeInit() {
 			displayLordsError(e, raw.data.commands + after_commands + '<br />Last executed_procedure:' + last_executed_procedure + '<br />Last API:' + last_executed_api);
 		    }
 		}
-        });
-        //Chat message 
-        client.onRaw('chat_msg', function (raw) {
-            if (current_window.contentWindow.$) {
-                current_window.contentWindow.chat_add_user_message(raw.data.params.from_chat_id, raw.data.params.from_user_id, raw.time, decodeURIComponent(raw.data.params.msg))
-            }
-        });
-        //Intercept receipt of the new message.
-        client.onRaw('ERR', function (raw, pipe) {
-	  switch (raw.data.code.toInt()) {
-	    case 100:
-		break;
-	    case 1010:
-		setTimeout("apeGetGameInfo();",1000);
-		break;
-	    case 1004:
-		load_window("site/login.php", "left"); //authorized in another browser
-	    default:
-		showError(raw.data.code, raw.data.value);
-	  }
-            //console.log('error:' + raw.data.code.toInt());
-        });
+    });
+    //Chat message 
+    client.onRaw('chat_msg', function (raw) {
+        if (current_window.contentWindow.$) {
+            current_window.contentWindow.chat_add_user_message(raw.data.params.from_chat_id, raw.data.params.from_user_id, raw.time, decodeURIComponent(raw.data.params.msg))
+        }
+    });
+    //Intercept receipt of the new message.
+    client.onRaw('ERR', function (raw, pipe) {
+        switch (raw.data.code.toInt()) {
+            case 100:
+            break;
+            case 1010:
+            setTimeout("apeGetGameInfo();",1000);
+            break;
+            case 1004:
+            load_window("site/login.php", "left"); //authorized in another browser
+            default:
+            showError(raw.data.code, raw.data.value);
+        }
+        //console.log('error:' + raw.data.code.toInt());
+    });
 
 
 
-        client.addEvent('userJoin', function (user, pipe) {
-            //user joined main channel
-            //if (pipe.name == "arena_1")	{
-            //  users[user.properties.name.replace('arenauser_','')]['pubid'] = user.pubid;
-            //}
-        });
-        client.addEvent('onCmd', function (cmd, args) {});
+    client.addEvent('userJoin', function (user, pipe) {
+        //user joined main channel
+        //if (pipe.name == "arena_1")	{
+        //  users[user.properties.name.replace('arenauser_','')]['pubid'] = user.pubid;
+        //}
+    });
+    client.addEvent('onCmd', function (cmd, args) {});
         if (typeOf(current_window) != 'null') current_window.fade(1);
     });
 }
@@ -188,9 +192,9 @@ function getErrorMsg(code, params) {
       var msg = error_dictionary[code]['description'];
       var p_arr = params.split(',');
       if (p_arr.length>0)
-	for(var i=0;i<p_arr.length;i++){
-	  msg = msg.replace('{'+i+'}',p_arr[i]);
-	}
+	  for(var i=0;i<p_arr.length;i++){
+	    msg = msg.replace('{'+i+'}',p_arr[i]);
+	  }
       return msg;
     }
     else return params;

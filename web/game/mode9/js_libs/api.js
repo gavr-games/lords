@@ -180,7 +180,6 @@ function unit_set_moves_left(x,y,moves_left)	{
 			after_commands_units = 'check_execute_unit('+(x+size-1)+','+(y+size-1)+');'; 
 			else
 			check_execute_unit(x+size-1,y+size-1);
-		deactivate_controls_on_move();
 	}
 	//
 	board.each(function(items,index)	{
@@ -375,7 +374,7 @@ function show_levelup(id){
 	    unit = x + ',' + y;
 	    pre_defined_param = 'unit';
 	    execute_procedure('unit_level_up_attack');
-	    console.log(unit);
+	    //console.log(unit);
 	  });
 	  $('lvl_m').removeEvents('click');
 	  $('lvl_m').addEvent('click', function(){
@@ -394,7 +393,7 @@ function show_levelup(id){
 	    unit = x + ',' + y;
 	    pre_defined_param = 'unit';
 	    execute_procedure('unit_level_up_moves');
-	    console.log(unit);
+	    //console.log(unit);
 	  });
 	  $('lvl_h').removeEvents('click');
 	  $('lvl_h').addEvent('click', function(){
@@ -413,7 +412,7 @@ function show_levelup(id){
 	    unit = x + ',' + y;
 	    pre_defined_param = 'unit';
 	    execute_procedure('unit_level_up_health');
-	    console.log(unit);
+	    //console.log(unit);
 	  });
     } else {
       $('lvl_choose').setStyle('display','none');
@@ -770,8 +769,8 @@ function logTimeStats(p_num) {
             need_answer = false;
     }
 }
-function add_card(pd_id,card_id,no_anim)	{
-        no_anim = no_anim || false;
+function add_card(pd_id,card_id,no_anim) {
+    no_anim = no_anim || false;
 	last_executed_api = 'add_card';
 	var myDiv = new Element('div', {
 		'class':'card',
@@ -1225,7 +1224,7 @@ function move_anim(x,y,x2,y2,size)	{
 	move_anims[uid].setStyle('opacity',1);
 	after_commands_anims += "move_anims["+uid+"].move({relativeTo: $('board_"+x2+"_"+y2+"'),position: 'bottomRight',edge:'bottomRight',offset:{x:1,y:1}});";
 }
-function deactivate_controls_on_move()	{
+function deactivate_buy_ressurect_play_card()	{
 	if (!movedUnits)	{
 		movedUnits = true;
 		deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
@@ -1983,24 +1982,31 @@ function chat_add_service_message(mtime,message)	{
 		  saved_chat_messages.shift();
 		}*/
 }
-function set_active_player(player_num,last_end_turn,turn,npc_flag,units_moves_flag,from_init)	{
+
+// From server we receive set_active_player($p_num,$last_turn,$turn_num,$npc_flag), other flags are set in initialization.js after refresh
+function set_active_player(player_num, last_end_turn, turn, npc_flag, units_moves_flag, card_played_flag, subsidy_flag, from_init)	{
 	last_executed_api = 'set_active_player';
-        units_moves_flag = units_moves_flag || 0;
+	units_moves_flag = units_moves_flag || 0;
+	card_played_flag = card_played_flag || 0;
+	subsidy_flag = subsidy_flag || 0;
 	from_init = from_init || 0;
-        //clean green cells after my move
-        if (turn_state == MY_TURN){
-            $$('#board .green').removeClass('green');
-            $$('#board .activeUnit').removeClass('activeUnit');
-        }
-	if (player_num==my_player_num)	{
+    //clean green cells after my move
+    if (turn_state == MY_TURN) {
+        $$('#board .green').removeClass('green');
+        $$('#board .activeUnit').removeClass('activeUnit');
+    }
+	if (player_num==my_player_num) {
 		turn_state = MY_TURN;
 		movedUnits = units_moves_flag.toInt();
 		activate_controls();
-		if (units_moves_flag.toInt()==1 || players_by_num[my_player_num]['gold'].toInt()<mode_config["card cost"]) //deactivate buy card if units moved or money<cost
+		if (players_by_num[my_player_num]['gold'].toInt()<mode_config["card cost"]) {//deactivate buy card if units moved or money<cost
 			deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
-		if (board_buildings[my_castle_id]['health'].toInt()<2) //deac subsidy if castle health<2
+		}
+		if (subsidy_flag.toInt()==1 || board_buildings[my_castle_id]['health'].toInt()<2) {//deac subsidy if castle health<2
 			deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
-		if (units_moves_flag.toInt()==1)	{ //disable cards and grave
+		}
+		if (card_played_flag.toInt()==1)	{ //disable cards, grave and buy card button
+			deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
 			$('cards_holder').getChildren().each(function(item,index)	{
 				if (item)	{
 					item.fade(unactive_card);

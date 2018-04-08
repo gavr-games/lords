@@ -49,7 +49,7 @@
 </div>
 <div class="windowcont" id="windowsettings" style="display:none" onclick="$('windowsettings').setStyle('display','none');return false;">
       <div class="window" onclick="stopClick(event)">
-           <table cellpadding="0" cellspacing="0"><tr><td class="topleft"></td><td class="toprep"> Настройки</td><td class="topright"><a href="#" class="window_close" onclick="$('windowsettings').setStyle('display','none');return false;"></a></td></tr></table>
+           <table cellpadding="0" cellspacing="0"><tr><td class="topleft"></td><td class="toprep"> ###l_game_settings###</td><td class="topright"><a href="#" class="window_close" onclick="$('windowsettings').setStyle('display','none');return false;"></a></td></tr></table>
            <table cellpadding="0" cellspacing="0"><tr><td class="leftrep"></td><td class="midrep">
                <div class="content">
                	Подсветка клеток поля:<br />
@@ -70,7 +70,7 @@
 
 <div class="windowcont" id="windowspecs" style="display:none" onclick="$('windowspecs').setStyle('display','none');return false;">
       <div class="window" onclick="stopClick(event)">
-           <table cellpadding="0" cellspacing="0"><tr><td class="topleft"></td><td class="toprep"> Информация об игре</td><td class="topright"><a href="#" class="window_close" onclick="$('windowspecs').setStyle('display','none');return false;"></a></td></tr></table>
+           <table cellpadding="0" cellspacing="0"><tr><td class="topleft"></td><td class="toprep"> ###l_game_info###</td><td class="topright"><a href="#" class="window_close" onclick="$('windowspecs').setStyle('display','none');return false;"></a></td></tr></table>
            <table cellpadding="0" cellspacing="0"><tr><td class="leftrep"></td><td class="midrep">
                <div class="content">
                		<div id="game_info"></div>
@@ -151,9 +151,9 @@
         <ul id="menulist">
            <li class="menu">
                <table>
-                  <tr><td><nobr><a href="#" onclick="$('windowsettings').setStyle('display','block');$('windowsettings').setStyle('height',document.getScrollSize().y);return false;">Настройки</a></nobr></td></tr>
-                  <tr><td><nobr><a href="#" onclick="$('windowspecs').setStyle('display','block');$('windowspecs').setStyle('height',document.getScrollSize().y);return false;">Информация об игре</a></nobr></td></tr>
-                  <tr><td><nobr><a href="#" onclick="execute_exit();return false;">Выйти из игры</a></nobr></td></tr>
+                  <tr><td><nobr><a href="#" onclick="$('windowsettings').setStyle('display','block');$('windowsettings').setStyle('height',document.getScrollSize().y);return false;">###l_game_settings###</a></nobr></td></tr>
+                  <tr><td><nobr><a href="#" onclick="$('windowspecs').setStyle('display','block');$('windowspecs').setStyle('height',document.getScrollSize().y);return false;">###l_game_info###</a></nobr></td></tr>
+                  <tr><td><nobr><a href="#" onclick="execute_exit();return false;">###l_game_exit###</a></nobr></td></tr>
                   <tr><td><nobr><a href="#" onclick="execute_changeUser();return false;">Войти под другим именем</a></nobr></td></tr>
 				  <tr><td>
 				  	<div id="agree_draw">

@@ -30,5 +30,5 @@
 		$replace[] = $key;
 		$values[]  = $value;
 	}
-	echo str_replace($replace,$values,file_get_contents('template.html'));
+	echo LangUtils::replaceTemplateMarkers(str_replace($replace,$values,file_get_contents('template.html')));
 ?>

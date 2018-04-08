@@ -173,7 +173,6 @@ if (Function.prototype.create == null) {
 APE.Config.baseUrl = 'http://' + window.location.hostname + '/general_js/ape'; //APE JSF
 APE.Config.domain = window.location.hostname;
 APE.Config.server = 'ape.' + window.location.hostname + ':6969'; //APE server URL
-console.log(window.location.host);
 
 (function(){
 	for (var i = 0; i < arguments.length; i++)
