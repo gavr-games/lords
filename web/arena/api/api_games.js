@@ -147,9 +147,9 @@ function arena_game_set_feature(game_id,feature_id,param){
 	}
 	  //add f-re
 	if($('i_frame').contentWindow.$)
-        if ($('i_frame').contentWindow.$('game_features')) {//client in game mode
+		if ($('i_frame').contentWindow.$('game_features')) {//client in game mode
 		var feature_str = '';
-		var name = games_features[feature_id]['name'];
+		var name = game_feature_description(feature_id);
 		if (param=='null') param = '';
 		eval('feature_str = '+feature_in_game);
 		var els = $('i_frame').contentWindow.Elements.from(feature_str);

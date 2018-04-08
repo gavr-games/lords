@@ -98,7 +98,7 @@ function initialization() {
     //set players statuses
     users.each(function (item, index) {
         if (item) {
-            $('pstatus_' + index).set('title', dic_player_status[item['status_id']]["description"]);
+            $('pstatus_' + index).set('title', player_status(item['status_id']));
         }
     });
     //connect ape to chat chanels
