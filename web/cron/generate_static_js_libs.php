@@ -43,9 +43,8 @@
 		Array('name'=>'videos_i18n', 'js_name'=>'videos_titles', 'keys'=>'language_id,code'),
 		Array('name'=>'log_message_text_i18n', 'js_name'=>'log_message_texts', 'keys'=>'language_id,code')
 	);
-	$each_mode_js_arrays = $params = '';
+	$common_js_arrays = $params = '';
 	foreach($tables as $table)	{
-		$first = true;
 		$where = '';
 		if (array_key_exists('keys', $table)) {
 			$keys = $table['keys'];
@@ -63,18 +62,20 @@
 			$key_column_names = explode(',', $keys);
 			$previous_keys = array_fill(0, sizeof($key_column_names), '');
 			
-			$each_mode_js_arrays .= chr(13).'var '.$js_name.' = new Array();'.PHP_EOL;
-			while ($row = mysqli_fetch_assoc($res))	{
+			$common_js_arrays .= PHP_EOL.'var '.$js_name.' = new Array();'.PHP_EOL;
+			while ($row = mysqli_fetch_assoc($res)) {
 				$current_keys = Array();
 				foreach($key_column_names as $i=>$key_col) {
 					array_push($current_keys, $row[$key_col]);
 					if ($row[$key_col] != $previous_keys[$i]) {
-						$each_mode_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"] = new Array();'.PHP_EOL;
+						$common_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"] = new Array();'.PHP_EOL;
 					}
 				}
 				
-				foreach($row as $field=>$value)	{
-					$each_mode_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"]["'.$field.'"] = "'.str_replace('"',"'",$value).'";'.PHP_EOL;
+				foreach($row as $field=>$value) {
+					$common_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"]["'.$field.'"] = "'.str_replace('"',"'",$value).'";'.PHP_EOL;
+					
+					//this line should be probably moved somewhere else to keep the code identical with pregame static libs generator
 					if ($table['name']=='procedures_params' && $field=='code') $params .= 'var '.$value.'="";'.PHP_EOL;
 				}
 				$previous_keys = $current_keys;
@@ -99,36 +100,36 @@
 	);
 	//get modes
 	$res = $dataBase->select('id','modes');
-	if ($res)	{
-		while ($mode = mysqli_fetch_assoc($res))	{
-			$js_arrays = '';
-			if (file_exists('../game/mode'.$mode['id']))	{
-					foreach($mode_tables as $table)	{ //get tables for mode
+	if ($res) {
+		while ($mode = mysqli_fetch_assoc($res)) {
+			$mode_specific_js_arrays = '';
+			if (file_exists('../game/mode'.$mode['id'])) {
+					foreach($mode_tables as $table) { //get tables for mode
+					
+					//!!!!!!!!!!!!
+					//СКОБЕ: можно кастомную логику vw_mode_unit_level_up_experience и mode_config сделать с помощью keys как выше для языка
+					
 						$old_unit_id = 0;
-						$first = true;
 						$res_table = $dataBase->select('*',$table['db_name'],'mode_id='.$mode['id']);
 						if ($res_table)	{
-						  $i = 1;
+							$i = 1;
+							$mode_specific_js_arrays .= PHP_EOL.'var '.$table['js_name'].' = new Array();'.PHP_EOL;
 							while ($row = mysqli_fetch_assoc($res_table))	{
-							if (! isset($row['id'])) $row['id'] = $i;
-								if ($first) {
-									$js_arrays .= chr(13).'var '.$table['js_name'].' = new Array();'.PHP_EOL;
-									$first = false;
-								}
+								if (! isset($row['id'])) $row['id'] = $i;
 								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
 								  if ($row['unit_id']!=$old_unit_id)
-								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].'] = new Array();'.PHP_EOL;
+								  $mode_specific_js_arrays .= $table['js_name'].'['.$row['unit_id'].'] = new Array();'.PHP_EOL;
 								  $old_unit_id = $row['unit_id'];
 								}
 								if ($table['db_name']=='mode_config'){
-								  $js_arrays .= $table['js_name'].'["'.$row['param'].'"] = '.$row['value'].';'.PHP_EOL;
+								  $mode_specific_js_arrays .= $table['js_name'].'["'.$row['param'].'"] = '.$row['value'].';'.PHP_EOL;
 								} else 
 								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
-								  $js_arrays .= $table['js_name'].'['.$row['unit_id'].']['.$row['level'].'] = '.$row['experience'].';'.PHP_EOL;
+								  $mode_specific_js_arrays .= $table['js_name'].'['.$row['unit_id'].']['.$row['level'].'] = '.$row['experience'].';'.PHP_EOL;
 								} else {
-								  $js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.PHP_EOL;
+								  $mode_specific_js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.PHP_EOL;
 								  foreach($row as $field=>$value)	{
-									  $js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.addslashes($value).'";'.PHP_EOL;
+									  $mode_specific_js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.addslashes($value).'";'.PHP_EOL;
 								  }
 								}
 								$i++;
@@ -137,7 +138,7 @@
 					}
 				$f = fopen('../game/mode'.$mode['id'].'/js_libs/static_libs.js','w');
 				if ($f)	{
-					fwrite($f,$js_arrays.$each_mode_js_arrays.$params);
+					fwrite($f,$mode_specific_js_arrays.$common_js_arrays.$params);
 					fclose($f);
 					$message .= '"../game/mode'.$mode['id'].'/js_libs/static_libs.js" is successfully generated.<br />';
 				} else $message .=  'Can\'t open file ../game/mode'.$mode['id'].'/js_libs/static_libs.js<br />';
