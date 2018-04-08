@@ -164,7 +164,7 @@
         
         <div id="leftbar">
           <div id="chat" class="chat">
-              <div class="header"></div>
+              <div class="header"><?= L::game_chat ?></div>
               <div class="chat_cont">
                  <div id="game_chat" class="game_chat" style="height:600px;">
                  </div>
@@ -181,7 +181,7 @@
            
         <div id="rightbar">
           <div id="log" class="log">
-              <div class="header"></div>
+              <div class="header"><?= L::game_log ?></div>
               <div class="log_cont" >
                  <div id="game_log" class="game_log" style="height:600px;"> </div>
               </div>
