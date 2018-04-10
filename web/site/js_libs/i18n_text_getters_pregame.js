@@ -3,7 +3,7 @@ function player_status(status_id) {
 }
 
 function error_message(error_id) {
-	return error_dictionary[USER_LANGUAGE][error_id]["description"];
+	return error_dictionary_messages[USER_LANGUAGE][error_id]["description"];
 }
 
 function game_feature_description(feature_id) {

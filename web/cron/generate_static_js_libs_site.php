@@ -21,7 +21,7 @@
 	$tables = Array(
 		Array('name'=>'dic_game_types'),
 		Array('name'=>'dic_player_status_i18n', 'js_name'=>'dic_player_status', 'keys'=>'language_id,player_status_id'),
-		Array('name'=>'error_dictionary_i18n', 'js_name'=>'error_dictionary', 'keys'=>'language_id,error_id'),
+		Array('name'=>'error_dictionary_i18n', 'js_name'=>'error_dictionary_messages', 'keys'=>'language_id,error_id'),
 		Array('name'=>'lords.games_features', 'js_name'=>'games_features'),
 		Array('name'=>'lords.games_features_i18n', 'js_name'=>'games_feature_names', 'keys'=>'language_id,feature_id'),
 		Array('name'=>'lords.modes', 'js_name'=>'modes')

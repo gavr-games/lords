@@ -149,7 +149,7 @@ function arena_game_set_feature(game_id,feature_id,param){
 	if($('i_frame').contentWindow.$)
 		if ($('i_frame').contentWindow.$('game_features')) {//client in game mode
 		var feature_str = '';
-		var name = game_feature_description(feature_id);
+		var name = parent.game_feature_description(feature_id);
 		if (param=='null') param = '';
 		eval('feature_str = '+feature_in_game);
 		var els = $('i_frame').contentWindow.Elements.from(feature_str);

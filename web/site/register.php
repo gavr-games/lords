@@ -18,6 +18,9 @@
 			background-color:black;
 		}
 	</style>
+	<script>
+		parent.USER_LANGUAGE = <?= LangUtils::getCurrentLangNumber($_SESSION['lang']) ?>;
+	</script>
 </head>
 <body>
 	<div id="reg_cont">

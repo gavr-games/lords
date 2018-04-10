@@ -140,6 +140,7 @@ $markers['###REVISION###'] = $SITE_conf['revision'];
 $copyYear = 2010;
 $curYear = date('Y');
 $markers['###COPY###'] = '© ' . $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '') . ' "THE LORDS"';
+$markers['###USER_LANGUAGE###'] = LangUtils::getCurrentLangNumber($_SESSION['lang']);
 
 // Print template of html page
 $replace = $values = array();

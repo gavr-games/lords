@@ -19,11 +19,7 @@
 	$mysqli->next_result();
 	
     $markers['###REVISION###'] = $SITE_conf['revision'];
-	if (isset($_SESSION['lang']) && is_string($_SESSION['lang'])) {
-		$markers['###USER_LANGUAGE###'] = $_SESSION['lang'] == 'en' ? 1 : 2; //1 - english, 2 - russian
-	} else {
-		$markers['###USER_LANGUAGE###'] = 1; //default english
-	}
+	$markers['###USER_LANGUAGE###'] = LangUtils::getCurrentLangNumber($_SESSION['lang']);
 	//print template of html page
 	$replace = $values = array();
 	foreach ($markers as $key=>$value)	{
