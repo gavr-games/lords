@@ -146,40 +146,41 @@ function arena_game_set_feature(game_id,feature_id,param){
 	  } else param = "";
 	}
 	  //add f-re
-	if($('i_frame').contentWindow.$)
+	if($('i_frame').contentWindow.$) {
 		if ($('i_frame').contentWindow.$('game_features')) {//client in game mode
-		var feature_str = '';
-		var name = parent.game_feature_description(feature_id);
-		if (param=='null') param = '';
-		eval('feature_str = '+feature_in_game);
-		var els = $('i_frame').contentWindow.Elements.from(feature_str);
-		//dont dublicate features
-		if ($('i_frame').contentWindow.$('gamefeature_'+feature_id)) $('i_frame').contentWindow.$('gamefeature_'+feature_id).destroy();
-		$('i_frame').contentWindow.$('game_features').adopt(els);
-		//if feature is teams count
-		if (feature_id==3)	{
-			var team_count = param.toInt();
-			var i = -1;
-			$('i_frame').contentWindow.$('teams').getChildren().each(function(item,index)	{
-				if (item)	{
-					i = index;
-					if (index<team_count)	{ //do nothing it's ok
-					} else { //remove teams and copy players to no_team
-						var team_players = item.getChildren();
-						//$('i_frame').contentWindow.$('no_team').adopt(team_players);
-						item.destroy();
+			var feature_str = '';
+			var name = parent.game_feature_description(feature_id);
+			if (param=='null') param = '';
+			eval('feature_str = '+feature_in_game);
+			var els = $('i_frame').contentWindow.Elements.from(feature_str);
+			//dont dublicate features
+			if ($('i_frame').contentWindow.$('gamefeature_'+feature_id)) $('i_frame').contentWindow.$('gamefeature_'+feature_id).destroy();
+			$('i_frame').contentWindow.$('game_features').adopt(els);
+			//if feature is teams count
+			if (feature_id==3)	{
+				var team_count = param.toInt();
+				var i = -1;
+				$('i_frame').contentWindow.$('teams').getChildren().each(function(item,index)	{
+					if (item)	{
+						i = index;
+						if (index<team_count)	{ //do nothing it's ok
+						} else { //remove teams and copy players to no_team
+							var team_players = item.getChildren();
+							//$('i_frame').contentWindow.$('no_team').adopt(team_players);
+							item.destroy();
+						}
 					}
-				}
-			});
-			//add new teams
-			if (i<team_count-1)	{
-				for(i++;i<team_count;i++){
-					var team_str = '';
-					var id = i;
-					var players = '';
-					eval('team_str = '+team_in_game);
-					var els = $('i_frame').contentWindow.Elements.from(team_str);
-					$('i_frame').contentWindow.$('teams').adopt(els);
+				});
+				//add new teams
+				if (i<team_count-1)	{
+					for(i++;i<team_count;i++){
+						var team_str = '';
+						var id = i;
+						var players = '';
+						eval('team_str = '+team_in_game);
+						var els = $('i_frame').contentWindow.Elements.from(team_str);
+						$('i_frame').contentWindow.$('teams').adopt(els);
+					}
 				}
 			}
 		}

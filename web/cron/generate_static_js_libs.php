@@ -114,21 +114,21 @@
 						if ($res_table)	{
 							$i = 1;
 							$mode_specific_js_arrays .= PHP_EOL.'var '.$table['js_name'].' = new Array();'.PHP_EOL;
-							while ($row = mysqli_fetch_assoc($res_table))	{
+							while ($row = mysqli_fetch_assoc($res_table)) {
 								if (! isset($row['id'])) $row['id'] = $i;
-								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
+								if ($table['db_name']=='vw_mode_unit_level_up_experience') {
 								  if ($row['unit_id']!=$old_unit_id)
 								  $mode_specific_js_arrays .= $table['js_name'].'['.$row['unit_id'].'] = new Array();'.PHP_EOL;
 								  $old_unit_id = $row['unit_id'];
 								}
-								if ($table['db_name']=='mode_config'){
+								if ($table['db_name']=='mode_config') {
 								  $mode_specific_js_arrays .= $table['js_name'].'["'.$row['param'].'"] = '.$row['value'].';'.PHP_EOL;
 								} else 
-								if ($table['db_name']=='vw_mode_unit_level_up_experience'){
+								if ($table['db_name']=='vw_mode_unit_level_up_experience') {
 								  $mode_specific_js_arrays .= $table['js_name'].'['.$row['unit_id'].']['.$row['level'].'] = '.$row['experience'].';'.PHP_EOL;
 								} else {
 								  $mode_specific_js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.PHP_EOL;
-								  foreach($row as $field=>$value)	{
+								  foreach($row as $field=>$value) {
 									  $mode_specific_js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.addslashes($value).'";'.PHP_EOL;
 								  }
 								}
