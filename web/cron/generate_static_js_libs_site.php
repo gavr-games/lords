@@ -8,11 +8,12 @@
 	session_start();
 	include ('../general_config/config.php');
 	include ('../general_classes/sql.class.php');
-		error_reporting(E_ALL);
+	include ('../general_classes/static_libs.class.php');
+	error_reporting(E_ALL);
 	$mysqli = new mysqli($DB_conf['server'], 'lords_reader', $_ENV['MYSQL_READER_PASSWORD'], $DB_conf['site']);
 	if (mysqli_connect_errno()) {
-		    printf("Connect failed: %s\n", mysqli_connect_error());
-		    die();
+		printf("Connect failed: %s\n", mysqli_connect_error());
+		die();
 	}
 	$message = '';
 	$dataBase = new cDataBase($mysqli);
@@ -26,42 +27,9 @@
 		Array('name'=>'lords.games_features_i18n', 'js_name'=>'games_feature_names', 'keys'=>'language_id,feature_id'),
 		Array('name'=>'lords.modes', 'js_name'=>'modes')
 	);
-	$js_arrays = '';
-	foreach($tables as $table) {
-		$where = '';
-		if (array_key_exists('keys', $table)) {
-			$keys = $table['keys'];
-		} else {
-			$keys = 'id';
-		}
-		if (array_key_exists('js_name', $table)) {
-			$js_name = $table['js_name'];
-		} else {
-			$js_name = $table['name'];
-		}
-		
-		$res = $dataBase->select('*', $table['name'], $where, $keys);
-		if ($res) {
-			$key_column_names = explode(',', $keys);
-			$previous_keys = array_fill(0, sizeof($key_column_names), '');
+	
+	$js_arrays = StaticLibs::generate($dataBase, $tables);
 
-			$js_arrays .= PHP_EOL.'var '.$js_name.' = new Array();'.PHP_EOL;
-			while ($row = mysqli_fetch_assoc($res)) {
-				$current_keys = Array();
-				foreach($key_column_names as $i=>$key_col) {
-					array_push($current_keys, $row[$key_col]);
-					if ($row[$key_col] != $previous_keys[$i]) {
-						$js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"] = new Array();'.PHP_EOL;
-					}
-				}
-
-				foreach($row as $field=>$value)	{
-					$js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"]["'.$field.'"] = "'.str_replace('"',"'",$value).'";'.PHP_EOL;
-				}
-				$previous_keys = $current_keys;
-			}
-		}
-	}
 	$f = fopen('../site/js_libs/static_libs.js','w');
 	if ($f)	{
 		fwrite($f,$js_arrays);

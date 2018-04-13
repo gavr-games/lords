@@ -8,6 +8,7 @@
 	session_start();
 	include ('../general_config/config.php');
 	include ('../general_classes/sql.class.php');
+	include ('../general_classes/static_libs.class.php');
 		error_reporting(E_ALL);
 	$mysqli = new mysqli($DB_conf['server'], 'lords_reader', $_ENV['MYSQL_READER_PASSWORD'], $DB_conf['name']);
 	if (mysqli_connect_errno()) {
@@ -18,16 +19,8 @@
 	$dataBase->query("SET NAMES 'UTF8'");
 	$message = '';
 	
-	//get each mode data
-	// 'keys' control hierarchical structure of the js array.
-	// For example, 'keys'=>'language_id,code' means that
-	// first index of js aray should be language_id, second - code,
-	// and then all other fields:
-	// log_message_texts[1]['resurrect']['message'] = '{player0} resurrects {unit1}'
-	//
-	// if omitted, defaults to 'id'
 	$tables = Array(
-		Array('name'=>'procedures_params'),
+		Array('name'=>'procedures_params', 'type'=>'vars', 'field'=>'code'),
 		Array('name'=>'procedures_params_i18n', 'js_name'=>'procedures_params_descriptions', 'keys'=>'language_id,param_id'),
 		Array('name'=>'unit_features'),
 		Array('name'=>'building_features'),
@@ -43,60 +36,23 @@
 		Array('name'=>'videos_i18n', 'js_name'=>'videos_titles', 'keys'=>'language_id,code'),
 		Array('name'=>'log_message_text_i18n', 'js_name'=>'log_message_texts', 'keys'=>'language_id,code')
 	);
-	$common_js_arrays = $params = '';
-	foreach($tables as $table)	{
-		$where = '';
-		if (array_key_exists('keys', $table)) {
-			$keys = $table['keys'];
-		} else {
-			$keys = 'id';
-		}
-		if (array_key_exists('js_name', $table)) {
-			$js_name = $table['js_name'];
-		} else {
-			$js_name = $table['name'];
-		}
-		
-		$res = $dataBase->select('*', $table['name'], $where, $keys);
-		if ($res) {
-			$key_column_names = explode(',', $keys);
-			$previous_keys = array_fill(0, sizeof($key_column_names), '');
-			
-			$common_js_arrays .= PHP_EOL.'var '.$js_name.' = new Array();'.PHP_EOL;
-			while ($row = mysqli_fetch_assoc($res)) {
-				$current_keys = Array();
-				foreach($key_column_names as $i=>$key_col) {
-					array_push($current_keys, $row[$key_col]);
-					if ($row[$key_col] != $previous_keys[$i]) {
-						$common_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"] = new Array();'.PHP_EOL;
-					}
-				}
-				
-				foreach($row as $field=>$value) {
-					$common_js_arrays .= $js_name.'["'.implode('"]["', $current_keys).'"]["'.$field.'"] = "'.str_replace('"',"'",$value).'";'.PHP_EOL;
-					
-					//this line should be probably moved somewhere else to keep the code identical with pregame static libs generator
-					if ($table['name']=='procedures_params' && $field=='code') $params .= 'var '.$value.'="";'.PHP_EOL;
-				}
-				$previous_keys = $current_keys;
-			}
-		}
-	}
+
+	$common_js_arrays = StaticLibs::generate($dataBase, $tables);
 	
 	//mode specific data
 	$mode_tables = array(
-	  Array('db_name'=>'vw_mode_cards','js_name'=>'cards'),
-	  Array('db_name'=>'vw_mode_units','js_name'=>'units'),
-	  Array('db_name'=>'vw_mode_buildings','js_name'=>'buildings'),
-	  Array('db_name'=>'vw_mode_all_procedures','js_name'=>'procedures_mode_1'),
-	  Array('db_name'=>'vw_mode_cards_procedures','js_name'=>'cards_procedures_1'),
-	  Array('db_name'=>'vw_mode_units_procedures','js_name'=>'units_procedures_1'),
-	  Array('db_name'=>'vw_mode_buildings_procedures','js_name'=>'buildings_procedures_1'),
-	  Array('db_name'=>'mode_config','js_name'=>'mode_config'),
-	  Array('db_name'=>'vw_mode_unit_default_features','js_name'=>'unit_features_usage'),
-	  Array('db_name'=>'vw_mode_building_default_features','js_name'=>'building_default_features'),
-	  Array('db_name'=>'vw_mode_unit_phrases','js_name'=>'dic_unit_phrases'),
-	  Array('db_name'=>'vw_mode_unit_level_up_experience','js_name'=>'units_levels')
+	  Array('name'=>'vw_mode_cards', 'js_name'=>'cards', 'numeric_keys'=>true),
+	  Array('name'=>'vw_mode_units', 'js_name'=>'units', 'numeric_keys'=>true),
+	  Array('name'=>'vw_mode_buildings', 'js_name'=>'buildings', 'numeric_keys'=>true),
+	  Array('name'=>'vw_mode_all_procedures', 'js_name'=>'procedures_mode_1', 'numeric_keys'=>true),
+	  Array('name'=>'vw_mode_cards_procedures', 'js_name'=>'cards_procedures_1', 'keys'=>'', 'numeric_keys'=>true),
+	  Array('name'=>'vw_mode_units_procedures','js_name'=>'units_procedures_1', 'keys'=>'', 'numeric_keys'=>true),
+	  Array('name'=>'vw_mode_buildings_procedures','js_name'=>'buildings_procedures_1', 'keys'=>'', 'numeric_keys'=>true),
+	  Array('name'=>'mode_config','js_name'=>'mode_config', 'type'=>'one_value', 'field'=>'value', 'keys'=>'param'),
+	  Array('name'=>'vw_mode_unit_default_features', 'js_name'=>'unit_features_usage', 'numeric_keys'=>true),
+	  Array('name'=>'vw_mode_building_default_features', 'js_name'=>'building_default_features', 'numeric_keys'=>true),
+	  Array('name'=>'vw_mode_unit_phrases', 'js_name'=>'dic_unit_phrases', 'numeric_keys'=>true),
+	  Array('name'=>'vw_mode_unit_level_up_experience', 'js_name'=>'units_levels', 'type'=>'one_value', 'field'=>'experience', 'keys'=>'unit_id,level', 'numeric_keys'=>true)
 	);
 	//get modes
 	$res = $dataBase->select('id','modes');
@@ -104,41 +60,11 @@
 		while ($mode = mysqli_fetch_assoc($res)) {
 			$mode_specific_js_arrays = '';
 			if (file_exists('../game/mode'.$mode['id'])) {
-					foreach($mode_tables as $table) { //get tables for mode
-					
-					//!!!!!!!!!!!!
-					//СКОБЕ: можно кастомную логику vw_mode_unit_level_up_experience и mode_config сделать с помощью keys как выше для языка
-					
-						$old_unit_id = 0;
-						$res_table = $dataBase->select('*',$table['db_name'],'mode_id='.$mode['id']);
-						if ($res_table)	{
-							$i = 1;
-							$mode_specific_js_arrays .= PHP_EOL.'var '.$table['js_name'].' = new Array();'.PHP_EOL;
-							while ($row = mysqli_fetch_assoc($res_table)) {
-								if (! isset($row['id'])) $row['id'] = $i;
-								if ($table['db_name']=='vw_mode_unit_level_up_experience') {
-								  if ($row['unit_id']!=$old_unit_id)
-								  $mode_specific_js_arrays .= $table['js_name'].'['.$row['unit_id'].'] = new Array();'.PHP_EOL;
-								  $old_unit_id = $row['unit_id'];
-								}
-								if ($table['db_name']=='mode_config') {
-								  $mode_specific_js_arrays .= $table['js_name'].'["'.$row['param'].'"] = '.$row['value'].';'.PHP_EOL;
-								} else 
-								if ($table['db_name']=='vw_mode_unit_level_up_experience') {
-								  $mode_specific_js_arrays .= $table['js_name'].'['.$row['unit_id'].']['.$row['level'].'] = '.$row['experience'].';'.PHP_EOL;
-								} else {
-								  $mode_specific_js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.PHP_EOL;
-								  foreach($row as $field=>$value) {
-									  $mode_specific_js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.addslashes($value).'";'.PHP_EOL;
-								  }
-								}
-								$i++;
-							}// while res table
-						}
-					}
+				$mode_specific_js_arrays = StaticLibs::generate($dataBase, $mode_tables, 'mode_id='.$mode['id']);
+				
 				$f = fopen('../game/mode'.$mode['id'].'/js_libs/static_libs.js','w');
 				if ($f)	{
-					fwrite($f,$mode_specific_js_arrays.$common_js_arrays.$params);
+					fwrite($f,$mode_specific_js_arrays.$common_js_arrays);
 					fclose($f);
 					$message .= '"../game/mode'.$mode['id'].'/js_libs/static_libs.js" is successfully generated.<br />';
 				} else $message .=  'Can\'t open file ../game/mode'.$mode['id'].'/js_libs/static_libs.js<br />';
