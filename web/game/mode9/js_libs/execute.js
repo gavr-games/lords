@@ -74,7 +74,7 @@ function execute_procedure(name) {
                     }
                 } // end of process
             } else showWindow('Извините', 'Невозможное действие: ' + name, 200, 40, false);
-        } else showWindow('Извините', 'Не Ваш ход.', 200, 20, false);
+        } else showWindow('Извините', error_message("1"), 200, 20, false); // Not your turn
     } catch (e) {
         if (DEBUG_MODE) {
             displayLordsError(e, 'execute_procedure(' + name + ');selected_params=' + selected_params + ';');
@@ -446,8 +446,8 @@ function execute_card(pd_id,id) {
                 });
                 addCancelAction();
             }
-        } else showWindow('Извините', 'Недостаточно золота.', 200, 20, false);
-    } else showWindow('Извините', 'Не Ваш ход.', 200, 20, false);
+        } else showWindow('Извините', error_message("2"), 200, 20, false); // Not enough gold
+    } else showWindow('Извините', error_message("1"), 200, 20, false); // Not your turn
 }
 
 function check_next_available_unit() {

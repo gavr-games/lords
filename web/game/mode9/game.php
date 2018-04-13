@@ -18,10 +18,6 @@
 	$res->free();
 	$mysqli->next_result();
 	
-	if (isset($_SESSION['lang']) && is_string($_SESSION['lang'])) {
-		$LANG = $_SESSION['lang'] == 'en' ? 1 : 2; //1 - english, 2 - russian
-	} else {
-		$LANG = 1; //default english
-	}
+	$LANG = LangUtils::getCurrentLangNumber($_SESSION['lang']);
 	include_once('template.php');
 ?>

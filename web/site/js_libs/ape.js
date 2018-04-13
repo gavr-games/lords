@@ -188,16 +188,17 @@ function myApeInit() {
 
 function getErrorMsg(code, params) {
     params = decodeURIComponent(params);
-    if ($chk(error_dictionary[code])) {
-      var msg = error_dictionary[code]['description'];
-      var p_arr = params.split(',');
-      if (p_arr.length>0)
-	  for(var i=0;i<p_arr.length;i++){
-	    msg = msg.replace('{'+i+'}',p_arr[i]);
-	  }
-      return msg;
+    if ($chk(error_dictionary_messages[USER_LANGUAGE][code])) {
+        var msg = error_message(code);
+        var p_arr = params.split(',');
+        if (p_arr.length>0)
+        for(var i=0;i<p_arr.length;i++){
+            msg = msg.replace('{'+i+'}',p_arr[i]);
+        }
+        return msg;
+    } else {
+        return params;
     }
-    else return params;
 }
 
 function showError(code, params) {

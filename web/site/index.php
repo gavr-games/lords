@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="general_js/mootools-more.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="general_js/fx.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="site/js_libs/winds.js?<?php echo $SITE_conf['revision']; ?>"></script>
+	<script type="text/javascript" src="site/js_libs/i18n_text_getters_pregame.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="site/js_libs/static_libs.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="general_js/ape/Build/uncompressed/apeClientJS.js?<?php echo $SITE_conf['revision']; ?>">"></script>
 	<script type="text/javascript" src="site/js_libs/ape.js?<?php echo $SITE_conf['revision']; ?>"></script>
@@ -25,6 +26,7 @@
 		var load_frame = '<?php echo $load_frame; ?>';
 		var site_domen = '<?php echo $SITE_conf['domen']; ?>';
 		var my_user_id = '<?php echo $_SESSION['user_id']; ?>';
+		USER_LANGUAGE = <?= LangUtils::getCurrentLangNumber($_SESSION['lang']); ?>;
 	</script>
 	<style>
 		#map {

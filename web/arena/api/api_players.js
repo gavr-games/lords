@@ -5,7 +5,7 @@ function arena_player_add(user_id, nick, avatar_filename, status_id) {
     eval('players_str = ' + player_in_playerslist);
     var els = Elements.from(players_str);
     $('players_list').adopt(els);
-    $('pstatus_' + user_id).set('title', dic_player_status[status_id]["description"]);
+    $('pstatus_' + user_id).set('title', parent.player_status(status_id));
 
     $('player_' + user_id).addEvent('mousedown', function (event) {
         event.stop();
@@ -69,7 +69,7 @@ function arena_player_set_status(user_id, status_id) {
     last_executed_api = 'arena_player_set_status(' + user_id + ',' + status_id + ')';
     if ($('pstatus_' + user_id)) {
       $('pstatus_' + user_id).set('class', 'status_' + status_id);
-      $('pstatus_' + user_id).set('title', dic_player_status[status_id]["description"]);
+      $('pstatus_' + user_id).set('title', parent.player_status(status_id));
       users[user_id]['status_id'] = status_id;
       //redirect to game if I am playing
       //console.log(window.location.toString().replace('arena/','')+'game/mode'+$('i_frame').contentWindow.cur_game_mode_id);

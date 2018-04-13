@@ -8,62 +8,31 @@
 	session_start();
 	include ('../general_config/config.php');
 	include ('../general_classes/sql.class.php');
-		error_reporting(E_ALL);
+	include ('../general_classes/static_libs.class.php');
+	error_reporting(E_ALL);
 	$mysqli = new mysqli($DB_conf['server'], 'lords_reader', $_ENV['MYSQL_READER_PASSWORD'], $DB_conf['site']);
 	if (mysqli_connect_errno()) {
-		    printf("Connect failed: %s\n", mysqli_connect_error());
-		    die();
+		printf("Connect failed: %s\n", mysqli_connect_error());
+		die();
 	}
 	$message = '';
 	$dataBase = new cDataBase($mysqli);
 	$dataBase->query("SET NAMES 'UTF8'");
-	//get each mode arrays
+
 	$tables = Array(
-		Array(
-			'name'=>'dic_game_types',
-			'rule'=>'',
-			'js_name'=>'dic_game_types'),
-		Array(
-			'name'=>'dic_player_status',
-			'rule'=>'',
-			'js_name'=>'dic_player_status'),
-		Array(
-			'name'=>'error_dictionary',
-			'rule'=>'',
-			'js_name'=>'error_dictionary'),
-		Array(
-			'name'=>'lords.games_features',
-			'rule'=>'',
-			'js_name'=>'games_features'),
-		Array(
-			'name'=>'lords.modes',
-			'rule'=>'',
-			'js_name'=>'modes'),
-		Array(
-			'name'=>'lords.dic_game_status',
-			'rule'=>'',
-			'js_name'=>'dic_game_status'),
+		Array('name'=>'dic_game_types'),
+		Array('name'=>'dic_player_status_i18n', 'js_name'=>'dic_player_status', 'keys'=>'language_id,player_status_id'),
+		Array('name'=>'error_dictionary_i18n', 'js_name'=>'error_dictionary_messages', 'keys'=>'language_id,error_id'),
+		Array('name'=>'lords.games_features', 'js_name'=>'games_features'),
+		Array('name'=>'lords.games_features_i18n', 'js_name'=>'games_feature_names', 'keys'=>'language_id,feature_id'),
+		Array('name'=>'lords.modes', 'js_name'=>'modes')
 	);
-	$each_mode_js_arrays = '';
-	foreach($tables as $table)	{
-		$first = true;
-		$res = $dataBase->select('*',$table['name'],$table['rule']);
-		if ($res)	{
-			while ($row = mysqli_fetch_assoc($res))	{
-				if ($first) {
-					$each_mode_js_arrays .= chr(13).'var '.$table['js_name'].' = new Array();'.PHP_EOL;
-					$first = false;
-				}
-				$each_mode_js_arrays .= $table['js_name'].'['.$row['id'].'] = new Array();'.PHP_EOL;
-				foreach($row as $field=>$value)	{
-					$each_mode_js_arrays .= $table['js_name'].'['.$row['id'].']["'.$field.'"] = "'.$value.'";'.PHP_EOL;
-				}
-			}
-		}
-	}
+	
+	$js_arrays = StaticLibs::generate($dataBase, $tables);
+
 	$f = fopen('../site/js_libs/static_libs.js','w');
 	if ($f)	{
-		fwrite($f,$each_mode_js_arrays);
+		fwrite($f,$js_arrays);
 		fclose($f);
 		$message .= '"../site/js_libs/static_libs.js" is successfully generated.<br />';
 	} else $message .= 'Can\'t open file "../site/js_libs/static_libs.js"';

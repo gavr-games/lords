@@ -32,6 +32,7 @@
 		var load_frame = '<?php echo $load_frame; ?>';
 		var site_domen = '<?php echo $SITE_conf['domen']; ?>';
 		var my_user_id = '<?php echo $_SESSION['user_id']; ?>';
+		parent.USER_LANGUAGE = <?= LangUtils::getCurrentLangNumber($_SESSION['lang']) ?>;
 	</script>
 	<style>
 		#map {

@@ -98,8 +98,9 @@
 		}
 	</style>
 	<script>
-	 function eval(){
-	 }
+	  function eval(){
+	  }
+		parent.USER_LANGUAGE = <?= LangUtils::getCurrentLangNumber($_SESSION['lang']) ?>;
 	</script>
 </head>
 <body>

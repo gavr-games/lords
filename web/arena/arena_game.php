@@ -100,16 +100,11 @@
 		//add some params
 		$features[$fkey]['game_id'] = $cur_game_row['game_id'];
 		if (!$features[$fkey]['param']) $features[$fkey]['param'] = '';
-		if ($feature['in_game']==1)	{
-		  if ($feature['feature_type']=='bool') $feature['param'] = '';
-			$search = $replace = array();
-			foreach($feature as $key=>$value)	{
-					$search[]  = '###'.$key.'###';
-					$replace[] = $value;
-			}
-			$search[]  = '###feature_id###';
-			$replace[] = $feature['id'];
-			$selected_features .= str_replace($search,$replace,$templates['feature_in_game']);
+		if ($feature['in_game'] == 1)	{
+		  	if ($feature['feature_type']=='bool') {
+				$feature['param'] = '';
+		  	}
+			$selected_features .= 'parent.arena_game_set_feature('.$cur_game_row['game_id'].', '.$feature['id'].', '.$feature['param'].');';
 		}
 	}
 	//generate teams
@@ -177,10 +172,12 @@
 					<br/>
 					<b><?= L::arena_game_selected_features ?>:</b><br />
 					<div id="game_features">
-						<?php echo $selected_features; ?>
 					</div>
 				</div>
 		</div><!--.content-->
 </div>
+<script>
+<?php echo $selected_features; ?>
+</script>
 </body>
 </html>
