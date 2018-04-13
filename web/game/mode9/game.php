@@ -18,13 +18,6 @@
 	$res->free();
 	$mysqli->next_result();
 	
-    $markers['###REVISION###'] = $SITE_conf['revision'];
-	$markers['###USER_LANGUAGE###'] = LangUtils::getCurrentLangNumber($_SESSION['lang']);
-	//print template of html page
-	$replace = $values = array();
-	foreach ($markers as $key=>$value)	{
-		$replace[] = $key;
-		$values[]  = $value;
-	}
-	echo LangUtils::replaceTemplateMarkers(str_replace($replace,$values,file_get_contents('template.html')));
+	$LANG = LangUtils::getCurrentLangNumber($_SESSION['lang']);
+	include_once('template.php');
 ?>
