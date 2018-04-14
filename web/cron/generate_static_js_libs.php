@@ -36,8 +36,13 @@
 		Array('name'=>'videos_i18n', 'js_name'=>'videos_titles', 'keys'=>'language_id,code'),
 		Array('name'=>'log_message_text_i18n', 'js_name'=>'log_message_texts', 'keys'=>'language_id,code')
 	);
-
 	$common_js_arrays = StaticLibs::generate($dataBase, $tables);
+
+	// Static libs for lang
+	$common_js_arrays .= PHP_EOL.'var i18n = new Array();'.PHP_EOL;
+	foreach(LangUtils::getAllLangs() as $code => $id) {
+		$common_js_arrays .= StaticLibs::generateI18n("../lang/lang_$code.ini", $id);
+	}
 	
 	//mode specific data
 	$mode_tables = array(

@@ -18,4 +18,8 @@ class LangUtils {
             return 1; //default english
         }
     }
+
+    public static function getAllLangs() {
+        return ['en' => 1, 'ru' => 2];
+    }
 }

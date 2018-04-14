@@ -73,8 +73,8 @@ function execute_procedure(name) {
                         $('tip').set('text', procedures_params_codes[params_arr[selected_params]]['description']);
                     }
                 } // end of process
-            } else showWindow('Извините', 'Невозможное действие: ' + name, 200, 40, false);
-        } else showWindow('Извините', error_message("1"), 200, 20, false); // Not your turn
+            } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], 'Невозможное действие: ' + name, 200, 40, false);
+        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("1"), 200, 20, false); // Not your turn
     } catch (e) {
         if (DEBUG_MODE) {
             displayLordsError(e, 'execute_procedure(' + name + ');selected_params=' + selected_params + ';');
@@ -105,7 +105,7 @@ function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) 
         if (suc == 0) {
 	        if ($chk(error_dictionary[error_code])) {
 	            error_txt = error_message(error_code);
-	            showWindow('Извините', error_txt, 200, 100, false);
+	            showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_txt, 200, 100, false);
                 error_msg = error_txt;
                 error_procedure = executable_procedure;
 	        } else {
@@ -446,8 +446,8 @@ function execute_card(pd_id,id) {
                 });
                 addCancelAction();
             }
-        } else showWindow('Извините', error_message("2"), 200, 20, false); // Not enough gold
-    } else showWindow('Извините', error_message("1"), 200, 20, false); // Not your turn
+        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("2"), 200, 20, false); // Not enough gold
+    } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("1"), 200, 20, false); // Not your turn
 }
 
 function check_next_available_unit() {

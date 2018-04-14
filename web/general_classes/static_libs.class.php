@@ -81,4 +81,20 @@ class StaticLibs {
         }
         return $js_string.$vars;
     }
+
+    public static function generateI18n($langFilePath, $langId) {
+        $js_string = "i18n[$langId] = new Array();".PHP_EOL;
+        $config = parse_ini_file($langFilePath, true);
+        foreach($config as $key => $value) {
+            if (is_array($value)) {
+                $js_string .= "i18n[$langId]['$key'] = new Array();".PHP_EOL;
+                foreach($value as $k => $v) {
+                    $js_string .= "i18n[$langId]['$key']['$k'] = '$v';".PHP_EOL;
+                }
+            } else {
+                $js_string .= "i18n[$langId]['$key'] = '$value';".PHP_EOL;
+            }
+        }
+        return $js_string;
+    }
 }
