@@ -778,6 +778,18 @@ ul {
 	background: url(../images/btn_buycard.png) bottom left no-repeat;
 }
 
+.ctrl_block .block .buttons a {
+	font-style: italic;
+    font-size: 14px;
+    padding-left: 32px;
+	line-height: 24px;
+	color: #000;
+}
+
+.ctrl_block .block .buttons a:hover {
+	color: #999;
+}
+
 .ctrl_block .block .buttons .btn_buycard:hover {
 	background: url(../images/btn_buycard.png) top left no-repeat;
 }
@@ -820,6 +832,7 @@ ul {
 
 .ctrl_block .block .buttons .unactive {
 	background-position: top left;
+	color: #999;
 }
 
 .ctrl_block .block .main_cont {
@@ -1042,6 +1055,15 @@ ul {
 	width: 56px;
 	height: 14px;
 	position: relative;
+}
+
+#menulist .menu .label {
+	font-style: italic;
+	font-size: 13px;
+	position: absolute;
+	top: -1px;
+	width: 54px;
+	text-align: center;
 }
 
 #menulist .menu table {

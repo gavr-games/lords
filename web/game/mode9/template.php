@@ -108,8 +108,8 @@
 </div>
 <div id="cancel_action" onclick="cancel_execute();"> </div>
 <div id="cards_container">
-		<a href="#" id="cardsLink" class="cardsunactive" onclick="openCards();return false;"></a>
-		<a href="#" id="graveLink" class="cementaryunactive" onclick="openGrave();return false;"></a>
+		<a href="#" id="cardsLink" class="cardsunactive" onclick="openCards();return false;"><?= L::game_cards ?></a>
+		<a href="#" id="graveLink" class="cementaryunactive" onclick="openGrave();return false;"><?= L::game_graveyard ?></a>
 		<a href="#" id="allcardstopLink" class="allcardstopunactive" onclick="openAllcardstop();return false;"></a>
 		<a href="#" id="allcardsCloseLink" class="allcardsclose" onclick="hideSliders();return false;"></a>
 	<div class="concards">
@@ -148,6 +148,7 @@
         
         <ul id="menulist">
            <li class="menu">
+		   	<div class="label"><?= L::game_menu ?></div>
                <table>
                   <tr><td><nobr><a href="#" onclick="$('windowsettings').setStyle('display','block');$('windowsettings').setStyle('height',document.getScrollSize().y);return false;"><?= L::game_settings ?></a></nobr></td></tr>
                   <tr><td><nobr><a href="#" onclick="$('windowspecs').setStyle('display','block');$('windowspecs').setStyle('height',document.getScrollSize().y);return false;"><?= L::game_info ?></a></nobr></td></tr>
@@ -191,10 +192,10 @@
            <div id="ctrl_block" class="ctrl_block">
 	          <div class="block">
 	              <div class="buttons" id="main_buttons">
-	                 <a href="#" class="btn_buycard" onclick="cancel_execute();execute_procedure('buy_card');return false;"></a>
-	                 <a href="#" class="btn_sendm" onclick="cancel_execute();execute_procedure('send_money');return false;" id="send_money1"></a>
-			         <a href="#" class="btn_subs"  onclick="cancel_execute();execute_procedure('take_subsidy');deactivate_button(this);return false;"></a>
-			         <a href="#" class="btn_end_turn" onclick="cancel_execute();execute_procedure('player_end_turn');return false;"></a>
+	                 <a href="#" class="btn_buycard" onclick="cancel_execute();execute_procedure('buy_card');return false;"><?= L::game_buy_card ?></a>
+	                 <a href="#" class="btn_sendm" onclick="cancel_execute();execute_procedure('send_money');return false;" id="send_money1"><?= L::game_send_money ?></a>
+			         <a href="#" class="btn_subs"  onclick="cancel_execute();execute_procedure('take_subsidy');deactivate_button(this);return false;"><?= L::game_take_subsidy ?></a>
+			         <a href="#" class="btn_end_turn" onclick="cancel_execute();execute_procedure('player_end_turn');return false;"><?= L::game_end_turn ?></a>
 	              </div>
 	              <div class="main_cont" >
 	                 <div class="inner">

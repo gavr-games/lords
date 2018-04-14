@@ -1,141 +1,240 @@
-#cards_container{
-	float:left;
-	position:absolute;
-	bottom:0;
-	z-index:2152;
-	left:234px;
-	width:762px;
-	text-align:center;
-	background:  url(../images/cards_bg.png) top no-repeat;
-	background-position:0px 15px;
-	color:white;
+#cards_container {
+	float: left;
+	position: absolute;
+	bottom: 0;
+	z-index: 2152;
+	left: 234px;
+	width: 762px;
+	text-align: center;
+	background: url(../images/cards_bg.png) top no-repeat;
+	background-position: 0px 15px;
+	color: white;
 }
-#cards_container a.cards {background:  url(../images/card_head_but_units.png) top no-repeat;
-                    width:160px;
-                    float:left;
-                    height:19px;
-                    margin-left:15px;
-                    filter:alpha(opacity=100); -moz-opacity: 1; -khtml-opacity: 1; opacity: 1;
+
+#cards_container a.cards {
+	background: url(../images/card_head_but_units.png) top no-repeat;
+	width: 160px;
+	float: left;
+	height: 19px;
+	margin-left: 15px;
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+    opacity: 1;
+    color: #000;
+    font-size: 14px;
+    font-style: italic;
 }
-#cards_container a.cardsunactive {background:  url(../images/card_head_but_cards_unactive.png) top no-repeat;
-                             filter:alpha(opacity=70); -moz-opacity: 0.7; -khtml-opacity: 0.7; opacity: 0.7;
-                             width:160px;
-                    float:left;
-                    height:19px;
-                    margin-left:15px;
+
+#cards_container a.cardsunactive {
+	background: url(../images/card_head_but_cards_unactive.png) top no-repeat;
+	filter: alpha(opacity=70);
+	-moz-opacity: 0.7;
+	-khtml-opacity: 0.7;
+	opacity: 0.7;
+	width: 160px;
+	float: left;
+	height: 19px;
+    margin-left: 15px;
+    color: #000;
+    font-size: 14px;
+    font-style: italic;
 }
-#cards_container a.cementary {background:  url(../images/card_head_but_cementary.png) top no-repeat;
-                    width:160px;
-                    float:left;
-                    height:19px;
-                    margin-left:15px;
-                    filter:alpha(opacity=100); -moz-opacity: 1; -khtml-opacity: 1; opacity: 1;
+
+#cards_container a.cementary {
+	background: url(../images/card_head_but_cementary.png) top no-repeat;
+	width: 160px;
+	float: left;
+	height: 19px;
+	margin-left: 15px;
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+    opacity: 1;
+    color: #000;
+    font-size: 14px;
+    font-style: italic;
 }
-#cards_container a.cementaryunactive {background:  url(../images/card_head_but_cementary_unactive.png) top no-repeat;
-                             filter:alpha(opacity=70); -moz-opacity: 0.7; -khtml-opacity: 0.7; opacity: 0.7;
-                             width:160px;
-                    float:left;
-                    height:19px;
-                    margin-left:15px;
+
+#cards_container a.cementaryunactive {
+	background: url(../images/card_head_but_cementary_unactive.png) top no-repeat;
+	filter: alpha(opacity=70);
+	-moz-opacity: 0.7;
+	-khtml-opacity: 0.7;
+	opacity: 0.7;
+	width: 160px;
+	float: left;
+	height: 19px;
+    margin-left: 15px;
+    color: #000;
+    font-size: 14px;
+    font-style: italic;
 }
-#cards_container a.allcardstop {background:  url(../images/card_head_but_allcards_top.png) top no-repeat;
-                    width:37px;
-                    float:left;
-                    height:19px;
-                    margin-left:15px;
-                    filter:alpha(opacity=100); -moz-opacity: 1; -khtml-opacity: 1; opacity: 1;
+
+#cards_container a.allcardstop {
+	background: url(../images/card_head_but_allcards_top.png) top no-repeat;
+	width: 37px;
+	float: left;
+	height: 19px;
+	margin-left: 15px;
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+	opacity: 1;
 }
+
 #cards_container a.allcardstopunactive {
-	background:  url(../images/card_head_but_allcards_top_unactive.png) top no-repeat;
-    filter:alpha(opacity=70); -moz-opacity: 0.7; -khtml-opacity: 0.7; opacity: 0.7;
-    width:37px;
-    float:left;
-    height:19px;
-    margin-left:15px;
+	background: url(../images/card_head_but_allcards_top_unactive.png) top no-repeat;
+	filter: alpha(opacity=70);
+	-moz-opacity: 0.7;
+	-khtml-opacity: 0.7;
+	opacity: 0.7;
+	width: 37px;
+	float: left;
+	height: 19px;
+	margin-left: 15px;
 }
-#cards_container a.allcardsbottom {background:  url(../images/card_head_but_allcards_bottom.png) top no-repeat;
-                    width:37px;
-                    float:left;
-                    height:19px;
-                    margin-left:15px;
-                    filter:alpha(opacity=100); -moz-opacity: 1; -khtml-opacity: 1; opacity: 1;
+
+#cards_container a.allcardsbottom {
+	background: url(../images/card_head_but_allcards_bottom.png) top no-repeat;
+	width: 37px;
+	float: left;
+	height: 19px;
+	margin-left: 15px;
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+	opacity: 1;
 }
+
 #cards_container a.allcardsbottomunactive {
-	background:  url(../images/card_head_but_allcards_bottom_unactive.png) top no-repeat;
-    filter:alpha(opacity=70); -moz-opacity: 0.7; -khtml-opacity: 0.7; opacity: 0.7;
-    width:37px;
-    float:left;
-    height:19px;
-    margin-left:15px;
+	background: url(../images/card_head_but_allcards_bottom_unactive.png) top no-repeat;
+	filter: alpha(opacity=70);
+	-moz-opacity: 0.7;
+	-khtml-opacity: 0.7;
+	opacity: 0.7;
+	width: 37px;
+	float: left;
+	height: 19px;
+	margin-left: 15px;
 }
+
 #cards_container a.allcardsclose {
-	background:  url(../images/card_head_but_close.png) top no-repeat;
-    filter:alpha(opacity=70); -moz-opacity: 0.7; -khtml-opacity: 0.7; opacity: 0.7;
-    width:37px;
-    float:left;
-    height:19px;
-    margin-left:300px;
-}
-#cards_container a:hover {filter:alpha(opacity=100); -moz-opacity: 1; -khtml-opacity: 1; opacity: 1;}
-
-#cards_container .concards {float:left;
-                            width:762px;
-                            }
-#cards_container  #left_roll, #cards_container  #left_roll_grave {background:  url(../images/card_arrow_left.png) bottom left no-repeat;
-                   width:20px;
-                   height:205px;
-                   float:left;
-                   }
-#cards_container  #right_roll, #cards_container  #right_roll_grave {background:  url(../images/card_arrow_right.png) bottom left no-repeat;
-                   width:20px;
-                   height:205px;
-                   float:right; 
-                   }
-#cards_container  .unactive {filter:alpha(opacity=70); -moz-opacity: 0.7; -khtml-opacity: 0.7; opacity: 0.7;}
-#cards, #graveyard {clear:all;float:left; padding:0px 4px 0px 4px; width:754px;height:205px;overflow:hidden;}
-.card, .dead_unit {float:left;width:130px; height:186px;
-        padding:10px 0px 0px 10px;
-        position:absolute;
-       }
-.card img , .dead_unit img{flaot:left;}
-.card_price{
-  position:absolute;
-  top: 163px;
-  left: 74px;
-}
-.card_price img{
-  vertical-align:top;
+	background: url(../images/card_head_but_close.png) top no-repeat;
+	filter: alpha(opacity=70);
+	-moz-opacity: 0.7;
+	-khtml-opacity: 0.7;
+	opacity: 0.7;
+	width: 37px;
+	float: left;
+	height: 19px;
+	margin-left: 300px;
 }
 
-#cards_holder, #grave_holder, #fullsize {
-	float:left;
-	width:714px;
-	height:205px;
-	overflow:hidden;
-	position:relative;
+#cards_container a:hover {
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+	opacity: 1;
 }
-#grave_bg{
-	background:  url(../images/grave_bg.jpg) bottom left no-repeat;
-	width:714px;
-	height:205px;
-	position:absolute;
-	left:23px;
+
+#cards_container .concards {
+	float: left;
+	width: 762px;
 }
+
+#cards_container #left_roll,
+#cards_container #left_roll_grave {
+	background: url(../images/card_arrow_left.png) bottom left no-repeat;
+	width: 20px;
+	height: 205px;
+	float: left;
+}
+
+#cards_container #right_roll,
+#cards_container #right_roll_grave {
+	background: url(../images/card_arrow_right.png) bottom left no-repeat;
+	width: 20px;
+	height: 205px;
+	float: right;
+}
+
+#cards_container .unactive {
+	filter: alpha(opacity=70);
+	-moz-opacity: 0.7;
+	-khtml-opacity: 0.7;
+	opacity: 0.7;
+}
+
+#cards,
+#graveyard {
+	clear: all;
+	float: left;
+	padding: 0px 4px 0px 4px;
+	width: 754px;
+	height: 205px;
+	overflow: hidden;
+}
+
+.card,
+.dead_unit {
+	float: left;
+	width: 130px;
+	height: 186px;
+	padding: 10px 0px 0px 10px;
+	position: absolute;
+}
+
+.card img,
+.dead_unit img {
+	flaot: left;
+}
+
+.card_price {
+	position: absolute;
+	top: 163px;
+	left: 74px;
+}
+
+.card_price img {
+	vertical-align: top;
+}
+
+#cards_holder,
+#grave_holder,
 #fullsize {
-	padding-left:20px;
-	text-align:left;
-	overflow:hidden;
-	width:735px;
+	float: left;
+	width: 714px;
+	height: 205px;
+	overflow: hidden;
+	position: relative;
 }
-#fullsize_grave_bg{
-	background:  url(../images/grave_bg.jpg) bottom left no-repeat;
-	width:749px;
-	position:absolute;
-	left:6px;
-	top:3px;
+
+#grave_bg {
+	background: url(../images/grave_bg.jpg) bottom left no-repeat;
+	width: 714px;
+	height: 205px;
+	position: absolute;
+	left: 23px;
 }
-#fullsize_holder{
-	position:relative;
-	overflow-y:scroll;
-	margin-top:4px;
+
+#fullsize {
+	padding-left: 20px;
+	text-align: left;
+	overflow: hidden;
+	width: 735px;
+}
+
+#fullsize_grave_bg {
+	background: url(../images/grave_bg.jpg) bottom left no-repeat;
+	width: 749px;
+	position: absolute;
+	left: 6px;
+	top: 3px;
+}
+
+#fullsize_holder {
+	position: relative;
+	overflow-y: scroll;
+	margin-top: 4px;
 }
