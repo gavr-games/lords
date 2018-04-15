@@ -436,12 +436,7 @@ function execute_card(pd_id,id) {
                 clearActions();
                 procedures.each(function (item, index) {
                     if (item) {
-                        var myA = new Element('a', {
-                            'href': '#',
-                            'class': 'act act_' + item['ui_action_name'],
-                            'onclick': 'execute_procedure(\'' + item['name'] + '\');return false;'
-                        });
-                        $('actions').grab(myA, 'bottom');
+                        add_action_btn(item['ui_action_name'], 'execute_procedure(\'' + item['name'] + '\');');
                     }
                 });
                 addCancelAction();
@@ -514,13 +509,10 @@ function execute_unit(x, y) {
             clearActions();
             procedures.each(function (item, index) {
                 if (item) {
-                    if (item['default'].toInt() == 1) default_proc = item['name'];
-                    var myA = new Element('a', {
-                        'href': '#',
-                        'class': 'act act_' + item['ui_action_name'],
-                        'onclick': 'setPreDefinedParam(\'unit\');setGameState(\'WAITTING\');execute_procedure(\'' + item['name'] + '\');return false;'
-                    });
-                    $('actions').grab(myA, 'bottom');
+                    if (item['default'].toInt() == 1) {
+                        default_proc = item['name'];
+                    }
+                    add_action_btn(item['ui_action_name'], 'setPreDefinedParam(\'unit\');setGameState(\'WAITTING\');execute_procedure(\'' + item['name'] + '\');');
                 }
             });
             addCancelAction();
@@ -561,12 +553,7 @@ function execute_building(x,y) {
             clearActions();
             procedures.each(function (item, index) {
                 if (item) {
-                    var myA = new Element('a', {
-                        'href': '#',
-                        'class': 'act act_' + item['ui_action_name'],
-                        'onclick': 'setPreDefinedParam(\'building\');setGameState(\'WAITTING\');execute_procedure(\'' + item['name'] + '\');return false;'
-                    });
-                    $('actions').grab(myA, 'bottom');
+                    add_action_btn(item['ui_action_name'], 'setPreDefinedParam(\'building\');setGameState(\'WAITTING\');execute_procedure(\'' + item['name'] + '\');');
                 }
             });
             addCancelAction();
@@ -615,13 +602,7 @@ function cancel_execute() {
 }
 
 function addCancelAction() {
-    var myA = new Element('a', {
-        'html': '',
-        'href': '#',
-        'class': 'act act_esc',
-        'onclick': 'cancel_execute();return false;'
-    });
-    $('actions').grab(myA, 'bottom');
+    add_action_btn('esc', 'cancel_execute();');
 }
 //set game_state
 function setGameState(nstate) {
@@ -647,18 +628,8 @@ function pre_send_money() {
 function pre_put_building() {
     flip = 0;
     rotation = 0;
-    var myA = new Element('a', {
-        'href': '#',
-        'class': 'act act_turn',
-        'onclick': 'change_rotation();return false;'
-    });
-    $('actions').grab(myA, 'bottom');
-    var myA = new Element('a', {
-        'href': '#',
-        'class': 'act act_refl',
-        'onclick': 'change_flip();return false;'
-    });
-    $('actions').grab(myA, 'bottom');
+    add_action_btn('turn', 'change_rotation();');
+    add_action_btn('refl', 'change_flip();');
 }
 
 function pre_archer_shoot(){
@@ -928,4 +899,14 @@ function on_unit_select() {
         var uy = coords[1].toInt();
         $('board_' + ux + '_' + uy).addClass('activeUnit');
     }
+}
+
+function add_action_btn(ui_action_name, onclick) {
+    var myA = new Element('a', {
+        'href': '#',
+        'class': 'act act_' + ui_action_name,
+        'html': i18n[USER_LANGUAGE]['game']['act_' + ui_action_name],
+        'onclick': onclick + 'return false;'
+    });
+    $('actions').grab(myA, 'bottom');
 }
