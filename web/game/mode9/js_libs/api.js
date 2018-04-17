@@ -1889,12 +1889,12 @@ function end_game()	{
 	clearInterval(titleInterval);
 	turn_state = NOT_MY_TURN;
 	deactivate_controls();
-	var text = '<a href="#" onclick="show_stats();return false;">Показать статистику</a><br><a href="#" onclick="execute_exit();return false;">Выйти из игры.</a>';
+	var text = '<a href="#" onclick="show_stats();return false;">'+ i18n[USER_LANGUAGE]['game']['show_statistic'] + '</a><br><a href="#" onclick="execute_exit();return false;">' + i18n[USER_LANGUAGE]['game']['exit'] + '</a>';
 	noCloseWindow = true;
 	if ($('window_m').getStyle('display')=='block')
-		appendWindow(' Конец игры ',text,500,500,true);
+		appendWindow(i18n[USER_LANGUAGE]['game']['game_end'],text,500,500,true);
 	else
-		showWindow(' Конец игры ',text,200,60,true);
+		showWindow(i18n[USER_LANGUAGE]['game']['game_end'],text,200,60,true);
 }
 function show_stats()	{
 	last_executed_api = 'show_stats';
@@ -1911,12 +1911,12 @@ function show_stats()	{
 				eval(html);
 				var statTabs = new Tabs('statistics');
 				var myA2 = new Element('a', {
-					'html': 'Выйти из игры.',
+					'html': i18n[USER_LANGUAGE]['game']['exit'],
 					'href':'#',
 					'onclick':'execute_exit();return false;'
 				});
 				myDiv.grab(myA2,'bottom');
-				$('window_h').set('text','Статистика');
+				$('window_h').set('text',i18n[USER_LANGUAGE]['game']['statistics']);
 				$('window_c').setStyle('width',630);
 				$('window_c').setStyle('height',450);
 				$('window_m').setStyle('display','block');

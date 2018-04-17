@@ -73,7 +73,7 @@ function execute_procedure(name) {
                         $('tip').set('text', procedures_params_codes[params_arr[selected_params]]['description']);
                     }
                 } // end of process
-            } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], 'Невозможное действие: ' + name, 200, 40, false);
+            } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], i18n[USER_LANGUAGE]['game']['wrong_action'] + ': ' + name, 200, 40, false);
         } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("1"), 200, 20, false); // Not your turn
     } catch (e) {
         if (DEBUG_MODE) {
