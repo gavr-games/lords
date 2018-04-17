@@ -797,6 +797,12 @@ function add_card(pd_id,card_id,no_anim) {
 	  });
 	  priceDiv.grab(number,'bottom');
 	}
+	// create div with title
+	var titleDiv = new Element('div', {
+		'class':'card_title',
+		html: card_names[USER_LANGUAGE][card_id]['name']
+	});
+	myDiv.grab(titleDiv,'bottom');
 	myDiv.grab(priceDiv,'bottom');
 	myDiv.grab(myImg,'bottom');
 	$('cards_holder').grab(myDiv,'bottom');
