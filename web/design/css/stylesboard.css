@@ -197,6 +197,7 @@
             left:-34px;
             width:69px;
             height:69px;
+            z-index: 738 !important;
             }
 .building_bridge_1_0_2 {background:  url(../images/buildings/bridge_top_right.png) top left no-repeat !important;
             position:absolute;
