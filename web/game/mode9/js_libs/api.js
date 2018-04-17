@@ -666,7 +666,7 @@ function log_add_move_message(x,y,x2,y2,p_num,unit_id,npc_name) {
 	if (p_num<10) myclass = 'color p'+p_num.toString();
 	else
 		myclass = 'color newtrl';
-	var mySpan = new Element('span', {'html': '<p class="icon move" title="Походил"></p>'});//create span with message
+	var mySpan = new Element('span', {'html': '<p class="icon move" title="' + i18n[USER_LANGUAGE]['game']['log_move'] + '"></p>'});//create span with message
 	var myP    = new Element('p',{'html':short_name,'class':myclass,'title':'('+x+','+y+') -> ('+x2+','+y2+')'});
 	myP.addEvent('mouseenter', function(){markCoords(x,y);markCoords2(x2,y2);drawArrow(x*35+17.5,y*35+17.5,x2*35+17.5,y2*35+17.5,color_move);});
 	myP.addEvent('mouseleave', function(){demarkCoords(x,y);demarkCoords2(x2,y2);clearArrowRect(x*35+17.5,y*35+17.5,x2*35+17.5,y2*35+17.5);});
@@ -717,16 +717,16 @@ function log_add_attack_message(x,y,x2,y2,p_num,short_name,p_num2,short_name2,at
 		myclass2 = 'color newtrl';
 	if (attack_success==0)	{
 		icon_class = 'miss';
-		icon_descr = 'Промах';
+		icon_descr = i18n[USER_LANGUAGE]['game']['log_miss'];
 		arrow_colr = color_miss;
 	} else {
 		if (critical==1) {
 			icon_class = 'crit';
-			icon_descr = 'Критический удар';
+			icon_descr = i18n[USER_LANGUAGE]['game']['log_crit'];
 			arrow_colr = color_critical;
 		} else {
 			icon_class = 'attack';
-			icon_descr = 'Атаковал';
+			icon_descr = i18n[USER_LANGUAGE]['game']['log_attack'];
 			arrow_colr = color_attack;
 		}
 	}
@@ -740,7 +740,7 @@ function log_add_attack_message(x,y,x2,y2,p_num,short_name,p_num2,short_name2,at
 	mySpan.grab(myP,'top');
 	mySpan.grab(myP2,'bottom');
 	if (damage>0) {
-		var myP3    = new Element('p',{'html':damage,'class':"icon damage",'title':"Получил урон"});
+		var myP3    = new Element('p',{'html':damage,'class':"icon damage",'title': i18n[USER_LANGUAGE]['game']['log_damage']});
 		mySpan.grab(myP3,'bottom');
 	}
 	var myBr = new Element('br');
