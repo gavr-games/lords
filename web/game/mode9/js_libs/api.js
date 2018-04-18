@@ -829,11 +829,11 @@ function add_card(pd_id,card_id,no_anim) {
                     'height':186,
                     'width':130,
                     'opacity':0,
-                    'z-index':2000
+                    'z-index':2001
                 }
             });
             my2Div.grab(my2Img);
-            document.body.grab(my2Div,'top');
+            document.body.grab(my2Div,'bottom');
             my2Div.position();
             var myFx = new Fx.Tween(my2Div, {property: 'opacity',duration:1000});
             myFx.start(0,1).chain(
