@@ -119,7 +119,7 @@ function initialization() {
         else document.body.style.overflow = "visible";
         var cur_client_time = Math.floor($time() / 1000);
         time_delay_from_server = cur_client_time - server_time;
-	    //console.log(Math.floor($time() / 1000) + '---'+ cur_client_time+'---'+server_time+'---'+time_delay_from_server);
+        //console.log(Math.floor($time() / 1000) + '---'+ cur_client_time+'---'+server_time+'---'+time_delay_from_server);
         winTitle = document.title;
         loadCookies();
 
@@ -139,26 +139,26 @@ function initialization() {
         formSortables();
         //additional massives
         setLoadingText('Инициализация игровых процедур');
-        procedures_mode_1.each(function (item, index) {
+        procedures_mode_1.each(function(item, index) {
             if (item) procedures_names[item["name"]] = item;
         });
-        procedures_params.each(function (item, index) {
+        procedures_params.each(function(item, index) {
             if (item) procedures_params_codes[item["code"]] = item;
             procedures_params_codes[item["code"]]["description"] = procedure_param_description(item["id"]);
         });
         if (game_status == 3) { //finished
-	    eval(ape_exec_cmds);
-	    exec_commands_now = true;
+            eval(ape_exec_cmds);
+            exec_commands_now = true;
             //hide loading
             hideLoading();
-	    $('cards_container').destroy();
+            $('cards_container').destroy();
             end_game();
             return 1;
         } else {
-	  var game_info_html = '<b>Имя игры: </b>'+game_info['title']+'<br /><b>Дата создания: </b>'+game_info['creation_date']+'<br /><hr /><table><tr><th>Игрок:</th><th>Команда:</th></tr>'
+            var game_info_html = '<b>Имя игры: </b>' + game_info['title'] + '<br /><b>Дата создания: </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>Игрок:</th><th>Команда:</th></tr>'
             //players
             setLoadingText('Инициализация игроков');
-            players.each(function (item, index) {
+            players.each(function(item, index) {
                 if (item) {
                     if (item['player_num'] == my_player_num && item['agree_draw'].toInt() == 1) $('chbDraw').setProperty('checked', true); // set Draw
                     if (item['owner'].toInt() == 0) //spectator
@@ -166,22 +166,22 @@ function initialization() {
                     else
                         add_player(item['player_num'], item['name'], item['gold'], item['owner'], item['team']);
                     var playerDisplayName = item['owner'] <= 1 ? item['name'] : npc_player_name(item['name']);
-                    game_info_html += '<tr><td>'+playerDisplayName+'</td><td>'+item['team']+'</td></tr>';
+                    game_info_html += '<tr><td>' + playerDisplayName + '</td><td>' + item['team'] + '</td></tr>';
                 }
             });
-	    //game info init
-	    game_info_html += '</table><hr />';
-	    $('game_info').set('html',game_info_html);
+            //game info init
+            game_info_html += '</table><hr />';
+            $('game_info').set('html', game_info_html);
             //features initialization
             setLoadingText('Инициализация фич юнитов и зданий');
-            board_buildings_features.each(function (item, index) {
+            board_buildings_features.each(function(item, index) {
                 if (item) {
                     if (item['param'] == '') fval = 1;
                     else fval = item['param'];
                     board_buildings[item['board_building_id']][building_features[item['feature_id']]['code']] = fval;
                 }
             });
-            board_units_features.each(function (item, index) {
+            board_units_features.each(function(item, index) {
                 if (item) {
                     if (item['param'] == '') fval = 1;
                     else fval = item['param'];
@@ -191,15 +191,16 @@ function initialization() {
 
             //board initialization
             setLoadingText('Инициализация доски');
-            init_board_buildings.each(function (item, index) {
+            init_board_buildings.each(function(item, index) {
                 if (item) {
                     if (board_buildings[item['ref']]['player_num'] == my_player_num && item['type'] == 'castle') my_castle_id = item['ref']; //store my castle id
                     put_building(item['ref'], board_buildings[item['ref']]['player_num'], item['x'], item['y'], board_buildings[item['ref']]['rotation'], board_buildings[item['ref']]['flip'], board_buildings[item['ref']]['card_id'], board_buildings[item['ref']]['income']);
                 }
             });
-            init_board_units.each(function (item, index) {
-                if (item) if (board_units[item['ref']]['card_id'] != "") add_unit(item['ref'], board_units[item['ref']]['player_num'], item['x'], item['y'], board_units[item['ref']]['card_id']);
-                else add_unit_by_id(item['ref'], board_units[item['ref']]['player_num'], item['x'], item['y'], board_units[item['ref']]['unit_id']);
+            init_board_units.each(function(item, index) {
+                if (item)
+                    if (board_units[item['ref']]['card_id'] != "") add_unit(item['ref'], board_units[item['ref']]['player_num'], item['x'], item['y'], board_units[item['ref']]['card_id']);
+                    else add_unit_by_id(item['ref'], board_units[item['ref']]['player_num'], item['x'], item['y'], board_units[item['ref']]['unit_id']);
             });
 
             //cards
@@ -207,10 +208,10 @@ function initialization() {
             $('grave_bg').fade(0);
             cardsSlider = new Fx.Slide($('cards'), {}).slideOut('vertical');
             graveSlider = new Fx.Slide($('graveyard'), {
-                onStart: function () {
+                onStart: function() {
                     if ($('graveyard').getStyle('margin-top') == '0px') $('grave_bg').fade(0);
                 },
-                onComplete: function () {
+                onComplete: function() {
                     if ($('graveyard').getStyle('margin-top') == '0px') $('grave_bg').fade(0.5);
                 }
             }).slideOut('vertical');
@@ -221,16 +222,17 @@ function initialization() {
             $('fullsize_grave_bg').setStyle('height', full_size);
             $('fullsize_grave_bg').fade(0);
             allCardsSlider = new Fx.Slide($('fullsize'), {
-                onStart: function () {
+                onStart: function() {
                     if ($('fullsize').getStyle('margin-top') == '0px') $('fullsize_grave_bg').fade(0);
                 },
-                onComplete: function () {
-                    if ($('fullsize').getStyle('margin-top') == '0px') if ($('graveLink').hasClass('cementary')) $('fullsize_grave_bg').fade(0.5);
+                onComplete: function() {
+                    if ($('fullsize').getStyle('margin-top') == '0px')
+                        if ($('graveLink').hasClass('cementary')) $('fullsize_grave_bg').fade(0.5);
                 }
             }).slideOut('vertical');
 
-            player_deck.each(function (item, index) {
-                if (item) add_card(item['id'],item['card_id'], true);
+            player_deck.each(function(item, index) {
+                if (item) add_card(item['id'], item['card_id'], true);
             });
             makeCardsCarousel();
             makeGraveCarousel();
@@ -241,25 +243,29 @@ function initialization() {
             //game_log
             setLoadingText('Инициализация лога');
             $('game_log').setStyle('display', 'none');
-            vw_command_log.each(function (item, index) {
+            vw_command_log.each(function(item, index) {
                 if (item) eval(item['command']);
             });
             $('game_log').setStyle('display', 'block');
 
             //graveyard
             setLoadingText('Инициализация могильника');
-            vwGrave.each(function (item, index) {
-                if (item) add_to_grave(item['grave_id'],item['card_id'], item['x'], item['y'], item['size']);
+            vwGrave.each(function(item, index) {
+                if (item) add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size']);
             });
-	    $('graveLink').addEvent('mouseenter', function(){show_all_graves();});
-	    $('graveLink').addEvent('mouseleave', function(){hide_all_graves();});
+            $('graveLink').addEvent('mouseenter', function() {
+                show_all_graves();
+            });
+            $('graveLink').addEvent('mouseleave', function() {
+                hide_all_graves();
+            });
 
             //other
             setLoadingText('Инициализация дополнительных элементов');
-            active_players.each(function (item, index) {
+            active_players.each(function(item, index) {
                 if (item) {
                     active_players = item;
-                    set_active_player(active_players['player_num'], active_players['last_end_turn'], active_players['turn'],0, active_players['units_moves_flag'], active_players["card_played_flag"], active_players["subsidy_flag"], 1);
+                    set_active_player(active_players['player_num'], active_players['last_end_turn'], active_players['turn'], 0, active_players['units_moves_flag'], active_players["card_played_flag"], active_players["subsidy_flag"], 1);
                 }
             });
             //cards_procedures_1.each(function(item,index)	{
@@ -276,12 +282,12 @@ function initialization() {
                 clone: true,
                 revert: true,
                 handle: 'div',
-                onComplete: function (el) {
+                onComplete: function(el) {
                     if ($('game_' + el.get('id'))) {
                         var scroll = $('game_' + el.get('id')).getScrollSize();
                         $('game_' + el.get('id')).scrollTo(0, scroll.y);
                     }
-                    var ser = mySortables.serialize(2, function (element, index) {
+                    var ser = mySortables.serialize(2, function(element, index) {
                         if ($chk(element.getProperty('id'))) return element.getProperty('id');
                         else return '';
                     }).join('&');
@@ -292,7 +298,7 @@ function initialization() {
                 }
             });
             if (inisize.x < 1200) { //mode with board ro left
-                var ser = mySortables.serialize(2, function (element, index) {
+                var ser = mySortables.serialize(2, function(element, index) {
                     if ($chk(element.getProperty('id'))) return element.getProperty('id');
                     else return '';
                 }).join('&');
@@ -311,7 +317,7 @@ function initialization() {
                     y: [122, 650]
                 },
                 stopPropagation: true,
-                onDrag: function (el, e) {
+                onDrag: function(el, e) {
                     if (chat_resize == 1) {
                         var new_h = el.getStyle('height').toInt() - 122;
                         if (new_h < 0) new_h = 0;
@@ -322,7 +328,7 @@ function initialization() {
                         updateBarsSizes();
                     }
                 },
-                onStart: function () {
+                onStart: function() {
                     if (chat_resize != 1) this.stop();
                 }
             });
@@ -336,7 +342,7 @@ function initialization() {
                     y: [53, 650]
                 },
                 stopPropagation: true,
-                onDrag: function (el, e) {
+                onDrag: function(el, e) {
                     if (log_resize == 1) {
                         var new_h = el.getStyle('height').toInt() - 53;
                         if (new_h < 0) new_h = 0;
@@ -347,14 +353,14 @@ function initialization() {
                         updateBarsSizes();
                     }
                 },
-                onStart: function () {
+                onStart: function() {
                     if (log_resize != 1) this.stop();
                 }
             });
             $('game_log').setStyle('height', logHeight.toInt());
             updateBarsSizes();
             //fix for cards container for small monitors
-            window.onscroll = function () {
+            window.onscroll = function() {
                 $('cards_container').setStyle('bottom', '-' + window.getScroll().y + 'px');
             }
             if (inisize.x < 1200) { //mode with board ro left
@@ -409,46 +415,46 @@ function initialization() {
             });
 
             //init events for overboard cells
-            $('overboard').getChildren('.board_cell').each(function (elem, index) {
+            $('overboard').getChildren('.board_cell').each(function(elem, index) {
                 if (elem) {
                     var idcoords = elem.get('id').split('_');
-                    elem.addEvent('mouseenter', function () {
+                    elem.addEvent('mouseenter', function() {
                         backlight(idcoords[1].toInt(), idcoords[2].toInt());
                     });
-                    elem.addEvent('mouseleave', function () {
+                    elem.addEvent('mouseleave', function() {
                         backlight_out(idcoords[1].toInt(), idcoords[2].toInt());
                     });
                 }
             });
-	    
-	    //panorama
-	    var dt = new Date();
-	    var seasons = new Array('winter','spring','summer','autumn');
-	    var season = seasons[Math.floor((dt.getMonth()+1) / 3) % 4];
-	    var hr = dt.getHours();
-	    var daytime = '';
-	    if ((hr>=22 && hr<=23) || (hr>=0 && hr<=5)) daytime = 'Night';
-	    else if (hr>=6 && hr<=9) daytime = 'Sunrise';
-	    else if (hr>=10 && hr<=17) daytime = 'Day';
-	    else if (hr>=18 && hr<=21) daytime = 'Sunset';
-	    var scr_size = 1200;
-	    screen_size = window.getSize();
-	    if (screen_size.y>0 && screen_size.y<=768) scr_size = 768;
-	    else if (screen_size.y>768 && screen_size.y<=1024) scr_size = 1024;
-	    document.body.setStyle('background-image','url("../../design/images/pregame/panorama/'+season+'/'+daytime+'_'+scr_size+'_Q8.jpg")');
-	    document.body.setStyle('background-position',Number.random(0, 10000)+"px 0px");
-	    setTimeout('movePanorama()',Number.random(60000, 180000));
-	    
-	    //init chat messages
-	    var saved_messages = Cookie.read("saved_messages_"+game_info["game_id"]+"_"+my_player_num);
-	    if ($chk(saved_messages)) {
-	      $('game_chat').set('html',saved_messages);
-	      chat_add_service_message($time()/1000,'Последние сообщения могут отсутствовать...');
-	    }
-	    setInterval("saveChatMessages();", 10000);
-	    
-	    eval(ape_exec_cmds);
-	    exec_commands_now = true;
+
+            //panorama
+            var dt = new Date();
+            var seasons = new Array('winter', 'spring', 'summer', 'autumn');
+            var season = seasons[Math.floor((dt.getMonth() + 1) / 3) % 4];
+            var hr = dt.getHours();
+            var daytime = '';
+            if ((hr >= 22 && hr <= 23) || (hr >= 0 && hr <= 5)) daytime = 'Night';
+            else if (hr >= 6 && hr <= 9) daytime = 'Sunrise';
+            else if (hr >= 10 && hr <= 17) daytime = 'Day';
+            else if (hr >= 18 && hr <= 21) daytime = 'Sunset';
+            var scr_size = 1200;
+            screen_size = window.getSize();
+            if (screen_size.y > 0 && screen_size.y <= 768) scr_size = 768;
+            else if (screen_size.y > 768 && screen_size.y <= 1024) scr_size = 1024;
+            document.body.setStyle('background-image', 'url("../../design/images/pregame/panorama/' + season + '/' + daytime + '_' + scr_size + '_Q8.jpg")');
+            document.body.setStyle('background-position', Number.random(0, 10000) + "px 0px");
+            setTimeout('movePanorama()', Number.random(60000, 180000));
+
+            //init chat messages
+            var saved_messages = Cookie.read("saved_messages_" + game_info["game_id"] + "_" + my_player_num);
+            if ($chk(saved_messages)) {
+                $('game_chat').set('html', saved_messages);
+                chat_add_service_message($time() / 1000, 'Последние сообщения могут отсутствовать...');
+            }
+            setInterval("saveChatMessages();", 10000);
+
+            eval(ape_exec_cmds);
+            exec_commands_now = true;
             hideLoading();
         } // end if game finished
     } catch (e) {
@@ -458,32 +464,41 @@ function initialization() {
     }
 }
 
-function movePanorama(){
-  var myMorph = new Fx.Morph(document.body, { 'duration': 3000,'link':'chain' });
-  var bg_pos = document.body.getStyle('background-position-x').toInt();
-  myMorph.start({ 'background-position': (bg_pos+30)+'px 0px' }).wait(100).start({ 'background-position': (bg_pos+20)+'px 0px' });
-  setTimeout('movePanorama()',Number.random(60000, 180000));
+function movePanorama() {
+    var myMorph = new Fx.Morph(document.body, {
+        'duration': 3000,
+        'link': 'chain'
+    });
+    var bg_pos = document.body.getStyle('background-position-x').toInt();
+    myMorph.start({
+        'background-position': (bg_pos + 30) + 'px 0px'
+    }).wait(100).start({
+        'background-position': (bg_pos + 20) + 'px 0px'
+    });
+    setTimeout('movePanorama()', Number.random(60000, 180000));
 }
-function saveChatMessages(){
-  var chat_cookie = "";
-  saved_chat_messages.each(function(item,index)	{
-				if (item)	{
-					chat_cookie+=item;
-				}
-			});
-  if (chat_cookie!='')
-  Cookie.write("saved_messages_"+game_info["game_id"]+"_"+my_player_num, chat_cookie, {
-		duration: 365
-	    });
+
+function saveChatMessages() {
+    var chat_cookie = "";
+    saved_chat_messages.each(function(item, index) {
+        if (item) {
+            chat_cookie += item;
+        }
+    });
+    if (chat_cookie != '')
+        Cookie.write("saved_messages_" + game_info["game_id"] + "_" + my_player_num, chat_cookie, {
+            duration: 365
+        });
 }
+
 function updateBarsSizes() {
     var height = 0;
-    $('leftbar').getChildren().each(function (elem, index) {
+    $('leftbar').getChildren().each(function(elem, index) {
         if (elem.get('id')) height += elem.getSize().y + 10;
     });
     $('leftbar').setStyle('height', height + 15);
     height = 0;
-    $('rightbar').getChildren().each(function (elem, index) {
+    $('rightbar').getChildren().each(function(elem, index) {
         if (elem.get('id')) height += elem.getSize().y + 10;
     });
     $('rightbar').setStyle('height', height + 15);
@@ -532,7 +547,7 @@ function doAttack() {
 function formSortables() {
     var sides = sortables.split('&');
     var leftelems = sides[0].split(',');
-    leftelems.each(function (elem, index) {
+    leftelems.each(function(elem, index) {
         if ($(elem)) {
             var cloned = $(elem).clone(true, true);
             $(elem).destroy();
@@ -542,7 +557,7 @@ function formSortables() {
         }
     });
     var rightelems = sides[1].split(',');
-    rightelems.each(function (elem, index) {
+    rightelems.each(function(elem, index) {
         if ($(elem)) {
             var cloned = $(elem).clone(true, true);
             $(elem).destroy();
@@ -628,69 +643,73 @@ function backlight(x, y) {
             if ((executable_procedure == 'put_building' && game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') || ((executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building') && game_state == 'SELECTING_EMPTY_COORD')) {
                 draw_building(x, y);
             } else
-            //SUMMON VAMPIRE
-            if (game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') {
-                draw_empty_coord_my_zone(x, y);
-            } else
-            //MOVING A UNIT
-            if (executable_procedure == 'player_move_unit' && game_state == 'SELECTING_EMPTY_COORD') {
-                draw_unit(x, y);
-            } else
-            //MAGIC TELEPORTING
-            if (executable_procedure == 'cast_teleport' && game_state == 'SELECTING_EMPTY_COORD') {
-                draw_teleport_unit(x, y);
-            } else
-            //UNIT ATTACK
-            if (executable_procedure == 'attack' && game_state == 'SELECTING_ATTACK_COORD') {
-                draw_unit_attack(x, y);
-            } else
-            //SELECTING A UNIT
-            if (game_state == 'SELECTING_UNIT' || game_state == 'SELECTING_TARGET_UNIT') {
-                if (board[x] && board[x][y]) if (board[x][y]['type'] == 'unit') {
-                    $('board_' + x + '_' + y).addClass('attackUnit');
-                }
-            } else
-	    //SELECTING A UNIT IN DISTANCE
-            if (game_state == 'SELECTING_TARGET_UNIT_IN_DISTANCE_2_4') {
-                var coords = unit.toString().split(',');
-		var ux = coords[0].toInt();
-		var uy = coords[1].toInt();
-		if ((Math.abs(ux-x.toInt())>=2 && Math.abs(ux-x.toInt())<=4) || (Math.abs(uy-y.toInt())>=2 && Math.abs(uy-y.toInt())<=4))
-		  if (board[x] && board[x][y]) if (board[x][y]['type'] == 'unit') {
-                    $('board_' + x + '_' + y).addClass('attackUnit');
-		    $('overboard_' + x + '_' + y).addClass('cursor_attack');
-                }
-            } else
-            //SELECTING MY UNIT
-            if (game_state == 'SELECTING_MY_UNIT') {
-                if (board[x] && board[x][y]) if (board[x][y]['type'] == 'unit') {
-		    if (board_units[board[x][y]['ref']]['player_num'].toInt()==my_player_num)
-                    $('board_' + x + '_' + y).addClass('attackUnit');
-                }
-            } else
-            //METEOR
-            if (executable_procedure == 'cast_meteor_shower' && game_state == 'SELECTING_ANY_COORD') {
-                draw_meteor_coords(x, y);
-            } else
-            //ZONE
-            if (game_state == 'SELECTING_ZONE') {
-                draw_zone(x, y);
-            } else
-            //BUILDING
-            if (game_state == 'SELECTING_BUILDING') {
-                draw_building_select(x, y);
-            } else
-	    //BUILDING AT DISTANCE
-            if (game_state == 'SELECTING_TARGET_BUILDING_IN_DISTANCE_2_5') {
-                var coords = unit.toString().split(',');
-		var ux = coords[0].toInt();
-		var uy = coords[1].toInt();
-		if ((Math.abs(ux-x.toInt())>=2 && Math.abs(ux-x.toInt())<=5) || (Math.abs(uy-y.toInt())>=2 && Math.abs(uy-y.toInt())<=5))
-		  if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') {
-                    $('board_' + x + '_' + y).addClass('attackUnit');
-		    $('overboard_' + x + '_' + y).addClass('cursor_attack');
-                }
-            } else if (game_state == 'WAITTING') {}
+                //SUMMON VAMPIRE
+                if (game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') {
+                    draw_empty_coord_my_zone(x, y);
+                } else
+                    //MOVING A UNIT
+                    if (executable_procedure == 'player_move_unit' && game_state == 'SELECTING_EMPTY_COORD') {
+                        draw_unit(x, y);
+                    } else
+                        //MAGIC TELEPORTING
+                        if (executable_procedure == 'cast_teleport' && game_state == 'SELECTING_EMPTY_COORD') {
+                            draw_teleport_unit(x, y);
+                        } else
+                            //UNIT ATTACK
+                            if (executable_procedure == 'attack' && game_state == 'SELECTING_ATTACK_COORD') {
+                                draw_unit_attack(x, y);
+                            } else
+                                //SELECTING A UNIT
+                                if (game_state == 'SELECTING_UNIT' || game_state == 'SELECTING_TARGET_UNIT') {
+                                    if (board[x] && board[x][y])
+                                        if (board[x][y]['type'] == 'unit') {
+                                            $('board_' + x + '_' + y).addClass('attackUnit');
+                                        }
+                                } else
+                                    //SELECTING A UNIT IN DISTANCE
+                                    if (game_state == 'SELECTING_TARGET_UNIT_IN_DISTANCE_2_4') {
+                                        var coords = unit.toString().split(',');
+                                        var ux = coords[0].toInt();
+                                        var uy = coords[1].toInt();
+                                        if ((Math.abs(ux - x.toInt()) >= 2 && Math.abs(ux - x.toInt()) <= 4) || (Math.abs(uy - y.toInt()) >= 2 && Math.abs(uy - y.toInt()) <= 4))
+                                            if (board[x] && board[x][y])
+                                                if (board[x][y]['type'] == 'unit') {
+                                                    $('board_' + x + '_' + y).addClass('attackUnit');
+                                                    $('overboard_' + x + '_' + y).addClass('cursor_attack');
+                                                }
+                                    } else
+                                        //SELECTING MY UNIT
+                                        if (game_state == 'SELECTING_MY_UNIT') {
+                                            if (board[x] && board[x][y])
+                                                if (board[x][y]['type'] == 'unit') {
+                                                    if (board_units[board[x][y]['ref']]['player_num'].toInt() == my_player_num)
+                                                        $('board_' + x + '_' + y).addClass('attackUnit');
+                                                }
+                                        } else
+                                            //METEOR
+                                            if (executable_procedure == 'cast_meteor_shower' && game_state == 'SELECTING_ANY_COORD') {
+                                                draw_meteor_coords(x, y);
+                                            } else
+                                                //ZONE
+                                                if (game_state == 'SELECTING_ZONE') {
+                                                    draw_zone(x, y);
+                                                } else
+                                                    //BUILDING
+                                                    if (game_state == 'SELECTING_BUILDING') {
+                                                        draw_building_select(x, y);
+                                                    } else
+                                                        //BUILDING AT DISTANCE
+                                                        if (game_state == 'SELECTING_TARGET_BUILDING_IN_DISTANCE_2_5') {
+                                                            var coords = unit.toString().split(',');
+                                                            var ux = coords[0].toInt();
+                                                            var uy = coords[1].toInt();
+                                                            if ((Math.abs(ux - x.toInt()) >= 2 && Math.abs(ux - x.toInt()) <= 5) || (Math.abs(uy - y.toInt()) >= 2 && Math.abs(uy - y.toInt()) <= 5))
+                                                                if (board[x] && board[x][y])
+                                                                    if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') {
+                                                                        $('board_' + x + '_' + y).addClass('attackUnit');
+                                                                        $('overboard_' + x + '_' + y).addClass('cursor_attack');
+                                                                    }
+                                                        } else if (game_state == 'WAITTING') {}
         }
     } catch (e) {
         if (DEBUG_MODE) {
@@ -715,46 +734,47 @@ function backlight_out(x, y) {
             if ((executable_procedure == 'put_building' && game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') || ((executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building') && game_state == 'SELECTING_EMPTY_COORD')) {
                 clean_building(x, y);
             } else
-            //SUMMON VAMPIRE
-            if (game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') {
-                clean_empty_coord_my_zone(x, y);
-            } else
-            //MOVING A UNIT
-            if (executable_procedure == 'player_move_unit' && game_state == 'SELECTING_EMPTY_COORD') {
-                clean_unit(x, y);
-            } else
-            //MAGIC TELEPORTING
-            if (executable_procedure == 'cast_teleport' && game_state == 'SELECTING_EMPTY_COORD') {
-                clean_teleport_unit(x, y);
-            } else
-            //UNIT ATTACK
-            if (executable_procedure == 'attack' && game_state == 'SELECTING_ATTACK_COORD') {
-                clean_unit_attack(x, y);
-            } else
-            //METEOR
-            if (executable_procedure == 'cast_meteor_shower' && game_state == 'SELECTING_ANY_COORD') {
-                clean_meteor_coords(x, y);
-            } else
-            //ZONE
-            if (game_state == 'SELECTING_ZONE') {
-                clean_zone(x, y);
-            } else
-            //BUILDING
-            if (game_state == 'SELECTING_BUILDING') {
-                clean_building_select(x, y);
-            } else
-	    //BUILDING IN DISTANCE
-	    if (game_state == 'SELECTING_TARGET_BUILDING_IN_DISTANCE_2_5') {
-	      $('board_' + x + '_' + y).removeClass('attackUnit');
-		    $('overboard_' + x + '_' + y).removeClass('cursor_attack');
-	    }else
-            //SELECTING A UNIT
-            if (game_state == 'SELECTING_UNIT' || game_state == 'SELECTING_TARGET_UNIT' || game_state == 'SELECTING_MY_UNIT' || game_state == 'SELECTING_TARGET_UNIT_IN_DISTANCE_2_4') {
-                if (board[x] && board[x][y]) if (board[x][y]['type'] == 'unit') {
-                    $('board_' + x + '_' + y).removeClass('attackUnit');
-		    $('overboard_' + x + '_' + y).removeClass('cursor_attack');
-                }
-            }
+                //SUMMON VAMPIRE
+                if (game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') {
+                    clean_empty_coord_my_zone(x, y);
+                } else
+                    //MOVING A UNIT
+                    if (executable_procedure == 'player_move_unit' && game_state == 'SELECTING_EMPTY_COORD') {
+                        clean_unit(x, y);
+                    } else
+                        //MAGIC TELEPORTING
+                        if (executable_procedure == 'cast_teleport' && game_state == 'SELECTING_EMPTY_COORD') {
+                            clean_teleport_unit(x, y);
+                        } else
+                            //UNIT ATTACK
+                            if (executable_procedure == 'attack' && game_state == 'SELECTING_ATTACK_COORD') {
+                                clean_unit_attack(x, y);
+                            } else
+                                //METEOR
+                                if (executable_procedure == 'cast_meteor_shower' && game_state == 'SELECTING_ANY_COORD') {
+                                    clean_meteor_coords(x, y);
+                                } else
+                                    //ZONE
+                                    if (game_state == 'SELECTING_ZONE') {
+                                        clean_zone(x, y);
+                                    } else
+                                        //BUILDING
+                                        if (game_state == 'SELECTING_BUILDING') {
+                                            clean_building_select(x, y);
+                                        } else
+                                            //BUILDING IN DISTANCE
+                                            if (game_state == 'SELECTING_TARGET_BUILDING_IN_DISTANCE_2_5') {
+                                                $('board_' + x + '_' + y).removeClass('attackUnit');
+                                                $('overboard_' + x + '_' + y).removeClass('cursor_attack');
+                                            } else
+                                                //SELECTING A UNIT
+                                                if (game_state == 'SELECTING_UNIT' || game_state == 'SELECTING_TARGET_UNIT' || game_state == 'SELECTING_MY_UNIT' || game_state == 'SELECTING_TARGET_UNIT_IN_DISTANCE_2_4') {
+                                                    if (board[x] && board[x][y])
+                                                        if (board[x][y]['type'] == 'unit') {
+                                                            $('board_' + x + '_' + y).removeClass('attackUnit');
+                                                            $('overboard_' + x + '_' + y).removeClass('cursor_attack');
+                                                        }
+                                                }
         }
     } catch (e) {
         if (DEBUG_MODE) {
@@ -831,14 +851,18 @@ function draw_building(x, y) {
     //radius
     for (rx = x.toInt() - b["radius"].toInt(); rx < x.toInt() + b["x_len"].toInt() + b["radius"].toInt(); rx++) {
         for (ry = y - b["radius"].toInt(); ry < y; ry++) {
-            if ($('board_' + rx + '_' + ry)) if (!my_quart(rx, ry)) $('board_' + rx + '_' + ry).addClass('yel');
-            if ($('board_' + rx + '_' + (ry + b["radius"].toInt() + b["y_len"].toInt()))) if (!my_quart(rx, ry + b["radius"].toInt() + b["y_len"].toInt())) $('board_' + rx + '_' + (ry + b["radius"].toInt() + b["y_len"].toInt())).addClass('yel');
+            if ($('board_' + rx + '_' + ry))
+                if (!my_quart(rx, ry)) $('board_' + rx + '_' + ry).addClass('yel');
+            if ($('board_' + rx + '_' + (ry + b["radius"].toInt() + b["y_len"].toInt())))
+                if (!my_quart(rx, ry + b["radius"].toInt() + b["y_len"].toInt())) $('board_' + rx + '_' + (ry + b["radius"].toInt() + b["y_len"].toInt())).addClass('yel');
         }
     }
     for (ry = y.toInt(); ry < y.toInt() + b["y_len"].toInt(); ry++) {
         for (rx = x.toInt() - b["radius"].toInt(); rx < x.toInt(); rx++) {
-            if ($('board_' + rx + '_' + ry)) if (!my_quart(rx, ry)) $('board_' + rx + '_' + ry).addClass('yel');
-            if ($('board_' + (rx + b["radius"].toInt() + b["x_len"].toInt()) + '_' + ry)) if (!my_quart(rx + b["radius"].toInt() + b["x_len"].toInt(), ry)) $('board_' + (rx + b["radius"].toInt() + b["x_len"].toInt()) + '_' + ry).addClass('yel');
+            if ($('board_' + rx + '_' + ry))
+                if (!my_quart(rx, ry)) $('board_' + rx + '_' + ry).addClass('yel');
+            if ($('board_' + (rx + b["radius"].toInt() + b["x_len"].toInt()) + '_' + ry))
+                if (!my_quart(rx + b["radius"].toInt() + b["x_len"].toInt(), ry)) $('board_' + (rx + b["radius"].toInt() + b["x_len"].toInt()) + '_' + ry).addClass('yel');
         }
     }
     //building
@@ -862,7 +886,9 @@ function draw_building(x, y) {
                 if ($('board_' + mx + '_' + my)) {
                     $('board_' + mx + '_' + my).addClass('green');
                     if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building') $('board_' + mx + '_' + my).addClass('red');
-                    else if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
+                    else if (board[mx])
+                        if (board[mx][my])
+                            if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
                 }
             }
             i++;
@@ -879,7 +905,9 @@ function draw_building(x, y) {
                 if ($('board_' + mx + '_' + my)) {
                     $('board_' + mx + '_' + my).addClass('green');
                     if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building') $('board_' + mx + '_' + my).addClass('red');
-                    else if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
+                    else if (board[mx])
+                        if (board[mx][my])
+                            if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
                 }
             }
             i++;
@@ -896,7 +924,9 @@ function draw_building(x, y) {
                 if ($('board_' + mx + '_' + my)) {
                     $('board_' + mx + '_' + my).addClass('green');
                     if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building') $('board_' + mx + '_' + my).addClass('red');
-                    else if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
+                    else if (board[mx])
+                        if (board[mx][my])
+                            if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
                 }
             }
             i++;
@@ -913,7 +943,9 @@ function draw_building(x, y) {
                 if ($('board_' + mx + '_' + my)) {
                     $('board_' + mx + '_' + my).addClass('green');
                     if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building') $('board_' + mx + '_' + my).addClass('red');
-                    else if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
+                    else if (board[mx])
+                        if (board[mx][my])
+                            if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
                 }
             }
             i++;
@@ -928,14 +960,18 @@ function clean_building(x, y) {
     //radius
     for (rx = x - b["radius"].toInt(); rx < x + b["x_len"].toInt() + b["radius"].toInt() * 2; rx++) {
         for (ry = y - b["radius"].toInt(); ry < y; ry++) {
-            if ($('board_' + rx + '_' + ry)) if (!my_quart(rx, ry)) $('board_' + rx + '_' + ry).removeClass('yel');
-            if ($('board_' + rx + '_' + (ry + b["radius"].toInt() + b["y_len"].toInt()))) if (!my_quart(rx, ry + b["radius"].toInt() + b["y_len"].toInt())) $('board_' + rx + '_' + (ry + b["radius"].toInt() + b["y_len"].toInt())).removeClass('yel');
+            if ($('board_' + rx + '_' + ry))
+                if (!my_quart(rx, ry)) $('board_' + rx + '_' + ry).removeClass('yel');
+            if ($('board_' + rx + '_' + (ry + b["radius"].toInt() + b["y_len"].toInt())))
+                if (!my_quart(rx, ry + b["radius"].toInt() + b["y_len"].toInt())) $('board_' + rx + '_' + (ry + b["radius"].toInt() + b["y_len"].toInt())).removeClass('yel');
         }
     }
     for (ry = y.toInt(); ry < y.toInt() + b["y_len"].toInt(); ry++) {
         for (rx = x.toInt() - b["radius"].toInt(); rx < x.toInt(); rx++) {
-            if ($('board_' + rx + '_' + ry)) if (!my_quart(rx, ry)) $('board_' + rx + '_' + ry).removeClass('yel');
-            if ($('board_' + (rx + b["radius"].toInt() + b["x_len"].toInt()) + '_' + ry)) if (!my_quart(rx + b["radius"].toInt() + b["x_len"].toInt(), ry)) $('board_' + (rx + b["radius"].toInt() + b["x_len"].toInt()) + '_' + ry).removeClass('yel');
+            if ($('board_' + rx + '_' + ry))
+                if (!my_quart(rx, ry)) $('board_' + rx + '_' + ry).removeClass('yel');
+            if ($('board_' + (rx + b["radius"].toInt() + b["x_len"].toInt()) + '_' + ry))
+                if (!my_quart(rx + b["radius"].toInt() + b["x_len"].toInt(), ry)) $('board_' + (rx + b["radius"].toInt() + b["x_len"].toInt()) + '_' + ry).removeClass('yel');
         }
     }
     //building
@@ -1031,12 +1067,12 @@ function getUnitPath(ux, uy, x, y, knight, size) {
         }
     }
     //fill path board
-    board.each(function (items, index) {
-        if (items) items.each(function (item, index) {
+    board.each(function(items, index) {
+        if (items) items.each(function(item, index) {
             if (item) {
                 if (item['type'] == 'unit' && item['ref'].toInt() == id); //this unit 
                 else if (item['type'] == 'obstacle') //cant attack obstacle
-                path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
+                    path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
                 else if (item['type'] == 'unit') { //attack unit
                     //fixing bug if we suddenly get not killed unit with not existing player (which already delted)
                     if (!$chk(players_by_num[board_units[item['ref']]['player_num']])) {
@@ -1045,14 +1081,14 @@ function getUnitPath(ux, uy, x, y, knight, size) {
                     } else if (board_units[id]['player_num'] == board_units[item['ref']]['player_num'] || players_by_num[board_units[id]['player_num']]['team'] == players_by_num[board_units[item['ref']]['player_num']]['team']) path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
                     else path_board[item['x'].toInt()][item['y'].toInt()] = 'u';
                 } else {
-		  if ($chk(players_by_num[board_buildings[item['ref']]['player_num']])) { //player num 9 for trees,moat ... doesnt exists
-                    if (board_units[id]['player_num'] == board_buildings[item['ref']]['player_num'] || players_by_num[board_units[id]['player_num']]['team'] == players_by_num[board_buildings[item['ref']]['player_num']]['team']) path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
-                    else path_board[item['x'].toInt()][item['y'].toInt()] = 'b';
-		  } else 
-		    if (board_buildings[item['ref']]['health']>0) //can kill bridge
-		      path_board[item['x'].toInt()][item['y'].toInt()] = 'b';
-		    else
-		      path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
+                    if ($chk(players_by_num[board_buildings[item['ref']]['player_num']])) { //player num 9 for trees,moat ... doesnt exists
+                        if (board_units[id]['player_num'] == board_buildings[item['ref']]['player_num'] || players_by_num[board_units[id]['player_num']]['team'] == players_by_num[board_buildings[item['ref']]['player_num']]['team']) path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
+                        else path_board[item['x'].toInt()][item['y'].toInt()] = 'b';
+                    } else
+                    if (board_buildings[item['ref']]['health'] > 0) //can kill bridge
+                        path_board[item['x'].toInt()][item['y'].toInt()] = 'b';
+                    else
+                        path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
                 }
             }
         });
@@ -1071,54 +1107,59 @@ function getUnitPath(ux, uy, x, y, knight, size) {
     while (not_reached && tnear) {
         tnear = false;
         for (i = 0; i < 20; i++)
-        for (k = 0; k < 20; k++) {
-            cnear = false;
-            if (path_board[i][k] == '-' || path_board[i][k] == 't') {
-                if (knight) {
-                    for (l = i - 2; l < i + 3; l++)
-                    for (m = k - 2; m < k + 3; m++) {
-                        if (l >= 0 && l <= 19 && m >= 0 && m <= 19) if ((Math.abs(i - l) == 1 && Math.abs(k - m) == 2) || (Math.abs(i - l) == 2 && Math.abs(k - m) == 1)) if ((step == 0 && path_board[l][m] == 'z') || (step != 0 && path_board[l][m] == symbols[step - 1])) if (size > 1) { //large unlts
-                            if (step == 0 && path_board[l][m] == 'z') {
-                                if (l == ux && m == uy) cnear = 1;
-                            } else cnear = 1;
-                        } else cnear = 1;
-                    }
-                } else { //usual moves
-                    for (l = i - 1; l < i + 2; l++)
-                    for (m = k - 1; m < k + 2; m++)
-                    if (l >= 0 && l <= 19 && m >= 0 && m <= 19) if ((step == 0 && path_board[l][m] == 'z') || (step != 0 && path_board[l][m] == symbols[step - 1])) cnear = 1;
-                }
-                if (cnear) {
-                    if (path_board[i][k] == 't') { //found target unit(s)
-                        not_reached = false;
-                    } else {
-                        cango = true;
-                        if (size > 1) { //large units
-                            t_in = false;
-                            x_in = false;
-                            for (l = i; l < i + size; l++)
-                            for (m = k; m < k + size; m++) {
-                                if (l >= 0 && l <= 19 && m >= 0 && m <= 19) {
-                                    if (path_board[l][m] == 'x') x_in = true;
-                                    if (path_board[l][m] == 't') t_in = true;
-                                    if (path_board[l][m] == 'x' || path_board[l][m] == 'u' || path_board[l][m] == 'b') cango = false;
-                                } else cango = false;
+            for (k = 0; k < 20; k++) {
+                cnear = false;
+                if (path_board[i][k] == '-' || path_board[i][k] == 't') {
+                    if (knight) {
+                        for (l = i - 2; l < i + 3; l++)
+                            for (m = k - 2; m < k + 3; m++) {
+                                if (l >= 0 && l <= 19 && m >= 0 && m <= 19)
+                                    if ((Math.abs(i - l) == 1 && Math.abs(k - m) == 2) || (Math.abs(i - l) == 2 && Math.abs(k - m) == 1))
+                                        if ((step == 0 && path_board[l][m] == 'z') || (step != 0 && path_board[l][m] == symbols[step - 1]))
+                                            if (size > 1) { //large unlts
+                                                if (step == 0 && path_board[l][m] == 'z') {
+                                                    if (l == ux && m == uy) cnear = 1;
+                                                } else cnear = 1;
+                                            } else cnear = 1;
                             }
-                            //if can hit target unit by hitting also another b or u - and target not free cell
-                            if (cango == false) {
-                                if ($chk(board[x]) && $chk(board[x][y]) && $chk(board[x][y]['ref'])) if (t_in && !x_in) {
-                                    cango = true;
+                    } else { //usual moves
+                        for (l = i - 1; l < i + 2; l++)
+                            for (m = k - 1; m < k + 2; m++)
+                                if (l >= 0 && l <= 19 && m >= 0 && m <= 19)
+                                    if ((step == 0 && path_board[l][m] == 'z') || (step != 0 && path_board[l][m] == symbols[step - 1])) cnear = 1;
+                    }
+                    if (cnear) {
+                        if (path_board[i][k] == 't') { //found target unit(s)
+                            not_reached = false;
+                        } else {
+                            cango = true;
+                            if (size > 1) { //large units
+                                t_in = false;
+                                x_in = false;
+                                for (l = i; l < i + size; l++)
+                                    for (m = k; m < k + size; m++) {
+                                        if (l >= 0 && l <= 19 && m >= 0 && m <= 19) {
+                                            if (path_board[l][m] == 'x') x_in = true;
+                                            if (path_board[l][m] == 't') t_in = true;
+                                            if (path_board[l][m] == 'x' || path_board[l][m] == 'u' || path_board[l][m] == 'b') cango = false;
+                                        } else cango = false;
+                                    }
+                                //if can hit target unit by hitting also another b or u - and target not free cell
+                                if (cango == false) {
+                                    if ($chk(board[x]) && $chk(board[x][y]) && $chk(board[x][y]['ref']))
+                                        if (t_in && !x_in) {
+                                            cango = true;
+                                        }
                                 }
                             }
-                        }
-                        if (cango) {
-                            path_board[i][k] = symbols[step];
-                            tnear = true;
+                            if (cango) {
+                                path_board[i][k] = symbols[step];
+                                tnear = true;
+                            }
                         }
                     }
-                }
-            } // =='-'
-        }
+                } // =='-'
+            }
         step++;
     }
     //show board
@@ -1144,11 +1185,11 @@ function getUnitPath(ux, uy, x, y, knight, size) {
     var doattack = false;
     if (size > 1 && target_coord == '-') { //large units
         for (l = x_path[step]; l < x_path[step] + size; l++)
-        for (m = y_path[step]; m < y_path[step] + size; m++)
-        if (l >= 0 && l <= 19 && m >= 0 && m <= 19) {
-            if (path_board[l][m] == 'u' || path_board[l][m] == 'b') doattack = true;
-            if (path_board[l][m] == 'x') cango = false;
-        } else cango = false;
+            for (m = y_path[step]; m < y_path[step] + size; m++)
+                if (l >= 0 && l <= 19 && m >= 0 && m <= 19) {
+                    if (path_board[l][m] == 'u' || path_board[l][m] == 'b') doattack = true;
+                    if (path_board[l][m] == 'x') cango = false;
+                } else cango = false;
     } else if (size > 1 && target_coord == 'b' || target_coord == 'u') {
         doattack = true;
     }
@@ -1169,22 +1210,25 @@ function getUnitPath(ux, uy, x, y, knight, size) {
         var delta = 100;
         if (knight == 1) { //knight moves
             for (i = cur_x - 2; i < cur_x + 3; i++)
-            for (j = cur_y - 2; j < cur_y + 3; j++) {
-                if (i >= 0 && i <= 19 && j >= 0 && j <= 19) if ((Math.abs(cur_x - i) == 1 && Math.abs(cur_y - j) == 2) || (Math.abs(cur_x - i) == 2 && Math.abs(cur_y - j) == 1)) if ((step == 0 && path_board[i][j] == 'z') || (step != 0 && path_board[i][j] == symbols[step - 1])) {
-                    u_x[ufound] = i;
-                    u_y[ufound] = j;
-                    ufound++;
+                for (j = cur_y - 2; j < cur_y + 3; j++) {
+                    if (i >= 0 && i <= 19 && j >= 0 && j <= 19)
+                        if ((Math.abs(cur_x - i) == 1 && Math.abs(cur_y - j) == 2) || (Math.abs(cur_x - i) == 2 && Math.abs(cur_y - j) == 1))
+                            if ((step == 0 && path_board[i][j] == 'z') || (step != 0 && path_board[i][j] == symbols[step - 1])) {
+                                u_x[ufound] = i;
+                                u_y[ufound] = j;
+                                ufound++;
+                            }
                 }
-            }
         } else //usual moves
-        for (i = cur_x - 1; i < cur_x + 2; i++)
-        for (j = cur_y - 1; j < cur_y + 2; j++) {
-            if (i >= 0 && i <= 19 && j >= 0 && j <= 19) if ((step == 0 && path_board[i][j] == 'z') || (step != 0 && path_board[i][j] == symbols[step - 1])) {
-                u_x[ufound] = i;
-                u_y[ufound] = j;
-                ufound++;
-            }
-        }
+            for (i = cur_x - 1; i < cur_x + 2; i++)
+                for (j = cur_y - 1; j < cur_y + 2; j++) {
+                    if (i >= 0 && i <= 19 && j >= 0 && j <= 19)
+                        if ((step == 0 && path_board[i][j] == 'z') || (step != 0 && path_board[i][j] == symbols[step - 1])) {
+                            u_x[ufound] = i;
+                            u_y[ufound] = j;
+                            ufound++;
+                        }
+                }
         //pick random way
         /*if (ufound!=1)	{
 			ufound = Math.floor(Math.random() * ufound);
@@ -1202,7 +1246,7 @@ function getUnitPath(ux, uy, x, y, knight, size) {
         else if (ux < cur_x && uy < cur_y) angl = Math.PI + Math.PI / 2 - Math.asin(sina);
         else if (cur_x == ux && uy < cur_y) angl = Math.PI + Math.PI / 2;
         else if (ux > cur_x && uy < cur_y) angl = Math.PI * 1.5 + Math.asin(sina);
-        u_x.each(function (item, index) {
+        u_x.each(function(item, index) {
             if ($chk(item)) {
                 l = Math.sqrt(Math.pow((u_x[index] - cur_x), 2) + Math.pow((u_y[index] - cur_y), 2));
                 sina = Math.abs(u_x[index] - cur_x) / l;
@@ -1242,10 +1286,10 @@ function getUnitPath(ux, uy, x, y, knight, size) {
         var can_hit_earlier = false;
         while (x_path[i] != -1 && y_path[i] != -1 && !can_hit_earlier) {
             for (l = x_path[i]; l < x_path[i] + size; l++)
-            for (m = y_path[i]; m < y_path[i] + size; m++)
-            if (l >= 0 && l <= 19 && m >= 0 && m <= 19) {
-                if (path_board[l][m] == 't') can_hit_earlier = true;
-            }
+                for (m = y_path[i]; m < y_path[i] + size; m++)
+                    if (l >= 0 && l <= 19 && m >= 0 && m <= 19) {
+                        if (path_board[l][m] == 't') can_hit_earlier = true;
+                    }
             i++;
         }
         if (can_hit_earlier) {
@@ -1274,53 +1318,58 @@ function draw_unit(x, y) {
         size = units[board_units[id]["unit_id"]]['size'].toInt();
         if (size > 1) {
             //get left up corner
-            board.each(function (items, index) {
-                if (items) items.each(function (item, index) {
-                    if (item) if (item["ref"] == id && item["type"] == "unit") {
-                        if (item["x"].toInt() < ux) ux = item["x"].toInt();
-                        if (item["y"].toInt() < uy) uy = item["y"].toInt();
-                    }
+            board.each(function(items, index) {
+                if (items) items.each(function(item, index) {
+                    if (item)
+                        if (item["ref"] == id && item["type"] == "unit") {
+                            if (item["x"].toInt() < ux) ux = item["x"].toInt();
+                            if (item["y"].toInt() < uy) uy = item["y"].toInt();
+                        }
                 });
             });
         }
         //teleport
-        board_buildings.each(function (item, index) {
-            if (item) 
-	      if ($chk(players_by_num[item['player_num']]))//player num 9 for trees,moat ... doesnt exists
-	      if (buildings[item["building_id"]]['ui_code'] == 'teleport' && (item['player_num'] == my_player_num || players_by_num[item['player_num']]['team'] == players_by_num[my_player_num]['team'])) { //this is my Teleport or my ally
-                tid = item["id"];
-                teleport = 1;
-                //get coords
-                board.each(function (items, index) {
-                    if (items) items.each(function (item, index) {
-                        if (item) if (item["ref"] == tid && item["type"] == "building") {
-                            tx = item["x"].toInt();
-                            ty = item["y"].toInt();
-                        }
-                    });
-                });
-            }
+        board_buildings.each(function(item, index) {
+            if (item)
+                if ($chk(players_by_num[item['player_num']])) //player num 9 for trees,moat ... doesnt exists
+                    if (board_units[id]['magic_immunity'] != 1 && buildings[item["building_id"]]['ui_code'] == 'teleport' && (item['player_num'] == my_player_num || players_by_num[item['player_num']]['team'] == players_by_num[my_player_num]['team'])) { //this is my Teleport or my ally and unit is not golem(magic_immunity==1)
+                        tid = item["id"];
+                        teleport = 1;
+                        //get coords
+                        board.each(function(items, index) {
+                            if (items) items.each(function(item, index) {
+                                if (item)
+                                    if (item["ref"] == tid && item["type"] == "building") {
+                                        tx = item["x"].toInt();
+                                        ty = item["y"].toInt();
+                                    }
+                            });
+                        });
+                    }
         });
         var nearSelectedUnit = false;
         var cx;
         var cy;
         for (cx = x - 1; cx < x + 2; cx++)
-        for (cy = y - 1; cy < y + 2; cy++) {
-            if (board[cx]) if (board[cx][cy]) if (board[cx][cy]["ref"] == id && board[cx][cy]["type"] == 'unit') nearSelectedUnit = true;
-        }
+            for (cy = y - 1; cy < y + 2; cy++) {
+                if (board[cx])
+                    if (board[cx][cy])
+                        if (board[cx][cy]["ref"] == id && board[cx][cy]["type"] == 'unit') nearSelectedUnit = true;
+            }
         var goToMultiMove = false;
         if (!nearSelectedUnit) {
             var dist = board_units[id]["moves_left"].toInt();
             if ($chk(board_units[id]["knight"])) dist = dist * 2;
-            if (Math.abs(ux - x) <= dist || Math.abs(uy - y) <= dist) if ($chk(board[x]) && $chk(board[x][y]) && $chk(board[x][y]['ref'])) {
-                if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle' || board[x][y]['type'] == 'unit') {
-                    if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') pnum = board_buildings[board[x][y]['ref']]['player_num'];
-                    if (board[x][y]['type'] == 'unit') pnum = board_units[board[x][y]['ref']]['player_num'];
-                    if (board_units[id]['player_num'] != pnum) getUnitPath(ux, uy, x, y, $chk(board_units[id]["knight"]), size);
+            if (Math.abs(ux - x) <= dist || Math.abs(uy - y) <= dist)
+                if ($chk(board[x]) && $chk(board[x][y]) && $chk(board[x][y]['ref'])) {
+                    if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle' || board[x][y]['type'] == 'unit') {
+                        if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') pnum = board_buildings[board[x][y]['ref']]['player_num'];
+                        if (board[x][y]['type'] == 'unit') pnum = board_units[board[x][y]['ref']]['player_num'];
+                        if (board_units[id]['player_num'] != pnum) getUnitPath(ux, uy, x, y, $chk(board_units[id]["knight"]), size);
+                    }
+                } else {
+                    getUnitPath(ux, uy, x, y, $chk(board_units[id]["knight"]), size);
                 }
-            } else {
-                getUnitPath(ux, uy, x, y, $chk(board_units[id]["knight"]), size);
-            }
             if (x_path[0] != -1 && y_path[0] != -1 && $chk(x_path[0]) && $chk(y_path[0]) && path_moves <= board_units[id]["moves_left"].toInt()) {
                 goToMultiMove = true;
             }
@@ -1334,13 +1383,15 @@ function draw_unit(x, y) {
                             $('board_' + x + '_' + y).addClass('green');
                             found_move = true;
                         } else {
-                            if (((x >= ux - 1 && x <= ux + 1) && (y >= uy - 1 && y <= uy + 1) && !$chk(board_units[id]["knight"])) || ($chk(board_units[id]["knight"]) && ((Math.abs(x - ux) == 1 && Math.abs(y - uy) == 2) || (Math.abs(x - ux) == 2 && Math.abs(y - uy) == 1)))) if (ux != x || uy != y) if (board[x][y]['type'] == 'unit') {
-                                if (board_units[id]['player_num'] != board_units[board[x][y]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_units[board[x][y]['ref']]['player_num']]['team']) {
-                                    addAttackClass(x, y);
-                                    move_kind = 'attack';
-                                    found_move = true;
-                                }
-                            } else if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') {
+                            if (((x >= ux - 1 && x <= ux + 1) && (y >= uy - 1 && y <= uy + 1) && !$chk(board_units[id]["knight"])) || ($chk(board_units[id]["knight"]) && ((Math.abs(x - ux) == 1 && Math.abs(y - uy) == 2) || (Math.abs(x - ux) == 2 && Math.abs(y - uy) == 1))))
+                                if (ux != x || uy != y)
+                                    if (board[x][y]['type'] == 'unit') {
+                                        if (board_units[id]['player_num'] != board_units[board[x][y]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_units[board[x][y]['ref']]['player_num']]['team']) {
+                                            addAttackClass(x, y);
+                                            move_kind = 'attack';
+                                            found_move = true;
+                                        }
+                                    } else if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') {
                                 if (!players_by_num[board_buildings[board[x][y]['ref']]['player_num']] || (board_units[id]['player_num'] != board_buildings[board[x][y]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_buildings[board[x][y]['ref']]['player_num']]['team'])) {
                                     addAttackClass(x, y);
                                     move_kind = 'attack';
@@ -1353,26 +1404,35 @@ function draw_unit(x, y) {
                     if (($chk(board_units[id]["knight"]) && ((Math.abs(x - ux) == 1 && Math.abs(y - uy) == 2) || (Math.abs(x - ux) == 2 && Math.abs(y - uy) == 1))) || ((x >= tx - size && x <= tx + 1) && (y >= ty - size && y <= ty + 1) && teleport == 1 && (!board[x] || !board[x][y] || !board[x][y]['type']))) { //knight or teleport
                         makeGreen = 1;
                         for (mx = x; mx < x + size; mx++)
-                        for (my = y; my < y + size; my++) {
-                            if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"]) if (board[mx][my]['type'] != 'unit' || board[mx][my]['ref'] != id) makeGreen = 0;
-                            if (mx < 0 || mx > 19 || my < 0 || my > 19) makeGreen = 0;
-                        }
+                            for (my = y; my < y + size; my++) {
+                                if (board[mx])
+                                    if (board[mx][my])
+                                        if (board[mx][my]["ref"])
+                                            if (board[mx][my]['type'] != 'unit' || board[mx][my]['ref'] != id) makeGreen = 0;
+                                if (mx < 0 || mx > 19 || my < 0 || my > 19) makeGreen = 0;
+                            }
                         if (makeGreen == 1) {
                             for (mx = x; mx < x + size; mx++)
-                            for (my = y; my < y + size; my++) {
-                                $('board_' + mx + '_' + my).addClass('green');
-                                found_move = true;
-                            }
-                        } else {
-                            if ($chk(board_units[id]["knight"]) && ((Math.abs(x - ux) == 1 && Math.abs(y - uy) == 2) || (Math.abs(x - ux) == 2 && Math.abs(y - uy) == 1))) if (x + 1 <= 19 && y + 1 <= 19) for (mx = x; mx < x + size; mx++)
-                            for (my = y; my < y + size; my++)
-                            if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"]) if (board[mx][my]['ref'] != id) if (board[mx][my]['type'] == 'unit') {
-                                if (board_units[id]['player_num'] != board_units[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_units[board[mx][my]['ref']]['player_num']]['team']) {
-                                    addAttackClass(mx, my);
-                                    move_kind = 'attack';
+                                for (my = y; my < y + size; my++) {
+                                    $('board_' + mx + '_' + my).addClass('green');
                                     found_move = true;
                                 }
-                            } else if (board[mx][my]['type'] == 'building' || board[mx][my]['type'] == 'castle') {
+                        } else {
+                            if ($chk(board_units[id]["knight"]) && ((Math.abs(x - ux) == 1 && Math.abs(y - uy) == 2) || (Math.abs(x - ux) == 2 && Math.abs(y - uy) == 1)))
+                                if (x + 1 <= 19 && y + 1 <= 19)
+                                    for (mx = x; mx < x + size; mx++)
+                                        for (my = y; my < y + size; my++)
+                                            if (board[mx])
+                                                if (board[mx][my])
+                                                    if (board[mx][my]["ref"])
+                                                        if (board[mx][my]['ref'] != id)
+                                                            if (board[mx][my]['type'] == 'unit') {
+                                                                if (board_units[id]['player_num'] != board_units[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_units[board[mx][my]['ref']]['player_num']]['team']) {
+                                                                    addAttackClass(mx, my);
+                                                                    move_kind = 'attack';
+                                                                    found_move = true;
+                                                                }
+                                                            } else if (board[mx][my]['type'] == 'building' || board[mx][my]['type'] == 'castle') {
                                 if (board_units[id]['player_num'] != board_buildings[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_buildings[board[mx][my]['ref']]['player_num']]['team']) {
                                     addAttackClass(mx, my);
                                     move_kind = 'attack';
@@ -1389,25 +1449,33 @@ function draw_unit(x, y) {
                         else newy = uy;
                         makeGreen = 1;
                         for (mx = newx; mx < newx + size; mx++)
-                        for (my = newy; my < newy + size; my++) {
-                            if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"]) if (board[mx][my]['type'] != 'unit' || board[mx][my]['ref'] != id) makeGreen = 0;
-                        }
+                            for (my = newy; my < newy + size; my++) {
+                                if (board[mx])
+                                    if (board[mx][my])
+                                        if (board[mx][my]["ref"])
+                                            if (board[mx][my]['type'] != 'unit' || board[mx][my]['ref'] != id) makeGreen = 0;
+                            }
                         if (makeGreen == 1) {
                             for (mx = newx; mx < newx + size; mx++)
-                            for (my = newy; my < newy + size; my++) {
-                                $('board_' + mx + '_' + my).addClass('green');
-                                found_move = true;
-                            }
-                        } else {
-                            if (newx + 1 <= 19 && newy + 1 <= 19) for (mx = newx; mx < newx + size; mx++)
-                            for (my = newy; my < newy + size; my++)
-                            if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"]) if (board[mx][my]['ref'] != id) if (board[mx][my]['type'] == 'unit') {
-                                if (board_units[id]['player_num'] != board_units[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_units[board[mx][my]['ref']]['player_num']]['team']) {
-                                    addAttackClass(mx, my);
-                                    move_kind = 'attack';
+                                for (my = newy; my < newy + size; my++) {
+                                    $('board_' + mx + '_' + my).addClass('green');
                                     found_move = true;
                                 }
-                            } else if (board[mx][my]['type'] == 'building' || board[mx][my]['type'] == 'castle') {
+                        } else {
+                            if (newx + 1 <= 19 && newy + 1 <= 19)
+                                for (mx = newx; mx < newx + size; mx++)
+                                    for (my = newy; my < newy + size; my++)
+                                        if (board[mx])
+                                            if (board[mx][my])
+                                                if (board[mx][my]["ref"])
+                                                    if (board[mx][my]['ref'] != id)
+                                                        if (board[mx][my]['type'] == 'unit') {
+                                                            if (board_units[id]['player_num'] != board_units[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_units[board[mx][my]['ref']]['player_num']]['team']) {
+                                                                addAttackClass(mx, my);
+                                                                move_kind = 'attack';
+                                                                found_move = true;
+                                                            }
+                                                        } else if (board[mx][my]['type'] == 'building' || board[mx][my]['type'] == 'castle') {
                                 if (board_units[id]['player_num'] != board_buildings[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_buildings[board[mx][my]['ref']]['player_num']]['team']) {
                                     addAttackClass(mx, my);
                                     move_kind = 'attack';
@@ -1429,12 +1497,12 @@ function draw_unit(x, y) {
 
                         } else if (size > 1 && path_actions[i] == 'a') { //if the dragon last move is attack
                             for (mx = x_path[i]; mx < x_path[i] + size; mx++)
-                            for (my = y_path[i]; my < y_path[i] + size; my++) {
-                                if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
-                                    $('board_' + mx + '_' + my).addClass('attackUnit');
-                                    move_kind = 'attack';
+                                for (my = y_path[i]; my < y_path[i] + size; my++) {
+                                    if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
+                                        $('board_' + mx + '_' + my).addClass('attackUnit');
+                                        move_kind = 'attack';
+                                    }
                                 }
-                            }
                         } else {
                             addAttackClass(x_path[i], y_path[i]);
                             move_kind = 'attack';
@@ -1442,20 +1510,20 @@ function draw_unit(x, y) {
                     } else { //free cell
                         if (size > 1 && path_actions[i] == 'a') { //if the dragon last move is attack
                             for (mx = x_path[i]; mx < x_path[i] + size; mx++)
-                            for (my = y_path[i]; my < y_path[i] + size; my++) {
-                                if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
-                                    $('board_' + mx + '_' + my).addClass('attackUnit');
-                                    move_kind = 'attack';
+                                for (my = y_path[i]; my < y_path[i] + size; my++) {
+                                    if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
+                                        $('board_' + mx + '_' + my).addClass('attackUnit');
+                                        move_kind = 'attack';
+                                    }
                                 }
-                            }
                         } else if (size > 1 && path_actions[i + 1] == 'a') {
                             for (mx = x_path[i]; mx < x_path[i] + size; mx++)
-                            for (my = y_path[i]; my < y_path[i] + size; my++)
-                            $('board_' + mx + '_' + my).addClass('green');
+                                for (my = y_path[i]; my < y_path[i] + size; my++)
+                                    $('board_' + mx + '_' + my).addClass('green');
                         } else if (size > 1 && x_path[i + 1] == -1 && y_path[i + 1] == -1) {
                             for (mx = x_path[i]; mx < x_path[i] + size; mx++)
-                            for (my = y_path[i]; my < y_path[i] + size; my++)
-                            $('board_' + mx + '_' + my).addClass('green');
+                                for (my = y_path[i]; my < y_path[i] + size; my++)
+                                    $('board_' + mx + '_' + my).addClass('green');
                         } else $('board_' + x_path[i] + '_' + y_path[i]).addClass('green');
                     }
                     i++;
@@ -1498,39 +1566,40 @@ function clean_unit(x, y) {
                 removeAttackClass(x, y)
             } else { //large_units
                 for (mx = x - size; mx < x + size; mx++)
-                for (my = y - size; my < y + size; my++)
-                if ($('board_' + mx + '_' + my)) {
-                    $('board_' + mx + '_' + my).removeClass('green');
-                    removeAttackClass(mx, my)
-                }
+                    for (my = y - size; my < y + size; my++)
+                        if ($('board_' + mx + '_' + my)) {
+                            $('board_' + mx + '_' + my).removeClass('green');
+                            removeAttackClass(mx, my)
+                        }
             }
         } else {
             i = 0;
             while (x_path[i] != -1 && y_path[i] != -1 && board_units[id]["moves_left"].toInt() != i) {
-                if ($chk(board[x_path[i]]) && $chk(board[x_path[i]][y_path[i]]) && $chk(board[x_path[i]][y_path[i]]['ref'])) if (size > 1 && path_actions[i] == 'a') { //if the dragon last move is attack
-                    for (mx = x_path[i]; mx < x_path[i] + size; mx++)
-                    for (my = y_path[i]; my < y_path[i] + size; my++) {
-                        if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
-                            $('board_' + mx + '_' + my).removeClass('attackUnit');
-                        }
-                    }
-                } else removeAttackClass(x_path[i], y_path[i]);
+                if ($chk(board[x_path[i]]) && $chk(board[x_path[i]][y_path[i]]) && $chk(board[x_path[i]][y_path[i]]['ref']))
+                    if (size > 1 && path_actions[i] == 'a') { //if the dragon last move is attack
+                        for (mx = x_path[i]; mx < x_path[i] + size; mx++)
+                            for (my = y_path[i]; my < y_path[i] + size; my++) {
+                                if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
+                                    $('board_' + mx + '_' + my).removeClass('attackUnit');
+                                }
+                            }
+                    } else removeAttackClass(x_path[i], y_path[i]);
                 else {
                     if (size > 1 && path_actions[i] == 'a') { //if the dragon last move is attack
                         for (mx = x_path[i]; mx < x_path[i] + size; mx++)
-                        for (my = y_path[i]; my < y_path[i] + size; my++) {
-                            if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
-                                $('board_' + mx + '_' + my).removeClass('attackUnit');
+                            for (my = y_path[i]; my < y_path[i] + size; my++) {
+                                if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
+                                    $('board_' + mx + '_' + my).removeClass('attackUnit');
+                                }
                             }
-                        }
                     } else if (size > 1 && path_actions[i + 1] == 'a') {
                         for (mx = x_path[i]; mx < x_path[i] + size; mx++)
-                        for (my = y_path[i]; my < y_path[i] + size; my++)
-                        $('board_' + mx + '_' + my).removeClass('green');
+                            for (my = y_path[i]; my < y_path[i] + size; my++)
+                                $('board_' + mx + '_' + my).removeClass('green');
                     } else if (size > 1 && x_path[i + 1] == -1 && y_path[i + 1] == -1) {
                         for (mx = x_path[i]; mx < x_path[i] + size; mx++)
-                        for (my = y_path[i]; my < y_path[i] + size; my++)
-                        $('board_' + mx + '_' + my).removeClass('green');
+                            for (my = y_path[i]; my < y_path[i] + size; my++)
+                                $('board_' + mx + '_' + my).removeClass('green');
                     } else $('board_' + x_path[i] + '_' + y_path[i]).removeClass('green');
                 }
                 i++;
@@ -1554,12 +1623,13 @@ function draw_unit_attack(x, y) {
     var newy;
     if (size > 1) {
         //get left up corner
-        board.each(function (items, index) {
-            if (items) items.each(function (item, index) {
-                if (item) if (item["ref"] == id && item["type"] == "unit") {
-                    if (item["x"].toInt() < ux) ux = item["x"].toInt();
-                    if (item["y"].toInt() < uy) uy = item["y"].toInt();
-                }
+        board.each(function(items, index) {
+            if (items) items.each(function(item, index) {
+                if (item)
+                    if (item["ref"] == id && item["type"] == "unit") {
+                        if (item["x"].toInt() < ux) ux = item["x"].toInt();
+                        if (item["y"].toInt() < uy) uy = item["y"].toInt();
+                    }
             });
         });
     }
@@ -1578,15 +1648,22 @@ function draw_unit_attack(x, y) {
             if ($chk(board_units[id]["knight"]) && ((Math.abs(x - ux) == 1 && Math.abs(y - uy) == 2) || (Math.abs(x - ux) == 2 && Math.abs(y - uy) == 1))) {
                 makeGreen = 1;
                 for (mx = x; mx < x + size; mx++)
-                for (my = y; my < y + size; my++)
-                if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"]) if (board[mx][my]['type'] != 'unit' || board[mx][my]['ref'] != id) makeGreen = 0;
-                if (makeGreen == 1) {} else {
-                    if (x + 1 <= 19 && y + 1 <= 19) for (mx = x; mx < x + size; mx++)
                     for (my = y; my < y + size; my++)
-                    if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"]) if (board[mx][my]['ref'] != id) {
-                        addAttackClass(mx, my)
-                        found_attack = true;
-                    }
+                        if (board[mx])
+                            if (board[mx][my])
+                                if (board[mx][my]["ref"])
+                                    if (board[mx][my]['type'] != 'unit' || board[mx][my]['ref'] != id) makeGreen = 0;
+                if (makeGreen == 1) {} else {
+                    if (x + 1 <= 19 && y + 1 <= 19)
+                        for (mx = x; mx < x + size; mx++)
+                            for (my = y; my < y + size; my++)
+                                if (board[mx])
+                                    if (board[mx][my])
+                                        if (board[mx][my]["ref"])
+                                            if (board[mx][my]['ref'] != id) {
+                                                addAttackClass(mx, my)
+                                                found_attack = true;
+                                            }
                 }
             } else if ((x >= ux - 1 && x <= ux + size) && (y >= uy - 1 && y <= uy + size) && !$chk(board_units[id]["knight"])) { //usual moves for large
                 if (x < ux) newx = x;
@@ -1598,15 +1675,22 @@ function draw_unit_attack(x, y) {
 
                 makeGreen = 1;
                 for (mx = newx; mx < newx + size; mx++)
-                for (my = newy; my < newy + size; my++)
-                if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"]) if (board[mx][my]['type'] != 'unit' || board[mx][my]['ref'] != id) makeGreen = 0;
-                if (makeGreen == 1) {} else {
-                    if (newx + 1 <= 19 && newy + 1 <= 19) for (mx = newx; mx < newx + size; mx++)
                     for (my = newy; my < newy + size; my++)
-                    if (board[mx]) if (board[mx][my]) if (board[mx][my]["ref"]) if (board[mx][my]['ref'] != id) {
-                        addAttackClass(mx, my)
-                        found_attack = true;
-                    }
+                        if (board[mx])
+                            if (board[mx][my])
+                                if (board[mx][my]["ref"])
+                                    if (board[mx][my]['type'] != 'unit' || board[mx][my]['ref'] != id) makeGreen = 0;
+                if (makeGreen == 1) {} else {
+                    if (newx + 1 <= 19 && newy + 1 <= 19)
+                        for (mx = newx; mx < newx + size; mx++)
+                            for (my = newy; my < newy + size; my++)
+                                if (board[mx])
+                                    if (board[mx][my])
+                                        if (board[mx][my]["ref"])
+                                            if (board[mx][my]['ref'] != id) {
+                                                addAttackClass(mx, my)
+                                                found_attack = true;
+                                            }
                 }
             }
         }
@@ -1626,12 +1710,13 @@ function addAttackClass(x, y) {
             var size = units[board_units[id]["unit_id"]]['size'].toInt();
             if (size > 1) {
                 //get left up corner
-                board.each(function (items, index) {
-                    if (items) items.each(function (item, index) {
-                        if (item) if (item["ref"] == id && item["type"] == "unit") {
-                            if (item["x"].toInt() > ux) ux = item["x"].toInt();
-                            if (item["y"].toInt() > uy) uy = item["y"].toInt();
-                        }
+                board.each(function(items, index) {
+                    if (items) items.each(function(item, index) {
+                        if (item)
+                            if (item["ref"] == id && item["type"] == "unit") {
+                                if (item["x"].toInt() > ux) ux = item["x"].toInt();
+                                if (item["y"].toInt() > uy) uy = item["y"].toInt();
+                            }
                     });
                 });
             }
@@ -1649,12 +1734,13 @@ function removeAttackClass(x, y) {
             var size = units[board_units[id]["unit_id"]]['size'].toInt();
             if (size > 1) {
                 //get left up corner
-                board.each(function (items, index) {
-                    if (items) items.each(function (item, index) {
-                        if (item) if (item["ref"] == id && item["type"] == "unit") {
-                            if (item["x"].toInt() > ux) ux = item["x"].toInt();
-                            if (item["y"].toInt() > uy) uy = item["y"].toInt();
-                        }
+                board.each(function(items, index) {
+                    if (items) items.each(function(item, index) {
+                        if (item)
+                            if (item["ref"] == id && item["type"] == "unit") {
+                                if (item["x"].toInt() > ux) ux = item["x"].toInt();
+                                if (item["y"].toInt() > uy) uy = item["y"].toInt();
+                            }
                     });
                 });
             }
@@ -1677,27 +1763,29 @@ function clean_unit_attack(x, y) {
         removeAttackClass(x, y)
     } else { //large_units
         for (mx = x - size; mx < x + size; mx++)
-        for (my = y - size; my < y + size; my++)
-        if ($('board_' + mx + '_' + my)) {
-            removeAttackClass(mx, my)
-        }
+            for (my = y - size; my < y + size; my++)
+                if ($('board_' + mx + '_' + my)) {
+                    removeAttackClass(mx, my)
+                }
     }
 }
 
 function draw_meteor_coords(x, y) {
     var mx;
     var my;
-    if (x < 19 && y < 19) for (mx = x; mx < x + 2; mx++)
-    for (my = y; my < y + 2; my++)
-    if ($('board_' + mx + '_' + my)) $('board_' + mx + '_' + my).addClass('attackUnit');
+    if (x < 19 && y < 19)
+        for (mx = x; mx < x + 2; mx++)
+            for (my = y; my < y + 2; my++)
+                if ($('board_' + mx + '_' + my)) $('board_' + mx + '_' + my).addClass('attackUnit');
 }
 
 function clean_meteor_coords(x, y) {
     var mx;
     var my;
-    if (x < 19 && y < 19) for (mx = x; mx < x + 2; mx++)
-    for (my = y; my < y + 2; my++)
-    if ($('board_' + mx + '_' + my)) $('board_' + mx + '_' + my).removeClass('attackUnit');
+    if (x < 19 && y < 19)
+        for (mx = x; mx < x + 2; mx++)
+            for (my = y; my < y + 2; my++)
+                if ($('board_' + mx + '_' + my)) $('board_' + mx + '_' + my).removeClass('attackUnit');
 }
 
 function draw_empty_coord_my_zone(x, y) {
@@ -1720,13 +1808,15 @@ function draw_teleport_unit(x, y) {
     var mx;
     var my;
     for (mx = x; mx < x + size; mx++)
-    for (my = y; my < y + size; my++)
-    if (mx < 0 || mx > 19 || y < 0 || y > 19) cango = false;
-    else if ($chk(board[mx])) if ($chk(board[mx][my])) cango = false;
+        for (my = y; my < y + size; my++)
+            if (mx < 0 || mx > 19 || y < 0 || y > 19) cango = false;
+            else if ($chk(board[mx]))
+        if ($chk(board[mx][my])) cango = false;
     for (mx = x; mx < x + size; mx++)
-    for (my = y; my < y + size; my++)
-    if ($('board_' + mx + '_' + my)) if (cango) $('board_' + mx + '_' + my).addClass('green');
-    else $('board_' + mx + '_' + my).addClass('red');
+        for (my = y; my < y + size; my++)
+            if ($('board_' + mx + '_' + my))
+                if (cango) $('board_' + mx + '_' + my).addClass('green');
+                else $('board_' + mx + '_' + my).addClass('red');
 }
 
 function clean_teleport_unit(x, y) {
@@ -1738,11 +1828,11 @@ function clean_teleport_unit(x, y) {
     var mx;
     var my;
     for (mx = x; mx < x + size; mx++)
-    for (my = y; my < y + size; my++)
-    if ($('board_' + mx + '_' + my)) {
-        $('board_' + mx + '_' + my).removeClass('green');
-        $('board_' + mx + '_' + my).removeClass('red');
-    }
+        for (my = y; my < y + size; my++)
+            if ($('board_' + mx + '_' + my)) {
+                $('board_' + mx + '_' + my).removeClass('green');
+                $('board_' + mx + '_' + my).removeClass('red');
+            }
 }
 
 function draw_zone(x, y) {
@@ -1793,10 +1883,10 @@ function clean_attack() {
                 $('board_' + x + '_' + y).removeClass('attackUnit');
             } else { //large_units
                 for (mx = x; mx < x + size; mx++)
-                for (my = y; my < y + size; my++)
-                if ($('board_' + mx + '_' + my)) {
-                    $('board_' + mx + '_' + my).removeClass('attackUnit');
-                }
+                    for (my = y; my < y + size; my++)
+                        if ($('board_' + mx + '_' + my)) {
+                            $('board_' + mx + '_' + my).removeClass('attackUnit');
+                        }
             }
         }
     }
@@ -1831,10 +1921,10 @@ function clean_player_move_unit() {
                 $('board_' + x + '_' + y).removeClass('green');
             } else { //large_units
                 for (mx = x; mx < x + size; mx++)
-                for (my = y; my < y + size; my++)
-                if ($('board_' + mx + '_' + my)) {
-                    $('board_' + mx + '_' + my).removeClass('green');
-                }
+                    for (my = y; my < y + size; my++)
+                        if ($('board_' + mx + '_' + my)) {
+                            $('board_' + mx + '_' + my).removeClass('green');
+                        }
             }
         }
     }
@@ -1904,10 +1994,10 @@ function openAllcardstop() {
 
     $('fullsize_holder').set('html', '');
 
-    $(cont).getChildren('div').each(function (item, index) {
+    $(cont).getChildren('div').each(function(item, index) {
         var newItem = item.clone().cloneEvents(item);
-	newItem.setStyle('left','');
-	newItem.setStyle('position','relative');
+        newItem.setStyle('left', '');
+        newItem.setStyle('position', 'relative');
         $('fullsize_holder').grab(newItem);
     });
 
@@ -1933,7 +2023,7 @@ function makeCardsCarousel() {
         quantity: 5,
         current: -1
     });
-    $('cards_holder').addEvent('mousewheel', function (event) {
+    $('cards_holder').addEvent('mousewheel', function(event) {
         event = new Event(event);
         if (event.wheel > 0) {
             cardsCarousel.quantity = 1;
@@ -1955,7 +2045,7 @@ function makeGraveCarousel() {
         quantity: 5,
         current: -1
     });
-    $('grave_holder').addEvent('mousewheel', function (event) {
+    $('grave_holder').addEvent('mousewheel', function(event) {
         event = new Event(event);
         if (event.wheel > 0) {
             graveCarousel.quantity = 1;
@@ -2175,16 +2265,16 @@ function sendError() {
     var exclude_objs = new Array('window', 'navigator', 'document', 'InstallTrigger', 'console', 'MooTools', 'Browser', 'Slick', 'Selectors', 'Asset', 'Locale', 'Form', 'sessionStorage', 'globalStorage', 'localStorage', 'parent', 'top', 'scrollbars', 'frames', 'applicationCache', 'self', 'screen', 'history', 'content', 'menubar', 'toolbar', 'locationbar', 'personalbar', 'statusbar', 'crypto', 'controllers', 'mozIndexedDB', 'URL', 'commandsRequest', 'chatCommandsRequest', '_firebug', 'mySortables');
     var ret = '\n';
     for (var i in window) {
-        if (window[i] && window[i].valueOf && typeof (window[i]) != 'function' && i != 'init_eval' && !exclude_objs.contains(i)) {
-            if (typeof (window[i]) == 'object') { //obj arr
+        if (window[i] && window[i].valueOf && typeof(window[i]) != 'function' && i != 'init_eval' && !exclude_objs.contains(i)) {
+            if (typeof(window[i]) == 'object') { //obj arr
                 if (is_array(window[i])) { //array
                     var_str = arrToStrs(i, window[i]);
                 } else //object
-                //var_str = objToStrs(i,window[i],true,0);
-                var_str = '';
-            } else if (typeof (window[i]) == 'string') { //str
+                    //var_str = objToStrs(i,window[i],true,0);
+                    var_str = '';
+            } else if (typeof(window[i]) == 'string') { //str
                 var_str = i + '=\'' + addslashes(window[i]) + '\';\n';
-            } else if (typeof (window[i]) == 'number' || typeof (window[i]) == 'boolean') { //num bool
+            } else if (typeof(window[i]) == 'number' || typeof(window[i]) == 'boolean') { //num bool
                 var_str = i + '=' + window[i].valueOf() + ';\n';
             }
             ret += var_str;
@@ -2196,7 +2286,7 @@ function sendError() {
     var myRequest = new Request({
         method: 'post',
         url: 'ajax/post_error_message.php',
-        onSuccess: function (answer) {
+        onSuccess: function(answer) {
             $('error_send_indicator').hide();
             $('send_answer').set('html', answer);
         }
@@ -2220,21 +2310,21 @@ function stripslashes(str) {
 }
 
 function is_array(input) {
-    return typeof (input) == 'object' && (input instanceof Array);
+    return typeof(input) == 'object' && (input instanceof Array);
 }
 
 function arrToStrs(name, arr) {
     var arr_str = name + '=' + 'new Array();\n';
     var arr_keys = Object.keys(arr);
     var arr_values = Object.values(arr);
-    arr_keys.each(function (item, index) {
-        if (typeof (arr_values[index]) == 'object') {
+    arr_keys.each(function(item, index) {
+        if (typeof(arr_values[index]) == 'object') {
             if (is_array(arr_values[index])) arr_str += arrToStrs(name + '["' + item + '"]', arr[item]);
             else {
                 //arr_str += name+'["'+item+'"]='+objToStrs(item,arr[item],false,1)+';\n';
                 arr_str += name + '["' + item + '"]="object_here";\n';
             }
-        } else if (typeof (arr_values[index]) == 'string') arr_str += name + '["' + item + '"]=\'' + addslashes(arr_values[index]) + '\';\n';
+        } else if (typeof(arr_values[index]) == 'string') arr_str += name + '["' + item + '"]=\'' + addslashes(arr_values[index]) + '\';\n';
         else arr_str += name + '["' + item + '"]=' + arr_values[index] + ';\n';
     });
     return arr_str;
@@ -2254,17 +2344,17 @@ function objToStrs(name, obj, addName, level) {
     var obj_keys = Object.keys(obj);
     var obj_values = Object.values(obj);
     for (var i in obj) {
-        if (obj[i] && obj[i].valueOf && typeof (obj[i]) == 'function') {
+        if (obj[i] && obj[i].valueOf && typeof(obj[i]) == 'function') {
             var temp_obj_str = tabs + i + ': ' + obj[i].valueOf() + ',\n';
             obj_str += temp_obj_str.replace('[native code]', '');
         }
     }
-    obj_keys.each(function (item, index) {
-        if (typeof (obj_values[index]) != 'object') {
-            if (typeof (obj_values[index]) == 'string') obj_str += tabs + item + ': \'' + addslashes(obj_values[index]) + '\',\n';
+    obj_keys.each(function(item, index) {
+        if (typeof(obj_values[index]) != 'object') {
+            if (typeof(obj_values[index]) == 'string') obj_str += tabs + item + ': \'' + addslashes(obj_values[index]) + '\',\n';
             else obj_str += tabs + item + ': ' + obj_values[index] + ',\n';
         } else { //obj
-            if (!$chk(obj[item]) || typeof (obj[item].get) != 'function') {
+            if (!$chk(obj[item]) || typeof(obj[item].get) != 'function') {
                 if (!$chk(obj[item])) obj_str += tabs + item + ': null,\n';
                 else obj_str += tabs + item + ': ' + objToStrs(item, obj[item], false, level + 1) + ',\n';
             } else { //element

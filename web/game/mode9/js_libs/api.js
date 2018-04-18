@@ -1140,6 +1140,9 @@ function visual_kill_unit(x,y)	{
 	board_units[id] = temp_unit;
 }
 function move_unit(x,y,x2,y2)	{
+	if (!$chk(board[x]) || !$chk(board[x][y]) || !$chk(board[x][y]['ref'])) {
+		return;
+	}
 	last_executed_api = 'move_unit';
         /*if (!$('board_'+x+'_'+y).getChildren('.unitdiv')[0])	{ //unit haven't appeared after move animation
 			setTimeout('move_unit('+x+','+y+','+x2+','+y2+');',2000);
