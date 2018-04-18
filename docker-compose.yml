@@ -23,6 +23,25 @@ services:
     command: bash -c "cd /ape_scripts/bin ; chmod 755 ./aped ; ./aped"
     networks:
       - lords-network
+  
+  ws:
+    build:
+      context: ws
+      dockerfile: Dockerfile
+    command: mix phoenix.server
+    ports:
+      - "4000:4000"
+    environment:
+      MIX_ENV: dev
+      PORT: 4000
+      LORDS_DOMAIN: ${LORDS_DOMAIN}
+      REVISION: ${REVISION}
+      MYSQL_CLIENT_PASSWORD: ${MYSQL_CLIENT_PASSWORD}
+      MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
+    volumes:
+      - ./ws:/app
+    networks:
+      - lords-network
 
   web:
     build:
