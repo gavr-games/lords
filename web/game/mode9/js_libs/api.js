@@ -829,10 +829,21 @@ function add_card(pd_id,card_id,no_anim) {
                     'height':186,
                     'width':130,
                     'opacity':0,
-                    'z-index':2001
+					'z-index':2001,
+					'text-align':'center'
                 }
-            });
-            my2Div.grab(my2Img);
+			});
+			// create div with title
+			var title2Div = new Element('div', {
+				'class':'card_title',
+				html: card_names[USER_LANGUAGE][card_id]['name'],
+				'styles': {
+					'top': 15,
+					'left': 15
+				}
+			});
+			my2Div.grab(title2Div, 'bottom');
+            my2Div.grab(my2Img, 'bottom');
             document.body.grab(my2Div,'bottom');
             my2Div.position();
             var myFx = new Fx.Tween(my2Div, {property: 'opacity',duration:1000});
