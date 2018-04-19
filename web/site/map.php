@@ -27,15 +27,29 @@
 	<div id="wrap" class="map">
 		<div id="map">
 			<div id="opened_map">
-				<a href="arena/" onclick="enterArena();return false;">
-					<img src="/design/images/pregame/arena.png" alt="Арена">
-				</a><br />
-				<a target="_blank" href="https://docs.google.com/document/pub?id=1Hrs05cfYbibReAGZbKd3UG17zpmZfeZM15XDDr-qtK8">
-					<img src="/design/images/pregame/library.png" alt="Библиотека">
-				</a><br />
-				<a target="_blank" href="<?php echo $SITE_conf['domen']; ?>gallery">
-					<img src="/design/images/pregame/gallery.png" alt="Галерея">
-				</a>
+				<div class="col">
+					<h3><?= L::about_about ?></h3>
+					<?= L::about_short_description ?>
+					<br />
+					<br />
+					<h3><?= L::about_gameplay ?></h3>
+					<video width="320" height="240" controls>
+						<source src="../design/video/gameplay.mp4" type="video/mp4">
+					</video>
+				</div>
+				<div class="col">
+					<h3><?= L::about_features ?></h3>
+					<ul>
+						<li>
+						<?= str_replace(' | ', '</li><li>', L::about_features_list) ?>
+						</li>
+					</ul>
+					<br />
+					<br />
+					<a href="arena/" onclick="enterArena();return false;" class="login-arena-btn">
+						<?= L::about_login_arena ?>
+					</a>
+				</div>
 			</div>
 		</div>
 		<span class="topbutton prof"><a href="#" id="profile_b" onclick="if (!parent.window_loading) {doLoading($('profile_b'), '<?= L::loading ?>');parent.load_window('site/myprofile.php?back=map','left');} return false;"><?= L::profile_profile ?></a></span>

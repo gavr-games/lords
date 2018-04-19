@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'edissonregular';
+    src: url('../fonts/edisson.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html{min-height:100%;}
 body {
 
@@ -293,8 +300,8 @@ body {
 .map {
 	background:  url(../../images/pregame/mapbg.png) top left  no-repeat;
 	width:976px;
-	height:435px;
-	padding:400px 0px 0px 100px;
+	height:520px;
+	padding:315px 0px 0px 180px;
 }
 .map .prof {
 	position:absolute;
@@ -320,12 +327,30 @@ body {
 }
 
 #opened_map{
+	font-family: 'edissonregular', 'Times New Roman', Times, serif;
+	font-size: 24px;
+	color: #482313;
 	width: 880px;
-	text-align:center;
+	display: flex;
+    flex-direction: row;
 }
 #opened_map a{
-	opacity: 0.8;
+	color: black;
+	opacity: 0.7;
+	text-decoration: none;
 }
 #opened_map a:hover{
 	opacity: 1;
+}
+#opened_map .col{
+	width: 400px;
+}
+#opened_map .col h3{
+	width: 320px;
+	text-align: center;
+	margin-bottom: 10px;
+	text-shadow: 0px -2px 3px #CEAC27;
+}
+#opened_map a.login-arena-btn{
+	font-size: 32px;
 }
