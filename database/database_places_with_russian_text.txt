@@ -5,13 +5,8 @@ attack_bonus
 dic_owner
 nonfinished_actions_dictionary
 player_features
+dic_statistic_measures
 
 2) Used in static libs
 dic_unit_phrases
-
-3) For statistics:
-dic_statistic_measures
-statistic_charts
-statistic_tabs
-statistic_values_config
 
