@@ -28,6 +28,8 @@ defmodule LordsWs.ChannelCase do
 
   setup tags do
 
+    _ = tags
+
     :ok
   end
 end

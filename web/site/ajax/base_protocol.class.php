@@ -136,4 +136,37 @@ class BaseProtocol {
 		}
 		return $query;
 	}
+
+	public static function dieNoAction($action) {
+		if ($action=='') {
+			die( 
+				json_encode(
+					array(
+						'header_result'=>array(
+							'success'=>0,
+							'error_code'=>1001, //no action supplied
+							'error_params'=>0
+						)
+					)
+				)
+			);
+		}
+	}
+
+	public static function dieMysqlError($res) {
+		if ($res["success"] != true) {
+			die( 
+				json_encode(
+					array(
+						'header_result'=>array(
+							'success'=>0,
+							'error_code'=>1002, //mysql error
+							'error_params'=>urlencode($res["error"])
+						)
+					)
+				)
+			);
+		}
+	}
+
 }

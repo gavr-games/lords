@@ -56,5 +56,9 @@
 
     			</div><!--.rel-->
     	</div><!--#panor-->
-    </div><!--#wind-->
+	</div><!--#wind-->
+	<script type="module">
+		import {WSClient} from "../general_js/ws/wsclient.js?<?php echo $SITE_conf['revision']; ?>";
+		window.WSClient = new WSClient();
+	</script>
 </body>

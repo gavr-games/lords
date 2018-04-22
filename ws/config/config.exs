@@ -8,7 +8,7 @@ use Mix.Config
 # Configures the endpoint
 config :lords_ws, LordsWs.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "609+saQu8XzRvo7lunC9Z9jyC5VJ8Hx4Sc8Q114UrbOMJjWl+6vOx47RypfTGVGC",
+  secret_key_base: "JYYnVGGdClvzhC/UQoPTtq3YIyiZFWnSxiW3D39frW6077Fn1I4xXUz+3xObEps2",
   render_errors: [view: LordsWs.ErrorView, accepts: ~w(html json)],
   pubsub: [name: LordsWs.PubSub,
            adapter: Phoenix.PubSub.PG2]

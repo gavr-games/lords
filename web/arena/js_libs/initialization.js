@@ -24,7 +24,7 @@ var scrolls = new Array();
 function initialization() {
 
     //drag players to chat
-    $$('#players_list .arena_player').addEvent('mousedown', function (event) {
+    $$('#players_list .arena_player').addEvent('mousedown', function(event) {
         event.stop();
         // `this` refers to the element with the .arena_player class
         var shirt = this;
@@ -38,27 +38,36 @@ function initialization() {
         var drag = new Drag.Move(clone, {
             droppables: $$('#chats_ticks .tick,#chats_messages .chat_field'),
             snap: 25,
-            onSnap: function (draggable, droppable) {
+            onSnap: function(draggable, droppable) {
                 draggable.show();
             },
-            onDrop: function (dragging, chat) {
+            onDrop: function(dragging, chat) {
                 if (chat) {
-		  var chat_id;
-		  if (chat.hasClass('tick')) chat_id = chat.get('id').replace('topic_', '');
-				 else chat_id = chat.get('id').replace('chat_messages_', '');
-                  parent.sendLoggedProtocolCmd({action:'chat_user_add',params:{'user_id':e_user_id, 'chat_id':chat_id},help_params:{'topic':chats[chat_id]['topic']}});
+                    var chat_id;
+                    if (chat.hasClass('tick')) chat_id = chat.get('id').replace('topic_', '');
+                    else chat_id = chat.get('id').replace('chat_messages_', '');
+                    parent.WSClient.sendLoggedProtocolCmd({
+                        action: 'chat_user_add',
+                        params: {
+                            'user_id': e_user_id,
+                            'chat_id': chat_id
+                        },
+                        help_params: {
+                            'topic': chats[chat_id]['topic']
+                        }
+                    });
                     chat.removeClass('add_user');
-		    makeChatActive(chat_id);
+                    makeChatActive(chat_id);
                 }
                 dragging.destroy();
             },
-            onEnter: function (draggable, droppable) {
+            onEnter: function(draggable, droppable) {
                 droppable.addClass('add_user');
             },
-            onLeave: function (draggable, droppable) {
+            onLeave: function(draggable, droppable) {
                 droppable.removeClass('add_user');
             },
-            onCancel: function (dragging) {
+            onCancel: function(dragging) {
                 dragging.destroy();
             }
         });
@@ -68,12 +77,12 @@ function initialization() {
     var myTips = new Tips('.help');
 
     ticksScroll = new Fx.Scroll('con_ticks');
-    $('r_arrow').addEvent('click', function (event) {
+    $('r_arrow').addEvent('click', function(event) {
         ticks_pos += 154;
         if (ticks_pos > ($('chats_ticks').getChildren.length * 154 + 1) + 103) ticks_pos = ($('chats_ticks').getChildren.length + 1) * 154;
         ticksScroll.start(ticks_pos, 0);
     });
-    $('l_arrow').addEvent('click', function (event) {
+    $('l_arrow').addEvent('click', function(event) {
         ticks_pos -= 154;
         if (ticks_pos < 0) ticks_pos = 0;
         ticksScroll.start(ticks_pos, 0);
@@ -90,32 +99,34 @@ function initialization() {
     makeScrollbar($('players_list'), false, false);
 
     var chats_messages = $('chats_messages').getChildren();
-    chats_messages.each(function (item, index) {
+    chats_messages.each(function(item, index) {
         makeScrollbar(item, false, false);
         item.addClass('hidden');
     });
 
     //set players statuses
-    users.each(function (item, index) {
+    users.each(function(item, index) {
         if (item) {
             $('pstatus_' + index).set('title', parent.player_status(item['status_id']));
         }
     });
-    //connect ape to chat chanels
-    var ape_chats = new Array();
-    chats.each(function (item, index) {
+    //connect to channels
+    parent.WSClient.joinArena();
+    chats.each(function(item, index) {
         if (item) {
-            ape_chats.push("arenachat_"+index);
+            parent.WSClient.joinChat(index);
         }
     });
-    parent.apeJoinChanels(ape_chats);
     $$('#topic_0 .tick_cross').hide();
     makeChatActive(active_chat, true);
 }
 
 function exitArena() {
     if (!parent.window_loading) { //another window is not loading
-	parent.sendLoggedProtocolCmd({action:'arena_exit',params:{}});
+        parent.WSClient.sendLoggedProtocolCmd({
+            action: 'arena_exit',
+            params: {}
+        });
     }
 }
 
@@ -128,7 +139,7 @@ function execute_procedure(name, params) {
             }
         }
     }).post('name=' + name + '&params=' + encodeURIComponent(params));*/
-    console.log(name,params);
+    console.log(name, params);
 }
 
 function makeChatActive(chat_id, init) {
@@ -152,47 +163,54 @@ function makeChatActive(chat_id, init) {
         modifyScrollBar('chat_messages_' + active_chat, false);
     }
 }
-function convertChars(s){
-  var xml_special_to_escaped_one_map = {
-            '&': '&amp;',
-            '"': '&quot;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '\\': '&#92;',
-	    '\'': '&apos;'
-        };
-        return s.replace(/([\&"<>\\\'])/g, function (str, item) {
-            return xml_special_to_escaped_one_map[item];
+
+function convertChars(s) {
+    var xml_special_to_escaped_one_map = {
+        '&': '&amp;',
+        '"': '&quot;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '\\': '&#92;',
+        '\'': '&apos;'
+    };
+    return s.replace(/([\&"<>\\\'])/g, function(str, item) {
+        return xml_special_to_escaped_one_map[item];
+    });
+}
+
+function convertFromChars(s) {
+    var escaped_one_to_xml_special_map = {
+        '&amp;': '&',
+        '&quot;': '"',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&#92;': '\\',
+        '&apos;': '\''
+    };
+    return s.replace(/(&quot;|&lt;|&gt;|&amp;|&#92;|&apos;)/g,
+        function(str, item) {
+            return escaped_one_to_xml_special_map[item];
         });
 }
-function convertFromChars(s){
-  var escaped_one_to_xml_special_map = {
-            '&amp;': '&',
-	    '&quot;': '"',
-	    '&lt;': '<',
-	    '&gt;': '>',
-            '&#92;':'\\',
-	    '&apos;':'\''
-        };
-        return s.replace(/(&quot;|&lt;|&gt;|&amp;|&#92;|&apos;)/g,
-	function(str, item) {
-	  return escaped_one_to_xml_special_map[item];
-	});
-}
+
 function sendChatMessage() {
     if ($('chat_text').get('value') != '\n') {
-	parent.apeSendMsgToChanel('arenachat_' + active_chat,'ARENA_CHAT_MSG',{
-            msg: convertChars($('chat_text').get('value')),
-            from_user_id: my_user_id,
-            from_chat_id: active_chat
-        });
+        parent.WSClient.sendChatMessage(active_chat, convertChars($('chat_text').get('value')))
         $('chat_text').set('value', '');
-    } else $('chat_text').set('value', '');
+    } else {
+        $('chat_text').set('value', '');
+    }
 }
 
 function changeChatTopic(chat_id) {
     if ($('topic_val_' + chat_id).get('value') != '\n') {
-	parent.sendLoggedProtocolCmd({action:'chat_topic_change',params:{'chat_id':chat_id, newtopic:'"'+convertChars($('topic_val_' + chat_id).get('value'))+'"'}});
+        parent.WSClient.sendLoggedProtocolCmd({
+            action: 'chat_topic_change',
+            params: {
+                'chat_id': chat_id,
+                'newtopic': '"' + convertChars($('topic_val_' + chat_id).get('value')) + '"'
+            }
+        });
         $('topic_val_' + chat_id).removeClass('active');
     }
 }
@@ -200,7 +218,7 @@ function changeChatTopic(chat_id) {
 function getChatPlayers(chat_id) {
     var myRequest = new Request({
         url: 'ajax/get_chat_users.php',
-        onSuccess: function (users) {
+        onSuccess: function(users) {
             eval(users);
         }
     }).send('chat_id=' + chat_id);

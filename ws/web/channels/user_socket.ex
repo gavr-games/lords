@@ -1,8 +1,13 @@
 defmodule LordsWs.UserSocket do
   use Phoenix.Socket
+  require Logger
+  require HTTPoison
 
   ## Channels
-  # channel "room:*", LordsWs.RoomChannel
+  channel "chat:*", LordsWs.ChatChannel
+  channel "user:*", LordsWs.UserChannel
+  channel "arena", LordsWs.UserChannel
+  channel "base", LordsWs.BaseChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
@@ -19,8 +24,23 @@ defmodule LordsWs.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
+  def connect(params, socket) do
+    Logger.info "New socket with token " <> params["token"]
+    url = "http://web/site/ajax/get_user_session.php?phpsessid=#{params["token"]}"
+    # Get user_id by token
+    case HTTPoison.get(url) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+        Logger.info "Received user by token " <> body
+        req = Jason.decode!(body)
+        case req |> Map.has_key?("user_id") && req["user_id"] != nil do
+          true -> 
+            Logger.info "Successfully received user info"
+            {:ok, socket |> assign(:user_id, req["user_id"]) |> assign(:token, params["token"])}
+          _ -> {:ok, socket |> assign(:token, params["token"])}
+        end
+      {_, _} ->
+        {:ok, socket |> assign(:token, params["token"])}
+    end
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
@@ -33,5 +53,5 @@ defmodule LordsWs.UserSocket do
   #     LordsWs.Endpoint.broadcast("users_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
-  def id(_socket), do: nil
+  def id(socket), do: "users_socket:#{socket.assigns.user_id}"
 end

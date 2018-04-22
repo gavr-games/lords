@@ -36,7 +36,7 @@ defmodule LordsWs.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_lords_ws_key",
-    signing_salt: "7RQg6o6D"
+    signing_salt: "REWt0AQZ"
 
   plug LordsWs.Router
 end

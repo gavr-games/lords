@@ -19,9 +19,9 @@ function stopLoading() {
     }
 }
 // BUTTON LOADING PART END
-window.addEvent('domready', function () {
+window.addEvent('domready', function() {
     if ($('login_form')) {
-        $('login_form').addEvent('keydown:keys(enter)', function () {
+        $('login_form').addEvent('keydown:keys(enter)', function() {
             doLogin($('login_b'));
             return false;
         });
@@ -32,10 +32,11 @@ window.addEvent('domready', function () {
 function loginAnswer(answer) {
     if (answer.header_result.success != "1") { //login error
         stopLoading();
-        $('login_error').set('text', parent.getErrorMsg(answer.header_result.error_code,answer.header_result.error_params));
+        $('login_error').set('text', parent.getErrorMsg(answer.header_result.error_code, answer.header_result.error_params));
         $('login_error').show();
     } else { //login OK
-	//console.log(answer);
+        //console.log(answer);
+        parent.WSClient.disconnect(); //we want user to reconnect to socket as an authorized user
         if (answer.data_result.game_type_id == 0) { //stay on top site
             parent.load_window('site/map.php', 'right');
         } else { //go to arena, etc.
@@ -53,10 +54,13 @@ function doLogin(link, validation_msg, loading_msg) {
     } else {
         if (!parent.window_loading) { //another window is not loading
             $('login_error').hide();
-	    parent.sendBaseProtocolCmd({action:'user_authorize',params:{
-		login: '"'+parent.convertChars($('login_i').get('value'))+'"',
-                pass:  '"'+$('pass_i').get('value').replace(new RegExp('"','g'),'\\"')+'"'
-	    }});
+            parent.WSClient.sendBaseProtocolCmd({
+                action: 'user_authorize',
+                params: {
+                    login: '"' + parent.convertChars($('login_i').get('value')) + '"',
+                    pass: '"' + $('pass_i').get('value').replace(new RegExp('"', 'g'), '\\"') + '"'
+                }
+            });
             doLoading(link, loading_msg);
         }
     }
@@ -64,14 +68,20 @@ function doLogin(link, validation_msg, loading_msg) {
 
 function doLogout(link, loading_msg) {
     if (!parent.window_loading) { //another window is not loading
-        parent.sendLoggedProtocolCmd({action:'logout',params:{}});
+        parent.WSClient.sendLoggedProtocolCmd({
+            action: 'logout',
+            params: {}
+        });
         doLoading(link, loading_msg);
     }
 }
 
 function enterArena() {
     if (!parent.window_loading) { //another window is not loading
-	parent.sendLoggedProtocolCmd({action:'arena_enter',params:{}});
+        parent.WSClient.sendLoggedProtocolCmd({
+            action: 'arena_enter',
+            params: {}
+        });
     }
 }
 
@@ -80,9 +90,9 @@ function goToLocation(loc) {
         new parent.URI(parent.site_domen + 'game/mode' + loc.mode_id).go();
     } else if (loc.game_id && loc.game_id != '') { //go to not started game
         if (!parent.window_loading) //another window is not loading 
-        parent.load_window(dic_game_types[loc.game_type_id]['description'] + '/' + dic_game_types[loc.game_type_id]['description'] + '.php', 'right');
+            parent.load_window(dic_game_types[loc.game_type_id]['description'] + '/' + dic_game_types[loc.game_type_id]['description'] + '.php', 'right');
     } else if (loc.game_type_id != '') { //go to general location
         if (!parent.window_loading) //another window is not loading
-        parent.load_window(dic_game_types[loc.game_type_id]['description'] + '/' + dic_game_types[loc.game_type_id]['description'] + '.php', 'right');
+            parent.load_window(dic_game_types[loc.game_type_id]['description'] + '/' + dic_game_types[loc.game_type_id]['description'] + '.php', 'right');
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 //error_code
 //1001 - no action supplied
 //1002 - mysql error
@@ -11,39 +10,14 @@
 	include_once('base_protocol.class.php');
 	set_time_limit(0);
 	
-	//check action and form a query
-	$action = $_POST['action'];
-	$params = $_POST['params'];
-	//$action = 'authorize_user';
-	//$params = array('"skoba"','"12345"');
-	if ($action=='')
-	die( 
-	  json_encode(
-	    array(
-	      'header_result'=>array(
-					'success'=>0,
-					'error_code'=>1001, //no action supplied
-					'error_params'=>0
-	      )
-	    )
-	  )
-	);
+	$inputJSON = file_get_contents('php://input');
+	$input = json_decode($inputJSON, TRUE);
+	$action = $input['action'];
+	$params = $input['params'];
 	
+	BaseProtocol::dieNoAction($action);
 	$res = BaseProtocol::execCmd($action, $params);
-	
-	if ($res["success"] != true) {
-		die( 
-			json_encode(
-				array(
-					'header_result'=>array(
-						'success'=>0,
-						'error_code'=>1002, //mysql error
-						'error_params'=>urlencode($res["error"])
-					)
-				)
-			)
-		);
-	}
+	BaseProtocol::dieMysqlError($res);
 	
 	//send results
 	$results_json = json_encode($res["results"]);

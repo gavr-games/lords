@@ -29,6 +29,8 @@ defmodule LordsWs.ConnCase do
 
   setup tags do
 
+    _ = tags
+
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

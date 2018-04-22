@@ -1,17 +1,31 @@
 <?php
+//error_code
+//1001 - no action supplied
+//1002 - mysql error
+//1003 - not connected to ape
+//1004 - connected in another browser or pc
+//1005 - game error
+
 	include_once('init.php');
-	
+	include_once('base_protocol.class.php');
+	set_time_limit(0);
+
+	$inputJSON = file_get_contents('php://input');
+	$input = json_decode($inputJSON, TRUE);
+	$action = $input['action'];
+	$params = $input['params'];
+
 	//logout
-	if ($_POST['action']=="logout"){
+	if ($action == "logout"){
 	  $_SESSION['user_id'] = '';
 	  die( 
 	    json_encode(
 	      array(
-		'header_result'=>array(
-		  'success'=>1,
-		  'error_code'=>0,
-		  'error_params'=>0
-		)
+					'header_result'=>array(
+						'success' => "1",
+						'error_code'=>0,
+						'error_params'=>0
+					)
 	      )
 	    )
 	  );
@@ -21,17 +35,22 @@
 		  json_encode(
 		    array(
 		      'header_result'=>array(
-			'success'=>0,
-			'error_code'=>1003, //not authorized
-			'error_params'=>'Not authorized - please refresh browser'
+					'success' => "0",
+					'error_code'=>1003, //not authorized
+					'error_params'=>'Not authorized - please refresh browser'
 		      )
 		    )
 		  )
 		);
 	}
-	if (!is_array($_POST['params'])) $_POST['params'] = array();
-	array_unshift($_POST['params'],$_SESSION['user_id']);
-	//print_r($_POST['params']);
+	if (!is_array($params)) $params = array();
+	array_unshift($params,$_SESSION['user_id']);
 	
-	include_once('base_protocol.php');
+	BaseProtocol::dieNoAction($action);
+	$res = BaseProtocol::execCmd($action, $params);
+	BaseProtocol::dieMysqlError($res);
+	
+	//send results
+	$results_json = json_encode($res["results"]);
+	echo $results_json;
 ?>
