@@ -581,7 +581,7 @@ function log_param_card(card_id) {
 	return "<b class='logCard'>" + card_name(card_id) + "</b>";
 }
 function log_param_damage(amount) {
-	return "<b class='damage'>" + amount + "</b>";
+	return "<b class='damage' title='" + i18n[USER_LANGUAGE]['game']['log_damage'] + "'>" + amount + "</b>";
 }
 function log_param_player(playerJson) {
 	var player = JSON.parse(playerJson);
