@@ -12,6 +12,7 @@ defmodule LordsWs do
       supervisor(LordsWs.Endpoint, []),
       # Start your own worker by calling: LordsWs.Worker.start_link(arg1, arg2, arg3)
       # worker(LordsWs.Worker, [arg1, arg2, arg3]),
+      supervisor(LordsWs.UserPresence, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

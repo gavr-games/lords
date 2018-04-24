@@ -39,6 +39,12 @@ export class WSClient {
     joinArena() {
         this.joinChannel("arena");
     }
+    joinGame(gameId) {
+        this.joinChannel("game:" + gameId);
+    }
+    joinPersonalChannel(user_id) {
+        this.joinChannel("user:" + user_id);
+    }
     sendChatMessage(chatId, msg) {
         let channelName = "chat:" + chatId
         this.channels[channelName].push("new_msg", {
@@ -65,6 +71,9 @@ export class WSClient {
     }
 
     sendJSONtoChannel(channelName, cmd, params) {
+        if (this.debug) {
+            console.log("Send " + JSON.encode(params) + " to " + channelName)
+        }
         this.channels[channelName].push(cmd, {json_params: JSON.encode(params)})
     }
 
@@ -115,10 +124,12 @@ export class WSClient {
         this.channels[channelName] = channel
     }
     leaveChannel(channelName) {
-        this.channels[channelName].leave()
-        this.channels[channelName] = null
-        if (this.debug) {
-            console.log("Leave channel " + channelName)
+        if (this.channels[channelName]) {
+            this.channels[channelName].leave()
+            this.channels[channelName] = null
+            if (this.debug) {
+                console.log("Leave channel " + channelName)
+            }
         }
     }
     handleProtocolRawMessage(payload) {

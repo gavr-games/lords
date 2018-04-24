@@ -113,6 +113,9 @@ function chat_remove_player(chat_id, user_id) {
         dt = parseInt(dt / 1000);
         chat_add_service_message(chat_id, dt, nick + ' покинул чат.');
     }
+    if (user_id == my_user_id) {
+        chat_destroy(chat_id);
+    }
 }
 
 function chat_set_topic(chat_id, topic) {
@@ -125,20 +128,22 @@ function chat_set_topic(chat_id, topic) {
 
 function chat_destroy(chat_id) {
     if (active_chat == chat_id) makeChatActive(0);
-    $('topic_' + chat_id).destroy();
-    $('chat_messages_' + chat_id).destroy();
-    $('chat_users_' + chat_id).destroy();
-    $('scroll_chat_messages_' + chat_id).destroy();
-    delete scrolls['chat_messages_' + chat_id];
-    delete chats[chat_id];
-    if ($('chats_ticks').getChildren().length < 6) {
-        $('l_arrow').addClass('unactive');
-        $('r_arrow').addClass('unactive');
-    } else {
-        $('l_arrow').removeClass('unactive');
-        $('r_arrow').removeClass('unactive');
-	}
-	parent.WSClient.leaveChannel("chat:" + chat_id)
+    if ($('topic_' + chat_id)) {
+        $('topic_' + chat_id).destroy();
+        $('chat_messages_' + chat_id).destroy();
+        $('chat_users_' + chat_id).destroy();
+        $('scroll_chat_messages_' + chat_id).destroy();
+        delete scrolls['chat_messages_' + chat_id];
+        delete chats[chat_id];
+        if ($('chats_ticks').getChildren().length < 6) {
+            $('l_arrow').addClass('unactive');
+            $('r_arrow').addClass('unactive');
+        } else {
+            $('l_arrow').removeClass('unactive');
+            $('r_arrow').removeClass('unactive');
+        }
+        parent.WSClient.leaveChannel("chat:" + chat_id)
+    }
 }
 
 function linkify(inputText) {

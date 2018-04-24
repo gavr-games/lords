@@ -146,7 +146,7 @@
 <script type="text/javascript">
 	var cur_game_id = <?php echo $cur_game_row['game_id']; ?>;
 	var cur_game_mode_id = <?php echo $cur_game_row['mode_id']; ?>;
-	parent.parent.apeJoinChanels(['arenagame_'+cur_game_id]);
+	parent.parent.WSClient.joinGame(cur_game_id);
 </script>
 <div class="current_game">
 	<a class="help" title="<?= L::arena_game_help ?>" href="" onclick="return false;"></a>

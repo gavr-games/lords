@@ -70,8 +70,14 @@ function arena_player_add(user_id, nick, avatar_filename, status_id) {
 
 function arena_player_remove(user_id) {
     last_executed_api = 'arena_player_remove(' + user_id + ')';
-    $('player_' + user_id).destroy();
-    delete users[user_id];
+    if (my_user_id == user_id) {
+        parent.WSClient.leaveChannel("arena");
+        parent.WSClient.leaveChannel("chat:0");
+        parent.load_window("site/map.php", "left");
+    } else {
+        $('player_' + user_id).destroy();
+        delete users[user_id];
+    }
 }
 
 function arena_player_set_status(user_id, status_id) {

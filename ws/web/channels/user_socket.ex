@@ -6,6 +6,7 @@ defmodule LordsWs.UserSocket do
   ## Channels
   channel "chat:*", LordsWs.ChatChannel
   channel "user:*", LordsWs.UserChannel
+  channel "game:*", LordsWs.UserChannel
   channel "arena", LordsWs.UserChannel
   channel "base", LordsWs.BaseChannel
 

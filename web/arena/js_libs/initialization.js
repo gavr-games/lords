@@ -112,6 +112,7 @@ function initialization() {
     });
     //connect to channels
     parent.WSClient.joinArena();
+    parent.WSClient.joinPersonalChannel(my_user_id);
     chats.each(function(item, index) {
         if (item) {
             parent.WSClient.joinChat(index);
