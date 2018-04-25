@@ -7,15 +7,8 @@
 MYSQL="mysql"
 MYSQLDUMP="mysqldump"
 
-# Validate arguments
-if [ "$#" -ne 4 ]; then
-    echo "Usage: $0 <DUMP_DIRECTORY> <USERNAME> <PASSWORD> <HOST>"
-    echo "Example: $0 database/dump root root localhost"
-    exit 1;
-fi
-
 # Remove dump directory if it exists
-DUMP_DIR="$1"
+DUMP_DIR="database/dump"
 if [ -d $DUMP_DIR ]; then
     echo "Removing $DUMP_DIR"
     rm -r $DUMP_DIR
@@ -23,9 +16,9 @@ fi
 
 mkdir $DUMP_DIR
 
-USERNAME=$2
-PASSWORD=$3
-HOST=$4
+USERNAME="root"
+PASSWORD="root"
+HOST="localhost"
 
 # Do not dump config databases
 IGNORE_DBS="^test|information_schema|mysql|phpmyadmin|performance_schema$"
