@@ -49,8 +49,6 @@ function showRandomPhrase()	{
 		function onPageLoad(revision) {
 			showRandomPhrase();
 			setLoadingText('Загрузка скриптов и стилей');
-			addLoadingItem('Подключение к серверу','ape_script');
-			myApeInit();
 			addLoadingItem('Скрипт инициализации','init_script');
 			Asset.javascript('js_libs/initialization.js?'+revision, {onLoad: function(){removeLoadingItem('init_script');}});
 			addLoadingItem('Скрипт ElementSwap','swap_script');
@@ -95,6 +93,6 @@ function showRandomPhrase()	{
 		function checkLoadList()	{
 			if($('load_list').getChildren().length==0) {
 				clearInterval(checkLoadInterval);
-				apeGetGameInfo();
+				parent.WSClient.getGameInfo();
 			}
 		}

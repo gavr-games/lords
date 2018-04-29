@@ -13,8 +13,7 @@
 	<script type="text/javascript" src="site/js_libs/winds.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="site/js_libs/i18n_text_getters_pregame.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="site/js_libs/static_libs.js?<?php echo $SITE_conf['revision']; ?>"></script>
-	<script type="text/javascript" src="general_js/ape/Build/uncompressed/apeClientJS.js?<?php echo $SITE_conf['revision']; ?>">"></script>
-	<script type="text/javascript" src="site/js_libs/ape.js?<?php echo $SITE_conf['revision']; ?>"></script>
+	<script type="text/javascript" src="site/js_libs/cmd_helper.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="general_js/jquery-3.2.1.min.js?<?php echo $SITE_conf['revision']; ?>"></script>
 	<script>
 		jQuery.noConflict();
@@ -49,7 +48,7 @@
 		}
 	</style>
 </head>
-<body onload="setTimeout('myApeInit()',100);">
+<body>
 	<div id="wind">
 		<div id="panor">
 				<div class="rel" id="rel">

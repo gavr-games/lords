@@ -2086,9 +2086,6 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
 	active_players['last_end_turn'] = last_end_turn;
 	active_players['turn'] = turn;
 	$('game_turn').set('html','Ход: '+turn);
-	//console.log(active_players['last_end_turn'].toInt()+'---'+ Math.floor($time()/1000) + '---' + time_delay_from_server)
-	if (!from_init) time_delay_from_server = Math.floor($time()/1000) - active_players['last_end_turn'].toInt();
-	turn_left_time();
 }
 function newRemindTimer(){
 	clearTimeout(remindMoveTimer);
@@ -2102,14 +2099,11 @@ function activateMyMove()	{
 	if (noSound==0) play_sound('your_move.swf');
 }
 
-function turn_left_time() 	{
+function update_next_turn_timer(left_seconds) 	{
 	//game_time
 	if (time_restriction!=0)	{
-		var unixtime = Math.floor($time()/1000);
-		
-		var last_end_turn = active_players['last_end_turn'].toInt() + time_delay_from_server;
-		var minutes = Math.floor((time_restriction-(unixtime-last_end_turn))/60);
-		var seconds = time_restriction-(unixtime-last_end_turn) - minutes*60;
+		var minutes = Math.floor(left_seconds/60);
+		var seconds = left_seconds - minutes*60;
 		if (minutes>=0 && seconds>=0)	{
 			if (seconds<10) $('game_time').set('html',minutes+':0'+seconds); else
 			$('game_time').set('html',minutes+':'+seconds);

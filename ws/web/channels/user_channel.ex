@@ -10,6 +10,7 @@ defmodule LordsWs.UserChannel do
 
   def join("arena", _params, socket) do
     Logger.info "User #{socket.assigns.user_id} joined channel arena"
+    LordsWs.Arena.PlayerOnlineOffline.run(%{user_id: socket.assigns.user_id, flag: 1})
     {:ok, socket}
   end
 
@@ -24,6 +25,11 @@ defmodule LordsWs.UserChannel do
       online_at: inspect(System.system_time(:seconds))
     })
     {:noreply, socket}
+  end
+
+  def terminate(_, socket) do
+    Logger.info "User #{socket.assigns.user_id} left #{socket.topic}"
+    LordsWs.Arena.PlayerOnlineOffline.run(%{user_id: socket.assigns.user_id, flag: 0})
   end
 
   def handle_in("logged_protocol_cmd", %{"json_params" => json_params}, socket) do
@@ -182,26 +188,19 @@ defmodule LordsWs.UserChannel do
                     "arena_player_set_status(#{u_id}, 3);"
                 end))
                 arena_cmds = "#{arena_cmds}arena_game_set_status(#{game_id}, 2);"
+                url = "http://web/site/ajax/get_game_info.php?game_id=#{game_id}"
+                case HTTPoison.get(url) do
+                    {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
+                        Logger.info "Received get_game_info answer #{game_body}"
+                        game = Jason.decode!(game_body)
+                        if Map.has_key?(game, "game_id") && game["status_id"] == "2" do
+                            LordsWs.SendPhrase.Timer.create(game)
+                            if game["time_restriction"] != "0" do
+                                LordsWs.NextTurn.Timer.create(game)
+                            end
+                        end
+                end
             end
-            #            var gamerequest = new Http(lords_domain + '/site/ajax/get_game_info.php');
-            #            gamerequest.set('method', 'POST');
-            #            gamerequest.writeObject({
-            #                game_id: params.params.game_id
-            #            });
-            #            gamerequest.getContent(function(gameresult) {
-            #                if (logging) {
-            #                    Ape.log('--F5 game--');
-            #                    Ape.log('F5 for game:' + gameresult);
-            #                }
-            #                var game = JSON.parse(gameresult);
-            #                if ($chk(game.game_id)) {
-            #                    allgames.set(game.game_id, game);
-            #                    if (game.status_id == 2) {
-            #                        sendPhrase(game.game_id);
-            #                        if (game.time_restriction != 0) setNextTurnTimeout(game.game_id, game.time_restriction.toInt() * 1000, game.active_player_num);
-            #                    }
-            #                }
-            #            });
           _ ->
             eval_cmds = ""
         end
@@ -220,6 +219,45 @@ defmodule LordsWs.UserChannel do
     if arena_cmds != "" do
         LordsWs.Endpoint.broadcast "arena", "protocol_raw", %{commands: URI.encode(arena_cmds)}
     end
+    {:noreply, socket}
+  end
+
+  def handle_in("game_protocol_cmd", %{"json_params" => json_params}, socket) do
+    url = "http://web/site/ajax/game_protocol.php?phpsessid=#{socket.assigns.token}"
+    params = Jason.decode!(json_params)
+    if params["proc_name"] == "multi" do
+        url = "http://web/site/ajax/multi_game_protocol.php?phpsessid=#{socket.assigns.token}"
+    end
+    case HTTPoison.post(url, json_params, [{"Content-Type", "application/json"}]) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+        Logger.info "Received game_protocol_cmd answer #{body}"
+        ans = Jason.decode!(body)
+        LordsWs.Game.ProcessCmd.run(%{game: socket.assigns.game, answer: ans, user_id: socket.assigns.user_id, params: params})
+    end
+    {:noreply, socket}
+  end
+
+  def handle_in("get_game_info", _, socket) do
+    url = "http://web/game/mode#{socket.assigns.game["mode_id"]}/ajax/get_all_game_info.php?phpsessid=#{socket.assigns.token}"
+    case HTTPoison.get(url) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
+        game_body = game_body |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()
+        push socket, "game_info_raw", %{commands: game_body}
+    end
+    {:noreply, socket}
+  end
+
+  def handle_in("performance", %{"json_params" => json_params}, socket) do
+    url = "http://web/site/ajax/call_save_perfomance.php"
+    case HTTPoison.post(url, json_params, [{"Content-Type", "application/json"}]) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+        Logger.info "Received call_save_perfomance answer #{body}"
+    end
+    {:noreply, socket}
+  end
+
+  def handle_in("new_msg", %{"msg" => msg}, socket) do
+    LordsWs.Endpoint.broadcast "game:#{socket.assigns.game_id}", "game_raw", %{commands: URI.encode("chat_add_user_message(#{socket.assigns.player_num},\"#{URI.decode(msg)}\");")}
     {:noreply, socket}
   end
 end

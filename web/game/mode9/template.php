@@ -6,8 +6,11 @@
 	<link id="site_icon" rel="icon" href="../../design/images/icon_lords.ico" type="image/x-icon" />
 	<script type="text/javascript" src="../../general_js/mootools.js?<?= $SITE_conf['revision'] ?>"></script>
 	<script type="text/javascript" src="../../general_js/mootools-more.js?<?= $SITE_conf['revision'] ?>"></script>
-	<script type="text/javascript" src="../../general_js/ape/Build/uncompressed/apeClientJS.js?<?= $SITE_conf['revision'] ?>">"></script>
-	<script type="text/javascript" src="../../site/js_libs/ape.js?<?= $SITE_conf['revision'] ?>"></script>
+	<script type="text/javascript" src="../../general_js/jquery-3.2.1.min.js?<?= $SITE_conf['revision']; ?>"></script>
+	<script>
+		jQuery.noConflict();
+	</script>
+	<script type="text/javascript" src="../../site/js_libs/cmd_helper.js?<?= $SITE_conf['revision'] ?>"></script>
 	<script type="text/javascript" src="js_libs/loading.js?<?= $SITE_conf['revision'] ?>"></script>
 	<link rel="stylesheet" type="text/css" href="../../design/css/reset.css?<?= $SITE_conf['revision'] ?>" />
 	<link rel="stylesheet" type="text/css" href="css/mode9.css?<?= $SITE_conf['revision'] ?>" />
@@ -267,6 +270,10 @@
              </div><!-- /#footer -->
              
         </div><!-- /#conteiner -->
-    </div><!-- /#wrap -->
+	</div><!-- /#wrap -->
+	<script type="module">
+		import {WSClient} from "../../general_js/ws/wsclient.js?<?php echo $SITE_conf['revision']; ?>";
+		window.WSClient = new WSClient();
+	</script>
 </body>
 </html>
