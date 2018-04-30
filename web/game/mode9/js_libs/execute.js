@@ -216,21 +216,12 @@ function board_clicked(x, y) {
                 $('board_' + x + '_' + y).removeClass('attackUnit');
                 execute_procedure(executable_procedure);
             }
-        } else if (game_state == 'SELECTING_TARGET_UNIT_IN_DISTANCE_2_4') {
-            if (board[x] && board[x][y]) if (board[x][y]['type'] == 'unit') {
-                game_state = 'SELECTED_TARGET_UNI_INT_DISTANCE_2_4';
+        } else if (game_state == 'SELECTING_SHOOT_TARGET') {
+            if (board[x] && board[x][y] && (board[x][y]['type'] in current_shoot_aim_types)) {
+                game_state = 'SELECTED_SHOOT_TARGET';
                 selected_params++;
-                target_unit_in_distance_2_4 = x.toString() + ',' + y.toString();
-                if (eval("typeof on_target_unit_in_distance_2_4_select == 'function'")) eval('on_target_unit_in_distance_2_4_select();'); //call on_param_select function if exists
-                $('board_' + x + '_' + y).removeClass('attackUnit');
-                execute_procedure(executable_procedure);
-            }
-        } else if (game_state == 'SELECTING_TARGET_BUILDING_IN_DISTANCE_2_5') {
-            if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') {
-                game_state = 'SELECTED_TARGET_UNI_INT_DISTANCE_2_5';
-                selected_params++;
-                target_building_in_distance_2_5 = x.toString() + ',' + y.toString();
-                if (eval("typeof on_target_building_in_distance_2_5_select == 'function'")) eval('on_target_building_in_distance_2_5_select();'); //call on_param_select function if exists
+                shoot_target = x.toString() + ',' + y.toString();
+                if (eval("typeof on_shoot_target_select == 'function'")) eval('on_shoot_target_select();'); //call on_param_select function if exists
                 $('board_' + x + '_' + y).removeClass('attackUnit');
                 execute_procedure(executable_procedure);
             }
@@ -632,49 +623,32 @@ function pre_put_building() {
     add_action_btn('refl', 'change_flip();');
 }
 
-function pre_archer_shoot(){
-  pre_arbalester_shoot();
+function pre_unit_shoot(){
+    var coords = unit.toString().split(',');
+    var ux = coords[0].toInt();
+    var uy = coords[1].toInt();
+    var shooting_unit_id = board_units[board[ux][uy]['ref']]['unit_id'];
+    var shoot_params = get_shooting_params(shooting_unit_id);
+    show_shoot_radius(ux,uy,shoot_params);
+    current_shoot_aim_types = shoot_params.aim_types;
 }
-function pre_arbalester_shoot(){
-  var coords = unit.toString().split(',');
-		var ux = coords[0].toInt();
-		var uy = coords[1].toInt();
-  show_shoot_radius(ux,uy,2,4);
-}
-function pre_catapult_shoot(){
-  var coords = unit.toString().split(',');
-		var ux = coords[0].toInt();
-		var uy = coords[1].toInt();
-  show_shoot_radius(ux,uy,2,5);
-}
-function show_shoot_radius(ux,uy,from,to){
-  for (d=0;d<to-from+1;d++){ 
-    for (x=ux-from-d;x<(ux+from+1+d);x++){
-	var addAim = true;
-	var y = uy-from-d;
-	if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'obstacle' || board[x][y]['type'] == 'castle') addAim = false;
-	if (x<0 || x>19 || y<0 || y>19)  addAim = false;
-	if (addAim) $('board_' + x + '_' + y).addClass('aim'+d);
-	addAim = true;
-	y = uy+from+d;
-	if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'obstacle' || board[x][y]['type'] == 'castle') addAim = false;
-	if (x<0 || x>19 || y<0 || y>19)  addAim = false;
-	if (addAim) $('board_' + x + '_' + y).addClass('aim'+d);
+
+function show_shoot_radius(ux,uy,shoot_params){
+    var range_min = shoot_params.range_min;
+    var range_max = shoot_params.range_max;
+    for (x = ux - range_max; x <= ux + range_max; x++){
+        for (y = uy - range_max; y <= uy + range_max; y++){
+            var distance = Math.max(Math.abs(ux - x), Math.abs(uy - y));
+            if (x<0 || x>19 || y<0 || y>19 || distance < range_min
+                || (board[x] && board[x][y] && !(board[x][y]['type'] in shoot_params.aim_types))) {
+                continue;
+            }
+            var classNumber = distance - range_min;
+            $('board_' + x + '_' + y).addClass('aim' + classNumber);
+        }
     }
-    for (y=uy-from+1-d;y<(uy+from+d);y++){
-	var addAim = true;
-	var x = ux-from-d;
-	if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'obstacle' || board[x][y]['type'] == 'castle') addAim = false;
-	if (x<0 || x>19 || y<0 || y>19)  addAim = false;
-	if (addAim) $('board_' + x + '_' + y).addClass('aim'+d);
-	addAim = true;
-	x = ux+from+d;
-	if (board[x] && board[x][y]) if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'obstacle' || board[x][y]['type'] == 'castle') addAim = false;
-	if (x<0 || x>19 || y<0 || y>19)  addAim = false;
-	if (addAim) $('board_' + x + '_' + y).addClass('aim'+d);
-    }
-  }
 }
+
 //POST functions
 function post_send_procedure() {
     $('anim').removeClass('anim');
@@ -753,30 +727,6 @@ function post_wizard_heal() {
     $('board_' + ux + '_' + uy).removeClass('activeUnit');
 }
 
-function post_archer_shoot() {
-    //clear green class
-    var coords = unit.toString().split(',');
-    var ux = coords[0].toInt();
-    var uy = coords[1].toInt();
-    $('board_' + ux + '_' + uy).removeClass('activeUnit');
-}
-
-function post_arbalester_shoot() {
-    //clear green class
-    var coords = unit.toString().split(',');
-    var ux = coords[0].toInt();
-    var uy = coords[1].toInt();
-    $('board_' + ux + '_' + uy).removeClass('activeUnit');
-}
-
-function post_catapult_shoot() {
-    //clear green class
-    var coords = unit.toString().split(',');
-    var ux = coords[0].toInt();
-    var uy = coords[1].toInt();
-    $('board_' + ux + '_' + uy).removeClass('activeUnit');
-}
-
 function post_wizard_fireball() {
     //clear green class
     var coords = unit.toString().split(',');
@@ -826,54 +776,63 @@ function post_wall_close(){
 	if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
 	}
 }
-function post_archer_shoot(){
-  post_arbalester_shoot();
-}
-function post_arbalester_shoot(){
-  var coords = unit.toString().split(',');
-		var ux = coords[0].toInt();
-		var uy = coords[1].toInt();
-  hide_shoot_radius(ux,uy,2,4);
-      if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
+
+function post_unit_shoot(){
+    var coords = unit.toString().split(',');
+    var ux = coords[0].toInt();
+    var uy = coords[1].toInt();
+    var shooting_unit_id = board_units[board[ux][uy]['ref']]['unit_id'];
+    var shoot_params = get_shooting_params(shooting_unit_id);
+    hide_shoot_radius(ux,uy,shoot_params);
+    if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
     if ($('board_' + (ux + 1) + '_' + (uy + 1))) $$('#board_' + (ux + 1) + '_' + (uy + 1) + ' .unitdiv').removeClass('activeUnit');
-    if (target_unit_in_distance_2_4!=''){
-      var coords = target_unit_in_distance_2_4.toString().split(',');
-		  var tx = coords[0].toInt();
-		  var ty = coords[1].toInt();
-      $('overboard_' + tx + '_' + ty).removeClass('cursor_attack');
+    if (shoot_target!=''){
+        var coords = shoot_target.toString().split(',');
+        var tx = coords[0].toInt();
+        var ty = coords[1].toInt();
+        $('overboard_' + tx + '_' + ty).removeClass('cursor_attack');
     }
 }
-function post_catapult_shoot(){
-  var coords = unit.toString().split(',');
-		var ux = coords[0].toInt();
-		var uy = coords[1].toInt();
-  hide_shoot_radius(ux,uy,2,5);
-      if ($('board_' + ux + '_' + uy)) $('board_' + ux + '_' + uy + '').removeClass('activeUnit');
-    if ($('board_' + (ux + 1) + '_' + (uy + 1))) $$('#board_' + (ux + 1) + '_' + (uy + 1) + ' .unitdiv').removeClass('activeUnit');
-    if (target_building_in_distance_2_5!=''){
-      var coords = target_building_in_distance_2_5.toString().split(',');
-		  var tx = coords[0].toInt();
-		  var ty = coords[1].toInt();
-      $('overboard_' + tx + '_' + ty).removeClass('cursor_attack');
+
+function hide_shoot_radius(ux,uy,shoot_params){
+    var range_min = shoot_params.range_min;
+    var range_max = shoot_params.range_max;
+    for (x = ux - range_max; x <= ux + range_max; x++){
+        for (y = uy - range_max; y <= uy + range_max; y++){
+            var distance = Math.max(Math.abs(ux - x), Math.abs(uy - y));
+            if (x<0 || x>19 || y<0 || y>19 || distance < range_min) {
+                continue;
+            }
+            var classNumber = distance - range_min;
+            $('board_' + x + '_' + y).removeClass('aim'+classNumber);
+        }
     }
 }
-function hide_shoot_radius(ux,uy,from,to){
-    for (d=0;d<to-from+1;d++){ 
-    for (x=ux-from-d;x<(ux+from+1+d);x++){
-	var y = uy-from-d;
-	if (x>=0 && x<=19 && y>=0 && y<=19) $('board_' + x + '_' + y).removeClass('aim'+d);
-	  y = uy+from+d;
-	if (x>=0 && x<=19 && y>=0 && y<=19) $('board_' + x + '_' + y).removeClass('aim'+d);
+
+
+function get_shooting_params(shooter_unit_id) {
+    var unit_shooting_params = shooting_params[shooter_unit_id];
+    var range_min = 99999;
+    var range_max = -1;
+    var aim_types = {};
+    for (i = 0; i < unit_shooting_params.length; ++i) {
+        if (unit_shooting_params[i]) {
+            if (i < range_min) {
+                range_min = i;
+            }
+            if (i > range_max) {
+                range_max = i;
+            }
+            for (aim_type in unit_shooting_params[i]) {
+                if (unit_shooting_params[i].hasOwnProperty(aim_type)) {
+                    aim_types[aim_type] = true;
+                }
+            }
+        }
     }
-    for (y=uy-from+1-d;y<(uy+from+d);y++){
-	var addAim = true;
-	var x = ux-from-d;
-	if (x>=0 && x<=19 && y>=0 && y<=19) $('board_' + x + '_' + y).removeClass('aim'+d);
-	  x = ux+from+d;
-	if (x>=0 && x<=19 && y>=0 && y<=19) $('board_' + x + '_' + y).removeClass('aim'+d);
-    }
-  }
+    return {'range_min':range_min, 'range_max':range_max, 'aim_types':aim_types};
 }
+
 //ON functions
 function on_player_select() {
     if (player.toString() != '' && executable_procedure == 'send_money') {
