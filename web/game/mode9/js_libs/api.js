@@ -781,29 +781,13 @@ function add_card(pd_id,card_id,no_anim) {
 		'alt': card_name(card_id)
 	});
 	myDiv.addEvent('click', function(){execute_card(pd_id,card_id)});
-	var priceDiv = new Element('div', {
-		'class':'card_price'
-	});//create div with price
-	var price = cards[card_id]['cost'];
-	var number;
-	//var numbers = new Array(63,63,65,63,63,63,63,81,65,78);
-	var new_height;
-	for(j=0;j<price.length;j++){
-	  //new_height = Math.round(numbers[price.charAt(j).toInt()]*186/1000);
-	  number = new Element('img', {
-		'src': '../../design/images/numbers/sm_'+price.charAt(j)+'.png',
-		'alt': price.charAt(j),
-		//'height': new_height
-	  });
-	  priceDiv.grab(number,'bottom');
-	}
 	// create div with title
 	var titleDiv = new Element('div', {
 		'class':'card_title',
 		html: card_names[USER_LANGUAGE][card_id]['name']
 	});
 	myDiv.grab(titleDiv,'bottom');
-	myDiv.grab(priceDiv,'bottom');
+	myDiv.grab(cardPriceDiv(cards[card_id]['cost']),'bottom');
 	myDiv.grab(myImg,'bottom');
 	$('cards_holder').grab(myDiv,'bottom');
 	addCardTip('card_'+pd_id,card_id);
@@ -831,7 +815,8 @@ function add_card(pd_id,card_id,no_anim) {
                     'opacity':0,
 					'z-index':2001,
 					'text-align':'center'
-                }
+				},
+				'class': 'card_anim'
 			});
 			// create div with title
 			var title2Div = new Element('div', {
@@ -843,7 +828,8 @@ function add_card(pd_id,card_id,no_anim) {
 				}
 			});
 			my2Div.grab(title2Div, 'bottom');
-            my2Div.grab(my2Img, 'bottom');
+			my2Div.grab(my2Img, 'bottom');
+			my2Div.grab(cardPriceDiv(cards[card_id]['cost']), 'bottom');
             document.body.grab(my2Div,'bottom');
             my2Div.position();
             var myFx = new Fx.Tween(my2Div, {property: 'opacity',duration:1000});
@@ -853,6 +839,21 @@ function add_card(pd_id,card_id,no_anim) {
                     function(){ if (this.element) this.element.destroy()}
             );
         }
+}
+
+function cardPriceDiv(price) {
+	var priceDiv = new Element('div', {
+		'class':'card_price'
+	});
+	var number;
+	for(j=0;j<price.length;j++){
+	  number = new Element('img', {
+		'src': '../../design/images/numbers/sm_'+price.charAt(j)+'.png',
+		'alt': price.charAt(j)
+	  });
+	  priceDiv.grab(number,'bottom');
+	}
+	return priceDiv;
 }
 
 function remove_card(card_id)	{
@@ -1611,24 +1612,7 @@ function add_to_grave(grave_id,card_id,x,y,size)	{
 		'src': '../../design/images/cards/'+cards[card_id]['image'],
 		'alt': card_name(card_id)
 	});
-	var priceDiv = new Element('div', {
-		'class':'card_price'
-	});//create div with price
-	var price = cards[card_id]['cost'].toInt()*2;
-	price = price.toString();
-	var number;
-	//var numbers = new Array(63,63,65,63,63,63,63,81,65,78);
-	var new_height;
-	for(j=0;j<price.length;j++){
-	  //new_height = Math.round(numbers[price.charAt(j).toInt()]*186/1000);
-	  number = new Element('img', {
-		'src': '../../design/images/numbers/sm_'+price.charAt(j)+'.png',
-		'alt': price.charAt(j),
-		//'height': new_height
-	  });
-	  priceDiv.grab(number,'bottom');
-	}
-	myDiv.grab(priceDiv,'bottom');
+	myDiv.grab(cardPriceDiv(cards[card_id]['cost'].toInt()*2),'bottom');
 	myDiv.grab(myImg,'bottom');
 	//myDiv.addEvent('click', function(){param_clicked($('dead_unit'+card_id));});
 	myDiv.addEvent('mouseenter', function(){show_grave(grave_id,x,y,size);});

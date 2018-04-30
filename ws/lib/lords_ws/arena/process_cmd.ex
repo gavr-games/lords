@@ -103,7 +103,7 @@ defmodule LordsWs.Arena.ProcessCmd do
                 game_id = params["params"]["game_id"]
                 user_id = params["params"]["user_id"]
                 if req["data_result"]["owner"] == "1" do
-                    arena_cmds = arena_cmds <> Enum.join(Enum.map(UserPresence.list("game:#{game_id}"),  fn {u_id, _metas} ->
+                    arena_cmds = arena_cmds <> Enum.join(Enum.map(LordsWs.UserPresence.list("game:#{game_id}"),  fn {u_id, _metas} ->
                         "arena_player_set_status(#{u_id}, 1);"
                     end))
                     arena_cmds = "#{arena_cmds}arena_game_delete(#{game_id});"
@@ -127,7 +127,7 @@ defmodule LordsWs.Arena.ProcessCmd do
                 user_id = socket.assigns.user_id
                 if req["data_result"]["was_owner"] == "1" do
                     game_id = req["data_result"]["game_id"]
-                    arena_cmds = arena_cmds <> Enum.join(Enum.map(UserPresence.list("game:#{game_id}"),  fn {u_id, _metas} ->
+                    arena_cmds = arena_cmds <> Enum.join(Enum.map(LordsWs.UserPresence.list("game:#{game_id}"),  fn {u_id, _metas} ->
                         "arena_player_set_status(#{u_id}, 1);"
                     end))
                     arena_cmds = "#{arena_cmds}arena_game_delete(#{game_id});"
@@ -147,7 +147,7 @@ defmodule LordsWs.Arena.ProcessCmd do
           "arena_game_start" ->
             if req["header_result"]["success"] == "1" do
                 game_id = params["params"]["game_id"]
-                arena_cmds = arena_cmds <> Enum.join(Enum.map(UserPresence.list("game:#{game_id}"),  fn {u_id, _metas} ->
+                arena_cmds = arena_cmds <> Enum.join(Enum.map(LordsWs.UserPresence.list("game:#{game_id}"),  fn {u_id, _metas} ->
                     "arena_player_set_status(#{u_id}, 3);"
                 end))
                 arena_cmds = "#{arena_cmds}arena_game_set_status(#{game_id}, 2);"
