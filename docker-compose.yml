@@ -24,10 +24,6 @@ services:
     environment:
       MIX_ENV: dev
       PORT: 4000
-      LORDS_DOMAIN: ${LORDS_DOMAIN}
-      REVISION: ${REVISION}
-      MYSQL_CLIENT_PASSWORD: ${MYSQL_CLIENT_PASSWORD}
-      MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
     volumes:
       - ./ws:/app
     networks:
