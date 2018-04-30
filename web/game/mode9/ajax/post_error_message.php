@@ -81,7 +81,6 @@ $html_code .= '
 	$fh = fopen('../'.$myFile, 'w') or die("<b>Из-за неполадок на сервере, сообщение принять невозможно.</b>");
 	fwrite($fh, $html_code);
 	fclose($fh);
-	echo '<b>Сообщение успешно отправлено.</b><br />
-	Для скорейшего исправления зарегестрируйте и опишите свою ошибку в <a target="_blank" href="'.$SITE_conf['mantis'].'">нашей системе</a>.<br />
-	<b>Ссылка на Вашу ошибку:</b> <a target="_blank" href="'.$SITE_conf['domen'].'game/mode9/'.$myFile.'">'.$SITE_conf['domen'].'game/mode9/'.$myFile.'</a>';
+	echo '<b>'.L::game_error_success.'.</b><br />
+	<b>'.L::game_error_link.':</b> <a target="_blank" href="'.$SITE_conf['domen'].'game/mode9/'.$myFile.'">'.$SITE_conf['domen'].'game/mode9/'.$myFile.'</a>';
 ?>

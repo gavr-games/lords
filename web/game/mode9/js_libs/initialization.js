@@ -443,7 +443,7 @@ function initialization() {
             var saved_messages = Cookie.read("saved_messages_" + game_info["game_id"] + "_" + my_player_num);
             if ($chk(saved_messages)) {
                 $('game_chat').set('html', saved_messages);
-                chat_add_service_message($time() / 1000, 'Последние сообщения могут отсутствовать...');
+                chat_add_service_message($time() / 1000, i18n[USER_LANGUAGE]["game"]["chat_missing_messages"]);
             }
             setInterval("saveChatMessages();", 10000);
 
@@ -2235,12 +2235,12 @@ function clearArrowRect(x, y, x2, y2) {
 
 function displayLordsError(e, str) {
     var file_line = '';
-    if (Browser.opera) file_line = '<br /><b>Файл+строка:</b>' + e.stacktrace;
-    else if (Browser.firefox || Browser.chrome) file_line = '<br /><b>Файл+строка:</b>' + e.stack;
-    else file_line = '<br /><b>Файл:</b>' + e.fileName + '<br /><b>Строка:</b>' + e.lineNumber;
-    var error_html = '<b>Ошибка Javacript:</b> ' + e.name + '<br /><b>Сообщение:</b>' + e.message + file_line + '<br /><b>Команды:</b><br />' + str + '<br />';
-    error_html += '<b>Браузер:</b> ' + Browser.name + '(v.' + Browser.version + ')' + ' Platform:' + Browser.Platform.name + '<br />';
-    error_html += '<b>Ваш комментарий:</b> <br /><textarea id="error_comment" style="width:400px;height:80px;" onfocus="chatFocused = true;" onblur="chatFocused = false;"> </textarea><br /><input onclick="this.hide();sendError();return false;" id="send_error_button" type="submit" value="Отправить сообщение об ошибке"><input onclick="window.location.reload();return false;" type="submit" value="Перегрузить игру">'
+    if (Browser.opera) file_line = '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_file"] + '+' + i18n[USER_LANGUAGE]["game"]["error_line"] + ':</b>' + e.stacktrace;
+    else if (Browser.firefox || Browser.chrome) file_line = '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_file"] + '+' + i18n[USER_LANGUAGE]["game"]["error_line"] + ':</b>' + e.stack;
+    else file_line = '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_file"] + ':</b>' + e.fileName + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_line"] + ':</b>' + e.lineNumber;
+    var error_html = '<b>' + i18n[USER_LANGUAGE]["game"]["js_error"] + ':</b> ' + e.name + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_msg"] + ':</b>' + e.message + file_line + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_commands"] + ':</b><br />' + str + '<br />';
+    error_html += '<b>' + i18n[USER_LANGUAGE]["game"]["error_browser"] + ':</b> ' + Browser.name + '(v.' + Browser.version + ')' + ' Platform:' + Browser.Platform.name + '<br />';
+    error_html += '<b>' + i18n[USER_LANGUAGE]["game"]["error_comment"] + ':</b> <br /><textarea id="error_comment" style="width:400px;height:80px;" onfocus="chatFocused = true;" onblur="chatFocused = false;"> </textarea><br /><input onclick="this.hide();sendError();return false;" id="send_error_button" type="submit" value="' + i18n[USER_LANGUAGE]["game"]["error_send"] + '"><input onclick="window.location.reload();return false;" type="submit" value="' + i18n[USER_LANGUAGE]["game"]["error_reload_game"] + '">'
     error_html += '<div id="send_answer" style="color:black;"></div><img src="../../design/images/ajax-loader.gif" id="error_send_indicator" style="display:none">';
     var errDiv = new Element('div', {
         'html': error_html,
@@ -2251,7 +2251,7 @@ function displayLordsError(e, str) {
 
 function sendError() {
     $('error_send_indicator').show();
-    $('send_answer').set('text', 'Идет отправка сообщения - ожидайте...');
+    $('send_answer').set('text', i18n[USER_LANGUAGE]["game"]["error_wait"]);
 
     //generate js vars and objects
     var exclude_objs = new Array('window', 'navigator', 'document', 'InstallTrigger', 'console', 'MooTools', 'Browser', 'Slick', 'Selectors', 'Asset', 'Locale', 'Form', 'sessionStorage', 'globalStorage', 'localStorage', 'parent', 'top', 'scrollbars', 'frames', 'applicationCache', 'self', 'screen', 'history', 'content', 'menubar', 'toolbar', 'locationbar', 'personalbar', 'statusbar', 'crypto', 'controllers', 'mozIndexedDB', 'URL', 'commandsRequest', 'chatCommandsRequest', '_firebug', 'mySortables');

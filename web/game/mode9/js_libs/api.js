@@ -1011,7 +1011,7 @@ function add_spectator(p_num, name) {
     var dt = new Date();
     dt = dt.getTime();
     dt = parseInt(dt / 1000);
-    chat_add_service_message(dt, 'К игре присоединился наблюдатель ' + name);
+    chat_add_service_message(dt, i18n[USER_LANGUAGE]["game"]["observer_joined"] + name);
 }
 
 function add_spectator_init(p_num, name) {

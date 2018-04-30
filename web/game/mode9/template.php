@@ -162,7 +162,7 @@
 				  	<div id="agree_draw">
 						<input type="checkbox" id="chbDraw" onclick="changeDraw();"><?= L::game_agree_draw ?>
 					</div></td></tr>
-				  <tr><td><nobr><a href="#" onclick="displayLordsError(new Error('Заполните, пожалуйста, форму с ошибкой! Это ФОРМА, не ошибка игры!'),'');return false;" style="color:#9f0909;"><?= L::game_report_error ?></a></nobr></td></tr>
+				  <tr><td><nobr><a href="#" onclick="displayLordsError(new Error('<?= L::game_error_fill_form ?>'),'');return false;" style="color:#9f0909;"><?= L::game_report_error ?></a></nobr></td></tr>
                </table>
            </li>
         </ul>

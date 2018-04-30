@@ -25,7 +25,7 @@ function showError(code, params) {
 
 function displayLordsError(e, str) {
     var errDiv = new Element('div', {
-        'html': 'Ошибка Javacript:' + e.name + '<br />Сообщение:' + e.message + '<br />Файл:' + e.fileName + '<br />Строка:' + e.lineNumber + '<br />Команды:<br />' + str + '<br /> Скопируйте текст ошибки и отправьте администратору. Затем нажмите F5.',
+        'html': i18n[USER_LANGUAGE]["game"]["js_error"] + e.name + '<br />' + i18n[USER_LANGUAGE]["game"]["error_msg"] + ':' + e.message + '<br />' + i18n[USER_LANGUAGE]["game"]["error_file"] + ':' + e.fileName + '<br />' + i18n[USER_LANGUAGE]["game"]["error_line"] + ':' + e.lineNumber + '<br />' + i18n[USER_LANGUAGE]["game"]["error_commands"] + ':<br />' + str + '<br /> ' + i18n[USER_LANGUAGE]["game"]["error_send_admin"],
         'styles': {
             'position': 'absolute',
             'z-index': '20000',
