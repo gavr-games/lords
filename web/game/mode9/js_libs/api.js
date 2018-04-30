@@ -1939,16 +1939,19 @@ function show_stats(data) {
 				item['charts'].each(function(chart_item, chart_index)	{
 					if (chart_item)	{
 						var myGraph = new Element('div', {
+							'id': 'chart-cont-' + chart_index,
 							'styles':{
 								'width': 300,
 								'height': 180 
 							}
 						});
 						myPanel.grab(myGraph,'bottom');
-						var myChart = new Element('canvas', {
-							'id': 'chart' + chart_index,
-						});
-						myGraph.grab(myChart,'bottom');
+						if (chart_item['chart_type'] != 'cardlist') {
+							var myChart = new Element('canvas', {
+								'id': 'chart-' + chart_index,
+							});
+							myGraph.grab(myChart,'bottom');
+						}
 					}
 				});
 			}
@@ -1983,48 +1986,71 @@ function show_stats(data) {
 	}
 }
 function drawChart(chart_id, chart) {
+	var title = statistics_names[[USER_LANGUAGE]][chart['chart_name']]['text'].replace('{player_name}', chart['player_name']);
 	if (chart['chart_type'] == 'cardlist') {
-
-	} else {
+		var title = new Element('h5', {
+			'text': title
+		});
+		$('chart-cont-' + chart_id).grab(title,'bottom');
+		var cards = '';
 		chart['values'].each(function(item, index)	{
 			if (item)	{
-				
+				cards += '<li id="cardlist-' + chart_id + '-' + item['value'] + '">' + card_names[USER_LANGUAGE][item['value']]['name'] + '</li>';
 			}
 		});
-		var ctx = document.getElementById("chart" + chart_id).getContext('2d');
+		var list = new Element('ul', {
+			'html': cards
+		});
+		$('chart-cont-' + chart_id).grab(list,'bottom');
+		// add tips
+		chart['values'].each(function(item, index)	{
+			if (item)	{
+				addCardTip('cardlist-' + chart_id + '-' + item['value'], item['value'])
+			}
+		});
+	} else {
+		var data = new Array();
+		var labels = new Array();
+		var colors = new Array();
+		var yAxesScale = [{
+			ticks: {
+				beginAtZero:true
+			}
+		}]
+		if (chart['chart_type'] == 'pie') {
+			yAxesScale = [];
+		}
+		chart['values'].each(function(item, index)	{
+			if (item)	{
+				data.push(item['value'].toInt());
+				label = item['value_name'];
+				if (label.startsWith('{')){
+					label = label.replace(label, statistics_names[[USER_LANGUAGE]][label]['text'])
+				}
+				labels.push(label);
+				colors.push(dic_colors[item['color']]['color']);
+			}
+		});
+		var ctx = document.getElementById("chart-" + chart_id).getContext('2d');
 		var myChart = new Chart(ctx, {
 			type: chart['chart_type'],
 			data: {
-				labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+				labels: labels,
 				datasets: [{
-					label: statistics_names[[USER_LANGUAGE]][chart['chart_name']]['text'].replace('{player_name}', chart['player_name']),
-					data: [12, 19, 3, 5, 2, 3],
-					backgroundColor: [
-						'rgba(255, 99, 132, 0.2)',
-						'rgba(54, 162, 235, 0.2)',
-						'rgba(255, 206, 86, 0.2)',
-						'rgba(75, 192, 192, 0.2)',
-						'rgba(153, 102, 255, 0.2)',
-						'rgba(255, 159, 64, 0.2)'
-					],
-					borderColor: [
-						'rgba(255,99,132,1)',
-						'rgba(54, 162, 235, 1)',
-						'rgba(255, 206, 86, 1)',
-						'rgba(75, 192, 192, 1)',
-						'rgba(153, 102, 255, 1)',
-						'rgba(255, 159, 64, 1)'
-					],
-					borderWidth: 1
+					data: data,
+					backgroundColor: colors
 				}]
 			},
 			options: {
+				title: {
+					display: true,
+					text: title
+				},
+				legend: {
+					display: false,
+				},
 				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero:true
-						}
-					}]
+					yAxes: yAxesScale
 				}
 			}
 		});
