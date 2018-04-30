@@ -19,20 +19,20 @@ function subEnterGame(game_id) {
     if (pass == '""') pass = 'null';
     //check game status end enter or spectate
     var parent_id = $('game_' + game_id).getParent().get('id');
-    if (parent_id == 'game_list') 
-    parent.parent.sendLoggedProtocolCmd({
-        action: 'arena_game_enter',
-        params: {
-            'game_id': game_id,
-            'pass': pass
-        }
-    });
+    if (parent_id == 'game_list')
+        parent.parent.WSClient.sendLoggedProtocolCmd({
+            action: 'arena_game_enter',
+            params: {
+                'game_id': game_id,
+                'pass': pass
+            }
+        });
     else
-      parent.parent.sendLoggedProtocolCmd({
-        action: 'arena_game_spectator_enter',
-        params: {
-            'game_id': game_id,
-            'pass': pass
-        }
-    });
+        parent.parent.WSClient.sendLoggedProtocolCmd({
+            action: 'arena_game_spectator_enter',
+            params: {
+                'game_id': game_id,
+                'pass': pass
+            }
+        });
 }

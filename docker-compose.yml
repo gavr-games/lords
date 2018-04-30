@@ -13,14 +13,23 @@ services:
       - ./database:/database
     networks:
       - lords-network
-
-  ape:
-    image: "i386/ubuntu:17.10"
+  
+  ws:
+    build:
+      context: ws
+      dockerfile: Dockerfile
+    command: mix phx.server
     ports:
-      - "6969:6969"
+      - "4000:4000"
+    environment:
+      MIX_ENV: dev
+      PORT: 4000
+      LORDS_DOMAIN: ${LORDS_DOMAIN}
+      REVISION: ${REVISION}
+      MYSQL_CLIENT_PASSWORD: ${MYSQL_CLIENT_PASSWORD}
+      MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
     volumes:
-      - ./ape_scripts:/ape_scripts
-    command: bash -c "cd /ape_scripts/bin ; chmod 755 ./aped ; ./aped"
+      - ./ws:/app
     networks:
       - lords-network
 

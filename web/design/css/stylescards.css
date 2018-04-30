@@ -238,7 +238,7 @@
 
 #fullsize {
 	padding-left: 20px;
-	text-align: left;
+	text-align: center;
 	overflow: hidden;
 	width: 735px;
 }
@@ -255,4 +255,18 @@
 	position: relative;
 	overflow-y: scroll;
 	margin-top: 4px;
+}
+
+.card_anim {
+	position: absolute;
+	height: 186px;
+	width: 130px;
+	opacity: 0;
+	z-index: 2001;
+	text-align: center;
+}
+
+.card_anim .card_price {
+	top: 155px;
+	left: 65px;
 }

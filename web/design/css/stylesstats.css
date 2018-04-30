@@ -72,3 +72,10 @@
 .tabs_panel p {
 	margin-left:5px;
 }
+.tabs_panel div {
+	float: left;
+	text-align: center;
+}
+.tabs_panel div h5 {
+	color: #676767;
+}

@@ -110,6 +110,7 @@ function hideLoading() {
 
 function initialization() {
     try {
+        parent.WSClient.joinGame(game_info["game_id"]);
         //init some variables
         time_restriction = game_info["time_restriction"].toInt();
         game_status = game_info["status_id"].toInt();
@@ -147,7 +148,7 @@ function initialization() {
             procedures_params_codes[item["code"]]["description"] = procedure_param_description(item["id"]);
         });
         if (game_status == 3) { //finished
-            eval(ape_exec_cmds);
+            eval(ws_exec_cmds);
             exec_commands_now = true;
             //hide loading
             hideLoading();
@@ -381,13 +382,6 @@ function initialization() {
             //board player class
             $('board').addClass(boardClass);
 
-            //hide loading
-            //hideLoading();
-            //game_time
-            if (time_restriction != 0) {
-                setInterval("turn_left_time();", 1000);
-            }
-
             var scroll = $('game_log').getScrollSize();
             $('game_log').scrollTo(0, scroll.y);
             scroll = $('game_chat').getScrollSize();
@@ -453,7 +447,7 @@ function initialization() {
             }
             setInterval("saveChatMessages();", 10000);
 
-            eval(ape_exec_cmds);
+            eval(ws_exec_cmds);
             exec_commands_now = true;
             hideLoading();
         } // end if game finished
@@ -612,9 +606,7 @@ function loadCookies() {
 
 function sendChatMessage() {
     if ($('chat_text').get('value') != '\n' && $('chat_text').get('value') != '') {
-        parent.sendSimpleApeCmd('gamechat_message', {
-            msg: convertChars($('chat_text').get('value'))
-        });
+        parent.WSClient.sendGameChatMessage(game_info["game_id"], convertChars($('chat_text').get('value')));
         $('chat_text').set('value', '');
         $('chat_cnt').set('html', '0');
     } else $('chat_text').set('value', '');
