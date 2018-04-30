@@ -75,6 +75,16 @@ defmodule LordsWs.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("get_game_statistic", _, socket) do
+    url = "http://web/site/ajax/get_statistic.php?phpsessid=#{socket.assigns.token}"
+    case HTTPoison.get(url) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
+        game_body = game_body |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()
+        push socket, "game_statistic_raw", %{commands: game_body}
+    end
+    {:noreply, socket}
+  end
+
   def handle_in("performance", %{"json_params" => json_params}, socket) do
     url = "http://web/site/ajax/call_save_perfomance.php"
     case HTTPoison.post(url, json_params, [{"Content-Type", "application/json"}]) do

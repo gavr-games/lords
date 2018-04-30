@@ -10,6 +10,7 @@
 	<script>
 		jQuery.noConflict();
 	</script>
+	<script type="text/javascript" src="../../general_js/Chart.min.js?<?= $SITE_conf['revision']; ?>"></script>
 	<script type="text/javascript" src="../../site/js_libs/cmd_helper.js?<?= $SITE_conf['revision'] ?>"></script>
 	<script type="text/javascript" src="js_libs/loading.js?<?= $SITE_conf['revision'] ?>"></script>
 	<link rel="stylesheet" type="text/css" href="../../design/css/reset.css?<?= $SITE_conf['revision'] ?>" />

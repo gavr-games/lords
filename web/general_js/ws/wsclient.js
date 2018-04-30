@@ -106,6 +106,10 @@ export class WSClient {
         this.sendLoggedProtocolCmd({}, "get_game_info")
     }
 
+    getGameStatistic() {
+        this.sendLoggedProtocolCmd({}, "get_game_statistic")
+    }
+
     joinChannel(channelName) {
         if (!this.connected) {
             this.connect()
@@ -183,6 +187,14 @@ export class WSClient {
                     displayLordsError(e, commands + after_commands + '<br />Last executed_procedure:' + last_executed_procedure + '<br />Last API:' + last_executed_api);
                 }
             }
+        })
+
+        channel.on("game_statistic_raw", payload => {
+            let commands = this.convertFromChars(payload.commands);
+            if (this.debug) {
+                console.log(commands)
+            }
+            show_stats(commands)
         })
 
         channel.on("err", payload => {

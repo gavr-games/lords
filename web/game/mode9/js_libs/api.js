@@ -1903,40 +1903,132 @@ function end_game()	{
 	clearInterval(titleInterval);
 	turn_state = NOT_MY_TURN;
 	deactivate_controls();
-	var text = '<a href="#" onclick="show_stats();return false;">'+ i18n[USER_LANGUAGE]['game']['show_statistic'] + '</a><br><a href="#" onclick="execute_exit();return false;">' + i18n[USER_LANGUAGE]['game']['exit'] + '</a>';
+	var text = '<a href="#" onclick="get_stats();return false;">'+ i18n[USER_LANGUAGE]['game']['show_statistic'] + '</a><br><a href="#" onclick="execute_exit();return false;">' + i18n[USER_LANGUAGE]['game']['exit'] + '</a>';
 	noCloseWindow = true;
 	if ($('window_m').getStyle('display')=='block')
 		appendWindow(i18n[USER_LANGUAGE]['game']['game_end'],text,500,500,true);
 	else
 		showWindow(i18n[USER_LANGUAGE]['game']['game_end'],text,200,60,true);
 }
-function show_stats()	{
+function get_stats() {
+	last_executed_api = 'get_stats';
+	parent.WSClient.getGameStatistic();
+}
+function show_stats(data) {
 	last_executed_api = 'show_stats';
-	var myRequest = new Request({
-			method:'post',
-			url: 'ajax/show_stats.php',
-			onSuccess: function(html) {
-				myDiv = $('window_c');
-				$('window_c').set('html','');
-				var myUl = new Element('ul',{
-					'class':'tabs_title'
+	try {
+		eval(data);
+		myDiv = $('window_c');
+		$('window_c').set('html','');
+		var myUl = new Element('ul',{
+			'class':'tabs_title'
+		});
+		myDiv.grab(myUl,'top');
+		statistic.each(function(item, index)	{
+			if (item)	{
+				var myLi = new Element('li', {
+					'title':'tab' + index,
+					'html': statistics_names[[USER_LANGUAGE]][item['tab_name']]['text']
 				});
-				myDiv.grab(myUl,'top');
-				eval(html);
-				var statTabs = new Tabs('statistics');
-				var myA2 = new Element('a', {
-					'html': i18n[USER_LANGUAGE]['game']['exit'],
-					'href':'#',
-					'onclick':'execute_exit();return false;'
+				myUl.grab(myLi,'bottom');
+				var myPanel = new Element('div', {
+					'id':'tab' + index,
+					'class':'tabs_panel'
 				});
-				myDiv.grab(myA2,'bottom');
-				$('window_h').set('text',i18n[USER_LANGUAGE]['game']['statistics']);
-				$('window_c').setStyle('width',630);
-				$('window_c').setStyle('height',450);
-				$('window_m').setStyle('display','block');
-				$('window_w').position();
+				myDiv.grab(myPanel,'bottom');
+				item['charts'].each(function(chart_item, chart_index)	{
+					if (chart_item)	{
+						var myGraph = new Element('div', {
+							'styles':{
+								'width': 300,
+								'height': 180 
+							}
+						});
+						myPanel.grab(myGraph,'bottom');
+						var myChart = new Element('canvas', {
+							'id': 'chart' + chart_index,
+						});
+						myGraph.grab(myChart,'bottom');
+					}
+				});
 			}
-	}).send('');
+		});
+		var statTabs = new Tabs('statistics');
+		var myA2 = new Element('a', {
+			'html': i18n[USER_LANGUAGE]['game']['exit'],
+			'href':'#',
+			'onclick':'execute_exit();return false;'
+		});
+		myDiv.grab(myA2,'bottom');
+		$('window_h').set('text',i18n[USER_LANGUAGE]['game']['statistics']);
+		$('window_c').setStyle('width',630);
+		$('window_c').setStyle('height',450);
+		$('window_m').setStyle('display','block');
+		$('window_w').position();
+
+		statistic.each(function(item, index)	{
+			if (item)	{
+				item['charts'].each(function(chart_item, chart_index)	{
+					if (chart_item)	{
+						drawChart(chart_index, chart_item);
+					}
+				});
+			}
+		});
+	} catch (e) {
+		wasError = true;
+		if (DEBUG_MODE) {
+			displayLordsError(e, data + '<br />Last executed_procedure:' + last_executed_procedure + '<br />Last API:' + last_executed_api);
+		}
+	}
+}
+function drawChart(chart_id, chart) {
+	if (chart['chart_type'] == 'cardlist') {
+
+	} else {
+		chart['values'].each(function(item, index)	{
+			if (item)	{
+				
+			}
+		});
+		var ctx = document.getElementById("chart" + chart_id).getContext('2d');
+		var myChart = new Chart(ctx, {
+			type: chart['chart_type'],
+			data: {
+				labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+				datasets: [{
+					label: statistics_names[[USER_LANGUAGE]][chart['chart_name']]['text'].replace('{player_name}', chart['player_name']),
+					data: [12, 19, 3, 5, 2, 3],
+					backgroundColor: [
+						'rgba(255, 99, 132, 0.2)',
+						'rgba(54, 162, 235, 0.2)',
+						'rgba(255, 206, 86, 0.2)',
+						'rgba(75, 192, 192, 0.2)',
+						'rgba(153, 102, 255, 0.2)',
+						'rgba(255, 159, 64, 0.2)'
+					],
+					borderColor: [
+						'rgba(255,99,132,1)',
+						'rgba(54, 162, 235, 1)',
+						'rgba(255, 206, 86, 1)',
+						'rgba(75, 192, 192, 1)',
+						'rgba(153, 102, 255, 1)',
+						'rgba(255, 159, 64, 1)'
+					],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
+				}
+			}
+		});
+	}
 }
 function linkify(inputText) {
     var replacedText, replacePattern1, replacePattern2, replacePattern3;
