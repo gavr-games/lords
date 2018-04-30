@@ -7,7 +7,7 @@ defmodule LordsWs.Game.ProcessCmd do
         if Map.has_key?(ans, "data_result") do
             Enum.each ans["data_result"], fn cmd -> 
                 if cmd["command"] == "end_game()" do
-                    GenServer.start_link(LordsWs.Game.RemoveTimer, %{game_id: game["game_id"]})
+                    GenServer.start_link(LordsWs.Game.RemoveTimer, game)
                 end
                 # Next turn
                 if cmd["command"] =~ "set_active_player(" && game["time_restriction"] != "0" do

@@ -39,6 +39,7 @@ defmodule LordsWs.NextTurn.Timer do
             Logger.info "Answer from end_turn_timeout #{body}"
             ans = Jason.decode!(body)
             LordsWs.Game.ProcessCmd.run(%{game: game, answer: ans, user_id: nil, params: %{}})
+            # TODO: send error if request failed
         end
         {:noreply, %{game: game, timer: String.to_integer(game["time_restriction"]), timer_ref: nil}}
       _ ->
@@ -51,7 +52,7 @@ defmodule LordsWs.NextTurn.Timer do
   def handle_info(%{event: "cancel"}, %{game: game, timer_ref: ref}) do
     Logger.info "Cancel end turn timer"
     cancel_timer(ref)
-    {:noreply, %{}}
+    {:noreply, %{game: game, timer_ref: nil, timer: String.to_integer(game["time_restriction"])}}
   end
 
   def handle_cast({:restart, game}, _state) do

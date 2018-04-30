@@ -34,6 +34,11 @@ export class WSClient {
             }
         }
     }
+
+    setDebug(debug) {
+        this.debug = debug
+    }
+
     joinChat(chatId) {
         this.joinChannel("chat:" + chatId);
     }

@@ -22,7 +22,7 @@ if ($_SESSION['game_id'] != '' && $_SESSION['player_num'] != '' && $proc_name !=
             '',
             "\\'"
         ), $proc_params);
-        $query .= proc_params;
+        $query .= $proc_params;
     }
     $query .= ');';
     $res  = $dataBase->query($query);

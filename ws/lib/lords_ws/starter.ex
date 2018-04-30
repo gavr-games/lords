@@ -29,8 +29,11 @@ defmodule LordsWs.Starter do
                 Logger.info "---> Starting next turn timer"
                 LordsWs.NextTurn.Timer.create(game)
               end
+              if game["active_player_num"] >= 4 do
+                GenServer.start_link(LordsWs.Npc.Worker, %{game: game, p_num: game["active_player_num"]})
+              end
             "3" ->
-              GenServer.start_link(LordsWs.Game.RemoveTimer, %{game_id: game["game_id"]})
+              GenServer.start_link(LordsWs.Game.RemoveTimer, game)
             _ -> nil
           end
         end)
