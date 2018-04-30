@@ -156,7 +156,7 @@ function initialization() {
             end_game();
             return 1;
         } else {
-            var game_info_html = '<b>Имя игры: </b>' + game_info['title'] + '<br /><b>Дата создания: </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>Игрок:</th><th>Команда:</th></tr>'
+            var game_info_html = '<b>' + i18n[USER_LANGUAGE]["game"]["game_name"] + ': </b>' + game_info['title'] + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["creation_date"] + ': </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>' + i18n[USER_LANGUAGE]["game"]["player"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["team"] + ':</th></tr>'
             //players
             setLoadingText('Инициализация игроков');
             players.each(function(item, index) {
