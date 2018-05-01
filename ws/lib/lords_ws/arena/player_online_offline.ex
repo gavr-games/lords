@@ -10,8 +10,8 @@ defmodule LordsWs.Arena.PlayerOnlineOffline do
 
     def change_status(%{user_id: user_id, flag: flag}) do
         url = "http://web/site/ajax/base_protocol.php"
-        params = %{action: "player_online_offline", params: %{user_id: user_id, flag: 1}}
-        case HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}]) do
+        params = "{\"action\":\"player_online_offline\",\"params\":{\"user_id\":#{user_id},\"flag\":#{flag}}}"
+        case HTTPoison.post(url, params, [{"Content-Type", "application/json"}]) do
             {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
                 Logger.info "Received player_online_offline answer #{body}"
                 Jason.decode!(body) |> Map.put("user_id", user_id)

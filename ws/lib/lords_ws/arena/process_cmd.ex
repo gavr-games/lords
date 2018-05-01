@@ -119,7 +119,7 @@ defmodule LordsWs.Arena.ProcessCmd do
                 game_id = params["params"]["game_id"]
                 user_id = socket.assigns.user_id
                 new_status = 3
-                LordsWs.Endpoint.broadcast "game:#{game_id}", "protocol_raw", %{commands: URI.encode("add_spectator(#{req["data_result"]["player_num"]}, \"#{req["data_result"]["player_name"]}\");")}
+                LordsWs.Endpoint.broadcast "game:#{game_id}", "game_raw", %{commands: URI.encode("add_spectator(#{req["data_result"]["player_num"]}, \"#{req["data_result"]["player_name"]}\");")}
                 LordsWs.Endpoint.broadcast "arena", "protocol_raw", %{commands: URI.encode("arena_player_set_status(#{user_id},#{new_status});arena_game_inc_spectator_count(#{game_id});")}
             end
           "arena_exit" ->
