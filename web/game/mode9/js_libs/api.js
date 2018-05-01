@@ -1030,6 +1030,10 @@ function add_spectator_init(p_num, name) {
 
 function remove_spectator(p_num) {
     last_executed_api = 'remove_spectator';
+    var dt = new Date();
+    dt = dt.getTime();
+    dt = parseInt(dt / 1000);
+    chat_add_service_message(dt, i18n[USER_LANGUAGE]["game"]["observer_left"] + $('spec_' + p_num).get('text'));
     if ($('spec_' + p_num))
         $('spec_' + p_num).destroy();
 }
