@@ -170,8 +170,10 @@
 					
 					<?php } ?>
 					<br/>
-					<b><?= L::arena_game_selected_features ?>:</b><br />
-					<div id="game_features">
+					<div <?= $cur_game_row['owner_id']==$_SESSION['user_id'] ? 'style="display:none;"' : '' ?> >
+						<b><?= L::arena_game_selected_features ?>:</b><br />
+						<div id="game_features">
+						</div>
 					</div>
 				</div>
 		</div><!--.content-->
