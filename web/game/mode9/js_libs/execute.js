@@ -691,15 +691,19 @@ function post_put_building() {
 }
 
 function post_buy_card() {
-    setTimeout("deactivate_buy_ressurect_play_card();",1000);
+    if (error_procedure == '') {
+        setTimeout("deactivate_buy_ressurect_play_card();", 1000);
+    }
 }
 
 function post_player_resurrect() {
-    setTimeout("deactivate_buy_ressurect_play_card();",1000);
+    if (error_procedure == '') {
+        setTimeout("deactivate_buy_ressurect_play_card();", 1000);
+    }
 }
 
 function post_player_exit() {
-   setTimeout("window.location.href = site_domen;",1000);
+   setTimeout("window.location.href = site_domen;", 1000);
 }
 
 function post_add_chat_message() {
