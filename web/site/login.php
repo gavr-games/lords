@@ -39,6 +39,7 @@
 		        </form>
 		        <a class="link reg" href="#" onclick="if (!parent.window_loading) parent.load_window('site/register.php','right'); return false;"><?= L::login_want_signup ?></a>
 			</div>
+			<span class="topbutton about"><a href="#" id="about_b" onclick="if (!parent.window_loading) {doLoading($('about_b'), '<?= L::loading_text ?>');parent.load_window('site/about.php?back=login','left');} return false;"><?= L::about_about ?></a></span>
 			<span class="topbutton en"><a href="/site/lang.php?lang=en">EN</a></span>
 			<span class="topbutton ru"><a href="/site/lang.php?lang=ru">RU</a></span>
 		</div>

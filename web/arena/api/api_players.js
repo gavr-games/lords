@@ -73,7 +73,12 @@ function arena_player_remove(user_id) {
     if (my_user_id == user_id) {
         parent.WSClient.leaveChannel("arena");
         parent.WSClient.leaveChannel("chat:0");
-        parent.load_window("site/map.php", "left");
+        //parent.load_window("site/map.php", "left");
+        // #63 Temporarily logout everyone who leaves Arena
+        parent.WSClient.sendLoggedProtocolCmd({
+            action: 'logout',
+            params: {}
+        });
     } else {
         $('player_' + user_id).destroy();
         delete users[user_id];

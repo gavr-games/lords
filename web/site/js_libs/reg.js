@@ -68,7 +68,12 @@ function loginAnswer(answer) {
         //console.log(answer);
         parent.WSClient.disconnect(); //we want user to reconnect to socket as an authorized user
         if (answer.data_result.game_type_id == 0) { //stay on top site
-            parent.load_window('site/map.php', 'right');
+            //parent.load_window('site/map.php', 'right');
+            // #63 Temporarily login everyone to arena by default
+            parent.WSClient.sendLoggedProtocolCmd({
+                action: 'arena_enter',
+                params: {}
+            });
         } else { //go to arena, etc.
             goToLocation(answer.data_result);
         }

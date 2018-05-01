@@ -98,8 +98,13 @@
 		}
 	</style>
 	<script>
-	  function eval(){
-	  }
+	  function eval(cmds) {
+			if (cmds.includes("load_window")) {
+				parent.eval(cmds);
+			}
+		}
+		function chat_add_user_message() {
+		}
 		parent.USER_LANGUAGE = <?= LangUtils::getCurrentLangNumber($_SESSION['lang']) ?>;
 	</script>
 </head>

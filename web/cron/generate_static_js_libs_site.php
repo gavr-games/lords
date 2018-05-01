@@ -30,6 +30,12 @@
 	
 	$js_arrays = StaticLibs::generate($dataBase, $tables);
 
+	// Static libs for lang
+	$js_arrays .= PHP_EOL.'var i18n = new Array();'.PHP_EOL;
+	foreach(LangUtils::getAllLangs() as $code => $id) {
+		$js_arrays .= StaticLibs::generateI18n("../lang/lang_$code.ini", $id);
+	}
+
 	$f = fopen('../site/js_libs/static_libs.js','w');
 	if ($f)	{
 		fwrite($f,$js_arrays);
