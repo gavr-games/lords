@@ -115,7 +115,7 @@ function initialization() {
         time_restriction = game_info["time_restriction"].toInt();
         game_status = game_info["status_id"].toInt();
 
-        setLoadingText('Инициализация');
+        setLoadingText(i18n[USER_LANGUAGE]["loading"]["initialization"]);
         if (!Browser.ie) document.body.setStyle('overflow', 'visible');
         else document.body.style.overflow = "visible";
         var cur_client_time = Math.floor($time() / 1000);
@@ -139,7 +139,7 @@ function initialization() {
         }
         formSortables();
         //additional massives
-        setLoadingText('Инициализация игровых процедур');
+        setLoadingText(i18n[USER_LANGUAGE]["loading"]["procedures_init"]);
         procedures_mode_1.each(function(item, index) {
             if (item) procedures_names[item["name"]] = item;
         });
@@ -158,7 +158,7 @@ function initialization() {
         } else {
             var game_info_html = '<b>' + i18n[USER_LANGUAGE]["game"]["game_name"] + ': </b>' + game_info['title'] + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["creation_date"] + ': </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>' + i18n[USER_LANGUAGE]["game"]["player"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["team"] + ':</th></tr>'
             //players
-            setLoadingText('Инициализация игроков');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["players_init"]);
             players.each(function(item, index) {
                 if (item) {
                     if (item['player_num'] == my_player_num && item['agree_draw'].toInt() == 1) $('chbDraw').setProperty('checked', true); // set Draw
@@ -174,7 +174,7 @@ function initialization() {
             game_info_html += '</table><hr />';
             $('game_info').set('html', game_info_html);
             //features initialization
-            setLoadingText('Инициализация фич юнитов и зданий');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["features_init"]);
             board_buildings_features.each(function(item, index) {
                 if (item) {
                     if (item['param'] == '') fval = 1;
@@ -191,7 +191,7 @@ function initialization() {
             });
 
             //board initialization
-            setLoadingText('Инициализация доски');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["board_init"]);
             init_board_buildings.each(function(item, index) {
                 if (item) {
                     if (board_buildings[item['ref']]['player_num'] == my_player_num && item['type'] == 'castle') my_castle_id = item['ref']; //store my castle id
@@ -205,7 +205,7 @@ function initialization() {
             });
 
             //cards
-            setLoadingText('Инициализация колоды');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["deck_init"]);
             $('grave_bg').fade(0);
             cardsSlider = new Fx.Slide($('cards'), {}).slideOut('vertical');
             graveSlider = new Fx.Slide($('graveyard'), {
@@ -242,7 +242,7 @@ function initialization() {
             $('cards_container').setStyle('left', boardCoords.left - 24);
 
             //game_log
-            setLoadingText('Инициализация лога');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["log_init"]);
             $('game_log').setStyle('display', 'none');
             vw_command_log.each(function(item, index) {
                 if (item) eval(item['command']);
@@ -250,7 +250,7 @@ function initialization() {
             $('game_log').setStyle('display', 'block');
 
             //graveyard
-            setLoadingText('Инициализация могильника');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["graveyard_init"]);
             vwGrave.each(function(item, index) {
                 if (item) add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size']);
             });
@@ -262,7 +262,7 @@ function initialization() {
             });
 
             //other
-            setLoadingText('Инициализация дополнительных элементов');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["other_init"]);
             active_players.each(function(item, index) {
                 if (item) {
                     active_players = item;
