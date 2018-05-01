@@ -658,14 +658,17 @@ function backlight(x, y) {
                                             $('board_' + x + '_' + y).addClass('attackUnit');
                                         }
                                 } else
-                                    //SELECTING A UNIT IN DISTANCE
-                                    if (game_state == 'SELECTING_TARGET_UNIT_IN_DISTANCE_2_4') {
+                                    //SELECTING A SHOOT TARGET
+                                    if (game_state == 'SELECTING_SHOOT_TARGET') {
                                         var coords = unit.toString().split(',');
                                         var ux = coords[0].toInt();
                                         var uy = coords[1].toInt();
-                                        if ((Math.abs(ux - x.toInt()) >= 2 && Math.abs(ux - x.toInt()) <= 4) || (Math.abs(uy - y.toInt()) >= 2 && Math.abs(uy - y.toInt()) <= 4))
+                                        var shooting_unit_id = board_units[board[ux][uy]['ref']]['unit_id'];
+                                        var shoot_params = get_shooting_params(shooting_unit_id);
+                                        var distance = Math.max(Math.abs(ux - x.toInt()), Math.abs(uy - y.toInt()));
+                                        if (distance >= shoot_params.range_min && distance <= shoot_params.range_max)
                                             if (board[x] && board[x][y])
-                                                if (board[x][y]['type'] == 'unit') {
+                                                if (board[x][y]['type'] in shoot_params.aim_types) {
                                                     $('board_' + x + '_' + y).addClass('attackUnit');
                                                     $('overboard_' + x + '_' + y).addClass('cursor_attack');
                                                 }
@@ -689,19 +692,7 @@ function backlight(x, y) {
                                                     //BUILDING
                                                     if (game_state == 'SELECTING_BUILDING') {
                                                         draw_building_select(x, y);
-                                                    } else
-                                                        //BUILDING AT DISTANCE
-                                                        if (game_state == 'SELECTING_TARGET_BUILDING_IN_DISTANCE_2_5') {
-                                                            var coords = unit.toString().split(',');
-                                                            var ux = coords[0].toInt();
-                                                            var uy = coords[1].toInt();
-                                                            if ((Math.abs(ux - x.toInt()) >= 2 && Math.abs(ux - x.toInt()) <= 5) || (Math.abs(uy - y.toInt()) >= 2 && Math.abs(uy - y.toInt()) <= 5))
-                                                                if (board[x] && board[x][y])
-                                                                    if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') {
-                                                                        $('board_' + x + '_' + y).addClass('attackUnit');
-                                                                        $('overboard_' + x + '_' + y).addClass('cursor_attack');
-                                                                    }
-                                                        } else if (game_state == 'WAITTING') {}
+                                                    } else if (game_state == 'WAITTING') {}
         }
     } catch (e) {
         if (DEBUG_MODE) {
@@ -754,13 +745,15 @@ function backlight_out(x, y) {
                                         if (game_state == 'SELECTING_BUILDING') {
                                             clean_building_select(x, y);
                                         } else
-                                            //BUILDING IN DISTANCE
-                                            if (game_state == 'SELECTING_TARGET_BUILDING_IN_DISTANCE_2_5') {
-                                                $('board_' + x + '_' + y).removeClass('attackUnit');
-                                                $('overboard_' + x + '_' + y).removeClass('cursor_attack');
+                                            //SHOOT TARGET
+                                            if (game_state == 'SELECTING_SHOOT_TARGET') {
+                                                if (board[x] && board[x][y]) {
+                                                    $('board_' + x + '_' + y).removeClass('attackUnit');
+                                                    $('overboard_' + x + '_' + y).removeClass('cursor_attack');
+                                                }
                                             } else
                                                 //SELECTING A UNIT
-                                                if (game_state == 'SELECTING_UNIT' || game_state == 'SELECTING_TARGET_UNIT' || game_state == 'SELECTING_MY_UNIT' || game_state == 'SELECTING_TARGET_UNIT_IN_DISTANCE_2_4') {
+                                                if (game_state == 'SELECTING_UNIT' || game_state == 'SELECTING_TARGET_UNIT' || game_state == 'SELECTING_MY_UNIT') {
                                                     if (board[x] && board[x][y])
                                                         if (board[x][y]['type'] == 'unit') {
                                                             $('board_' + x + '_' + y).removeClass('attackUnit');
@@ -1468,7 +1461,11 @@ function draw_unit(x, y) {
                                                                 found_move = true;
                                                             }
                                                         } else if (board[mx][my]['type'] == 'building' || board[mx][my]['type'] == 'castle') {
-                                if (board_units[id]['player_num'] != board_buildings[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_buildings[board[mx][my]['ref']]['player_num']]['team']) {
+                                if (!players_by_num[board_buildings[board[mx][my]['ref']]['player_num']]
+                                  ||(
+                                      board_units[id]['player_num'] != board_buildings[board[mx][my]['ref']]['player_num']
+                                      && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_buildings[board[mx][my]['ref']]['player_num']]['team']
+                                  )) {
                                     addAttackClass(mx, my);
                                     move_kind = 'attack';
                                     found_move = true;

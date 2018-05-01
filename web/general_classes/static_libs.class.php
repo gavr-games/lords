@@ -48,9 +48,11 @@ class StaticLibs {
                         $row['id'] = $artificial_id;
                         $key_column_names = ['id'];
                     }
+                    $key_value_differs = FALSE;
                     foreach($key_column_names as $i=>$key_col) {
                         array_push($current_keys, $row[$key_col]);
-                        if ($row[$key_col] != $previous_keys[$i]) {
+                        if (($row[$key_col] != $previous_keys[$i]) || $key_value_differs) {
+                            $key_value_differs = TRUE;
                             if ($table['numeric_keys']) {
                                 $keys_js_string = '['.implode('][', $current_keys).']';
                             } else {
