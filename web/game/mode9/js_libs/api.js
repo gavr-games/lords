@@ -2412,7 +2412,7 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
     active_players['player_num'] = player_num;
     active_players['last_end_turn'] = last_end_turn;
     active_players['turn'] = turn;
-    $('game_turn').set('html', 'Ход: ' + turn);
+    $('game_turn').set('html', i18n[USER_LANGUAGE]['game']['turn'] + ': ' + turn);
 }
 
 function newRemindTimer() {

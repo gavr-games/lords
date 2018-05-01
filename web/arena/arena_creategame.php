@@ -33,6 +33,7 @@
 	</style>
 </head>
 <body>
+<h3 class="arena_header"><?= L::arena_chat_arena ?></h3>
 <div class="create_game">
 <span class="gmsheader gmstopheader"> - <?= L::arena_creategame_create_game ?></span><br /><br />
 	<form action="" method="post" id="create_form">

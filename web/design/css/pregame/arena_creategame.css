@@ -1,3 +1,22 @@
+@font-face {
+    font-family: 'edissonregular';
+    src: url('../fonts/edisson.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+h3.arena_header {
+	font-family: 'edissonregular', 'Times New Roman', Times, serif;
+	font-size: 40px;
+	position: absolute;
+	top: 70px;
+    color: #482313;
+	top: -4px;
+	left: 10px;
+    text-align: center;
+    text-shadow: 0px -2px 3px #CEAC27;
+}
+
 .input_com_style {
 	border-color:#d6b77f #f6e8b2 #f6e8b2 #d6b77f;
 	border-width:1px;

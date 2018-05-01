@@ -35,7 +35,9 @@ defmodule LordsWs.UserChannel do
 
   def terminate(_, socket) do
     Logger.info "User #{socket.assigns.user_id} left #{socket.topic}"
-    LordsWs.Arena.PlayerOnlineOffline.run(%{user_id: socket.assigns.user_id, flag: 0})
+    if socket.topic == "arena" do
+      LordsWs.Arena.PlayerOnlineOffline.run(%{user_id: socket.assigns.user_id, flag: 0})
+    end
   end
 
   def handle_in("logged_protocol_cmd", %{"json_params" => json_params}, socket) do

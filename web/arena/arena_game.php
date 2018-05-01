@@ -143,6 +143,7 @@
 	</style>
 </head>
 <body onload="game_initialization();">
+<h3 class="arena_header"><?= L::arena_chat_arena ?></h3>
 <script type="text/javascript">
 	var cur_game_id = <?php echo $cur_game_row['game_id']; ?>;
 	var cur_game_mode_id = <?php echo $cur_game_row['mode_id']; ?>;
@@ -151,7 +152,7 @@
 <div class="current_game">
 	<a class="help" title="<?= L::arena_game_help ?>" href="" onclick="return false;"></a>
         <?php  echo $cur_game; ?>
-		<div id="trash" onclick="exitGame();return false;"></div>
+		<div id="trash" onclick="exitGame();return false;"><span><?= L::do_exit ?></span></div>
 		<div class="content" id="ingame_content">
 				<div id="spectators">
 					<?php echo $spectators; ?>

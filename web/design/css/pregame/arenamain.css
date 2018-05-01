@@ -1,3 +1,22 @@
+@font-face {
+    font-family: 'edissonregular';
+    src: url('../fonts/edisson.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+h3.arena_header {
+	font-family: 'edissonregular', 'Times New Roman', Times, serif;
+	font-size: 40px;
+	position: absolute;
+	top: 70px;
+    color: #482313;
+	top: -4px;
+	left: 10px;
+    text-align: center;
+    text-shadow: 0px -2px 3px #CEAC27;
+}
+
 .arena_player_drag {
 	background: url(../../images/pregame/arena_player_drag.png) top left no-repeat;
 	width:98px;
@@ -188,6 +207,18 @@ body {
 	cursor:pointer;
 	top:80px;
 }
+
+#players_cont h3 {
+	font-family: 'edissonregular', 'Times New Roman', Times, serif;
+	font-size: 40px;
+	position: absolute;
+	top: 70px;
+    color: #482313;
+	width: 180px;
+    text-align: center;
+    text-shadow: 0px -2px 3px #CEAC27;
+}
+
 #players_cont .help:hover{background:  url(../../images/pregame/help_sign.png) bottom left no-repeat;}
 #players_cont #players_list{
 	float:left;
