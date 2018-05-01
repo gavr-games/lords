@@ -34,7 +34,7 @@
 		               <span class="logfields"><?= L::login_login ?>:<p class="txtfield"><input class="log" type="text" name="login" id="login_i"></p></span>
 		               <span class="logfields"><?= L::login_password ?>:<p class="txtfield"><input class="pas" type="password" name="pass" id="pass_i"></p></span>
 		    		</div>	
-		    			<div class="button"><span class="in_b_1"><p class="in_b_2"><a id="login_b" href="#" class="" onclick="doLogin($('login_b'), '<?= L::login_fields_blank ?>', '<?= L::loading ?>');return false;"><?= L::login_enter ?></a></p></span></div>
+		    			<div class="button"><span class="in_b_1"><p class="in_b_2"><a id="login_b" href="#" class="" onclick="doLogin($('login_b'), '<?= L::login_fields_blank ?>', '<?= L::loading_text ?>');return false;"><?= L::login_enter ?></a></p></span></div>
 		    		
 		        </form>
 		        <a class="link reg" href="#" onclick="if (!parent.window_loading) parent.load_window('site/register.php','right'); return false;"><?= L::login_want_signup ?></a>
