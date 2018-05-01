@@ -1,10 +1,17 @@
 //ЕСЛИ ТЫ ЗЛОСТНЫЙ ХАКЕР И ЗАЛЕЗ СЮДА, ЧТОБЫ ПРОЧЕСТЬ ВСЕ ФРАЗЫ, ТО ВОТ ОНИ - ОБЛОМАЙСЯ И ПОТЕРЯЙ ВЕСЬ ФАН ОТ ЗАГРУЗКИ ИГРЫ =)
-var phrases = new Array(
+var phrases = new Array();
+phrases[1] = new Array(
+	new Array('May the force be with you','Lord Han Solo'),
+	new Array('Cheat? Cheaaaaaaaat!','Lord Morchug'),
+	new Array('Sacrifices accepted...',' Goddess of Random'),
+	new Array('Do not know what to do? Sing the patriotic songs!','The brave spearman'),
+	new Array('No money? Rob the troll!','Proverb')
+);
+phrases[2] = new Array(
 	new Array('Не забудь воскресить конного!','Первая заповедь Лорда'),
 	new Array('Хорошо везет тому, кому везет последнему (:','Лорд Morchug'),
 	new Array('Главное манёвры!','Лорд And'),
 	new Array('Чит? Чииииииит!','Лорд Morchug'),
-	new Array('May the force be with you','Лорд Han Solo'),
 	new Array('Не знаешь, что делать? Пой патриотические песни!','Отважный копейщик'),
 	new Array('Три магии, три веселых спелла, Экипаж спеллбука моего','Лорд Helmut'),
 	new Array('Принимаются жертвоприношения...','Богиня Рендома'),
@@ -16,7 +23,7 @@ var checkLoadInterval;
 var changePhraseInterval;
 
 function showRandomPhrase()	{
-	var phrase = phrases.getRandom();
+	var phrase = phrases[USER_LANGUAGE].getRandom();
 	$('phrase').set('text',phrase[0]);
 	$('phrase_a').set('text',phrase[1]);
 	$('phrase_a').position({
