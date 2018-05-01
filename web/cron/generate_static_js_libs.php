@@ -34,6 +34,7 @@
 		Array('name'=>'buildings_features_i18n', 'js_name'=>'buildings_feature_names', 'keys'=>'language_id,feature_id'),
 		Array('name'=>'npc_player_name_modificators_i18n', 'js_name'=>'npc_player_name_modificators', 'keys'=>'language_id,code'),
 		Array('name'=>'videos_i18n', 'js_name'=>'videos_titles', 'keys'=>'language_id,code'),
+		Array('name'=>'shooting_params', 'js_name'=>'shooting_params', 'keys'=>'unit_id,distance,aim_type'),
 		Array('name'=>'statistics_i18n', 'js_name'=>'statistics_names', 'keys'=>'language_id,code'),
 		Array('name'=>'log_message_text_i18n', 'js_name'=>'log_message_texts', 'keys'=>'language_id,code')
 	);
