@@ -56,9 +56,8 @@
     			</div><!--.rel-->
     	</div><!--#panor-->
 	</div><!--#wind-->
-	<script type="module">
-		import {WSClient} from "../general_js/ws/wsclient.js?<?php echo $SITE_conf['revision']; ?>";
-		window.WSClient = new WSClient();
+	<script type="text/javascript" src="general_js/ws/build/ws.bundle.js?<?php echo $SITE_conf['revision']; ?>"></script>
+	<script>
 		window.WSClient.joinChannel('base');
 	</script>
 </body>

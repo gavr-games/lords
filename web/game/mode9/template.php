@@ -273,9 +273,6 @@
              
         </div><!-- /#conteiner -->
 	</div><!-- /#wrap -->
-	<script type="module">
-		import {WSClient} from "../../general_js/ws/wsclient.js?<?php echo $SITE_conf['revision']; ?>";
-		window.WSClient = new WSClient();
-	</script>
+	<script type="text/javascript" src="../../general_js/ws/build/ws.bundle.js?<?php echo $SITE_conf['revision']; ?>"></script>
 </body>
 </html>
