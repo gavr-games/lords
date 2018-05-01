@@ -88,7 +88,7 @@ function send_procedure(name, params) {
     pre_send_procedure();
     proc_uid = $time();
     start_proc_time = proc_uid;
-    parent.sendGameProtocolCmd({
+    parent.WSClient.sendGameProtocolCmd({
         proc_name: name,
         proc_params: params,
         'proc_uid': proc_uid
@@ -116,7 +116,7 @@ function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) 
             error_msg = '';
             error_procedure = '';
             start_proc_time = $time()-start_proc_time;
-            parent.sendSimpleApeCmd('perfomance', {
+            parent.WSClient.sendPerformance({
                 'name':executable_procedure,
                 'js_time':start_proc_time/1000,
                 'ape_time':ape_time/1000,
@@ -147,7 +147,7 @@ function send_multiple_actions(params) {
     proc_uid = $time();
     start_proc_time = proc_uid;
     
-    parent.sendGameProtocolCmd({
+    parent.WSClient.sendGameProtocolCmd({
 	    proc_name: 'multi',
 	    proc_params: params,
 	    'proc_uid': proc_uid
@@ -665,15 +665,19 @@ function post_put_building() {
 }
 
 function post_buy_card() {
-    setTimeout("deactivate_buy_ressurect_play_card();",1000);
+    if (error_procedure == '') {
+        setTimeout("deactivate_buy_ressurect_play_card();", 1000);
+    }
 }
 
 function post_player_resurrect() {
-    setTimeout("deactivate_buy_ressurect_play_card();",1000);
+    if (error_procedure == '') {
+        setTimeout("deactivate_buy_ressurect_play_card();", 1000);
+    }
 }
 
 function post_player_exit() {
-   setTimeout("window.location.href = site_domen;",1000);
+   setTimeout("window.location.href = site_domen;", 1000);
 }
 
 function post_add_chat_message() {

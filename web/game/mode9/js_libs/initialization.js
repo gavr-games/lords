@@ -110,11 +110,12 @@ function hideLoading() {
 
 function initialization() {
     try {
+        parent.WSClient.joinGame(game_info["game_id"]);
         //init some variables
         time_restriction = game_info["time_restriction"].toInt();
         game_status = game_info["status_id"].toInt();
 
-        setLoadingText('Инициализация');
+        setLoadingText(i18n[USER_LANGUAGE]["loading"]["initialization"]);
         if (!Browser.ie) document.body.setStyle('overflow', 'visible');
         else document.body.style.overflow = "visible";
         var cur_client_time = Math.floor($time() / 1000);
@@ -138,7 +139,7 @@ function initialization() {
         }
         formSortables();
         //additional massives
-        setLoadingText('Инициализация игровых процедур');
+        setLoadingText(i18n[USER_LANGUAGE]["loading"]["procedures_init"]);
         procedures_mode_1.each(function(item, index) {
             if (item) procedures_names[item["name"]] = item;
         });
@@ -147,7 +148,7 @@ function initialization() {
             procedures_params_codes[item["code"]]["description"] = procedure_param_description(item["id"]);
         });
         if (game_status == 3) { //finished
-            eval(ape_exec_cmds);
+            eval(ws_exec_cmds);
             exec_commands_now = true;
             //hide loading
             hideLoading();
@@ -155,9 +156,9 @@ function initialization() {
             end_game();
             return 1;
         } else {
-            var game_info_html = '<b>Имя игры: </b>' + game_info['title'] + '<br /><b>Дата создания: </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>Игрок:</th><th>Команда:</th></tr>'
+            var game_info_html = '<b>' + i18n[USER_LANGUAGE]["game"]["game_name"] + ': </b>' + game_info['title'] + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["creation_date"] + ': </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>' + i18n[USER_LANGUAGE]["game"]["player"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["team"] + ':</th></tr>'
             //players
-            setLoadingText('Инициализация игроков');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["players_init"]);
             players.each(function(item, index) {
                 if (item) {
                     if (item['player_num'] == my_player_num && item['agree_draw'].toInt() == 1) $('chbDraw').setProperty('checked', true); // set Draw
@@ -173,7 +174,7 @@ function initialization() {
             game_info_html += '</table><hr />';
             $('game_info').set('html', game_info_html);
             //features initialization
-            setLoadingText('Инициализация фич юнитов и зданий');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["features_init"]);
             board_buildings_features.each(function(item, index) {
                 if (item) {
                     if (item['param'] == '') fval = 1;
@@ -190,7 +191,7 @@ function initialization() {
             });
 
             //board initialization
-            setLoadingText('Инициализация доски');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["board_init"]);
             init_board_buildings.each(function(item, index) {
                 if (item) {
                     if (board_buildings[item['ref']]['player_num'] == my_player_num && item['type'] == 'castle') my_castle_id = item['ref']; //store my castle id
@@ -204,7 +205,7 @@ function initialization() {
             });
 
             //cards
-            setLoadingText('Инициализация колоды');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["deck_init"]);
             $('grave_bg').fade(0);
             cardsSlider = new Fx.Slide($('cards'), {}).slideOut('vertical');
             graveSlider = new Fx.Slide($('graveyard'), {
@@ -241,7 +242,7 @@ function initialization() {
             $('cards_container').setStyle('left', boardCoords.left - 24);
 
             //game_log
-            setLoadingText('Инициализация лога');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["log_init"]);
             $('game_log').setStyle('display', 'none');
             vw_command_log.each(function(item, index) {
                 if (item) eval(item['command']);
@@ -249,7 +250,7 @@ function initialization() {
             $('game_log').setStyle('display', 'block');
 
             //graveyard
-            setLoadingText('Инициализация могильника');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["graveyard_init"]);
             vwGrave.each(function(item, index) {
                 if (item) add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size']);
             });
@@ -261,7 +262,7 @@ function initialization() {
             });
 
             //other
-            setLoadingText('Инициализация дополнительных элементов');
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["other_init"]);
             active_players.each(function(item, index) {
                 if (item) {
                     active_players = item;
@@ -381,13 +382,6 @@ function initialization() {
             //board player class
             $('board').addClass(boardClass);
 
-            //hide loading
-            //hideLoading();
-            //game_time
-            if (time_restriction != 0) {
-                setInterval("turn_left_time();", 1000);
-            }
-
             var scroll = $('game_log').getScrollSize();
             $('game_log').scrollTo(0, scroll.y);
             scroll = $('game_chat').getScrollSize();
@@ -449,11 +443,11 @@ function initialization() {
             var saved_messages = Cookie.read("saved_messages_" + game_info["game_id"] + "_" + my_player_num);
             if ($chk(saved_messages)) {
                 $('game_chat').set('html', saved_messages);
-                chat_add_service_message($time() / 1000, 'Последние сообщения могут отсутствовать...');
+                chat_add_service_message($time() / 1000, i18n[USER_LANGUAGE]["game"]["chat_missing_messages"]);
             }
             setInterval("saveChatMessages();", 10000);
 
-            eval(ape_exec_cmds);
+            eval(ws_exec_cmds);
             exec_commands_now = true;
             hideLoading();
         } // end if game finished
@@ -612,9 +606,7 @@ function loadCookies() {
 
 function sendChatMessage() {
     if ($('chat_text').get('value') != '\n' && $('chat_text').get('value') != '') {
-        parent.sendSimpleApeCmd('gamechat_message', {
-            msg: convertChars($('chat_text').get('value'))
-        });
+        parent.WSClient.sendGameChatMessage(game_info["game_id"], convertChars($('chat_text').get('value')));
         $('chat_text').set('value', '');
         $('chat_cnt').set('html', '0');
     } else $('chat_text').set('value', '');
@@ -2240,12 +2232,12 @@ function clearArrowRect(x, y, x2, y2) {
 
 function displayLordsError(e, str) {
     var file_line = '';
-    if (Browser.opera) file_line = '<br /><b>Файл+строка:</b>' + e.stacktrace;
-    else if (Browser.firefox || Browser.chrome) file_line = '<br /><b>Файл+строка:</b>' + e.stack;
-    else file_line = '<br /><b>Файл:</b>' + e.fileName + '<br /><b>Строка:</b>' + e.lineNumber;
-    var error_html = '<b>Ошибка Javacript:</b> ' + e.name + '<br /><b>Сообщение:</b>' + e.message + file_line + '<br /><b>Команды:</b><br />' + str + '<br />';
-    error_html += '<b>Браузер:</b> ' + Browser.name + '(v.' + Browser.version + ')' + ' Platform:' + Browser.Platform.name + '<br />';
-    error_html += '<b>Ваш комментарий:</b> <br /><textarea id="error_comment" style="width:400px;height:80px;" onfocus="chatFocused = true;" onblur="chatFocused = false;"> </textarea><br /><input onclick="this.hide();sendError();return false;" id="send_error_button" type="submit" value="Отправить сообщение об ошибке"><input onclick="window.location.reload();return false;" type="submit" value="Перегрузить игру">'
+    if (Browser.opera) file_line = '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_file"] + '+' + i18n[USER_LANGUAGE]["game"]["error_line"] + ':</b>' + e.stacktrace;
+    else if (Browser.firefox || Browser.chrome) file_line = '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_file"] + '+' + i18n[USER_LANGUAGE]["game"]["error_line"] + ':</b>' + e.stack;
+    else file_line = '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_file"] + ':</b>' + e.fileName + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_line"] + ':</b>' + e.lineNumber;
+    var error_html = '<b>' + i18n[USER_LANGUAGE]["game"]["js_error"] + ':</b> ' + e.name + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_msg"] + ':</b>' + e.message + file_line + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["error_commands"] + ':</b><br />' + str + '<br />';
+    error_html += '<b>' + i18n[USER_LANGUAGE]["game"]["error_browser"] + ':</b> ' + Browser.name + '(v.' + Browser.version + ')' + ' Platform:' + Browser.Platform.name + '<br />';
+    error_html += '<b>' + i18n[USER_LANGUAGE]["game"]["error_comment"] + ':</b> <br /><textarea id="error_comment" style="width:400px;height:80px;" onfocus="chatFocused = true;" onblur="chatFocused = false;"> </textarea><br /><input onclick="this.hide();sendError();return false;" id="send_error_button" type="submit" value="' + i18n[USER_LANGUAGE]["game"]["error_send"] + '"><input onclick="window.location.reload();return false;" type="submit" value="' + i18n[USER_LANGUAGE]["game"]["error_reload_game"] + '">'
     error_html += '<div id="send_answer" style="color:black;"></div><img src="../../design/images/ajax-loader.gif" id="error_send_indicator" style="display:none">';
     var errDiv = new Element('div', {
         'html': error_html,
@@ -2256,7 +2248,7 @@ function displayLordsError(e, str) {
 
 function sendError() {
     $('error_send_indicator').show();
-    $('send_answer').set('text', 'Идет отправка сообщения - ожидайте...');
+    $('send_answer').set('text', i18n[USER_LANGUAGE]["game"]["error_wait"]);
 
     //generate js vars and objects
     var exclude_objs = new Array('window', 'navigator', 'document', 'InstallTrigger', 'console', 'MooTools', 'Browser', 'Slick', 'Selectors', 'Asset', 'Locale', 'Form', 'sessionStorage', 'globalStorage', 'localStorage', 'parent', 'top', 'scrollbars', 'frames', 'applicationCache', 'self', 'screen', 'history', 'content', 'menubar', 'toolbar', 'locationbar', 'personalbar', 'statusbar', 'crypto', 'controllers', 'mozIndexedDB', 'URL', 'commandsRequest', 'chatCommandsRequest', '_firebug', 'mySortables');

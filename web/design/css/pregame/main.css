@@ -326,6 +326,24 @@ body {
 	right:210px;
 }
 
+.topbutton.en_about {
+	position:absolute;
+	top:7px;
+	right:310px;
+}
+
+.topbutton.ru_about {
+	position:absolute;
+	top:7px;
+	right:260px;
+}
+
+.topbutton.about, .topbutton.back {
+	position:absolute;
+	top:7px;
+	left:0px;
+}
+
 #opened_map{
 	font-family: 'edissonregular', 'Times New Roman', Times, serif;
 	font-size: 24px;

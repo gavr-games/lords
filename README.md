@@ -31,47 +31,6 @@ Once you have all of those installed you should:
 ```
 # Lords
 127.0.0.1 lords.local
-127.0.0.1 ape.lords.local
-127.0.0.1 0.ape.lords.local
-127.0.0.1 1.ape.lords.local
-127.0.0.1 2.ape.lords.local
-127.0.0.1 3.ape.lords.local
-127.0.0.1 4.ape.lords.local
-127.0.0.1 5.ape.lords.local
-127.0.0.1 6.ape.lords.local
-127.0.0.1 7.ape.lords.local
-127.0.0.1 8.ape.lords.local
-127.0.0.1 9.ape.lords.local
-127.0.0.1 10.ape.lords.local
-127.0.0.1 11.ape.lords.local
-127.0.0.1 12.ape.lords.local
-127.0.0.1 13.ape.lords.local
-127.0.0.1 14.ape.lords.local
-127.0.0.1 15.ape.lords.local
-127.0.0.1 16.ape.lords.local
-127.0.0.1 17.ape.lords.local
-127.0.0.1 18.ape.lords.local
-127.0.0.1 19.ape.lords.local
-127.0.0.1 20.ape.lords.local
-127.0.0.1 21.ape.lords.local
-127.0.0.1 22.ape.lords.local
-127.0.0.1 23.ape.lords.local
-127.0.0.1 24.ape.lords.local
-127.0.0.1 25.ape.lords.local
-127.0.0.1 26.ape.lords.local
-127.0.0.1 27.ape.lords.local
-127.0.0.1 28.ape.lords.local
-127.0.0.1 29.ape.lords.local
-127.0.0.1 30.ape.lords.local
-127.0.0.1 31.ape.lords.local
-127.0.0.1 32.ape.lords.local
-127.0.0.1 33.ape.lords.local
-127.0.0.1 34.ape.lords.local
-127.0.0.1 35.ape.lords.local
-127.0.0.1 36.ape.lords.local
-127.0.0.1 37.ape.lords.local
-127.0.0.1 38.ape.lords.local
-127.0.0.1 39.ape.lords.local
 ```
 - Now you should have a running set of docker containers. Check all of them are working using `docker-compose ps` command. The game should be available via http://lords.local
 

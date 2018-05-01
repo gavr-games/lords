@@ -22,7 +22,7 @@ $res->free();
 $mysqli->next_result();
 
 # Lang
-$markers['###LOADING###'] = L::loading;
+$markers['###LOADING###'] = L::loading_text;
 $markers['###EXIT###'] = L::do_exit;
 $markers['###PROFILE###'] = L::profile_profile;
 
