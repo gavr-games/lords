@@ -2182,7 +2182,7 @@ function drawChart(chart_id, chart) {
         var cards = '';
         chart['values'].each(function(item, index) {
             if (item) {
-                cards += '<li id="cardlist-' + chart_id + '-' + item['value'] + '">' + card_names[USER_LANGUAGE][item['value']]['name'] + '</li>';
+                cards += '<li id="cardlist-' + chart_id + '-' + item['value'] + '" style="color:' + dic_colors[item['color']]['color'] + ';">' + card_names[USER_LANGUAGE][item['value']]['name'] + '</li>';
             }
         });
         var list = new Element('ul', {
