@@ -43,7 +43,7 @@ defmodule LordsWs.UserChannel do
   def handle_in("logged_protocol_cmd", %{"json_params" => json_params}, socket) do
     url = "http://web/site/ajax/logged_protocol.php?phpsessid=#{socket.assigns.token}"
     params = Jason.decode!(json_params)
-    case HTTPoison.post(url, json_params, [{"Content-Type", "application/json"}]) do
+    case HTTPoison.post(url, json_params, [{"Content-Type", "application/json"}], [timeout: 15_000, recv_timeout: 15_000]) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         Logger.info "Received logged_protocol_cmd answer #{body}"
         req = Jason.decode!(body)
