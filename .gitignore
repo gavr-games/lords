@@ -6,3 +6,4 @@ deployment/ai_bin
 database/dump
 .idea
 .env
+.DS_store
