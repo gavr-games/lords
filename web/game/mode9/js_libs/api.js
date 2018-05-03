@@ -2082,6 +2082,7 @@ function play_sound(file_name) {
 function end_game() {
     last_executed_api = 'end_game';
     cancel_execute();
+    localStorage.removeItem("saved_messages_" + game_info["game_id"] + "_" + my_player_num);
     clearTimeout(remindMoveTimer);
     clearInterval(shieldInterval);
     clearInterval(titleInterval);

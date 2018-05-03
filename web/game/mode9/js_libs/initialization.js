@@ -440,7 +440,7 @@ function initialization() {
             setTimeout('movePanorama()', Number.random(60000, 180000));
 
             //init chat messages
-            var saved_messages = Cookie.read("saved_messages_" + game_info["game_id"] + "_" + my_player_num);
+            var saved_messages = localStorage.getItem("saved_messages_" + game_info["game_id"] + "_" + my_player_num);
             if ($chk(saved_messages)) {
                 $('game_chat').set('html', saved_messages);
                 chat_add_service_message($time() / 1000, i18n[USER_LANGUAGE]["game"]["chat_missing_messages"]);
@@ -473,16 +473,15 @@ function movePanorama() {
 }
 
 function saveChatMessages() {
-    var chat_cookie = "";
+    var chat_str = "";
     saved_chat_messages.each(function(item, index) {
         if (item) {
-            chat_cookie += item;
+            chat_str += item;
         }
     });
-    if (chat_cookie != '')
-        Cookie.write("saved_messages_" + game_info["game_id"] + "_" + my_player_num, chat_cookie, {
-            duration: 365
-        });
+    if (chat_str != '') {
+        localStorage.setItem("saved_messages_" + game_info["game_id"] + "_" + my_player_num, chat_str);
+    }
 }
 
 function updateBarsSizes() {
