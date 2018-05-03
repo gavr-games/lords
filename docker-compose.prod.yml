@@ -9,7 +9,7 @@ services:
       MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
     volumes:
       - ./database:/database
-      - mysql-data:/var/lib/mysql # persist db
+      - ../lords-mysql-data:/var/lib/mysql # persist db
     networks:
       - lords-network
     deploy:
