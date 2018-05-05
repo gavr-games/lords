@@ -21,6 +21,7 @@ public class AiServiceImpl implements AiService
 
 		Game game;
 		PlayerAI ai;
+		PlayerAI levelAi;
         try
         {
             String gameDataJson = UrlContentsLoader.load(gameDataRetrieveURL);
@@ -29,9 +30,13 @@ public class AiServiceImpl implements AiService
             game = GameJsonFactory.getGameFromJson(gameDataJson);
 			game.setId(gameId);
 
-            ai = PlayerAIFactory.createPlayerAI(game,playerNum);
+			levelAi = PlayerAIFactory.createPlayerLevelUpAI(game,playerNum);
+			List<Command> cmds = levelAi.getCommands();
 
-			List<Command> cmds = ai.getCommands();
+            ai = PlayerAIFactory.createPlayerAI(game,playerNum);
+			List<Command> actionCmds = ai.getCommands();
+			
+			cmds.addAll(actionCmds);
 
 			JSONArray commandsJsonArr = new JSONArray();
 			for(Command cmd:cmds)

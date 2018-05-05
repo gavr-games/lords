@@ -28,24 +28,27 @@ while ($error && $error_com_num != 1 /*&& $error_com_num!=0*/ ) {
     $error         = false;
     $error_com_num = 0;
     
+    $ai_answer = $client->makeMove($game_id, $player_num);
     $ai_commands = json_decode($client->makeMove($game_id, $player_num));
+    Logger::info('npc ai answer -> '.$ai_answer);
+
     foreach ($ai_commands as $procedure) {
         $error_com_num++;
         $query  = 'call ' . $DB_conf['name'] . '.' . $procedure;
+        Logger::info('npc exec query -> '.$query);
         //print_r($query);
         $result = $dataBase->multi_query($query);
         do {
             /* store first result set */
             if ($result = $mysqli->store_result()) {
                 while ($row = $result->fetch_assoc()) {
-                    //print_r($row);
+                    Logger::info('npc exec query row -> '.json_encode($row));
                     if (!isset($row['error_code'])) {
                         $row['command']  = str_replace("'", "\u0027", $row['command']);
                         $game_commands[] = $row;
                     } else { //in case of game logic error
-                        //do some error logging
+                        Logger::info('npc row returned error');
                         $error = true;
-                        break 3;
                     }
                 }
                 $result->free();
@@ -56,6 +59,10 @@ while ($error && $error_com_num != 1 /*&& $error_com_num!=0*/ ) {
             }
         } while ($mysqli->more_results() && $mysqli->next_result());
         
+        if ($error) {
+            break;
+        }
+
         //check for errors in query
         $error_msg = mysqli_error($dataBase->dbLink);
         if ($error_msg != '') {
@@ -69,16 +76,18 @@ while ($error && $error_com_num != 1 /*&& $error_com_num!=0*/ ) {
     if (($error && $error_com_num == 1) /*|| $error_com_num==0*/ ) {
         $query  = 'call ' . $DB_conf['name'] . '.player_end_turn(' . $game_id . ',' . $player_num . ');';
         //print_r($query);
+        Logger::info('npc error query -> '.$query);
         $result = $dataBase->multi_query($query);
         do {
             /* store first result set */
             if ($result = $mysqli->store_result()) {
                 while ($row = $result->fetch_assoc()) {
+                    Logger::info('npc error query row -> '.json_encode($row));
                     if (!isset($row['error_code'])) {
                         $row['command']  = str_replace("'", "\u0027", $row['command']);
                         $game_commands[] = $row;
                     } else { //in case of game logic error
-                        //do some error logging
+                        Logger::info('npc error query row returned error');
                     }
                 }
                 $result->free();

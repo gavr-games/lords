@@ -6,11 +6,10 @@ import java.util.logging.Logger;
 
 public class PlayerAIFactory
 {
-    private static final Logger log = Logger.getLogger(PlayerAIFactory.class.getName());
-
-	public static PlayerAI createPlayerAI(Game g, int playerNum)
+	private static final Logger log = Logger.getLogger(PlayerAIFactory.class.getName());
+	
+	public static Player getMyPlayer(Game g, int playerNum)
 	{
-		//find myPlayer
 		Player myPlayer = null;
 		for(Player p:g.getPlayers())
 		{
@@ -20,13 +19,11 @@ public class PlayerAIFactory
 				break;
 			}
 		}
-		
-		if(myPlayer == null)
-		{
-			throw new IllegalArgumentException("Player "+playerNum+" was not found");
-		}
-		
-		//find myUnit
+		return myPlayer;
+	}
+
+	public static BoardObject getMyUnit(Game g, Player myPlayer)
+	{
 		BoardObject myUnit = null;
 		for(BoardObject bo:g.getBoard().getObjects())
 		{
@@ -36,6 +33,21 @@ public class PlayerAIFactory
 				break;
 			}
 		}
+		return myUnit;
+	}
+
+	public static PlayerAI createPlayerAI(Game g, int playerNum)
+	{
+		//find myPlayer
+		Player myPlayer = getMyPlayer(g,playerNum);
+		
+		if(myPlayer == null)
+		{
+			throw new IllegalArgumentException("Player "+playerNum+" was not found");
+		}
+		
+		//find myUnit
+		BoardObject myUnit = getMyUnit(g,myPlayer);
 		
 		if(myUnit == null)
 		{
@@ -122,5 +134,27 @@ public class PlayerAIFactory
 		}
 		
 		return new MultiTargetUnitAI(g.getBoard(), myUnit, targets);
+	}
+
+	public static PlayerAI createPlayerLevelUpAI(Game g, int playerNum)
+	{
+		//find myPlayer
+		Player myPlayer = getMyPlayer(g,playerNum);
+		
+		if(myPlayer == null)
+		{
+			throw new IllegalArgumentException("Player "+playerNum+" was not found");
+		}
+		
+		//find myUnit
+		BoardObject myUnit = getMyUnit(g,myPlayer);
+		
+		if(myUnit == null)
+		{
+			log.warning(String.format("Game %s player %s No units found. Ending turn.",String.valueOf(g.getId()),String.valueOf(playerNum)));
+			return new EndTurningAI();
+		}
+
+		return new LevelUpAI(myUnit,g.getUnitLevels());
 	}
 }

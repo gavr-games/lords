@@ -35,6 +35,19 @@ public class GameJsonFactory
 			Player player = new Player(pNum,owner,team);
 			playersMap.put(Integer.valueOf(pNum),player);
 		}
+
+		//unit levels
+		ArrayList<UnitLevel> unitLevelsList = new ArrayList<UnitLevel>();
+		JSONArray levelsJ = (JSONArray) jsonObject.get("unit_levels");
+		for(Object ul:levelsJ)
+		{
+			JSONObject levelJ = (JSONObject)ul;
+			int unitId = Integer.parseInt((String)levelJ.get("unit_id"));
+			int level = Integer.parseInt((String)levelJ.get("level"));
+			int experience = Integer.parseInt((String)levelJ.get("experience"));
+			UnitLevel unitLevel = new UnitLevel(unitId,level,experience);
+			unitLevelsList.add(unitLevel);
+		}
 		
 		//board
 		Map<String,BoardObject> boardObjectsMap = new HashMap<>();
@@ -49,8 +62,11 @@ public class GameJsonFactory
 				int id = Integer.parseInt((String)unitJ.get("id"));
 				int pNum = Integer.parseInt((String)unitJ.get("player_num"));
 				int moves = Integer.parseInt((String)unitJ.get("moves"));
+				int unitId = Integer.parseInt((String)unitJ.get("unit_id"));
+				int level = Integer.parseInt((String)unitJ.get("level"));
+				int experience = Integer.parseInt((String)unitJ.get("experience"));
 				Player p = playersMap.get(Integer.valueOf(pNum));
-				BoardObject bo = new BoardObject(id,BoardObjectType.UNIT,p,moves);
+				BoardObject bo = new BoardObject(id,BoardObjectType.UNIT,p,moves,unitId,level,experience);
 				boardObjectsMap.put(Integer.toString(id)+"u",bo);
 			}
 		}
@@ -65,7 +81,7 @@ public class GameJsonFactory
 				int id = Integer.parseInt((String)buildingJ.get("id"));
 				int pNum = Integer.parseInt((String)buildingJ.get("player_num"));
 				Player p = playersMap.get(Integer.valueOf(pNum));
-				BoardObject bo = new BoardObject(id,BoardObjectType.BUILDING,p,0);
+				BoardObject bo = new BoardObject(id,BoardObjectType.BUILDING,p,0,0,0,0);
 				boardObjectsMap.put(Integer.toString(id)+"b",bo);
 			}
 		}
@@ -128,7 +144,7 @@ public class GameJsonFactory
 		}
 		
 		Board b = new Board(MAP_SIZE_X,MAP_SIZE_Y,new ArrayList<>(boardObjectsMap.values()));
-		Game g = new Game(new ArrayList<>(playersMap.values()),b);
+		Game g = new Game(new ArrayList<>(playersMap.values()),unitLevelsList,b);
 		return g;
 	}
 }
