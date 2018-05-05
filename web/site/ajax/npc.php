@@ -23,8 +23,10 @@ $error_com_num = 0;
 $game_id = (int) $_GET['game_id'];
 $player_num = (int) $_GET['player_num'];
 
+$turn_ended = false;
+
 //repeat until all commands from ai successful or there is error on the first move
-while ($error && $error_com_num != 1 /*&& $error_com_num!=0*/ ) {
+while (($error && $error_com_num != 1) || !$turn_ended ) {
     $error         = false;
     $error_com_num = 0;
     
@@ -45,10 +47,14 @@ while ($error && $error_com_num != 1 /*&& $error_com_num!=0*/ ) {
                     Logger::info('npc exec query row -> '.json_encode($row));
                     if (!isset($row['error_code'])) {
                         $row['command']  = str_replace("'", "\u0027", $row['command']);
+                        if (strpos($row['command'], 'set_active_player') !== false) {
+                            $turn_ended = true;
+                        }
                         $game_commands[] = $row;
                     } else { //in case of game logic error
                         Logger::info('npc row returned error');
                         $error = true;
+                        $turn_ended = true;
                     }
                 }
                 $result->free();
@@ -89,6 +95,7 @@ while ($error && $error_com_num != 1 /*&& $error_com_num!=0*/ ) {
                     } else { //in case of game logic error
                         Logger::info('npc error query row returned error');
                     }
+                    $turn_ended = true;
                 }
                 $result->free();
                 $i++;
