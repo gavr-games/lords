@@ -741,6 +741,7 @@ body {
     color:#4b4b4b;
     line-height:30px;
     outline:none;
+    text-overflow: ellipsis;
 }
 .chat .tickbar .con_ticks .ticks .tick .active{
     background-color:white;
