@@ -53,6 +53,7 @@ defmodule LordsWs.UserChannel do
   end
 
   def handle_in("game_protocol_cmd", %{"json_params" => json_params}, socket) do
+    start = :os.system_time()
     url = "http://web/site/ajax/game_protocol.php?phpsessid=#{socket.assigns.token}"
     params = Jason.decode!(json_params)
     if params["proc_name"] == "multi" do
@@ -62,7 +63,7 @@ defmodule LordsWs.UserChannel do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         Logger.info "Received game_protocol_cmd answer #{body}"
         ans = Jason.decode!(body)
-        LordsWs.Game.ProcessCmd.run(%{game: socket.assigns.game, answer: ans, user_id: socket.assigns.user_id, params: params})
+        LordsWs.Game.ProcessCmd.run(%{game: socket.assigns.game, answer: ans, user_id: socket.assigns.user_id, params: params |> Map.put("start", start)})
     end
     {:noreply, socket}
   end

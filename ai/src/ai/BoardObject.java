@@ -8,28 +8,39 @@ public class BoardObject
     private Player player;
     private List<BoardObjectFeature> features;
     private List<BoardCell> cells;
-    private int moves;
+	private int moves;
+	private int level;
+	private int experience;
+	private int unitId;
 	private int id;
 	private BoardObjectType type;
 
-	public BoardObject(int id, BoardObjectType type, Player player, List<BoardObjectFeature> features, List<BoardCell> cells, int moves)
+	public BoardObject(int id, BoardObjectType type, Player player, List<BoardObjectFeature> features, List<BoardCell> cells, int moves, int unitId, int level, int experience)
 	{
 		this.id = id;
 		this.type = type;
         this.player = player;
         this.features = features;
         this.cells = cells;
-        this.moves = moves;
+		this.moves = moves;
+		this.unitId = unitId;
+		this.level = level;
+		this.experience = experience;
+	}
+	
+	public BoardObject(int id, BoardObjectType type, Player player, int moves, int unitId, int level, int experience)
+	{
+		this(id,type,player,new ArrayList<BoardObjectFeature>(),new ArrayList<BoardCell>(),moves,unitId,level,experience);
     }
 
 	public BoardObject(int id, BoardObjectType type, Player player, List<BoardCell> cells, int moves)
 	{
-		this(id,type,player,new ArrayList<BoardObjectFeature>(),cells,moves);
+		this(id,type,player,new ArrayList<BoardObjectFeature>(),cells,moves,0,0,0);
     }
 
 	public BoardObject(int id, BoardObjectType type, Player player, int moves)
 	{
-		this(id,type,player,new ArrayList<BoardObjectFeature>(),new ArrayList<BoardCell>(),moves);
+		this(id,type,player,new ArrayList<BoardObjectFeature>(),new ArrayList<BoardCell>(),moves,0,0,0);
     }
 	
     public List<BoardCell> getCells()
@@ -45,6 +56,26 @@ public class BoardObject
     public int getMoves()
     {
         return moves;
+	}
+
+	public int getUnitId()
+    {
+        return unitId;
+	}
+	
+	public int getLevel()
+    {
+        return level;
+	}
+
+	public void setLevel(int level)
+	{
+		this.level = level;
+	}
+	
+	public int getExperience()
+    {
+        return experience;
     }
 
     public Player getPlayer()

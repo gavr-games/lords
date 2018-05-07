@@ -1,8 +1,9 @@
 <?php
 	include_once('init.php');
-	$_SESSION['tabs'] = '';
+
 	if ($_SESSION['game_id']!='' && $_SESSION['player_num']!='')	{
 		$query = 'call '.$DB_conf['name'].'.get_game_statistic('.$_SESSION['game_id'].');';
+		Logger::info('statistic get -> '.$query);
 		$res = $dataBase->multi_query($query);
 		if ($res)	{
 			$result = $mysqli->store_result();

@@ -3,7 +3,15 @@ defmodule LordsWs.Game.ProcessCmd do
     require HTTPoison
     
     def run(%{game: game, answer: ans, user_id: user_id, params: params}) do
-        start = :os.system_time()
+        if Map.has_key?(params, "proc_uid") do
+            if ans["header_result"]["success"] == "1" do
+                cmd = "proc_answer(#{params["proc_uid"]},1,0,\"\",#{:os.system_time() - params["start"]},#{ans["phptime"]});"
+                LordsWs.Endpoint.broadcast "game:#{game["game_id"]}", "game_raw", %{commands: URI.encode(cmd)}
+            else
+                cmd = "proc_answer(#{params["proc_uid"]},0,#{ans["header_result"]["error_code"]},\"#{ans["header_result"]["error_params"]}\");"
+                LordsWs.Endpoint.broadcast "user:#{user_id}", "game_raw", %{commands: URI.encode(cmd)}
+            end
+        end
         if Map.has_key?(ans, "data_result") do
             Enum.each ans["data_result"], fn cmd -> 
                 if cmd["command"] == "end_game()" do
@@ -37,16 +45,6 @@ defmodule LordsWs.Game.ProcessCmd do
                 else
                     LordsWs.Endpoint.broadcast "user:#{cmd["user_id"]}", "game_raw", %{commands: URI.encode(cmd["command"])}
                 end
-            end
-        end
-
-        if Map.has_key?(params, "proc_uid") do
-            if ans["header_result"]["success"] == "1" do
-                cmd = "proc_answer(#{params["proc_uid"]},1,0,\"\",#{:os.system_time() - start},#{ans["phptime"]});"
-                LordsWs.Endpoint.broadcast "game:#{game["game_id"]}", "game_raw", %{commands: URI.encode(cmd)}
-            else
-                cmd = "proc_answer(#{params["proc_uid"]},0,#{ans["header_result"]["error_code"]},\"#{ans["header_result"]["error_params"]}\");"
-                LordsWs.Endpoint.broadcast "user:#{user_id}", "game_raw", %{commands: URI.encode(cmd)}
             end
         end
     end

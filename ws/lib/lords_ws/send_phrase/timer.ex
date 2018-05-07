@@ -33,8 +33,10 @@ defmodule LordsWs.SendPhrase.Timer do
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: phrase_body}} ->
         Logger.info "Received get_unit_phrase answer #{phrase_body}"
-        phrase = Jason.decode!(phrase_body)
-        broadcast game["game_id"], "show_unit_message(#{phrase["board_unit_id"]},#{phrase["phrase_id"]});"
+        if phrase_body != "null" do
+          phrase = Jason.decode!(phrase_body)
+          broadcast game["game_id"], "show_unit_message(#{phrase["board_unit_id"]},#{phrase["phrase_id"]});"
+        end
         ref = schedule_timer()
       _ ->
         ref = schedule_timer()
