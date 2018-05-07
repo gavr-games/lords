@@ -267,6 +267,10 @@ function initialization() {
                 if (item) {
                     active_players = item;
                     set_active_player(active_players['player_num'], active_players['last_end_turn'], active_players['turn'], 0, active_players['units_moves_flag'], active_players["card_played_flag"], active_players["subsidy_flag"], 1);
+                    // finish_command_procedure
+                    if (active_players['player_num'] == my_player_num && active_players['command_procedure'] != '') {
+                        execute_procedure(active_players['command_procedure']);
+                    }
                 }
             });
             //cards_procedures_1.each(function(item,index)	{
@@ -829,7 +833,21 @@ function changeDraw() {
 }
 
 function draw_building(x, y) {
-    var b = buildings[cards[card]["ref"]];
+    var b = null;
+    if (card != "") {
+        b = buildings[cards[card]["ref"]];
+    }
+    if (building != "") {
+        var coords = building.toString().split(',');
+        var ux = coords[0].toInt();
+        var uy = coords[1].toInt();
+        if ($chk(board[ux]) && $chk(board[ux][uy]) && $chk(board[ux][uy]['ref'])) {
+            b = buildings[board_buildings[board[ux][uy]['ref']]['building_id']];
+        }
+    }
+    if (b == null) {
+        return;
+    }
     var rx;
     var ry;
     //radius
@@ -938,7 +956,21 @@ function draw_building(x, y) {
 }
 
 function clean_building(x, y) {
-    var b = buildings[cards[card]["ref"]];
+    var b = null;
+    if (card != "") {
+        b = buildings[cards[card]["ref"]];
+    }
+    if (building != "") {
+        var coords = building.toString().split(',');
+        var ux = coords[0].toInt();
+        var uy = coords[1].toInt();
+        if ($chk(board[ux]) && $chk(board[ux][uy]) && $chk(board[ux][uy]['ref'])) {
+            b = buildings[board_buildings[board[ux][uy]['ref']]['building_id']];
+        }
+    }
+    if (b == null) {
+        return;
+    }
     var rx;
     var ry;
     //radius
