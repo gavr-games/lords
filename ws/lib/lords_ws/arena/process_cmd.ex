@@ -5,6 +5,12 @@ defmodule LordsWs.Arena.ProcessCmd do
     def run(%{answer: req, socket: socket, params: params}) do
         eval_cmds = ""
         arena_cmds = ""
+        error_code = ""
+        error_params = ""
+        if req["header_result"]["success"] != "1" do
+            error_code = req["header_result"]["error_code"]
+            error_params = req["header_result"]["error_params"]
+        end
         case params["action"] do
           "logout" -> 
             if req["header_result"]["success"] == "1" do
@@ -34,6 +40,10 @@ defmodule LordsWs.Arena.ProcessCmd do
                 chat_id = params["params"]["chat_id"]
                 topic = params["params"]["newtopic"]
                 LordsWs.Endpoint.broadcast "chat:#{chat_id}", "protocol_raw", %{commands: "chat_set_topic(#{chat_id},#{URI.encode(topic)})"}
+            else
+                if params["params"]["chat_id"] == 0 do
+                    error_code = "7" # Cannot change common chat topic
+                end
             end
           "chat_user_add" ->
             if req["header_result"]["success"] == "1" do
@@ -170,8 +180,8 @@ defmodule LordsWs.Arena.ProcessCmd do
         # Send error
         if req["header_result"]["success"] != "1" do
             LordsWs.Endpoint.broadcast "user:#{socket.assigns.user_id}", "err", %{
-                code: req["header_result"]["error_code"],
-                value: req["header_result"]["error_params"]
+                code: error_code,
+                value: error_params
             }
         end 
 
