@@ -396,8 +396,8 @@ function initialization() {
             for (i = 0; i < 40; i++) y_path[i] = -1;
 
             //set buttons titles
-            $('main_buttons').getChildren('.btn_buycard')[0].set('title', mode_config["card cost"] + ' золота');
-            $('main_buttons').getChildren('.btn_subs')[0].set('title', mode_config["subsidy amount"] + ' золота за ' + mode_config["subsidy castle damage"] + 'ед. урона своему замку');
+            $('main_buttons').getChildren('.btn_buycard')[0].set('title', substitute_game_i18n('buy_card_cost', {'{card_cost}': mode_config["card cost"]}));
+            $('main_buttons').getChildren('.btn_subs')[0].set('title', substitute_game_i18n('take_subsidy_cost', {'{subsidy_castle_damage}': mode_config["subsidy castle damage"], '{subsidy_amount}': mode_config["subsidy amount"]}));
 
             //set hotkeys
             var myKeyboardEvents = new Keyboard({

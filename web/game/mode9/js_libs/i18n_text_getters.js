@@ -79,3 +79,8 @@ function npc_player_name_with_params(player_name, akk = false, log_name = false)
 	return player_name;
 }
 
+function substitute_game_i18n(key, substitutions) {
+	return i18n[USER_LANGUAGE]['game'][key].replace(/{\w+}/g, function(all) {
+		return substitutions[all] || all;
+	});
+}
