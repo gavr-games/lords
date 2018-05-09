@@ -15,4 +15,8 @@ steps:
     shell: true
   - command: docker exec $(docker ps -q -f name=lords_db) /database/bin/lords_db_update.sh
     shell: true
+  - command: docker exec $(docker ps -q -f name=lords_web) curl http://127.0.0.1/cron/generate_static_js_libs.php
+    shell: true
+  - command: docker exec $(docker ps -q -f name=lords_web) curl http://127.0.0.1/cron/generate_static_js_libs_site.php
+    shell: true
   - command: docker stack services lords
