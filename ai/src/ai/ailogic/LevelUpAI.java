@@ -1,6 +1,5 @@
 package ai.ailogic;
 
-import ai.game.UnitLevel;
 import ai.command.Command;
 import ai.command.LevelUpCommand;
 import ai.game.board.BoardObject;
