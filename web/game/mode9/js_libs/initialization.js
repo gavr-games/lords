@@ -391,6 +391,11 @@ function initialization() {
             scroll = $('game_chat').getScrollSize();
             $('game_chat').scrollTo(0, scroll.y);
 
+            //init controls
+            $('controls').addEvent('click', function(event) {
+                $('rightbar').toggle();
+            });
+
             //init some vars
             for (i = 0; i < 40; i++) x_path[i] = -1;
             for (i = 0; i < 40; i++) y_path[i] = -1;

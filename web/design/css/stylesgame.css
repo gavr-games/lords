@@ -1188,3 +1188,7 @@ ul {
 .levelup_choose a:hover {
 	background-position: 66% 50%;
 }
+
+#controls {
+	display: none;
+}

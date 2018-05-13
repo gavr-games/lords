@@ -73,6 +73,7 @@ function showRandomPhrase()	{
 			
 			addLoadingItem(i18n[USER_LANGUAGE]["loading"]["game_styles"],'game_styles');
 			Asset.css('../../design/css/stylesgame.css?'+revision).addEvent('onload',removeLoadingItem('game_styles'));
+			Asset.css('../../design/css/mobile.css?'+revision);
 			addLoadingItem(i18n[USER_LANGUAGE]["loading"]["board_styles"],'board_styles');
 			Asset.css('../../design/css/stylesboard.css?'+revision).addEvent('onload',removeLoadingItem('board_styles'));
 			addLoadingItem(i18n[USER_LANGUAGE]["loading"]["zi_styles"],'zi_styles');
