@@ -1,5 +1,8 @@
-package ai;
+package ai.paths_finding;
 
+import ai.game.board.Board;
+import ai.game.board.BoardCell;
+import ai.game.board.BoardObject;
 import ai.paths_finding.astar.AiBoardObject;
 import ai.paths_finding.astar.Cell;
 import ai.paths_finding.PathsFinder;
@@ -10,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class PathsFinderConnector {
+public class PathsFinderConnector {
     private static Map<Integer, BoardObject> hashMapOfTargets;
 
     public static Map<BoardObject, List<BoardCell>> getPaths(Board board, BoardObject myUnit, List<BoardObject> targets) {

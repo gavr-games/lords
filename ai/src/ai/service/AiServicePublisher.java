@@ -1,7 +1,6 @@
-package ai;
+package ai.service;
 
 import javax.xml.ws.Endpoint;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AiServicePublisher

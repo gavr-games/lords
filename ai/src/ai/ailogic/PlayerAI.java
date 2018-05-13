@@ -1,4 +1,6 @@
-package ai;
+package ai.ailogic;
+
+import ai.command.Command;
 
 import java.util.List;
 

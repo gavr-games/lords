@@ -1,4 +1,12 @@
-package ai;
+package ai.ailogic;
+
+import ai.command.Command;
+import ai.command.EndTurnCommand;
+import ai.game.board.Board;
+import ai.game.board.BoardCell;
+import ai.game.board.BoardObject;
+import ai.game.board.Unit;
+import ai.paths_finding.PathsFinderConnector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +16,9 @@ import java.util.Random;
 public class MultiTargetUnitAI extends UnitMovingAttackingAI {
     private List<BoardObject> targets;
     private Board board;
-    private BoardObject myUnit;
+    private Unit myUnit;
 
-    public MultiTargetUnitAI(Board board, BoardObject myUnit, List<BoardObject> targets) {
+    public MultiTargetUnitAI(Board board, Unit myUnit, List<BoardObject> targets) {
 
         this.targets = targets;
         this.board = board;

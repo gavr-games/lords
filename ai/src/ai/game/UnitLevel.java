@@ -1,4 +1,4 @@
-package ai;
+package ai.game;
 
 public class UnitLevel
 {

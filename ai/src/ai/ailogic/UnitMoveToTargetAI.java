@@ -1,4 +1,12 @@
-package ai;
+package ai.ailogic;
+
+import ai.command.Command;
+import ai.command.EndTurnCommand;
+import ai.command.UnitMoveCommand;
+import ai.game.board.Board;
+import ai.game.board.BoardCell;
+import ai.game.board.BoardObject;
+import ai.game.board.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +14,7 @@ import java.util.List;
 public class UnitMoveToTargetAI extends MultiTargetUnitAI
 {
 
-    public UnitMoveToTargetAI(Board board, BoardObject myUnit, List<BoardObject> targets) {
+    public UnitMoveToTargetAI(Board board, Unit myUnit, List<BoardObject> targets) {
 		super(board,myUnit,targets);
     }
 	

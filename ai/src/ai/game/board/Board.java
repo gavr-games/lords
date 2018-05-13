@@ -1,4 +1,4 @@
-package ai;
+package ai.game.board;
 
 import java.util.List;
 
@@ -30,12 +30,21 @@ public class Board
         return sizeY;
     }
     
-    public BoardObject getUnitById(int id)
+    public Unit getUnitById(int id)
 	{
 		for(BoardObject bo:objects)
 		{
-			if(bo.getId() == id && bo.getType() == BoardObjectType.UNIT) return bo;
+			if(bo.getId() == id && bo instanceof Unit) return (Unit) bo;
 		}
 		throw new IllegalArgumentException("Unit with id = "+id+" was not found");
+	}
+
+	public BoardObject getBuildingById(int id)
+	{
+		for(BoardObject bo:objects)
+		{
+			if(bo.getId() == id && !bo.getType().equals(BoardObjectType.UNIT)) return bo;
+		}
+		return null;
 	}
 }

@@ -1,34 +1,38 @@
-package ai;
+package ai.game;
 
 public class Player
 {
-    private int playerNum;
-    private int owner;
-    private int team;
-    
-    public Player(int playerNum,int owner,int team)
-    {
-        this.playerNum = playerNum;
-        this.owner = owner;
-        this.team = team;
-    }
+	private int playerNum;
+	private int owner;
+	private int team;
 
-    public int getOwner()
+	public Player(int playerNum,int owner,int team)
+	{
+		this.playerNum = playerNum;
+		this.owner = owner;
+		this.team = team;
+	}
+
+	public int getOwner()
     {
         return owner;
     }
 
-    public int getPlayerNum()
+	public int getPlayerNum()
     {
         return playerNum;
     }
 
-    public int getTeam()
+	public int getTeam()
     {
         return team;
     }
-	
-    @Override
+
+	public void setOwner(int owner) {
+		this.owner = owner;
+	}
+
+	@Override
 	public boolean equals(Object obj)
 	{
 		if(this == obj)
@@ -39,9 +43,9 @@ public class Player
 		return playerNum == test.playerNum;
 	}
 
-    @Override
+	@Override
 	public int hashCode()
 	{
 		return playerNum;
-	}	
+	}
 }

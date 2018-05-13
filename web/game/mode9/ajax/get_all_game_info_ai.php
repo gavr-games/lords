@@ -18,9 +18,6 @@
 			'name'=>'board_units_features',
 		),
 		Array(
-			'name'=>'unit_levels',
-		),
-		Array(
 			'name'=>'board',
 		)
 	);
