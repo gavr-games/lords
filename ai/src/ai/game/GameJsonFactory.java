@@ -1,9 +1,11 @@
-package ai;
+package ai.game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import ai.game.board.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,7 +26,7 @@ public class GameJsonFactory
 		JSONObject jsonObject = (JSONObject) obj;
 		
 		//players
-		Map<Integer,Player> playersMap = new HashMap<>();
+		Map<Integer, Player> playersMap = new HashMap<>();
 		JSONArray playersJ = (JSONArray) jsonObject.get("players");
 		for(Object p:playersJ)
 		{
@@ -33,24 +35,11 @@ public class GameJsonFactory
 			int owner = Integer.parseInt((String)playerJ.get("owner"));
 			int team = Integer.parseInt((String)playerJ.get("team"));
 			Player player = new Player(pNum,owner,team);
-			playersMap.put(Integer.valueOf(pNum),player);
+			playersMap.put(pNum,player);
 		}
 
-		//unit levels
-		ArrayList<UnitLevel> unitLevelsList = new ArrayList<UnitLevel>();
-		JSONArray levelsJ = (JSONArray) jsonObject.get("unit_levels");
-		for(Object ul:levelsJ)
-		{
-			JSONObject levelJ = (JSONObject)ul;
-			int unitId = Integer.parseInt((String)levelJ.get("unit_id"));
-			int level = Integer.parseInt((String)levelJ.get("level"));
-			int experience = Integer.parseInt((String)levelJ.get("experience"));
-			UnitLevel unitLevel = new UnitLevel(unitId,level,experience);
-			unitLevelsList.add(unitLevel);
-		}
-		
 		//board
-		Map<String,BoardObject> boardObjectsMap = new HashMap<>();
+		Map<String, BoardObject> boardObjectsMap = new HashMap<>();
 		
 		//units
 		JSONArray unitsJ = (JSONArray) jsonObject.get("board_units");
@@ -62,11 +51,9 @@ public class GameJsonFactory
 				int id = Integer.parseInt((String)unitJ.get("id"));
 				int pNum = Integer.parseInt((String)unitJ.get("player_num"));
 				int moves = Integer.parseInt((String)unitJ.get("moves"));
-				int unitId = Integer.parseInt((String)unitJ.get("unit_id"));
-				int level = Integer.parseInt((String)unitJ.get("level"));
-				int experience = Integer.parseInt((String)unitJ.get("experience"));
-				Player p = playersMap.get(Integer.valueOf(pNum));
-				BoardObject bo = new BoardObject(id,BoardObjectType.UNIT,p,moves,unitId,level,experience);
+				boolean canLevelup = Integer.parseInt((String)unitJ.get("can_levelup")) == 1;
+				Player p = playersMap.get(pNum);
+				BoardObject bo = new Unit(id, p, moves, canLevelup);
 				boardObjectsMap.put(Integer.toString(id)+"u",bo);
 			}
 		}
@@ -80,8 +67,8 @@ public class GameJsonFactory
 				JSONObject buildingJ = (JSONObject)b;
 				int id = Integer.parseInt((String)buildingJ.get("id"));
 				int pNum = Integer.parseInt((String)buildingJ.get("player_num"));
-				Player p = playersMap.get(Integer.valueOf(pNum));
-				BoardObject bo = new BoardObject(id,BoardObjectType.BUILDING,p,0,0,0,0);
+				Player p = playersMap.get(pNum);
+				BoardObject bo = new BoardObject(id, BoardObjectType.BUILDING, p);
 				boardObjectsMap.put(Integer.toString(id)+"b",bo);
 			}
 		}
@@ -138,13 +125,12 @@ public class GameJsonFactory
 				BoardCell bc = new BoardCell(x,y);
 				bo.addCell(bc);
 				
-				if(type.equals("castle") && bo.getType() != BoardObjectType.CASTLE)bo.setType(BoardObjectType.CASTLE);
-				if(type.equals("obstacle") && bo.getType() != BoardObjectType.OBSTACLE)bo.setType(BoardObjectType.OBSTACLE);
+				if(type.equals("castle") && bo.getType() != BoardObjectType.CASTLE) bo.setType(BoardObjectType.CASTLE);
+				if(type.equals("obstacle") && bo.getType() != BoardObjectType.OBSTACLE) bo.setType(BoardObjectType.OBSTACLE);
 			}
 		}
 		
 		Board b = new Board(MAP_SIZE_X,MAP_SIZE_Y,new ArrayList<>(boardObjectsMap.values()));
-		Game g = new Game(new ArrayList<>(playersMap.values()),unitLevelsList,b);
-		return g;
+		return new Game(new ArrayList<>(playersMap.values()),b);
 	}
 }

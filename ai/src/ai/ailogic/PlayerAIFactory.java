@@ -1,4 +1,10 @@
-package ai;
+package ai.ailogic;
+
+import ai.game.Game;
+import ai.game.Player;
+import ai.game.board.BoardObject;
+import ai.game.board.BoardObjectType;
+import ai.game.board.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +14,7 @@ public class PlayerAIFactory
 {
 	private static final Logger log = Logger.getLogger(PlayerAIFactory.class.getName());
 	
-	public static Player getMyPlayer(Game g, int playerNum)
+	private static Player getMyPlayer(Game g, int playerNum)
 	{
 		Player myPlayer = null;
 		for(Player p:g.getPlayers())
@@ -22,18 +28,19 @@ public class PlayerAIFactory
 		return myPlayer;
 	}
 
-	public static BoardObject getMyUnit(Game g, Player myPlayer)
+	/**
+	 * Returns the unit for a given player, or null if there are no units
+	 */
+	private static Unit getMyUnit(Game g, Player myPlayer)
 	{
-		BoardObject myUnit = null;
 		for(BoardObject bo:g.getBoard().getObjects())
 		{
-			if(bo.getPlayer() != null && bo.getPlayer().equals(myPlayer))
+			if(bo.getPlayer() != null && bo.getPlayer().equals(myPlayer) && bo instanceof Unit)
 			{
-				myUnit = bo;
-				break;
+				return (Unit) bo;
 			}
 		}
-		return myUnit;
+		return null;
 	}
 
 	public static PlayerAI createPlayerAI(Game g, int playerNum)
@@ -47,7 +54,7 @@ public class PlayerAIFactory
 		}
 		
 		//find myUnit
-		BoardObject myUnit = getMyUnit(g,myPlayer);
+		Unit myUnit = getMyUnit(g,myPlayer);
 		
 		if(myUnit == null)
 		{
@@ -60,6 +67,11 @@ public class PlayerAIFactory
 		if(myUnit.checkFeature("paralich"))
 		{
 			return new EndTurningAI();
+		}
+
+		//level up
+		if(myUnit.canLevelUp()) {
+			return new LevelUpAI(myUnit);
 		}
 
 		//mad
@@ -103,7 +115,6 @@ public class PlayerAIFactory
 		//troll
 		if(myPlayer.getOwner() == 3)
 		{
-			int myTeam = myPlayer.getTeam();
 			for(BoardObject bo:g.getBoard().getObjects())
 			{
 				if(bo.getType() == BoardObjectType.BUILDING && !bo.checkFeature("not_interesting_for_npc"))
@@ -122,39 +133,19 @@ public class PlayerAIFactory
 		if(targets.isEmpty())
 		{
 			log.info(String.format("Game %s player %s No targets for unit found. Start searching a 'home'.",String.valueOf(g.getId()),String.valueOf(playerNum)));
-			for(BoardObject bo : g.getBoard().getObjects()) {
-                if(bo.checkFeature("summon_team") && Integer.parseInt(bo.getFeatureValue("summon_team")) == myPlayer.getTeam()) {
-                    targets.add(bo);
-                    return new UnitMoveToTargetAI(g.getBoard(), myUnit, targets);
-                }
-            }
+			if (myUnit.checkFeature("parent_building")) {
+				int parentBuildingId = Integer.parseInt(myUnit.getFeatureValue("parent_building"));
+				BoardObject parentBuilding = g.getBoard().getBuildingById(parentBuildingId);
+				if (parentBuilding != null) {
+					targets.add(parentBuilding);
+					return new UnitMoveToTargetAI(g.getBoard(), myUnit, targets);
+				}
+			}
 
-            log.info(String.format("Game %s player %s No 'home' for unit found.",String.valueOf(g.getId()),String.valueOf(playerNum)));
-            return new EndTurningAI();
+			log.info(String.format("Game %s player %s No 'home' for unit found.",String.valueOf(g.getId()),String.valueOf(playerNum)));
+			return new EndTurningAI();
 		}
 		
 		return new MultiTargetUnitAI(g.getBoard(), myUnit, targets);
-	}
-
-	public static PlayerAI createPlayerLevelUpAI(Game g, int playerNum)
-	{
-		//find myPlayer
-		Player myPlayer = getMyPlayer(g,playerNum);
-		
-		if(myPlayer == null)
-		{
-			throw new IllegalArgumentException("Player "+playerNum+" was not found");
-		}
-		
-		//find myUnit
-		BoardObject myUnit = getMyUnit(g,myPlayer);
-		
-		if(myUnit == null)
-		{
-			log.warning(String.format("Game %s player %s No units found. Ending turn.",String.valueOf(g.getId()),String.valueOf(playerNum)));
-			return new EndTurningAI();
-		}
-
-		return new LevelUpAI(myUnit,g.getUnitLevels());
 	}
 }

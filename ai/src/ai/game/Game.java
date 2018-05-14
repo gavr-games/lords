@@ -1,20 +1,18 @@
-package ai;
+package ai.game;
+
+import ai.game.board.Board;
 
 import java.util.List;
-import java.util.ArrayList;
 
 public class Game
 {
     private List<Player> players;
-    private List<UnitLevel> unitLevels;
     private Board board;
     private int id;
-    private int currentPlayerNum;
-    
-    public Game(List<Player> players, List<UnitLevel> unitLevels, Board board)
+
+    public Game(List<Player> players, Board board)
     {
         this.players = players;
-        this.unitLevels = unitLevels;
         this.board = board;
     }
     
@@ -23,11 +21,6 @@ public class Game
         return players;
     }
 
-    public List<UnitLevel> getUnitLevels()
-    {
-        return unitLevels;
-    }
-    
     public Board getBoard()
     {
         return board;

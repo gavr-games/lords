@@ -1,4 +1,9 @@
-package ai;
+package ai.ailogic;
+
+import ai.command.Command;
+import ai.command.EndTurnCommand;
+import ai.game.board.*;
+import ai.paths_finding.PathsFinderConnector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +13,9 @@ import java.util.Random;
 public class VampireAI extends UnitMovingAttackingAI
 {
 	private Board board;
-	private BoardObject myUnit;
+	private Unit myUnit;
 	
-	public VampireAI(Board board, BoardObject myUnit)
+	public VampireAI(Board board, Unit myUnit)
 	{
 		this.board = board;
 		this.myUnit = myUnit;
@@ -26,7 +31,7 @@ public class VampireAI extends UnitMovingAttackingAI
 		int myTeam = myUnit.getPlayer().getTeam();
 		for(BoardObject bo:board.getObjects())
 		{
-			if(bo.getType() != BoardObjectType.OBSTACLE && 
+			if(bo.getType() != BoardObjectType.OBSTACLE &&
 				(bo.getPlayer() == null || bo.getPlayer().getTeam() != myTeam) && 
 				!bo.checkFeature("not_interesting_for_npc"))
 			{

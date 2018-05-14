@@ -1,4 +1,4 @@
-package ai;
+package ai.service;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;

@@ -1,9 +1,10 @@
 package ai.gui;
 
-import ai.Command;
-import ai.MultiTargetUnitAI;
-import ai.Board;
-import ai.BoardCell;
+import ai.command.Command;
+import ai.ailogic.MultiTargetUnitAI;
+import ai.game.board.Board;
+import ai.game.board.BoardCell;
+import ai.command.ActionCommand;
 
 import javax.swing.*;
 import java.util.List;
@@ -21,7 +22,7 @@ public class LordsAITester {
     public static void runTest(TestProperties testProperties) {
         if(testProperties != null) {
             Board board = new Board(20,20, testProperties.getAllObjects());
-            ai.MultiTargetUnitAI ai = new MultiTargetUnitAI(board, testProperties.getMyUnit(), testProperties.getEnemies());
+            MultiTargetUnitAI ai = new MultiTargetUnitAI(board, testProperties.getMyUnit(), testProperties.getEnemies());
             try {
                 visualizePath(ai.getCommands());
             }
@@ -41,8 +42,8 @@ public class LordsAITester {
     private static void visualizePath(List<Command> commands) {
         GBoard.shadePreviousPaths();
         for(Command command : commands) {
-            if(command instanceof ai.ActionCommand) {
-                ai.ActionCommand acmd = (ai.ActionCommand)command;
+            if(command instanceof ActionCommand) {
+                ActionCommand acmd = (ActionCommand)command;
                 BoardCell pathCell = acmd.getTo();
                 GBoard.markPathCell(pathCell.x, pathCell.y);
             }

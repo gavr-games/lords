@@ -1,4 +1,4 @@
-package ai;
+package ai.game.board;
 
 public class BoardObjectFeature
 {

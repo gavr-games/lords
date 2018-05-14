@@ -1,4 +1,8 @@
-package ai;
+package ai.ailogic;
+
+import ai.ailogic.PlayerAI;
+import ai.command.Command;
+import ai.command.EndTurnCommand;
 
 import java.util.ArrayList;
 import java.util.List;
