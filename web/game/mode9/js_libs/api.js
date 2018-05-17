@@ -2210,7 +2210,7 @@ function drawChart(chart_id, chart) {
         }
         chart['values'].each(function(item, index) {
             if (item) {
-                data.push(item['value'].toInt());
+                data.push(parseFloat(item['value']));
                 label = item['value_name'];
                 if (label.startsWith('{')) {
                     label = label.replace(label, statistics_names[[USER_LANGUAGE]][label]['text'])
