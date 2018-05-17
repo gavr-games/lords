@@ -1,4 +1,4 @@
-package ai.gui;
+package ai;
 
 import ai.ailogic.*;
 import ai.command.*;
@@ -21,7 +21,7 @@ public class PlayerAiFactoryRangeUnitTest {
 	private final static int myUnitX = 10;
 	private final static int myUnitY = 10;
 	private Player myPlayer;
-	private Unit myUnit;
+	private RangeUnit myUnit;
 	private Player otherPlayer;
 
 	@Before
@@ -53,8 +53,8 @@ public class PlayerAiFactoryRangeUnitTest {
 		}
 	}
 
-	private void addBuilding(int x, int y, Player p) {
-		BoardObject b = new BoardObject(50, BoardObjectType.BUILDING, p);
+	private void addBoardObject(int x, int y, BoardObjectType type) {
+		BoardObject b = new BoardObject(60 + type.ordinal(), type, otherPlayer);
 		b.addCell(new BoardCell(x, y));
 		game.getBoard().getObjects().add(b);
 	}
@@ -151,7 +151,7 @@ public class PlayerAiFactoryRangeUnitTest {
 
 	@Test
 	public void testIgnoreBuilding() {
-		addBuilding(myUnitX + 3, myUnitY, otherPlayer);
+		addBoardObject(myUnitX + 3, myUnitY, BoardObjectType.BUILDING);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
 		assertTrue(cmds.size() == 1);
@@ -160,6 +160,41 @@ public class PlayerAiFactoryRangeUnitTest {
 
 	@Test
 	public void testShootingVampire() {
-		//TODO test archer vampire, catapult vampire
+		myPlayer.setOwner(4); //vampire
+		addUnit(myUnitX + 3, myUnitY);
+		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
+		List<Command> cmds = ai.getCommands();
+		assertTrue(cmds.size() == 1);
+		assertTrue(cmds.get(0) instanceof ShootCommand);
+	}
+
+	@Test
+	public void testVampireCatapultPreferBuildingToCastle() {
+		myPlayer.setOwner(4); //vampire
+		myUnit.setTargetTypes(Arrays.asList(BoardObjectType.BUILDING, BoardObjectType.CASTLE));
+		addUnit(myUnitX + 3, myUnitY);
+		addBoardObject(myUnitX + 3, myUnitY + 1, BoardObjectType.BUILDING);
+		addBoardObject(myUnitX + 3, myUnitY + 2, BoardObjectType.CASTLE);
+		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
+		List<Command> cmds = ai.getCommands();
+		assertTrue(cmds.size() == 1);
+		assertTrue(cmds.get(0) instanceof ShootCommand);
+		BoardCell shootTo = ((ShootCommand) cmds.get(0)).getTo();
+		assertTrue(shootTo.x == myUnitX + 3 && shootTo.y == myUnitY + 1);
+	}
+
+	@Test
+	public void testVampireCatapultPreferCastleToFarBuilding() {
+		myPlayer.setOwner(4); //vampire
+		myUnit.setTargetTypes(Arrays.asList(BoardObjectType.BUILDING, BoardObjectType.CASTLE));
+		addUnit(myUnitX + 3, myUnitY);
+		addBoardObject(0, 0, BoardObjectType.BUILDING);
+		addBoardObject(myUnitX + 3, myUnitY + 2, BoardObjectType.CASTLE);
+		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
+		List<Command> cmds = ai.getCommands();
+		assertTrue(cmds.size() == 1);
+		assertTrue(cmds.get(0) instanceof ShootCommand);
+		BoardCell shootTo = ((ShootCommand) cmds.get(0)).getTo();
+		assertTrue(shootTo.x == myUnitX + 3 && shootTo.y == myUnitY + 2);
 	}
 }

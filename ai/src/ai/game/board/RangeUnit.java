@@ -20,4 +20,12 @@ public class RangeUnit extends Unit{
 	public boolean canShootAt(BoardObject target) {
 		return targetTypes.contains(target.getType());
 	}
+
+	public List<BoardObjectType> getTargetTypes() {
+		return targetTypes;
+	}
+
+	public void setTargetTypes(List<BoardObjectType> targetTypes) {
+		this.targetTypes = targetTypes;
+	}
 }
