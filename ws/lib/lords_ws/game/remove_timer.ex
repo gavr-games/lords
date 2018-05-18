@@ -19,7 +19,7 @@ defmodule LordsWs.Game.RemoveTimer do
   end
 
   def handle_info(:remove, state) do
-    url = "http://web/site/ajax/delete_game.php?game_id=#{state["game_id"]}"
+    url = "http://web-internal/internal/ajax/delete_game.php?game_id=#{state["game_id"]}"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         Logger.info "Received delete_game answer #{body}"

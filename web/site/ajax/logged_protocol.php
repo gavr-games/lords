@@ -7,7 +7,7 @@
 //1005 - game error
 
 	include_once('init.php');
-	include_once('base_protocol.class.php');
+	include_once('../../general_classes/base_protocol.class.php');
 	set_time_limit(0);
 
 	$inputJSON = file_get_contents('php://input');

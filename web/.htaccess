@@ -1,10 +1,12 @@
 RewriteEngine on
-#RewriteRule  ^$ /lords/site/index.php
 RewriteRule  ^$ /site/index.php
-#RewriteRule  ^game/mode9$ /lords/game/mode9/game.php
-#RewriteRule  ^game/mode9/$ /lords/game/mode9/game.php
 RewriteRule  ^game/mode9$ /game/mode9/game.php
 RewriteRule  ^game/mode9/$ /game/mode9/game.php
+
+# Deny internal folder access for public web
+RewriteCond %{ENV:VISIBILITY} public
+RewriteCond %{REQUEST_URI} "/internal/"
+RewriteRule ^.*$ - [F,L]
 
 ExpiresActive On
 ExpiresByType image/png "access plus 1 days"

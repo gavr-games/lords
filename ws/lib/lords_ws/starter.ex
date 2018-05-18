@@ -16,7 +16,7 @@ defmodule LordsWs.Starter do
     #Enum.each(accounts, fn account ->
     #  LordsWs.NextTurn.Timer.create(account)
     #end)
-    url = "http://web/site/ajax/get_games_info.php"
+    url = "http://web-internal/internal/ajax/get_games_info.php"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: games_body}} ->
         Logger.info "Received get_games_info answer #{games_body}"

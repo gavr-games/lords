@@ -1192,3 +1192,7 @@ ul {
 #controls {
 	display: none;
 }
+
+#game_info table{
+	color: white !important;
+}

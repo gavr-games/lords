@@ -69,7 +69,7 @@ defmodule LordsWs.UserChannel do
   end
 
   def handle_in("get_game_info", _, socket) do
-    url = "http://web/game/mode#{socket.assigns.game["mode_id"]}/ajax/get_all_game_info.php?phpsessid=#{socket.assigns.token}"
+    url = "http://web-internal/internal/ajax/get_all_game_info.php?game_id=#{socket.assigns.game_id}&player_num=#{socket.assigns.player_num}"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
         game_body = game_body |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()

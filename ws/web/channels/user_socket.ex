@@ -9,6 +9,7 @@ defmodule LordsWs.UserSocket do
   channel "base", LordsWs.BaseChannel
   channel "end_turn_timer:*", LordsWs.EndTurnTimerChannel
   channel "send_phrase_timer:*", LordsWs.SendPhraseTimerChannel
+  channel "bot:*", LordsWs.BotChannel
 
   transport :websocket, Phoenix.Transports.WebSocket
 

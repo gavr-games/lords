@@ -15,6 +15,7 @@ defmodule LordsWs do
       supervisor(LordsWs.UserPresence, []),
       supervisor(LordsWs.NextTurn.Supervisor, []),
       supervisor(LordsWs.SendPhrase.Supervisor, []),
+      supervisor(LordsWs.Bot.Supervisor, []),
       worker(LordsWs.Starter, [], restart: :transient)
     ]
 
