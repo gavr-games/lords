@@ -92,6 +92,30 @@ public class BoardObject
 		this.type = type;
 	}
 
+	public int distanceTo(BoardObject other) {
+		int minDistance = Integer.MAX_VALUE;
+		for (BoardCell myCell : cells) {
+			for (BoardCell otherCell : other.getCells()) {
+				int dist = myCell.distanceTo(otherCell);
+				if (dist < minDistance) {
+					minDistance = dist;
+				}
+			}
+		}
+		return minDistance;
+	}
+
+	public BoardObject hypotheticalCopyAtPosition(BoardCell topLeftCell) {
+		BoardObject newObject = new BoardObject(id, type, player);
+		BoardCell myTopLeftCell = getTopLeftCell();
+		for (BoardCell myCell : cells) {
+			int offsetX = myCell.x - myTopLeftCell.x;
+			int offsetY = myCell.y - myTopLeftCell.y;
+			newObject.addCell(new BoardCell(topLeftCell.x + offsetX, topLeftCell.y + offsetY));
+		}
+		return newObject;
+	}
+
 	@Override
 	public boolean equals(Object obj)
 	{

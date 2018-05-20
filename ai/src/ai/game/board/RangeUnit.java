@@ -28,4 +28,12 @@ public class RangeUnit extends Unit{
 	public void setTargetTypes(List<BoardObjectType> targetTypes) {
 		this.targetTypes = targetTypes;
 	}
+
+	public int getMinRange() {
+		return minRange;
+	}
+
+	public int getMaxRange() {
+		return maxRange;
+	}
 }

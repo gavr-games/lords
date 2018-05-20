@@ -10,15 +10,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class VampireAI extends UnitMovingAttackingAI
+public class VampireAI implements PlayerAI
 {
 	private Board board;
 	private Unit myUnit;
-	
-	public VampireAI(Board board, Unit myUnit)
+	private PathToCommandsConverter pathToCommandsConverter;
+
+	public VampireAI(Board board, Unit myUnit, PathToCommandsConverter pathToCommandsConverter)
 	{
 		this.board = board;
 		this.myUnit = myUnit;
+		this.pathToCommandsConverter = pathToCommandsConverter;
 	}
 
 	
@@ -91,8 +93,26 @@ public class VampireAI extends UnitMovingAttackingAI
 				}
 			}
 
+			if (myUnit instanceof RangeUnit) {
+				int minShootDistance = Integer.MAX_VALUE;
+				List<BoardObject> keysForShortestShots = new ArrayList<>();
+				for (BoardObject target : highestPriorityTargets) {
+					List<BoardCell> path = pathsToTargets.get(target);
+					BoardCell shootingPosition = path.get(path.size() - 2);
+					int dist = myUnit.hypotheticalCopyAtPosition(shootingPosition).distanceTo(target);
+					if (dist < minShootDistance) {
+						minShootDistance = dist;
+						keysForShortestShots.clear();
+						keysForShortestShots.add(target);
+					} else if (dist == minShootDistance) {
+						keysForShortestShots.add(target);
+					}
+				}
+				highestPriorityTargets = keysForShortestShots;
+			}
+
 			List<BoardCell> finalPath = pathsToTargets.get(highestPriorityTargets.get(new Random().nextInt(highestPriorityTargets.size())));
-			commands = generateCommandsFromPath(finalPath);
+			commands = pathToCommandsConverter.generateCommandsFromPath(finalPath);
 		}
 
 		if(commands.size() <= myUnit.getMoves())

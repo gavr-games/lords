@@ -1,11 +1,9 @@
 package ai.paths_finding;
 
-import ai.game.board.Board;
-import ai.game.board.BoardCell;
-import ai.game.board.BoardObject;
+import ai.game.board.*;
 import ai.paths_finding.astar.AiBoardObject;
 import ai.paths_finding.astar.Cell;
-import ai.paths_finding.PathsFinder;
+import ai.paths_finding.range.RangePathFinder;
 
 
 import java.util.ArrayList;
@@ -14,59 +12,72 @@ import java.util.List;
 import java.util.Map;
 
 public class PathsFinderConnector {
-    private static Map<Integer, BoardObject> hashMapOfTargets;
+	private static Map<Integer, BoardObject> hashMapOfTargets;
 
-    public static Map<BoardObject, List<BoardCell>> getPaths(Board board, BoardObject myUnit, List<BoardObject> targets) {
+	public static Map<BoardObject, List<BoardCell>> getPaths(Board board, Unit myUnit, List<BoardObject> targets) {
+		if (myUnit instanceof RangeUnit) {
+			return getPathsForRangeUnit(board, (RangeUnit) myUnit, targets);
+		} else {
+			return getPathsForMeleeUnit(board, myUnit, targets);
+		}
+	}
 
-        hashMapOfTargets = getHashMapOfBoardObjects(targets);
+	private static Map<BoardObject, List<BoardCell>> getPathsForRangeUnit(Board board, RangeUnit myUnit, List<BoardObject> targets) {
+		return new RangePathFinder(myUnit, targets, board).getPaths();
+	}
 
-        PathsFinder pathsFinder =
-                new PathsFinder(board.getSizeX(), board.getSizeY(),
-                        convertListOfBoardObjectsToListOfAiBoardObjects(board.getObjects()));
 
-        List<Integer> targets_hashes = new ArrayList<>(hashMapOfTargets.keySet());
+	private static Map<BoardObject, List<BoardCell>> getPathsForMeleeUnit(Board board, Unit myUnit, List<BoardObject> targets) {
 
-        Map<Integer, List<Cell>> foundPaths = pathsFinder.searchPaths(myUnit.hashCode(), targets_hashes, myUnit.checkFeature("knight"));
+		hashMapOfTargets = getHashMapOfBoardObjects(targets);
 
-        return convertPathsToGameTypes(foundPaths, board);
-    }
+		PathsFinder pathsFinder =
+				new PathsFinder(board.getSizeX(), board.getSizeY(),
+						convertListOfBoardObjectsToListOfAiBoardObjects(board.getObjects()));
 
-    private static Map<Integer, BoardObject> getHashMapOfBoardObjects(List<BoardObject> targets) {
-        Map<Integer, BoardObject> map = new HashMap<>();
-        for(BoardObject target : targets)
-            map.put(target.hashCode(), target);
-        return map;
-    }
+		List<Integer> targets_hashes = new ArrayList<>(hashMapOfTargets.keySet());
 
-    private static List<AiBoardObject> convertListOfBoardObjectsToListOfAiBoardObjects(List<BoardObject> boardObjects) {
+		Map<Integer, List<Cell>> foundPaths = pathsFinder.searchPaths(myUnit.hashCode(), targets_hashes, myUnit.checkFeature("knight"));
 
-        List<AiBoardObject> aiBoardObjects = new ArrayList<>();
-        for(BoardObject boardObject : boardObjects)
-            aiBoardObjects.add(convertBoardObjectToAiBoardObject(boardObject));
+		return convertPathsToGameTypes(foundPaths);
+	}
 
-        return aiBoardObjects;
-    }
+	private static Map<Integer, BoardObject> getHashMapOfBoardObjects(List<BoardObject> targets) {
+		Map<Integer, BoardObject> map = new HashMap<>();
+		for(BoardObject target : targets)
+			map.put(target.hashCode(), target);
+		return map;
+	}
 
-    private static AiBoardObject convertBoardObjectToAiBoardObject(BoardObject boardObject) {
+	private static List<AiBoardObject> convertListOfBoardObjectsToListOfAiBoardObjects(List<BoardObject> boardObjects) {
 
-        List<Cell> AiBoardObjectCells = new ArrayList<>();
-        for(BoardCell boardCell : boardObject.getCells())
-            AiBoardObjectCells.add(new Cell(boardCell.x, boardCell.y));
+		List<AiBoardObject> aiBoardObjects = new ArrayList<>();
+		for(BoardObject boardObject : boardObjects)
+			aiBoardObjects.add(convertBoardObjectToAiBoardObject(boardObject));
 
-        return new AiBoardObject(boardObject.hashCode(), AiBoardObjectCells);
-    }
+		return aiBoardObjects;
+	}
 
-    private static Map<BoardObject, List<BoardCell>> convertPathsToGameTypes(Map<Integer, List<Cell>> paths, Board board) {
+	private static AiBoardObject convertBoardObjectToAiBoardObject(BoardObject boardObject) {
 
-        Map<BoardObject, List<BoardCell>> convertedPaths = new HashMap<>();
-        for(int key : paths.keySet()) {
-            List<BoardCell> pathCells = new ArrayList<>();
-            for(Cell cell : paths.get(key)) {
-                pathCells.add(new BoardCell(cell.x, cell.y));
-                convertedPaths.put(hashMapOfTargets.get(key), pathCells);
-            }
-        }
+		List<Cell> AiBoardObjectCells = new ArrayList<>();
+		for(BoardCell boardCell : boardObject.getCells())
+			AiBoardObjectCells.add(new Cell(boardCell.x, boardCell.y));
 
-        return convertedPaths;
-    }
+		return new AiBoardObject(boardObject.hashCode(), AiBoardObjectCells);
+	}
+
+	private static Map<BoardObject, List<BoardCell>> convertPathsToGameTypes(Map<Integer, List<Cell>> paths) {
+
+		Map<BoardObject, List<BoardCell>> convertedPaths = new HashMap<>();
+		for(int key : paths.keySet()) {
+			List<BoardCell> pathCells = new ArrayList<>();
+			for(Cell cell : paths.get(key)) {
+				pathCells.add(new BoardCell(cell.x, cell.y));
+				convertedPaths.put(hashMapOfTargets.get(key), pathCells);
+			}
+		}
+
+		return convertedPaths;
+	}
 }

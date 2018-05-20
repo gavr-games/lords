@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import ai.ailogic.MultiTargetUnitAI;
+import ai.ailogic.UnitMovingAttackingPathConverter;
 import ai.command.Command;
 import ai.command.EndTurnCommand;
 import ai.command.UnitAttackCommand;
@@ -67,6 +68,10 @@ public class MultiTargetUnitAITest
 		me.addCell(new BoardCell(x+1,y+1));
 		return me;
 	}
+
+	private MultiTargetUnitAI getAi(Board board, Unit myUnit, List<BoardObject> targets) {
+		return new MultiTargetUnitAI(board, myUnit, targets, new UnitMovingAttackingPathConverter());
+	}
 	
 	private Unit getEnemy(int x, int y)
 	{
@@ -97,7 +102,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(4,4,me,null,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertTrue(cmds.size() == 1);
@@ -115,17 +120,17 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(4,4,me,null,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertTrue(cmds.size() == 2);
 		
-		assertTrue(cmds.get(0) instanceof UnitMoveCommand);		
-		UnitMoveCommand c1 = (UnitMoveCommand)cmds.get(0);		
+		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
+		UnitMoveCommand c1 = (UnitMoveCommand)cmds.get(0);
 		assertEquals(c1.getTo(),new BoardCell(1,2));
 		
 		assertTrue(cmds.get(1) instanceof UnitAttackCommand);
-		UnitAttackCommand c2 = (UnitAttackCommand)cmds.get(1);		
+		UnitAttackCommand c2 = (UnitAttackCommand)cmds.get(1);
 		assertEquals(c2.getTo(),new BoardCell(2,1));
 	}
 
@@ -140,7 +145,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertHitsOneCellAimInNumberOfMoves(cmds, howManyMovesShouldBe, enemy);
@@ -156,7 +161,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(me,enemy2,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Arrays.asList(enemy,enemy2));
+		MultiTargetUnitAI ai = getAi(b, me, Arrays.asList(enemy,enemy2));
 		List<Command> cmds = ai.getCommands();
 		
 		assertHitsOneCellAimInNumberOfMoves(cmds, howManyMovesShouldBe, enemy);
@@ -173,7 +178,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertHitsOneCellAimInNumberOfMoves(cmds, howManyMovesShouldBe, enemy);
@@ -189,7 +194,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(3,3,me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertTrue(cmds.size() == 1);
@@ -207,7 +212,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(me,null,obstacle);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(obstacle));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(obstacle));
 		List<Command> cmds = ai.getCommands();
 		
 		assertHitsOneCellAimInNumberOfMoves(cmds, howManyMovesShouldBe, fictiveEnemy);
@@ -224,7 +229,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(3,6,me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 
 		Unit fictiveEnemy = getEnemy(1,0); //this is where Dragon's top left cell shoud attack
@@ -243,7 +248,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(4,6,me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 
 		Unit fictiveEnemy = getEnemy(0,4); //this is where Dragon's top left cell shoud attack
@@ -261,7 +266,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(4,5,me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertTrue(cmds.size() == 1);
@@ -279,7 +284,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(3,4,me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertTrue(cmds.size() == 1);
@@ -299,7 +304,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(4,4,me,null,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertHitsOneCellAimInNumberOfMoves(cmds, howManyMovesShouldBe, enemy);
@@ -317,7 +322,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(4,4,me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertHitsOneCellAimInNumberOfMoves(cmds, howManyMovesShouldBe, enemy);
@@ -334,7 +339,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(3,4,me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 		
 		assertTrue(cmds.size() == 1);
@@ -353,7 +358,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(5,4,me,obstacle,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds = ai.getCommands();
 
 		Unit fictiveEnemy = getEnemy(3,1); //this is where Dragon's top left cell shoud attack
@@ -375,7 +380,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(me,null,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds;
 		for(int i = 0; i<10000; i++)
 		{
@@ -407,7 +412,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(me,null,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds;
 		for(int i = 0; i<10000; i++)
 		{
@@ -438,7 +443,7 @@ public class MultiTargetUnitAITest
 		
 		Board b = prepareBoard(me,null,enemy);
 		
-		MultiTargetUnitAI ai = new MultiTargetUnitAI(b, me, Collections.singletonList(enemy));
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
 		List<Command> cmds;
 		for(int i = 0; i<10000; i++)
 		{
@@ -460,11 +465,11 @@ public class MultiTargetUnitAITest
 		
 		for(int i = 0; i < moves-1; i++)
 		{
-			assertTrue(cmds.get(i) instanceof UnitMoveCommand);		
+			assertTrue(cmds.get(i) instanceof UnitMoveCommand);
 		}
 		
-		assertTrue(cmds.get(moves-1) instanceof UnitAttackCommand);		
-		UnitAttackCommand c = (UnitAttackCommand)cmds.get(moves-1);		
+		assertTrue(cmds.get(moves-1) instanceof UnitAttackCommand);
+		UnitAttackCommand c = (UnitAttackCommand)cmds.get(moves-1);
 		assertEquals(c.getTo(), aim.getCells().get(0));
 	}
 }

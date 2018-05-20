@@ -1,5 +1,6 @@
 package ai.gui;
 
+import ai.ailogic.UnitMovingAttackingPathConverter;
 import ai.command.Command;
 import ai.ailogic.MultiTargetUnitAI;
 import ai.game.board.Board;
@@ -22,7 +23,7 @@ public class LordsAITester {
     public static void runTest(TestProperties testProperties) {
         if(testProperties != null) {
             Board board = new Board(20,20, testProperties.getAllObjects());
-            MultiTargetUnitAI ai = new MultiTargetUnitAI(board, testProperties.getMyUnit(), testProperties.getEnemies());
+            MultiTargetUnitAI ai = new MultiTargetUnitAI(board, testProperties.getMyUnit(), testProperties.getEnemies(), new UnitMovingAttackingPathConverter());
             try {
                 visualizePath(ai.getCommands());
             }
