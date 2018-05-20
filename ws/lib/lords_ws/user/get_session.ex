@@ -20,7 +20,7 @@ defmodule LordsWs.User.GetSession do
     def get_user_game(params) do
         case Map.has_key?(params, "game_id") do
             true ->
-                url = "http://web/site/ajax/get_game_info.php?game_id=#{params["game_id"]}"
+                url = "http://web-internal/internal/ajax/get_game_info.php?game_id=#{params["game_id"]}"
                 case HTTPoison.get(url) do
                     {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
                         game = Jason.decode!(game_body)

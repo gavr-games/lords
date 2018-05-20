@@ -161,7 +161,7 @@ defmodule LordsWs.Arena.ProcessCmd do
                     "arena_player_set_status(#{u_id}, 3);"
                 end))
                 arena_cmds = "#{arena_cmds}arena_game_set_status(#{game_id}, 2);"
-                url = "http://web/site/ajax/get_game_info.php?game_id=#{game_id}"
+                url = "http://web-internal/internal/ajax/get_game_info.php?game_id=#{game_id}"
                 case HTTPoison.get(url) do
                     {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
                         Logger.info "Received get_game_info answer #{game_body}"

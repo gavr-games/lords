@@ -132,14 +132,6 @@ function exitArena() {
 }
 
 function execute_procedure(name, params) {
-    /*var myRequest = new Request({
-        url: 'ajax/call_procedure.php',
-        onSuccess: function (answer) {
-            if (answer != "Ok") { //login error
-                alert(answer);
-            }
-        }
-    }).post('name=' + name + '&params=' + encodeURIComponent(params));*/
     console.log(name, params);
 }
 
