@@ -78,7 +78,7 @@ services:
         condition: on-failure
 
   ai:
-    image: "java:7"
+    image: "java:8"
     ports:
       - "5600" # not shared to host
     volumes:
