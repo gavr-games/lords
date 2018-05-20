@@ -10,6 +10,14 @@ public class BoardCell
 		this.x = x;
 		this.y = y;
 	}
+
+	/**
+	 * @return how many moves it is necessary to make to get from this cell to the other cell
+	 * (not considering obstacles)
+	 */
+	public int distanceTo(BoardCell otherCell) {
+		return Math.max(Math.abs(x - otherCell.x), Math.abs(y - otherCell.y));
+	}
 		
     @Override
 	public boolean equals(Object obj)

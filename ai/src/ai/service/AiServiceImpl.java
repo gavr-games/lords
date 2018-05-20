@@ -32,7 +32,7 @@ public class AiServiceImpl implements AiService
 			String gameDataJson = UrlContentsLoader.load(gameDataRetrieveURL);
 			log.log(Level.INFO, gameDataJson);
 
-			game = GameJsonFactory.getGameFromJson(gameDataJson);
+			game = new GameJsonFactory().getGameFromJson(gameDataJson);
 			game.setId(gameId);
 
 			ai = PlayerAIFactory.createPlayerAI(game,playerNum);

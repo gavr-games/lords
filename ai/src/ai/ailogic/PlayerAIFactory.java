@@ -4,6 +4,7 @@ import ai.game.Game;
 import ai.game.Player;
 import ai.game.board.BoardObject;
 import ai.game.board.BoardObjectType;
+import ai.game.board.RangeUnit;
 import ai.game.board.Unit;
 
 import java.util.ArrayList;
@@ -55,7 +56,13 @@ public class PlayerAIFactory
 		
 		//find myUnit
 		Unit myUnit = getMyUnit(g,myPlayer);
-		
+		PathToCommandsConverter pathConverter;
+		if (myUnit instanceof RangeUnit) {
+			pathConverter = new UnitMovingShootingPathConverter();
+		} else {
+			pathConverter = new UnitMovingAttackingPathConverter();
+		}
+
 		if(myUnit == null)
 		{
 			log.warning(String.format("Game %s player %s No units found. Ending turn.",String.valueOf(g.getId()),String.valueOf(playerNum)));
@@ -127,7 +134,7 @@ public class PlayerAIFactory
 		//vampire
 		if(myPlayer.getOwner() == 4)
 		{
-			return new VampireAI(g.getBoard(), myUnit);
+			return new VampireAI(g.getBoard(), myUnit, pathConverter);
 		}
 
 		if(targets.isEmpty())
@@ -138,14 +145,14 @@ public class PlayerAIFactory
 				BoardObject parentBuilding = g.getBoard().getBuildingById(parentBuildingId);
 				if (parentBuilding != null) {
 					targets.add(parentBuilding);
-					return new UnitMoveToTargetAI(g.getBoard(), myUnit, targets);
+					return new MultiTargetUnitAI(g.getBoard(), myUnit, targets, new UnitMoveToTargetPathConverter());
 				}
 			}
 
 			log.info(String.format("Game %s player %s No 'home' for unit found.",String.valueOf(g.getId()),String.valueOf(playerNum)));
 			return new EndTurningAI();
 		}
-		
-		return new MultiTargetUnitAI(g.getBoard(), myUnit, targets);
+
+		return new MultiTargetUnitAI(g.getBoard(), myUnit, targets, pathConverter);
 	}
 }

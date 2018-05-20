@@ -3,10 +3,8 @@ package ai;
 import ai.ailogic.*;
 import ai.command.*;
 import ai.game.Game;
-import ai.game.GameJsonFactory;
 import ai.game.Player;
 import ai.game.board.*;
-import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -67,7 +65,6 @@ public class PlayerAiFactoryTest {
 	public void testTrollNoBuildingsMoveHomeFar() {
 		addTrollHouse(myUnitX - 5, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
-		assertTrue(ai instanceof UnitMoveToTargetAI);
 		List<Command> cmds = ai.getCommands();
 		assertTrue(cmds.size() == 2);
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
@@ -78,7 +75,6 @@ public class PlayerAiFactoryTest {
 	public void testTrollNoBuildingsMoveHomeClose() {
 		addTrollHouse(myUnitX - 2, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
-		assertTrue(ai instanceof UnitMoveToTargetAI);
 		List<Command> cmds = ai.getCommands();
 		assertTrue(cmds.size() == 2);
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
@@ -89,7 +85,6 @@ public class PlayerAiFactoryTest {
 	public void testTrollNoBuildingsAtHomeEndTurn() {
 		addTrollHouse(myUnitX - 1, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
-		assertTrue(ai instanceof UnitMoveToTargetAI);
 		List<Command> cmds = ai.getCommands();
 		assertTrue(cmds.size() == 1);
 		assertTrue(cmds.get(0) instanceof EndTurnCommand);
@@ -187,4 +182,6 @@ public class PlayerAiFactoryTest {
 		assertTrue(cmds.size() == 1);
 		assertTrue(cmds.get(0) instanceof LevelUpCommand);
 	}
+
+
 }
