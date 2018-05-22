@@ -96,7 +96,7 @@ class GameInfo {
         return $js_arrays;
     }
 
-    public static function generateArray($database, $config, $where = '') {
+    public static function generateArray($tables, $game_id, $player_num) {
         global $dataBase, $DB_conf, $mysqli, $SITE_conf;
 
         $info = [];

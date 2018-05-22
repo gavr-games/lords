@@ -21,7 +21,7 @@ defmodule LordsWs.Npc.Worker do
     url = "http://web-internal/internal/ajax/npc.php?game_id=#{game["game_id"]}&player_num=#{p_num}"
     case HTTPoison.get(url, [], [timeout: 20_000, recv_timeout: 20_000]) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-        Logger.info "Anser from npc.php #{body}"
+        Logger.info "Answer from npc.php #{body}"
         ans = Jason.decode!(body)
         LordsWs.Game.ProcessCmd.run(%{game: game, answer: ans, user_id: nil, params: %{}})
     end
