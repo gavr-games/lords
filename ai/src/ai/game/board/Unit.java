@@ -28,4 +28,8 @@ public class Unit extends BoardObject {
 	public void setType(BoardObjectType type) {
 		throw new RuntimeException("Error: attempting to set type to a Unit");
 	}
+
+	public int getSize() {
+		return (int) Math.sqrt(getCells().size());
+	}
 }
