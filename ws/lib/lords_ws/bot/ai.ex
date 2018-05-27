@@ -13,6 +13,7 @@ defmodule LordsWs.Bot.Ai do
   end
 
   #Example: LordsWs.Bot.Ai.start_link(%{"game_id"=>"1","player_num"=>"0", "mode_id"=>"9", "time_restriction"=>"0"})
+  #Example: LordsWs.Endpoint.broadcast "bot:1_0", "move", %{}
   def start_link(state) do
     GenServer.start_link __MODULE__, state, name: ref(state["game_id"])
   end
@@ -34,7 +35,6 @@ defmodule LordsWs.Bot.Ai do
     {:ok, %{game: state, static_info: static_info}}
   end
 
-  #Example: LordsWs.Endpoint.broadcast "bot:1_0", "move", %{}
   def handle_info(%{event: "move"}, state = %{game: game, static_info: static_info}) do
     Logger.info "Move bot #{game["game_id"]}"
     RandomAi.move(state)
