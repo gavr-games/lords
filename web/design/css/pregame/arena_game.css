@@ -200,3 +200,21 @@ h3.arena_header {
 	float:left;  height:20px;
 	padding:5px 0px 0px 0px;
 }
+
+.current_game .content .btn{
+	display: block;
+    width: 205px;
+    height: 36px;
+    font-family: Lucida Grande;
+    font-size: 13px;
+    color: #4b4b4b;
+    border: 1px solid #9d9379;
+    line-height: 34px;
+    text-decoration: none;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.current_game .content .btn:hover{
+	border: 1px solid #3f3f3f;
+}

@@ -12,9 +12,10 @@ defmodule LordsWs.Bot.RandomAi do
         end
         {_res, cmds} = Commands.possible_cmds(game, game_info, static_info)
         Logger.info "Possible cmds for bot #{inspect(cmds)}"
-        #if length(cmds) > 0 do
-        #    Commands.exec_cmd(game, Enum.random(cmds))
-        #    move(state)
-        #end
+        if length(cmds) > 0 do
+            cmd = Enum.random(cmds)
+            Commands.exec_cmd(game, cmd)
+            move(state)
+        end
     end
 end

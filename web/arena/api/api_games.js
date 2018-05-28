@@ -92,7 +92,7 @@ function arena_game_delete(game_id) {
     }
 }
 
-function arena_game_add_player(game_id, user_id) {
+function arena_game_add_player(game_id, user_id, bot = 0) {
     last_executed_api = 'arena_game_add_player(' + game_id + ',' + user_id + ')';
     if (user_id != my_user_id) {
         if ($('i_frame').contentWindow.$)
@@ -100,11 +100,15 @@ function arena_game_add_player(game_id, user_id) {
                 //add player
                 var player_cont = 'spectators';
                 var player_str = '';
-                var name = users[user_id]['nick'];
-                var avatar_filename = users[user_id]['avatar_filename'];
+                var name = 'Bot';
+                var avatar_filename = 'bot_user.png';
+                if (bot == 0) {
+                    var name = users[user_id]['nick'];
+                    var avatar_filename = users[user_id]['avatar_filename'];
+                }
                 var display = "none";
                 if (avatar_filename != "") {
-                    avatar_filename = parent.site_domen + "design/images/profile/" + users[user_id]['avatar_filename'];
+                    avatar_filename = parent.site_domen + "design/images/profile/" + avatar_filename;
                     display = "block";
                 }
                 eval('player_str = ' + player_in_game);

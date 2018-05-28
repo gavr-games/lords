@@ -142,7 +142,7 @@
 		}
 	</style>
 </head>
-<body onload="game_initialization();">
+<body>
 <h3 class="arena_header"><?= L::arena_chat_arena ?></h3>
 <script type="text/javascript">
 	var cur_game_id = <?php echo $cur_game_row['game_id']; ?>;
@@ -167,7 +167,8 @@
 						<b><?= L::arena_game_features ?>:</b><br />
 						<?php echoFeatures($features); ?>
 					</div>
-					<a href="#" onclick="startGame();return false;"><?= L::arena_game_start ?></a>
+					<a class="btn" href="#" onclick="addBot();return false;"><?= L::arena_game_add_bot ?></a>
+					<a class="btn" href="#" onclick="startGame();return false;"><?= L::arena_game_start ?></a>
 					
 					<?php } ?>
 					<br/>
@@ -181,6 +182,7 @@
 </div>
 <script>
 <?php echo $selected_features; ?>
+game_initialization();
 </script>
 </body>
 </html>

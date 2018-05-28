@@ -39,7 +39,11 @@ defmodule LordsWs.Bot.Unit do
     end
 
     def possible_move_coords(board_unit, unit, board) do
-        add_possible_move_coords([], 0, board_unit, unit, board)
+        if board_unit["moves_left"] != "0" do
+            add_possible_move_coords([], 0, board_unit, unit, board)
+        else
+            []
+        end
     end
 
     def add_possible_move_coords(coords, i, board_unit, unit, board) do
@@ -62,7 +66,11 @@ defmodule LordsWs.Bot.Unit do
     end
 
     def possible_attack_coords(board_unit, unit, game_info) do
-        add_possible_attack_coords([], 0, board_unit, unit, game_info)
+        if board_unit["moves_left"] != "0" do
+            add_possible_attack_coords([], 0, board_unit, unit, game_info)
+        else
+            []
+        end
     end
 
     def add_possible_attack_coords(coords, i, board_unit, unit, game_info) do
