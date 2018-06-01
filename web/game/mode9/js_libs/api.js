@@ -555,6 +555,7 @@ function log_add_container(p_num, message_code, message_parameters) {
 
     mesDiv.grab(logContainer, 'bottom');
     $('game_log').grab(mesDiv, 'bottom');
+    log_message_add_card_tooltips(mainDiv);
     $(mid).set('morph', {
         duration: 2000,
         transition: Fx.Transitions.Sine.easeOut,
@@ -589,6 +590,7 @@ function log_add_message(message_code, message_parameters) {
         'html': message
     }); //create span with message
     logContainer.grab(mySpan, 'bottom'); //insert span to div
+    log_message_add_card_tooltips(mySpan);
 
     if ($('game_log').getStyle('display') != 'none') { //not f5
         var container;
@@ -608,6 +610,16 @@ function log_add_message(message_code, message_parameters) {
 
     var scroll = $('game_log').getScrollSize();
     $('game_log').scrollTo(0, scroll.y);
+}
+
+function log_message_add_card_tooltips(elem) {
+    elem.getChildren('.logCard').each(function(item, index) {
+        if (item) {
+            var dom_id = item.get('id');
+            var card_id = item.get('data-card-id');
+            addCardTip(dom_id, card_id);
+        }
+    });
 }
 
 function parse_log_message(message_code, message_parameters) {
@@ -645,7 +657,8 @@ function log_param_amount_with_image(amount, image) {
 }
 
 function log_param_card(card_id) {
-    return "<b class='logCard'>" + card_name(card_id) + "</b>";
+    var dom_id = Math.random().toString(36).substr(2, 9) + card_id;
+    return "<b class='logCard' id='log-card-" + dom_id + "' data-card-id='" + card_id + "'>" + card_name(card_id) + "</b>";
 }
 
 function log_param_damage(amount) {
