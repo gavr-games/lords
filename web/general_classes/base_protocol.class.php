@@ -1,4 +1,5 @@
 <?php
+include_once(dirname(__FILE__) . '/lang_utils.class.php');
 
 class BaseProtocol {
     const WRONG_LOGIN_OR_PASSWORD_ERROR_CODE = 3;
@@ -14,7 +15,7 @@ class BaseProtocol {
 	}
 
 	private static function isCustomLogic($action) {
-		return $action == 'user_authorize';
+		return in_array($action, ['user_authorize', 'guest_user_authorize']);
 	}
 
 	private static function customLogic($action, $params) {
@@ -31,9 +32,9 @@ class BaseProtocol {
                 $hash = $res['results']['data_result']['pass_hash'];
                 if (password_verify(trim(self::sanitizeParam($params['pass']), '"'), $hash)) {
                     $res = self::execCmd('user_get_info', [$params['login']]);
-                    if ($res['results']['header_result']['success']=='1'){
+                    if ($res['results']['header_result']['success']=='1') {
                         $_SESSION['user_id'] = $res['results']['data_result']['user_id'];
-						$_SESSION['lang'] = $res['results']['data_result']['user_language_code'] == 'RU' ? 'ru' : 'en';
+						$_SESSION['lang'] = strtolower($res['results']['data_result']['user_language_code']);
                     }
                     return $res;
                 } else {
@@ -43,7 +44,14 @@ class BaseProtocol {
 						'error_params' => null
 					);
                 }
-
+			break;
+			case 'guest_user_authorize':
+				$res = self::execCmd('guest_user_add', [$params['name'], '"'.LangUtils::getCurrentLangCode($_SESSION['lang']).'"']);
+				if ($res['results']['header_result']['success']=='1') {
+					$_SESSION['user_id'] = $res['results']['data_result']['user_id'];
+					$_SESSION['lang'] = strtolower($res['results']['data_result']['user_language_code']);
+				}
+				return $res;
 			break;
 		}
 

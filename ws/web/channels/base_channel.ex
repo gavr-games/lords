@@ -17,6 +17,7 @@ defmodule LordsWs.BaseChannel do
         req = Jason.decode!(body)
         case params["action"] do
           "user_authorize" -> eval_cmds = eval_cmds <> URI.encode("loginAnswer(" <> body <> ")");
+          "guest_user_authorize" -> eval_cmds = eval_cmds <> URI.encode("loginAnswer(" <> body <> ")");
           "user_add" -> eval_cmds = eval_cmds <> URI.encode("regAnswer(" <> body <> ")");
         end
     end

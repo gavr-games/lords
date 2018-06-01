@@ -105,6 +105,7 @@ GRANT EXECUTE ON PROCEDURE `lords_site`.`user_language_change` TO 'lords_client'
 GRANT EXECUTE ON PROCEDURE `lords_site`.`arena_game_bot_add` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`arena_game_bot_remove` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords_site`.`get_all_arena_bots` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords_site`.`guest_user_add` TO 'lords_client'@'%';
 
 GRANT SELECT ON lords.* TO 'lords_reader'@'%';
 GRANT SELECT ON lords_site.* TO 'lords_reader'@'%';
