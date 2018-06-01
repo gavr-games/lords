@@ -1,3 +1,13 @@
+h3.arena_header {
+  font-family: 'edissonregular', 'Times New Roman', Times, serif;
+  font-size: 40px;
+  position: absolute;
+  top: 110px;
+  color: #482313;
+  left: 70px;
+  text-align: center;
+  text-shadow: 0px -2px 3px #CEAC27;
+}
 .profile {
 	background:  url(../../images/pregame/profile_mcont_bg.png) top left  no-repeat;
 	width:588px;
