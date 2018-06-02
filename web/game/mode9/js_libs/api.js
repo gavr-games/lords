@@ -22,7 +22,7 @@ var level_menu_id = 0;
 function player_set_gold(p_num, amount) {
     last_executed_api = 'player_set_gold()';
     players_by_num[p_num]["gold"] = amount;
-    if (p_num == my_player_num && turn_state == MY_TURN && movedUnits != 1 && amount >= mode_config["card cost"]) //activate buy card
+    if (p_num == my_player_num && turn_state == MY_TURN && amount >= mode_config["card cost"]) //activate buy card
         activate_button($('main_buttons').getChildren('.btn_buycard')[0]);
     if (p_num < 10) { //not neutral
         if ($('money' + p_num))
@@ -488,6 +488,7 @@ function log_add_independent_message(p_num, message_code, message_parameters) {
     }
     mesDiv.grab(mainDiv, 'bottom');
     $('game_log').grab(mesDiv, 'bottom');
+    log_message_add_card_tooltips(mainDiv);
 
     if ($('game_log').getStyle('display') != 'none') {
         $(mid).set('morph', {
@@ -2352,6 +2353,7 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
             deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
             $('cards_holder').getChildren().each(function(item, index) {
                 if (item) {
+                    console.log(item);
                     item.fade(unactive_card);
                 }
             });
