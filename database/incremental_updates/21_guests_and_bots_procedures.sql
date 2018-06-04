@@ -274,6 +274,7 @@ BEGIN
   DECLARE created_game_status INT DEFAULT 1; 
   DECLARE owner_id INT;
   DECLARE status_id INT;
+  DECLARE was_spectator INT;
 
   SELECT ag.owner_id, ag.status_id INTO owner_id, status_id FROM arena_games ag WHERE ag.id = game_id LIMIT 1;
 
@@ -289,10 +290,12 @@ BEGIN
         IF NOT EXISTS (SELECT id FROM arena_game_players agp WHERE agp.game_id = game_id AND agp.user_id = bot_user_id) THEN
           SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code = 'bot_is_not_in_this_game';
         ELSE
+          SELECT agp.spectator_flag INTO was_spectator FROM arena_game_players agp WHERE agp.user_id = bot_user_id;
           DELETE FROM users WHERE id = bot_user_id;
           DELETE FROM arena_game_players WHERE user_id = bot_user_id;
 
           SELECT 1 AS `success`, null as `error_code`, null as `error_params` FROM DUAL;
+          SELECT 'was_spectator' AS `name`, was_spectator as `value` FROM DUAL;
         END IF;
       END IF;
     END IF;
