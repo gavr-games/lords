@@ -25,7 +25,6 @@ GRANT EXECUTE ON PROCEDURE `lords`.`cast_paralich` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_madness` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_shield` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_healing` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_russian_ruletka` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_o_d` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_teleport` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_mind_control` TO 'lords_client'@'%';
