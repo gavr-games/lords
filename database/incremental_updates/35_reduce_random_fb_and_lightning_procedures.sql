@@ -32,8 +32,6 @@ BEGIN
 
 END$$
 
-DELIMITER ;
-
 DROP PROCEDURE IF EXISTS `lords`.`cast_lightening_max` $$
 
 CREATE PROCEDURE `cast_lightening_max`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
@@ -98,3 +96,4 @@ BEGIN
 
 END$$
 
+DELIMITER ;
