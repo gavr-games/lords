@@ -19,6 +19,7 @@ defmodule LordsWs.Game.RemoveTimer do
   end
 
   def handle_info(:remove, state) do
+    Logger.info "Removing game #{state["game_id"]}"
     url = "http://web-internal/internal/ajax/delete_game.php?game_id=#{state["game_id"]}"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
@@ -28,13 +29,7 @@ defmodule LordsWs.Game.RemoveTimer do
     {:noreply, state}
   end
 
-  #TODO: cancel timer when game ends
   defp schedule_timer() do
-    interval = 900_000
-    Process.send_after self(), :remove, interval
-  end
-
-  defp broadcast(game_id, cmds) do
-    LordsWs.Endpoint.broadcast "game:#{game_id}", "game_raw", %{commands: URI.encode(cmds)}
+    Process.send_after self(), :remove, 900_000
   end
 end

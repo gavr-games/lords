@@ -69,7 +69,9 @@ defmodule LordsWs.Bot.Ai do
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
         Logger.info "Answer from get_game_info #{game_body}"
-        state = Map.merge(state, Jason.decode!(game_body))
+        game_info = Jason.decode!(game_body)
+        if game_info == nil, do: game_info = %{"status_id"=>"3"}
+        state = Map.merge(state, game_info)
     end
     if state["status_id"] != "2" do
       send self(), :stop
