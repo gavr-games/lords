@@ -71,6 +71,25 @@ function doLogin(link, validation_msg, loading_msg) {
     }
 }
 
+function doGuestLogin(link, validation_msg, loading_msg) {
+    if ($('guest_name_i').get('value') == '') {
+        $('login_error').set('text', validation_msg);
+        $('login_error').show();
+        if ($('guest_name_i').get('value') == '') $('guest_name_i').highlight('#A11D15');
+    } else {
+        if (!parent.window_loading) { //another window is not loading
+            $('login_error').hide();
+            parent.WSClient.sendBaseProtocolCmd({
+                action: 'guest_user_authorize',
+                params: {
+                    name: '"' + parent.convertChars($('guest_name_i').get('value')) + '"'
+                }
+            });
+            doLoading(link, loading_msg);
+        }
+    }
+}
+
 function doLogout(link, loading_msg) {
     if (!parent.window_loading) { //another window is not loading
         parent.WSClient.sendLoggedProtocolCmd({

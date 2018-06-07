@@ -590,6 +590,7 @@ function cancel_execute() {
     pre_defined_param = '';
     do_not_in_turn = 0;
     path_mode = false;
+    playingCard = false;
 }
 
 function addCancelAction() {

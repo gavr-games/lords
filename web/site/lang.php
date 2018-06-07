@@ -1,6 +1,6 @@
 <?php
 include_once('init.php');
-include_once('ajax/base_protocol.class.php');
+include_once('../general_classes/base_protocol.class.php');
 session_start();
 
 $_SESSION['lang'] = $_GET['lang'];

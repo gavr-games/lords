@@ -142,7 +142,7 @@
 		}
 	</style>
 </head>
-<body onload="game_initialization();">
+<body>
 <h3 class="arena_header"><?= L::arena_chat_arena ?></h3>
 <script type="text/javascript">
 	var cur_game_id = <?php echo $cur_game_row['game_id']; ?>;
@@ -164,15 +164,16 @@
 				<div class="features_cont">
 					<?php if ($cur_game_row['owner_id']==$_SESSION['user_id']) { //I'm owner?>
 					<div class="select_game_features">
-						<b><?= L::arena_game_features ?>:</b><br />
+						<h3><?= L::arena_game_features ?>:</h3>
 						<?php echoFeatures($features); ?>
 					</div>
-					<a href="#" onclick="startGame();return false;"><?= L::arena_game_start ?></a>
+					<a class="btn" href="#" onclick="addBot();return false;"><?= L::arena_game_add_bot ?></a>
+					<a class="btn" href="#" onclick="startGame();return false;"><?= L::arena_game_start ?></a>
 					
 					<?php } ?>
 					<br/>
 					<div <?= $cur_game_row['owner_id']==$_SESSION['user_id'] ? 'style="display:none;"' : '' ?> >
-						<b><?= L::arena_game_selected_features ?>:</b><br />
+						<h3><?= L::arena_game_selected_features ?>:</h3>
 						<div id="game_features">
 						</div>
 					</div>
@@ -181,6 +182,7 @@
 </div>
 <script>
 <?php echo $selected_features; ?>
+game_initialization();
 </script>
 </body>
 </html>

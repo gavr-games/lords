@@ -19,6 +19,14 @@ class LangUtils {
         }
     }
 
+    public static function getCurrentLangCode($langCode) {
+        if (isset($langCode) && is_string($langCode) && in_array($langCode, array_keys(self::getAllLangs()))) {
+            return strtolower($langCode);
+        } else {
+            return 'en'; //default english
+        }
+    }
+
     public static function getAllLangs() {
         return ['en' => 1, 'ru' => 2];
     }

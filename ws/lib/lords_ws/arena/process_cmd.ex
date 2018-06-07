@@ -117,12 +117,25 @@ defmodule LordsWs.Arena.ProcessCmd do
                         "arena_player_set_status(#{u_id}, 1);"
                     end))
                     arena_cmds = "#{arena_cmds}arena_game_delete(#{game_id});"
-                end
-                unless req["data_result"]["owner"] == "1" do
+                else
                     LordsWs.Endpoint.broadcast "game:#{game_id}", "protocol_raw", %{commands: URI.encode("arena_game_remove_player(#{game_id},#{user_id});")}
                     arena_cmds = "#{arena_cmds}arena_player_set_status(#{user_id}, 1);"
                     if req["data_result"]["was_spectator"] == "1", do: arena_cmds = "#{arena_cmds}arena_game_dec_spectator_count(#{game_id});", else: arena_cmds = "#{arena_cmds}arena_game_dec_player_count(#{game_id});"
                 end
+            end
+          "arena_game_bot_add" ->
+            if req["header_result"]["success"] == "1" do
+                game_id = params["params"]["game_id"]
+                bot_id  = req["data_result"]["bot_user_id"]
+                LordsWs.Endpoint.broadcast "game:#{game_id}", "protocol_raw", %{commands: URI.encode("arena_game_add_player(#{game_id},#{bot_id},1)")}
+                LordsWs.Endpoint.broadcast "arena", "protocol_raw", %{commands: URI.encode("arena_game_inc_spectator_count(#{game_id});")}
+            end
+          "arena_game_bot_remove" ->
+            if req["header_result"]["success"] == "1" do
+                game_id = params["params"]["game_id"]
+                user_id = params["params"]["user_id"]
+                LordsWs.Endpoint.broadcast "game:#{game_id}", "protocol_raw", %{commands: URI.encode("arena_game_remove_player(#{game_id},#{user_id});")}
+                if req["data_result"]["was_spectator"] == "1", do: arena_cmds = "#{arena_cmds}arena_game_dec_spectator_count(#{game_id});", else: arena_cmds = "#{arena_cmds}arena_game_dec_player_count(#{game_id});"
             end
           "arena_game_spectator_enter" ->
             if req["header_result"]["success"] == "1" do
@@ -168,6 +181,7 @@ defmodule LordsWs.Arena.ProcessCmd do
                         game = Jason.decode!(game_body)
                         if Map.has_key?(game, "game_id") && game["status_id"] == "2" do
                             LordsWs.SendPhrase.Timer.create(game)
+                            LordsWs.Bot.Ai.create_for_game(game)
                             if game["time_restriction"] != "0" do
                                 LordsWs.NextTurn.Timer.create(game)
                             end

@@ -59,6 +59,7 @@
 <body>
 	<div id="wrap" class="profile">
 		<div id="profile">
+			<h3 class="arena_header"><?= L::profile_profile ?></h3>
 		  <form action="" method="post" enctype="multipart/form-data">
 			  <span class="title"> - Великий Лорд <p class="nick"><?php echo $user['login']; ?></p></span>
 			  <br clear="all" />

@@ -8,6 +8,7 @@ $player_num = (int) $_GET['player_num'];
 $tables = GameInfo::getGameConfig();
 if (isset($_GET['format']) && $_GET['format'] == 'json') {
 	$result = json_encode(GameInfo::generateArray($tables, $game_id, $player_num));
+	//Logger::info($result);
 } else {
 	$result = GameInfo::generateJS($tables, $game_id, $player_num);
 }

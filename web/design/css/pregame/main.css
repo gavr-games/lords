@@ -200,9 +200,18 @@ body {
  #log_cont #log_form  {
 	float:left;
 	width:598px;
-	height:136px;
-	padding:270px 0px 0px 30px;
+	height:176px;
+	padding:230px 0px 0px 30px;
 	background:  url(../../images/pregame/loginbg.png) top left  no-repeat;
+}
+#login_form {
+	margin-bottom: 10px;
+}
+#guest_login_form {
+	margin-top: 10px;
+}
+#log_cont #log_form hr {
+	width: 390px;
 }
  #log_cont .winter  {
 	background:  url(../../images/pregame/loginbg_winter.png) top left  no-repeat !important;
@@ -225,7 +234,7 @@ body {
 }
 #log_cont #log_form .reg {
 	float:left;
-	margin:30px 40px 0px 10px;
+	margin:10px 40px 0px 10px;
 }
 #log_cont #log_form .button {
 	float:right;
@@ -236,7 +245,7 @@ body {
 }
 #log_cont #log_form .error_msg {
  	position:absolute;
-	top:327px;
+	top:350px;
 	left:267px;
 	width:300px;
  }

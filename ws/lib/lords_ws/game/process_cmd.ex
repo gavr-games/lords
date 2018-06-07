@@ -12,23 +12,27 @@ defmodule LordsWs.Game.ProcessCmd do
                 LordsWs.Endpoint.broadcast "user:#{user_id}", "game_raw", %{commands: URI.encode(cmd)}
             end
         end
-        if Map.has_key?(ans, "data_result") do
+        if Map.has_key?(ans, "data_result") && ans["data_result"] != nil do
             Enum.each ans["data_result"], fn cmd -> 
                 if cmd["command"] == "end_game()" do
+                    LordsWs.Bot.Ai.stop_for_game(game)
                     GenServer.start_link(LordsWs.Game.RemoveTimer, game)
                 end
                 # Next turn
-                if cmd["command"] =~ "set_active_player(" && game["time_restriction"] != "0" do
-                    LordsWs.Endpoint.broadcast "end_turn_timer:#{game["game_id"]}", "cancel", %{}
+                if cmd["command"] =~ "set_active_player(" do
                     next_p_num = cmd["command"]
                         |> String.split(",")
                         |> Enum.at(0)
                         |> String.split("(")
                         |> Enum.at(1)
                         |> String.to_integer()
-                    if next_p_num < 4 do
+                    if next_p_num < 4 && game["time_restriction"] != "0" do
+                        LordsWs.Endpoint.broadcast "end_turn_timer:#{game["game_id"]}", "cancel", %{}
                         LordsWs.NextTurn.Timer.create(game |> Map.put("active_player_num", next_p_num))
                     end
+                    # Try to call bot, if no bot subscribed to channel - nothing happens
+                    Logger.info "Try to move bot:#{game["game_id"]}_#{next_p_num}"
+                    LordsWs.Endpoint.broadcast "bot:#{game["game_id"]}_#{next_p_num}", "move", %{}
                 end
                 # NPC
                 if cmd["command"] =~ "NPC(" do
