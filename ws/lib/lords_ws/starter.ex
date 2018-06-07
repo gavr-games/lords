@@ -46,7 +46,7 @@ defmodule LordsWs.Starter do
         Enum.each(bots, fn bot ->
           case bot["player_num"] do
             nil -> nil
-            _ -> LordsWs.Bot.Ai.start_link(bot)
+            _ -> LordsWs.Bot.Ai.create(bot)
           end
         end)
         {:stop, :normal, state}

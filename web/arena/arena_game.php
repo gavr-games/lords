@@ -164,7 +164,7 @@
 				<div class="features_cont">
 					<?php if ($cur_game_row['owner_id']==$_SESSION['user_id']) { //I'm owner?>
 					<div class="select_game_features">
-						<b><?= L::arena_game_features ?>:</b><br />
+						<h3><?= L::arena_game_features ?>:</h3>
 						<?php echoFeatures($features); ?>
 					</div>
 					<a class="btn" href="#" onclick="addBot();return false;"><?= L::arena_game_add_bot ?></a>
@@ -173,7 +173,7 @@
 					<?php } ?>
 					<br/>
 					<div <?= $cur_game_row['owner_id']==$_SESSION['user_id'] ? 'style="display:none;"' : '' ?> >
-						<b><?= L::arena_game_selected_features ?>:</b><br />
+						<h3><?= L::arena_game_selected_features ?>:</h3>
 						<div id="game_features">
 						</div>
 					</div>

@@ -5,6 +5,7 @@ defmodule LordsWs.Bot.GameInfo do
     # Resulting map with game info should look like this:
     # %{
     #   active_player: %{},
+    #   game_info: %{},
     #   players: %{p_num: player},
     #   board_buildings: %{id: building},
     #   my_buildings: %{id: building},
@@ -16,6 +17,7 @@ defmodule LordsWs.Bot.GameInfo do
     def process(game, game_info, static_info) do
         game_info 
         |> active_player
+        |> game_info
         |> players
         |> board_buildings(game, static_info)
         |> board_units(game, static_info)
@@ -25,6 +27,11 @@ defmodule LordsWs.Bot.GameInfo do
     def active_player(game_info) do
         {active_players, game_info} = Map.pop(game_info, "active_players")
         game_info |> Map.put(:active_player, List.first(active_players))
+    end
+
+    def game_info(game_info) do
+        {gi, game_info} = Map.pop(game_info, "game_info")
+        game_info |> Map.put(:game_info, List.first(gi))
     end
 
     def players(game_info) do

@@ -12,9 +12,10 @@ defmodule LordsWs.Game.ProcessCmd do
                 LordsWs.Endpoint.broadcast "user:#{user_id}", "game_raw", %{commands: URI.encode(cmd)}
             end
         end
-        if Map.has_key?(ans, "data_result") do
+        if Map.has_key?(ans, "data_result") && ans["data_result"] != nil do
             Enum.each ans["data_result"], fn cmd -> 
                 if cmd["command"] == "end_game()" do
+                    LordsWs.Bot.Ai.stop_for_game(game)
                     GenServer.start_link(LordsWs.Game.RemoveTimer, game)
                 end
                 # Next turn
@@ -30,6 +31,7 @@ defmodule LordsWs.Game.ProcessCmd do
                         LordsWs.NextTurn.Timer.create(game |> Map.put("active_player_num", next_p_num))
                     end
                     # Try to call bot, if no bot subscribed to channel - nothing happens
+                    Logger.info "Try to move bot:#{game["game_id"]}_#{next_p_num}"
                     LordsWs.Endpoint.broadcast "bot:#{game["game_id"]}_#{next_p_num}", "move", %{}
                 end
                 # NPC

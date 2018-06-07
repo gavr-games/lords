@@ -14,7 +14,8 @@ defmodule LordsWs.Bot.Commands do
             commands: []
         }
 
-        if game_data[:game_info][:active_player]["player_num"] == game["player_num"] do
+        if game_data[:game_info][:active_player]["player_num"] == game["player_num"] && game_data[:game_info][:game_info]["status_id"] != "3" do
+            Logger.info "Generating possible commands for bot #{game["game_id"]}_#{game["player_num"]}"
             game_data = game_data
             |> end_turn_cmd
             |> agree_draw_cmd
@@ -22,6 +23,11 @@ defmodule LordsWs.Bot.Commands do
             |> take_subsidy_cmd
             |> move_units_cmds
             |> units_attack_cmds
+        end
+
+        # Game finished
+        if game_data[:game_info][:game_info]["status_id"] == "3" do
+            game_data = game_data |> Map.put(:commands, ["player_exit(#{game["game_id"]},#{game["player_num"]});"])
         end
 
         {:ok, game_data[:commands]}
@@ -82,11 +88,13 @@ defmodule LordsWs.Bot.Commands do
     def exec_cmd(game, cmd) do
         Logger.info("Executing bot cmd for game #{game["game_id"]} cmd: #{cmd}")
         url = "http://web-internal/internal/ajax/bot.php"
-        case HTTPoison.post(url, Jason.encode!(%{cmd: cmd}), [{"Content-Type", "application/json"}]) do
+        case HTTPoison.post(url, Jason.encode!(%{cmd: cmd}), [{"Content-Type", "application/json"}], [timeout: 20_000, recv_timeout: 20_000]) do
             {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
                 Logger.info "Received bot.php answer #{body}"
                 ans = Jason.decode!(body)
                 LordsWs.Game.ProcessCmd.run(%{game: game, answer: ans, user_id: %{}, params: %{}})
+            res ->
+                Logger.info inspect(res)
         end
     end
 end

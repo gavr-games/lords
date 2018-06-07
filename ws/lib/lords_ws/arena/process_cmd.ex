@@ -181,6 +181,7 @@ defmodule LordsWs.Arena.ProcessCmd do
                         game = Jason.decode!(game_body)
                         if Map.has_key?(game, "game_id") && game["status_id"] == "2" do
                             LordsWs.SendPhrase.Timer.create(game)
+                            LordsWs.Bot.Ai.create_for_game(game)
                             if game["time_restriction"] != "0" do
                                 LordsWs.NextTurn.Timer.create(game)
                             end

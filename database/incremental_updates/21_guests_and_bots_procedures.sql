@@ -323,6 +323,7 @@ CREATE PROCEDURE `get_bots_for_game`(game_id INT)
 BEGIN
   SELECT
     agp.user_id,
+    agp.game_id,
     p.player_num
   FROM arena_game_players agp LEFT JOIN lords.players p ON agp.user_id = p.user_id
   WHERE is_bot_user(agp.user_id) = 1 AND agp.game_id = game_id AND agp.spectator_flag = 0;

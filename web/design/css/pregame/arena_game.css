@@ -196,6 +196,14 @@ h3.arena_header {
 	width:20px;
 	margin-right:5px;
 }
+.current_game .content .features_cont h3 {
+	font-family: 'edissonregular', 'Times New Roman', Times, serif;
+	color: #482313;
+	font-size: 25px;
+	text-align: center;
+    margin-bottom: 10px;
+    text-shadow: 0px -2px 3px #CEAC27;
+}
 .current_game .textlink {
 	float:left;  height:20px;
 	padding:5px 0px 0px 0px;

@@ -4,25 +4,66 @@ defmodule LordsWs.Bot.Ai do
   alias LordsWs.Bot.RandomAi
 
   def create(state) do
-    case GenServer.whereis(ref(state["game_id"])) do
+    case GenServer.whereis(ref(state)) do
       nil ->
-        Supervisor.start_child(LordsWs.NextTurn.Supervisor, [state])
+        Supervisor.start_child(LordsWs.Bot.Supervisor, [state])
       _game ->
         {:error, "bot ai already exists"}
     end
   end
 
-  def start_link(state) do
-    GenServer.start_link __MODULE__, state, name: ref(state["game_id"])
+  def create_for_game(game) do
+    url = "http://web-internal/internal/ajax/get_bots_info.php?game_id=#{game["game_id"]}"
+    case HTTPoison.get(url) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: bots_body}} ->
+        Logger.info "Received get_bots_info answer #{bots_body}"
+        bots = Jason.decode!(bots_body)
+        Enum.each(bots, fn bot ->
+          case bot["player_num"] do
+            nil -> nil
+            _ -> create(bot)
+          end
+        end)
+        {:ok}
+      _ ->
+        {:error, "failed to get bots info"}       
+    end
   end
 
-  defp ref(game_id) do
-    {:global, {:bot, game_id}}
+  def stop_for_game(game) do
+    Logger.info "Stop bots for game #{game["game_id"]}"
+    url = "http://web-internal/internal/ajax/get_bots_info.php?game_id=#{game["game_id"]}"
+    case HTTPoison.get(url) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: bots_body}} ->
+        Logger.info "Received get_bots_info answer #{bots_body}"
+        bots = Jason.decode!(bots_body)
+        Enum.each(bots, fn bot ->
+          case bot["player_num"] do
+            nil -> nil
+            _ -> LordsWs.Endpoint.broadcast "bot:#{game["game_id"]}_#{bot["player_num"]}", "stop", %{}
+          end
+        end)
+        {:ok}
+      _ ->
+        {:error, "failed to get bots info"}       
+    end
+  end
+
+  def start_link(state) do
+    GenServer.start_link __MODULE__, state, name: ref(state)
+  end
+
+  defp ref(game) do
+    {:global, {:bot, game["game_id"], game["player_num"]}}
   end
 
   def init(state) do
-    Logger.info "Init bot for #{state["game_id"]}"
-    LordsWs.Endpoint.subscribe "bot:#{state["game_id"]}_#{state["player_num"]}", []
+    Logger.info "Init bot for #{state["game_id"]}_#{state["player_num"]}"
+    send self(), :post_init
+    {:ok, state}
+  end
+
+  def handle_info(:post_init, state) do
     # Current game info
     url = "http://web-internal/internal/ajax/get_game_info.php?game_id=#{state["game_id"]}"
     case HTTPoison.get(url) do
@@ -30,20 +71,28 @@ defmodule LordsWs.Bot.Ai do
         Logger.info "Answer from get_game_info #{game_body}"
         state = Map.merge(state, Jason.decode!(game_body))
     end
-    # Static info
-    static_info = nil
-    url = "http://web-internal/internal/ajax/get_static_info.php?mode_id=#{state["mode_id"]}"
-    case HTTPoison.get(url, [], [timeout: 20_000, recv_timeout: 20_000]) do
-      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-        Logger.info "Answer from get_static_info.php"
-        static_info = Jason.decode!(body)
+    if state["status_id"] != "2" do
+      send self(), :stop
+      {:noreply, state}
+    else
+      Logger.info "Bot subscribe bot:#{state["game_id"]}_#{state["player_num"]}"
+      LordsWs.Endpoint.subscribe "bot:#{state["game_id"]}_#{state["player_num"]}", []
+      # Static info
+      static_info = nil
+      url = "http://web-internal/internal/ajax/get_static_info.php?mode_id=#{state["mode_id"]}"
+      case HTTPoison.get(url, [], [timeout: 20_000, recv_timeout: 20_000]) do
+        {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+          Logger.info "Answer from get_static_info.php"
+          static_info = Jason.decode!(body)
+      end
+      # Move bot if it's his turn
+      state = %{game: state, static_info: static_info}
+      if state[:game]["active_player_num"] == state[:game]["player_num"] do
+        Logger.info "Move bot on init"
+        send self(), :move
+      end
+      {:noreply, state}
     end
-    # Move bot if it's his turn
-    state = %{game: state, static_info: static_info}
-    if state[:game]["active_player_num"] == state[:game]["player_num"] do
-      send self(), :move
-    end
-    {:ok, state}
   end
 
   def handle_info(%{event: "move"}, state = %{game: game, static_info: static_info}) do
@@ -61,6 +110,11 @@ defmodule LordsWs.Bot.Ai do
   def handle_info(%{event: "stop"}, state = %{game: game}) do
     Logger.info "Stop bot #{game["game_id"]}"
     {:stop, :normal, state}
+  end
+
+  def handle_info(:stop, game) do
+    Logger.info "Stop bot #{game["game_id"]}"
+    {:stop, :normal, game}
   end
 
   def ai_move(state) do
