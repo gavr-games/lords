@@ -25,6 +25,7 @@ if ($_SESSION['game_id'] != '' && $_SESSION['player_num'] != '' && $proc_name !=
         $query .= $proc_params;
     }
     $query .= ');';
+    Logger::info('game protocol query -> '.$query);
     $res  = $dataBase->query($query);
     $rows = array();
     while ($row = mysqli_fetch_assoc($res)) {

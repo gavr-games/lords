@@ -2353,7 +2353,6 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
             deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
             $('cards_holder').getChildren().each(function(item, index) {
                 if (item) {
-                    console.log(item);
                     item.fade(unactive_card);
                 }
             });

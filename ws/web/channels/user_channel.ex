@@ -90,6 +90,10 @@ defmodule LordsWs.UserChannel do
 
   def handle_in("performance", %{"json_params" => json_params}, socket) do
     url = "http://web/site/ajax/call_save_perfomance.php"
+    json_params = json_params
+      |> Jason.decode!
+      |> Map.put(:game_id, socket.assigns.game_id)
+      |> Jason.encode!
     case HTTPoison.post(url, json_params, [{"Content-Type", "application/json"}]) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         Logger.info "Received call_save_perfomance answer #{body}"
