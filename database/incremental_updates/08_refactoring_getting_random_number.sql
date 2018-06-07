@@ -946,8 +946,6 @@ BEGIN
   END IF;
 END$$
 
-use lords;
-
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS `lords`.`mountains_summon_troll` $$
