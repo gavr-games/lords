@@ -1196,3 +1196,11 @@ ul {
 #game_info table{
 	color: white !important;
 }
+
+#game_info td {
+	text-align: center;
+}
+
+#game_info td.player_name {
+	text-align: left;
+}

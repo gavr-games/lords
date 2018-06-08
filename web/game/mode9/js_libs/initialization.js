@@ -156,7 +156,6 @@ function initialization() {
             end_game();
             return 1;
         } else {
-            var game_info_html = '<b>' + i18n[USER_LANGUAGE]["game"]["game_name"] + ': </b>' + game_info['title'] + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["creation_date"] + ': </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>' + i18n[USER_LANGUAGE]["game"]["player"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["team"] + ':</th></tr>'
             //players
             setLoadingText(i18n[USER_LANGUAGE]["loading"]["players_init"]);
             players.each(function(item, index) {
@@ -166,13 +165,10 @@ function initialization() {
                         add_spectator_init(item['player_num'], item['name']);
                     else
                         add_player(item['player_num'], item['name'], item['gold'], item['owner'], item['team']);
-                    var playerDisplayName = item['owner'] <= 1 ? item['name'] : npc_player_name(item['name']);
-                    game_info_html += '<tr><td>' + playerDisplayName + '</td><td>' + item['team'] + '</td></tr>';
                 }
             });
             //game info init
-            game_info_html += '</table><hr />';
-            $('game_info').set('html', game_info_html);
+            update_game_info_window();
             //features initialization
             setLoadingText(i18n[USER_LANGUAGE]["loading"]["features_init"]);
             board_buildings_features.each(function(item, index) {
@@ -465,6 +461,20 @@ function initialization() {
             displayLordsError(e, 'initialization();<br />Last executed_procedure:' + last_executed_procedure + '<br />Last API:' + last_executed_api);
         }
     }
+}
+
+function update_game_info_window() {
+    var game_info_html = '<b>' + i18n[USER_LANGUAGE]["game"]["game_name"] + ': </b>' + game_info['title'] + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["creation_date"] + ': </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>' + i18n[USER_LANGUAGE]["game"]["player"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["team"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["gold"] + ':</th></tr>'
+    players_by_num.each(function(item, index) {
+        if (item) {
+            if (item['owner'].toInt() != 0) { // not spectator
+                var playerDisplayName = item['owner'] <= 1 ? item['name'] : npc_player_name(item['name']);
+                game_info_html += '<tr><td class="player_name">' + playerDisplayName + '</td><td>' + item['team'] + '</td><td>' + item['gold'] + '</td></tr>';
+            }
+        }
+    });
+    game_info_html += '</table><hr />';
+    $('game_info').set('html', game_info_html);
 }
 
 function movePanorama() {

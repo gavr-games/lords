@@ -22,6 +22,7 @@ var level_menu_id = 0;
 function player_set_gold(p_num, amount) {
     last_executed_api = 'player_set_gold()';
     players_by_num[p_num]["gold"] = amount;
+    update_game_info_window();
     if (p_num == my_player_num && turn_state == MY_TURN && amount >= mode_config["card cost"]) //activate buy card
         activate_button($('main_buttons').getChildren('.btn_buycard')[0]);
     if (p_num < 10) { //not neutral
@@ -94,6 +95,7 @@ function add_player(p_num, name, gold, owner, team) {
         $('players').grab(myP2, 'bottom');
         $('players').grab(myP3, 'bottom');
     }
+    update_game_info_window();
 }
 
 function delete_player(p_num) {
@@ -107,6 +109,7 @@ function delete_player(p_num) {
             $('pl_td' + p_num).destroy();
         }
     }
+    update_game_info_window();
 }
 
 function unit_set_health(x, y, health) {

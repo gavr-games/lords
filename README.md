@@ -60,6 +60,7 @@ Deploy
 - create `log` directory
 - add permissions for lang cache `chmod 0777 web/lang/cache`
 - run `./deployment/deploy.sh`
+- make sure `web/game/mode9` is writable for everyone for error saving
 
 Validate deployed services:
 - `docker stack services lords` - replicas should be 1/1, not 0/1

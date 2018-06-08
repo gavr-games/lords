@@ -85,6 +85,7 @@
 	float: left;
 	padding: 10px;
 	color: white;
+	overflow-y: scroll;
 	background: url(../images/mid_circle.png) center no-repeat;
 }
 
