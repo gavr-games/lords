@@ -5,6 +5,7 @@
 	else { 
 		include_once('../general_config/config.php');
 		include_once('../general_classes/sql.class.php');
+		include_once('../general_classes/google_analytics.class.php');
 		$mysqli = new mysqli($DB_conf['server'], $DB_conf['user'], $DB_conf['pass']);
 		if (mysqli_connect_errno()) {
 			    printf("Connect failed: %s\n", mysqli_connect_error());

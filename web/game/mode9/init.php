@@ -3,6 +3,7 @@
 	session_start();
 	include_once('../../general_config/config.php');
 	include_once('../../general_classes/sql.class.php');
+	include_once('../../general_classes/google_analytics.class.php');
 	
 	//check user logged in
 	if ($_SESSION['user_id']=='') header('location:'.$SITE_conf['domen']);

@@ -1,5 +1,6 @@
 <html>
 <head>
+	<?= GoogleAnalytics::globalSiteTag() ?>
 	<title>THE LORDS</title>
 	<meta name="viewport" content="width=device-width,height=device-height initial-scale=1">
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />

@@ -48,6 +48,7 @@ services:
       MYSQL_CLIENT_PASSWORD: ${MYSQL_CLIENT_PASSWORD}
       MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
       VISIBILITY: public
+      WEB_ENV: prod
     volumes:
       - ./web:/var/www/html
       - ./log/web:/var/log/apache2

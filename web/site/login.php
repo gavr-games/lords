@@ -5,6 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
+	<?= GoogleAnalytics::globalSiteTag() ?>
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 	<title>THE LORDS</title>
 	<link id="site_icon" rel="icon" href="design/images/icon_lords.ico" type="image/x-icon" />

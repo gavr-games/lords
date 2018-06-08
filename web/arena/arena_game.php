@@ -121,6 +121,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
+	<?= GoogleAnalytics::globalSiteTag() ?>
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 	<title>THE LORDS</title>
 	<script type="text/javascript" src="../general_js/mootools.js?<?php echo $SITE_conf['revision']; ?>"></script>

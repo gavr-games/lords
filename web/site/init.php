@@ -16,9 +16,9 @@ function getSeason()
 // init classes and db connection
 
 session_start();
-include_once ('../general_config/config.php');
-
-include_once ('../general_classes/sql.class.php');
+include_once('../general_config/config.php');
+include_once('../general_classes/sql.class.php');
+include_once('../general_classes/google_analytics.class.php');
 
 $mysqli = new mysqli($DB_conf['server'], $DB_conf['user'], $DB_conf['pass']);
 
