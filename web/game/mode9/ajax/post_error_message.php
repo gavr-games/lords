@@ -78,7 +78,7 @@ $html_code .= '
 </body>
 </html>';
 	$myFile = "error ".date('Y_m_d H_i s').rand(0,10000).".html";
-	$fh = fopen('../'.$myFile, 'w') or die("<b>Из-за неполадок на сервере, сообщение принять невозможно.</b>");
+	$fh = fopen('../'.$myFile, 'w') or die(L::game_error_fail);
 	fwrite($fh, $html_code);
 	fclose($fh);
 	echo '<b>'.L::game_error_success.'.</b><br />
