@@ -370,20 +370,60 @@ ul {
 	background: #d44334 !important;
 }
 
-#container .board .aim0 {
+#container .board .aim.dist0 {
 	outline: 1px dotted #33ff00;
 }
 
-#container .board .aim1 {
+#container .board .aim.dist1 {
 	outline: 1px dotted #fdee00;
 }
 
-#container .board .aim2 {
+#container .board .aim.dist2 {
 	outline: 1px dotted #ff0000;
 }
 
-#container .board .aim3 {
+#container .board .aim.dist3 {
 	outline: 1px dotted #5b5bcd;
+}
+
+#container .board .cross::before, #container .board .cross::after {
+	content: "";
+	position: absolute;
+	z-index: 0;
+}
+
+#container .board .cross.dist0::before, #container .board .cross.dist0::after {
+	background: #33ff00;
+}
+
+#container .board .cross.dist1::before, #container .board .cross.dist1::after {
+	background: #fdee00;
+}
+
+#container .board .cross.dist2::before, #container .board .cross.dist2::after {
+	background: #ff0000;
+}
+
+#container .board .cross.dist3::before, #container .board .cross.dist3::after {
+	background: #5b5bcd;
+}
+  
+#container .board .cross::before {
+	left: 50%;
+	width: 1px;
+	top: 50%;
+	margin-top: -3px;
+	margin-left: -1px;
+	height: 5px;
+}
+  
+#container .board .cross::after {
+	top: 50%;
+	height: 1px;
+	left: 50%;
+	width: 5px;
+	margin-left: -3px;
+	margin-top: -1px;
 }
 
 #container .board .activeUnit {

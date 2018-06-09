@@ -652,7 +652,8 @@ function pre_unit_shoot(){
     current_shoot_aim_types = shoot_params.aim_types;
 }
 
-function show_shoot_radius(ux,uy,shoot_params){
+function show_shoot_radius(ux, uy, shoot_params, shoot_class){
+    shoot_class = shoot_class || 'aim';
     var range_min = shoot_params.range_min;
     var range_max = shoot_params.range_max;
     for (x = ux - range_max; x <= ux + range_max; x++){
@@ -663,7 +664,8 @@ function show_shoot_radius(ux,uy,shoot_params){
                 continue;
             }
             var classNumber = distance - range_min;
-            $('board_' + x + '_' + y).addClass('aim' + classNumber);
+            $('board_' + x + '_' + y).addClass(shoot_class);
+            $('board_' + x + '_' + y).addClass('dist' + classNumber);
         }
     }
 }
@@ -817,7 +819,8 @@ function post_unit_shoot(){
     }
 }
 
-function hide_shoot_radius(ux,uy,shoot_params){
+function hide_shoot_radius(ux, uy, shoot_params, shoot_class){
+    shoot_class = shoot_class || 'aim';
     var range_min = shoot_params.range_min;
     var range_max = shoot_params.range_max;
     for (x = ux - range_max; x <= ux + range_max; x++){
@@ -827,7 +830,10 @@ function hide_shoot_radius(ux,uy,shoot_params){
                 continue;
             }
             var classNumber = distance - range_min;
-            $('board_' + x + '_' + y).removeClass('aim'+classNumber);
+            $('board_' + x + '_' + y).removeClass(shoot_class);
+            if (!$('board_' + x + '_' + y).hasClass('aim') && !$('board_' + x + '_' + y).hasClass('cross')) {
+                $('board_' + x + '_' + y).removeClass('dist'+classNumber);
+            }
         }
     }
 }
@@ -838,17 +844,19 @@ function get_shooting_params(shooter_unit_id) {
     var range_min = 99999;
     var range_max = -1;
     var aim_types = {};
-    for (i = 0; i < unit_shooting_params.length; ++i) {
-        if (unit_shooting_params[i]) {
-            if (i < range_min) {
-                range_min = i;
-            }
-            if (i > range_max) {
-                range_max = i;
-            }
-            for (aim_type in unit_shooting_params[i]) {
-                if (unit_shooting_params[i].hasOwnProperty(aim_type)) {
-                    aim_types[aim_type] = true;
+    if ($chk(unit_shooting_params)) {
+        for (i = 0; i < unit_shooting_params.length; ++i) {
+            if (unit_shooting_params[i]) {
+                if (i < range_min) {
+                    range_min = i;
+                }
+                if (i > range_max) {
+                    range_max = i;
+                }
+                for (aim_type in unit_shooting_params[i]) {
+                    if (unit_shooting_params[i].hasOwnProperty(aim_type)) {
+                        aim_types[aim_type] = true;
+                    }
                 }
             }
         }

@@ -649,6 +649,8 @@ function backlight(x, y) {
                 if (p_num >= 10) $('board_' + x + '_' + y).addClass('newtrl');
                 else $('board_' + x + '_' + y).addClass('pl' + (p_num.toInt() + 1).toString());
             }
+            // Draw shoot radius on hover
+            draw_shoot_radius(x, y);
             //SETTING A BUILDING
             if ((executable_procedure == 'put_building' && game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') || ((executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building') && game_state == 'SELECTING_EMPTY_COORD')) {
                 draw_building(x, y);
@@ -731,6 +733,8 @@ function backlight_out(x, y) {
                 if (p_num >= 10) $('board_' + x + '_' + y).removeClass('newtrl');
                 else $('board_' + x + '_' + y).removeClass('pl' + (p_num.toInt() + 1).toString());
             }
+            // Clean shoot radius on out
+            clean_shoot_radius(x, y);
             //SETTING A BUILDING
             if ((executable_procedure == 'put_building' && game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') || ((executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building') && game_state == 'SELECTING_EMPTY_COORD')) {
                 clean_building(x, y);
@@ -845,6 +849,28 @@ function changeDraw() {
     if ($('chbDraw').getProperty('checked')) execute_procedure('agree_draw');
     else execute_procedure('disagree_draw');
     do_not_in_turn = 0;
+}
+
+function draw_shoot_radius(x, y) {
+    if ($chk(board[x]) && $chk(board[x][y]) && $chk(board[x][y]['ref']) && board[x][y]['type'] == 'unit') {
+        var board_unit_id = board[x][y]['ref'];
+        var unit_id = board_units[board_unit_id]['unit_id'];
+        var shoot_params = get_shooting_params(unit_id);
+        if (shoot_params.range_max != -1) {
+            show_shoot_radius(x, y, shoot_params, 'cross');
+        }
+    }
+}
+
+function clean_shoot_radius(x, y) {
+    if ($chk(board[x]) && $chk(board[x][y]) && $chk(board[x][y]['ref']) && board[x][y]['type'] == 'unit') {
+        var board_unit_id = board[x][y]['ref'];
+        var unit_id = board_units[board_unit_id]['unit_id'];
+        var shoot_params = get_shooting_params(unit_id);
+        if (shoot_params.range_max != -1) {
+            hide_shoot_radius(x, y, shoot_params, 'cross');
+        }
+    }
 }
 
 function draw_building(x, y) {
