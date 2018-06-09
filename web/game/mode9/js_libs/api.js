@@ -346,13 +346,15 @@ function unit_add_exp(x, y, exps) {
     for (; x < maxx; x++)
         for (y = oldy; y < maxy; y++) {
             if (board_units[id]['experience'] >= units_levels[board_units[id]['unit_id'].toInt()][board_units[id]['level'].toInt() + 1] && x == maxx - 1 && y == oldy) {
-                var star = new Element('a', {
-                    'html': '',
-                    'class': 'level-star',
-                    'id': 'star_' + id,
-                    'onclick': 'show_levelup(' + id + ');'
-                });
-                $('overboard_' + x + '_' + y).grab(star, 'bottom');
+                if ($('overboard_' + x + '_' + y).getChildren('.level-star').length == 0) {
+                    var star = new Element('a', {
+                        'html': '',
+                        'class': 'level-star',
+                        'id': 'star_' + id,
+                        'onclick': 'show_levelup(' + id + ');'
+                    });
+                    $('overboard_' + x + '_' + y).grab(star, 'bottom');
+                }
             }
         }
     x = oldx;
