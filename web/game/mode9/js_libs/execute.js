@@ -479,7 +479,8 @@ function execute_unit(x, y) {
         if (units[board_units[id]["unit_id"]]['size'].toInt() > 1) $$('#board_' + x + '_' + y + ' .unitdiv').addClass('activeUnit');
         else $('board_' + x + '_' + y).addClass('activeUnit');
         unit = x + ',' + y;
-        pre_defined_param = 'unit';
+        setPreDefinedParam('unit');
+        highlight_active_unit();
         i = 0;
         var default_proc = '';
         procedures = Array();
@@ -503,12 +504,24 @@ function execute_unit(x, y) {
                     if (item['default'].toInt() == 1) {
                         default_proc = item['name'];
                     }
-                    add_action_btn(item['ui_action_name'], 'setPreDefinedParam(\'unit\');setGameState(\'WAITTING\');execute_procedure(\'' + item['name'] + '\');');
+                    add_action_btn(item['ui_action_name'], 'eval_post_function();highlight_active_unit();setPreDefinedParam(\'unit\');setGameState(\'WAITTING\');execute_procedure(\'' + item['name'] + '\');');
                 }
             });
             addCancelAction();
             if (default_proc != '') execute_procedure(default_proc);
         }
+    }
+}
+
+function highlight_active_unit(u) {
+    u = u || unit;
+    var coords = u.toString().split(',');
+    var x = coords[0].toInt();
+    var y = coords[1].toInt();
+    var id = board[x][y]["ref"];
+    if ($chk(board_units[id])) {
+        if (units[board_units[id]["unit_id"]]['size'].toInt() > 1) $$('#board_' + x + '_' + y + ' .unitdiv').addClass('activeUnit');
+        else $('board_' + x + '_' + y).addClass('activeUnit');
     }
 }
 
@@ -579,7 +592,7 @@ function clearActions() {
 function cancel_execute() {
     was_active = 0;
     stopShield();
-    if (eval("typeof post_" + executable_procedure + " == 'function'")) eval('post_' + executable_procedure + '();'); //call post-function if it exists
+    eval_post_function();
     clean_everything();
     game_state = 'WAITTING';
     executable_procedure = '';
@@ -591,6 +604,11 @@ function cancel_execute() {
     do_not_in_turn = 0;
     path_mode = false;
     playingCard = false;
+}
+
+function eval_post_function(func_name) {
+    func_name = func_name || executable_procedure;
+    if (eval("typeof post_" + executable_procedure + " == 'function'")) eval('post_' + executable_procedure + '();'); //call post-function if it exists
 }
 
 function addCancelAction() {
