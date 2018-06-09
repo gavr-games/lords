@@ -526,6 +526,7 @@ function doEndTurn() {
 function doCancel() {
     if (!chatFocused) {
         cancel_execute();
+        $('window_m').setStyle('display','none');$('window_c').set('html','');
     }
 }
 
