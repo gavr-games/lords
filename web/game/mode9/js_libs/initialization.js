@@ -245,19 +245,7 @@ function initialization() {
             });
             $('game_log').setStyle('display', 'block');
 
-            //graveyard
-            setLoadingText(i18n[USER_LANGUAGE]["loading"]["graveyard_init"]);
-            vwGrave.each(function(item, index) {
-                if (item) add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size']);
-            });
-            $('graveLink').addEvent('mouseenter', function() {
-                show_all_graves();
-            });
-            $('graveLink').addEvent('mouseleave', function() {
-                hide_all_graves();
-            });
-
-            //other
+            //active players
             setLoadingText(i18n[USER_LANGUAGE]["loading"]["other_init"]);
             active_players.each(function(item, index) {
                 if (item) {
@@ -269,6 +257,22 @@ function initialization() {
                     }
                 }
             });
+
+            //graveyard
+            setLoadingText(i18n[USER_LANGUAGE]["loading"]["graveyard_init"]);
+            vwGrave.each(function(item, index) {
+                if (item) {
+                    add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size'], item['turn_when_killed']);
+                }
+            });
+            $('graveLink').addEvent('mouseenter', function() {
+                show_all_graves();
+            });
+            $('graveLink').addEvent('mouseleave', function() {
+                hide_all_graves();
+            });
+
+            //other
             //cards_procedures_1.each(function(item,index)	{
             //	cards_procedures_ids[item['card_id']] = item;
             //});

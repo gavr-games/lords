@@ -192,6 +192,10 @@
 	position: absolute;
 }
 
+.dead_unit.necromanser-is-resurrecting {
+	opacity: 1 !important;
+}
+
 .card img,
 .dead_unit img {
 	flaot: left;

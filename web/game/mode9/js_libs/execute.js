@@ -642,7 +642,7 @@ function pre_put_building() {
     add_action_btn('refl', 'change_flip();');
 }
 
-function pre_unit_shoot(){
+function pre_unit_shoot() {
     var coords = unit.toString().split(',');
     var ux = coords[0].toInt();
     var uy = coords[1].toInt();
@@ -650,6 +650,39 @@ function pre_unit_shoot(){
     var shoot_params = get_shooting_params(shooting_unit_id);
     show_shoot_radius(ux,uy,shoot_params);
     current_shoot_aim_types = shoot_params.aim_types;
+}
+
+function pre_necromancer_resurrect() {
+    $('grave_holder').getChildren().each(function(item, index) {
+        if (item) {
+            item.addClass('necromanser-is-resurrecting');
+        }
+    });
+}
+
+function post_necromancer_resurrect() {
+    $('grave_holder').getChildren().each(function(item, index) {
+        if (item) {
+            item.removeClass('necromanser-is-resurrecting');
+        }
+    });
+    //clear green class
+    if (unit != '') {
+        var coords = unit.toString().split(',');
+        var ux = coords[0].toInt();
+        var uy = coords[1].toInt();
+        $('board_' + ux + '_' + uy).removeClass('activeUnit');
+    }
+}
+
+function post_necromancer_sucrifice() {
+    //clear green class
+    if (unit != '') {
+        var coords = unit.toString().split(',');
+        var ux = coords[0].toInt();
+        var uy = coords[1].toInt();
+        $('board_' + ux + '_' + uy).removeClass('activeUnit');
+    }
 }
 
 function show_shoot_radius(ux, uy, shoot_params, shoot_class){

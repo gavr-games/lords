@@ -1800,12 +1800,16 @@ function add_building_cell(id, p_num, mx, my, b, card_id, nrotation, nflip, i) {
     myDiv.fade('in');
 }
 
-function add_to_grave(grave_id, card_id, x, y, size) {
+function add_to_grave(grave_id, card_id, x, y, size, turn_when_killed) {
     last_executed_api = 'add_to_grave';
+    turn_when_killed = turn_when_killed || active_players['turn'];
     var myDiv = new Element('div', {
         'html': '',
         'class': 'dead_unit',
         'id': 'dead_unit' + grave_id,
+        styles: {
+            opacity: (turn_when_killed.toInt() == active_players['turn'].toInt()) ? '0.5' : '1.0'
+        },
         'onclick': 'if (game_state=="WAITTING") execute_resurrect(' + grave_id + '); else param_clicked(this); hide_grave(' + grave_id + ',' + x + ',' + y + ',' + size + ');return false;'
     }); //create div with dead_unit
     var myImg = new Element('img', {
@@ -1845,12 +1849,12 @@ function add_to_grave(grave_id, card_id, x, y, size) {
     vwGrave[grave_id]["size"] = size;
     if (graveCarousel)
         graveCarousel.toLast();
-    if (movedUnits || turn_state == NOT_MY_TURN) myDiv.fade(unactive_card);
+    if (turn_state == NOT_MY_TURN) myDiv.fade(unactive_card);
     //all cards view is opened and grave
     if (allCardsSlider.open && $('graveLink').hasClass('cementary')) {
         var newItem = myImg.clone().cloneEvents(myDiv);
         $('fullsize_holder').grab(newItem);
-        if (movedUnits || turn_state == NOT_MY_TURN) newItem.fade(unactive_card);
+        if (turn_state == NOT_MY_TURN) newItem.fade(unactive_card);
     }
 }
 
