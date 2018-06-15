@@ -1963,11 +1963,15 @@ function addBuildingTip(dom_id, id) {
     if ($chk(players_by_num[p_num])) {
         playerInfo = ' (<font color="white" face="Arial">' + players_by_num[p_num]['name'] + '</font>)';
     }
+    var b_name = building_name(building_id) + playerInfo;
+    var b_health = board_buildings[id]["health"];
+    var b_max_health = board_buildings[id]["max_health"];
+    var b_income =  board_buildings[id]["income"];
     addBoardTip(dom_id, '<table><tr><td><p class="con_img"><span><img src="../../design/images/buildings/' +
         buildings[building_id]['ui_code'] + '.png"></span></p></td><td><ul>' +
-        '<li class="name">' + building_name(building_id) + playerInfo + '</li>' +
-        '<li class="health">-&nbsp;&nbsp;' + board_buildings[id]["health"] + '/' + board_buildings[id]["max_health"] + '</li>' +
-        '<li class="income"><font color="white">-&nbsp;&nbsp;' + board_buildings[id]["income"] + '</font></li>' +
+        '<li class="name">' + b_name + '</li>' +
+        (b_health.toInt() != 0 && b_max_health.toInt() != 0 ? '<li class="health">-&nbsp;&nbsp;' + b_health + '/' + b_max_health + '</li>' : '') +
+        (b_income.toInt() > 0 ? '<li class="income"><font color="white">-&nbsp;&nbsp;' + b_income + '</font></li>' : '') +
         '</ul></td></tr></table>', '<p class="pl' + (p_num.toInt() + 1).toString() + '"></p>' +
         '<p style="padding:4px 7px 5px 7px;">' + effects + building_description(building_id) + '</p>', 'hintTip buildtip' + id);
 }
