@@ -212,6 +212,8 @@ body {
 }
 #log_cont #log_form hr {
 	width: 390px;
+	float: left;
+	margin-left: 100px;
 }
  #log_cont .winter  {
 	background:  url(../../images/pregame/loginbg_winter.png) top left  no-repeat !important;
@@ -234,7 +236,7 @@ body {
 }
 #log_cont #log_form .reg {
 	float:left;
-	margin:10px 40px 0px 10px;
+	margin:4px 40px 0px 10px;
 }
 #log_cont #log_form .button {
 	float:right;
