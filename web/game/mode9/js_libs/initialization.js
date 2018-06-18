@@ -2177,7 +2177,7 @@ function changeTitle() {
         });
         document.getElement('head').grab(favicon, 'bottom');
     } else {
-        document.title = 'Ваш ход - ' + winTitle;
+        document.title = i18n[USER_LANGUAGE]['game']['your_turn'] + ' - ' + winTitle;
         if ($('site_icon')) $('site_icon').dispose();
         var favicon = new Element('link', {
             'href': '../../design/images/icon_attention.ico',
