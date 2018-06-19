@@ -310,9 +310,9 @@ body {
 /*    map page   */
 .map {
 	background:  url(../../images/pregame/mapbg.png) top left  no-repeat;
-	width:976px;
-	height:520px;
-	padding:315px 0px 0px 180px;
+	width:1026px;
+	height:570px;
+	padding:250px 0px 0px 50px;
 }
 .map .prof {
 	position:absolute;
@@ -359,7 +359,7 @@ body {
 	font-family: 'edissonregular', 'Times New Roman', Times, serif;
 	font-size: 24px;
 	color: #482313;
-	width: 880px;
+	width: 980px;
 	display: flex;
     flex-direction: row;
 }

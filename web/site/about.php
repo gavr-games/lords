@@ -1,5 +1,6 @@
 <?php
 	include_once('init.php');
+	include_once('../general_classes/rules.class.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -28,29 +29,7 @@
 	<div id="wrap" class="map">
 		<div id="map">
 			<div id="opened_map">
-				<div class="col">
-					<h3><?= L::about_about ?></h3>
-					<?= L::about_short_description ?>
-					<br />
-					<br />
-					<h3><?= L::about_gameplay ?></h3>
-					<video width="320" height="240" controls>
-						<source src="../design/video/gameplay.mp4" type="video/mp4">
-					</video>
-				</div>
-				<div class="col">
-					<h3><?= L::about_features ?></h3>
-					<ul>
-						<li>
-						<?= str_replace(' | ', '</li><li>', L::about_features_list) ?>
-						</li>
-					</ul>
-					<br />
-					<br />
-					<a href="arena/" onclick="if (!parent.window_loading) {parent.load_window('site/login.php','right');} return false;" class="login-arena-btn">
-						<?= L::about_login_arena ?>
-					</a>
-				</div>
+				<?= Rules::getHtml(LangUtils::getCurrentLangCode($_SESSION['lang'])) ?>
 			</div>
 		</div>
         <span class="topbutton back"><a href="#" id="back_b" onclick="if (!parent.window_loading) {doLoading($('back_b'), '<?= L::loading_text ?>');parent.load_window('site/login.php','right');} return false;"><?= L::back ?></a></span>
