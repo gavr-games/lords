@@ -173,11 +173,4 @@
 		<span class="topbutton ru"><a href="/site/lang.php?lang=ru">RU</a></span>
 		<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'), '<?= L::loading_text ?>');return false;"><?= L::do_exit ?></a></span>
 	</div>
-		<div id="footer"> 
-	    	© <?php 
-		$copyYear = 2010; 
-		$curYear = date('Y'); 
-		echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
-		?> "THE LORDS"
-	    </div>
 </body>

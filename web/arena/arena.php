@@ -137,9 +137,6 @@ $markers['###JS_ARRAYS###'] .= 'my_user_id = ' . $_SESSION['user_id'] . ';' . ch
 $markers['###JS_ARRAYS###'] .= $js_arrays;
 $markers['###IFRAME_LINK###'] = $iframe_link;
 $markers['###REVISION###'] = $SITE_conf['revision'];
-$copyYear = 2010;
-$curYear = date('Y');
-$markers['###COPY###'] = '© ' . $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '') . ' "THE LORDS"';
 $markers['###USER_LANGUAGE###'] = LangUtils::getCurrentLangNumber($_SESSION['lang']);
 $markers['###GOOGLE_ANALYTICS###'] = GoogleAnalytics::globalSiteTag();
 

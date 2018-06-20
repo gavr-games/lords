@@ -266,14 +266,6 @@
 		}
 	?>
 	</div><!--/#board-->
-			 <div id="footer"> 
-			 <?php
-			   $copyYear = 2010;
-			   $curYear = date('Y');
-			   $copy = '© ' . $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '') . ' "THE LORDS"';
-			 ?>
-                <img id="get_commands_indicator" src="../../design/images/ajax-loader.gif" style="display:none;"><?= $copy ?><!----><!----><!----><!---->
-             </div><!-- /#footer -->
              
         </div><!-- /#conteiner -->
 	</div><!-- /#wrap -->

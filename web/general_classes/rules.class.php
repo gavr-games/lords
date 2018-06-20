@@ -8,4 +8,8 @@ class Rules {
     public static function getHtml($lang) {
         return '<iframe width="1020" height="544" scrolling="yes" style="overflow-y:scroll;" src="' . self::RULES_DOCS[$lang] . '"></iframe>';
     }
+
+    public static function getEmbedUrl($lang) {
+        return self::RULES_DOCS[$lang];
+    }
 }

@@ -43,12 +43,4 @@
 	    </div>
 	    
 	</div>
-	<div id="footer"> 
-    	© <?php 
-		$copyYear = 2010; 
-		$curYear = date('Y'); 
-		echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
-		?> "THE LORDS"
-    </div>
-
 </body>

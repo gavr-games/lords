@@ -3,6 +3,8 @@ var current_window;
 var old_window;
 var panorFx;
 var window_loading = false;
+var width_correction = 0;
+var height_correction = 0;
 
 window.addEvent('resize', function() {
     screen_size = window.getSize();
@@ -11,8 +13,8 @@ window.addEvent('resize', function() {
     $('panor').setStyle('height', screen_size.y);
     $('rel').setStyle('min-height', screen_size.y);
     if (current_window) {
-        current_window.setStyle('width', screen_size.x);
-        current_window.setStyle('height', screen_size.y);
+        current_window.setStyle('width', screen_size.x + width_correction);
+        current_window.setStyle('height', screen_size.y + height_correction);
     }
 });
 window.addEvent('domready', function() {
@@ -40,8 +42,8 @@ window.addEvent('domready', function() {
         'src': load_frame,
         'class': 'window',
         'styles': {
-            'width': screen_size.x,
-            'height': screen_size.y,
+            'width': screen_size.x + width_correction,
+            'height': screen_size.y + height_correction,
             'left': 15000,
             'z-index': 1000,
             'opacity': 0
@@ -63,8 +65,8 @@ function load_window(src, dir) {
         'class': 'window',
         'onload': '//current_window.contentWindow.document.body.style.overflow = "hidden";',
         'styles': {
-            'width': screen_size.x,
-            'height': screen_size.y,
+            'width': screen_size.x + width_correction,
+            'height': screen_size.y + height_correction,
             'left': x_offset
         },
         'allowtransparency': 'true'
