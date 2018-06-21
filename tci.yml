@@ -1,4 +1,8 @@
 steps:
+  - command: mkdir -p log
+  - command: mkdir -p log/ai
+  - command: mkdir -p log/web
+  - command: mkdir -p log/web-internal
   - command: docker exec $(docker ps -q -f name=lords_db) /database/bin/create_dump.sh
     shell: true
   - command: docker service create --name registry --publish published=5000,target=5000 registry:2
@@ -15,8 +19,8 @@ steps:
     shell: true
   - command: docker exec $(docker ps -q -f name=lords_db) /database/bin/lords_db_update.sh
     shell: true
-  - command: docker exec $(docker ps -q -f name=lords_web) curl http://127.0.0.1/cron/generate_static_js_libs.php
+  - command: docker exec $(docker ps -q -f name=lords_web-internal) curl http://127.0.0.1/cron/generate_static_js_libs.php
     shell: true
-  - command: docker exec $(docker ps -q -f name=lords_web) curl http://127.0.0.1/cron/generate_static_js_libs_site.php
+  - command: docker exec $(docker ps -q -f name=lords_web-internal) curl http://127.0.0.1/cron/generate_static_js_libs_site.php
     shell: true
   - command: docker stack services lords
