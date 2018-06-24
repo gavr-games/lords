@@ -7,14 +7,9 @@
 MYSQL="mysql"
 MYSQLDUMP="mysqldump"
 
-# Remove dump directory if it exists
 DUMP_DIR="database/dump"
-if [ -d $DUMP_DIR ]; then
-    echo "Removing $DUMP_DIR"
-    rm -r $DUMP_DIR
-fi
 
-mkdir $DUMP_DIR
+mkdir -p $DUMP_DIR
 
 USERNAME="root"
 PASSWORD="root"
@@ -34,6 +29,11 @@ for DB in $DBS
         
         TABLES_DIR="$DUMP_DIR/$DB/tables"
         ROUTINES_DIR="$DUMP_DIR/$DB/routines"
+
+        if [ -d $DUMP_DIR/$DB ]; then
+                echo "Removing $DUMP_DIR/$DB"
+                rm -r $DUMP_DIR/$DB
+        fi
 
         if [ ! -d "$DUMP_DIR/$DB" ]; then
                 mkdir "$DUMP_DIR/$DB"
