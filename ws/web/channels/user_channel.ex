@@ -53,7 +53,7 @@ defmodule LordsWs.UserChannel do
   end
 
   def handle_in("game_protocol_cmd", %{"json_params" => json_params}, socket) do
-    start = :os.system_time()
+    start = :os.system_time(:millisecond)
     url = "http://web/site/ajax/game_protocol.php?phpsessid=#{socket.assigns.token}"
     params = Jason.decode!(json_params)
     if params["proc_name"] == "multi" do

@@ -5,7 +5,7 @@ defmodule LordsWs.Game.ProcessCmd do
     def run(%{game: game, answer: ans, user_id: user_id, params: params}) do
         if Map.has_key?(params, "proc_uid") do
             if ans["header_result"]["success"] == "1" do
-                cmd = "proc_answer(#{params["proc_uid"]},1,0,\"\",#{:os.system_time() - params["start"]},#{ans["phptime"]});"
+                cmd = "proc_answer(#{params["proc_uid"]},1,0,\"\",#{:os.system_time(:millisecond) - params["start"]},#{ans["phptime"]});"
                 LordsWs.Endpoint.broadcast "game:#{game["game_id"]}", "game_raw", %{commands: URI.encode(cmd)}
             else
                 cmd = "proc_answer(#{params["proc_uid"]},0,#{ans["header_result"]["error_code"]},\"#{ans["header_result"]["error_params"]}\");"

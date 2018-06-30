@@ -67,5 +67,5 @@ Validate deployed services:
 - `docker stack services lords` - replicas should be 1/1, not 0/1
 - run database updates `docker exec -it $(docker ps -q -f name=lords_db) /database/bin/lords_db_update.sh`
 - see the list of containers with errors `docker stack ps lords --no-trunc`
-
+- see service logs `docker service logs --tail="200" lords_ws` replace ws with service name
 
