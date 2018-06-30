@@ -2075,35 +2075,24 @@ function removeBuildingTip(id, b_id) {
 
 function play_video(code, file_name) {
     last_executed_api = 'play_video';
-    var obj = new Swiff('../../design/video/' + file_name, {
-        width: 500,
-        height: 400,
-        params: {
-            wmode: 'opaque',
-            bgcolor: '#000000'
-        }
+    var obj = new Element('video', {
+        'src': '../../design/video/' + file_name,
+        'width': 480,
+        'height': 270,
+        'autoplay': true,
+        'loop': 'loop'
     });
     $('window_c').grab(obj, 'bottom');
     $('window_h').set('text', video_title(code));
     $('window_c').setStyle('width', 500);
-    $('window_c').setStyle('height', 400);
+    $('window_c').setStyle('height', 310);
     $('window_m').setStyle('display', 'block');
     $('window_w').position();
 }
 
 function play_sound(file_name) {
-    var olds = $$('.sound');
-    olds.each(function(item, index) {
-        if (item && !Browser.ie) {
-            item.destroy();
-        }
-    });
-    var obj = new Swiff('../../design/sounds/' + file_name, {
-        properties: {
-            'class': 'sound'
-        }
-    });
-    document.body.grab(obj, 'bottom');
+    var snd = new Audio('../../design/sounds/' + file_name);
+    snd.play();
 }
 
 function end_game() {
@@ -2118,9 +2107,9 @@ function end_game() {
     var text = '<a href="#" onclick="get_stats();return false;">' + i18n[USER_LANGUAGE]['game']['show_statistic'] + '</a><br><a href="#" onclick="execute_exit();return false;">' + i18n[USER_LANGUAGE]['game']['exit'] + '</a>';
     noCloseWindow = true;
     if ($('window_m').getStyle('display') == 'block')
-        appendWindow(i18n[USER_LANGUAGE]['game']['game_end'], text, 500, 500, true);
+        appendWindow(i18n[USER_LANGUAGE]['game']['game_end'], text, 500, 310, true);
     else
-        showWindow(i18n[USER_LANGUAGE]['game']['game_end'], text, 200, 60, true);
+        showWindow(i18n[USER_LANGUAGE]['game']['game_end'], text, 200, 310, true);
 }
 
 function get_stats() {
@@ -2453,7 +2442,7 @@ function activateMyMove() {
     shieldInterval = setInterval(changeShield, 1000);
     clearInterval(titleInterval);
     titleInterval = setInterval(changeTitle, 2000);
-    if (noSound == 0) play_sound('your_move.swf');
+    if (noSound == 0) play_sound('your_move.wav');
 }
 
 function update_next_turn_timer(left_seconds) {

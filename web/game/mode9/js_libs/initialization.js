@@ -2138,7 +2138,7 @@ function showWindow(title, text, w, h, hideCloseButton) {
 }
 
 function appendWindow(title, text, w, h, hideCloseButton) {
-    $('window_h').set('text', $('window_h').get('text') + title);
+    $('window_h').set('text', $('window_h').get('text') + ' ' + title);
     $('window_c').set('html', $('window_c').get('html') + text);
     $('window_c').setStyle('width', w);
     $('window_c').setStyle('height', h);
