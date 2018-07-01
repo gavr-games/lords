@@ -1420,8 +1420,6 @@ function move_anim(x, y, x2, y2, size) {
 }
 
 function deactivate_buy_ressurect_play_card() {
-    if (!movedUnits) {
-        movedUnits = true;
         deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
         $('cards_holder').getChildren().each(function(item, index) {
             if (item) {
@@ -1433,7 +1431,6 @@ function deactivate_buy_ressurect_play_card() {
                 item.fade(unactive_card);
             }
         });
-    }
 }
 
 function building_set_health(x, y, health) {

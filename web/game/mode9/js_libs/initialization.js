@@ -1380,22 +1380,42 @@ function draw_shooting(x, y) {
             if (board_units[id]["moves_left"].toInt() > 0 && !$chk(board_units[id]['paralich'])) { //can move
                 if ($chk(board[x]) && $chk(board[x][y]) && $chk(board[x][y]['ref'])) { //there is something to shot at
                     var target_type = board[x][y]['type'];
-                    var x_dist = Math.abs(x - ux);
-                    var y_dist = Math.abs(y - uy);
+                    var target_ref  = board[x][y]['ref'];
+                    var dist = Math.max(Math.abs(ux - x), Math.abs(uy - y));
+                    //get min dist
+                    board.each(function(items, index) {
+                        if (items) items.each(function(item, index) {
+                            if (item)
+                                if (item["ref"] == target_ref) {
+                                    var new_dist = Math.max(Math.abs(ux - item["x"].toInt()), Math.abs(uy - item["y"].toInt()));
+                                    if (new_dist < dist) {
+                                        dist = new_dist;
+                                    }
+                                }
+                        });
+                    });
                     var target_p_num;
                     //can shoot at target
-                    if (shooting_params["aim_types"][target_type] && ((x_dist >= shooting_params["range_min"] && x_dist <= shooting_params["range_max"]) || (y_dist >= shooting_params["range_min"]  && y_dist <= shooting_params["range_max"]))) {
+                    if (shooting_params["aim_types"][target_type] && dist >= shooting_params["range_min"] && dist <= shooting_params["range_max"]) {
                         if (target_type == 'unit') {
                             target_p_num = board_units[board[x][y]['ref']]['player_num'];
                         } else {
                             target_p_num = board_buildings[board[x][y]['ref']]['player_num'];
                         }
+                        var can_shoot = false;
                         if (players_by_num[target_p_num] && board_units[id]['player_num'] != target_p_num && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[target_p_num]['team']) {
+                            can_shoot = true;
+                        }
+                        if (!players_by_num[target_p_num] && target_type != 'unit') { //trees, bridge, etc
+                            can_shoot = true;
+                        }
+                        if (can_shoot) {
                             addAttackClass(x, y);
                             show_shoot_radius(ux, uy, shooting_params);
                             $('overboard').addClass('cursor_shoot');
                             $('overboard_' + x + '_' + y).addClass('cursor_shoot');
                             do_shoot = true;
+                            return true;
                         }
                     }
                 }
@@ -1638,6 +1658,10 @@ function draw_unit(x, y) {
                 while (x_path[i] != -1 && y_path[i] != -1 && board_units[id]["moves_left"].toInt() != i) {
                     //something on the path
                     if ($chk(board[x_path[i]]) && $chk(board[x_path[i]][y_path[i]]) && $chk(board[x_path[i]][y_path[i]]['ref'])) {
+                        if (shooting_params["range_max"] != -1) {
+                            clean_unit(x, y);
+                            return;
+                        }
                         if (board[x_path[i]][y_path[i]]['type'] == 'unit' && board[x_path[i]][y_path[i]]['ref'] == id) {
 
                         } else if (size > 1 && path_actions[i] == 'a') { //if the dragon last move is attack
