@@ -58,6 +58,8 @@ var path_actions = new Array();
 var path_mode = false;
 var path_moves = 0;
 
+var do_shoot = false;
+
 var no_backlight = false;
 var multiple_action_unit_id = false;
 var after_commands = '';
@@ -634,6 +636,7 @@ function sendChatMessage() {
         $('chat_cnt').set('html', '0');
     } else $('chat_text').set('value', '');
 }
+
 //change color of cells on mouseover, show info boxes
 function backlight(x, y) {
     try {
@@ -695,7 +698,7 @@ function backlight(x, y) {
                                             if (board[x] && board[x][y])
                                                 if (board[x][y]['type'] in shoot_params.aim_types) {
                                                     $('board_' + x + '_' + y).addClass('attackUnit');
-                                                    $('overboard_' + x + '_' + y).addClass('cursor_attack');
+                                                    $('overboard_' + x + '_' + y).addClass('cursor_shoot');
                                                 }
                                     } else
                                         //SELECTING MY UNIT
@@ -776,7 +779,7 @@ function backlight_out(x, y) {
                                             if (game_state == 'SELECTING_SHOOT_TARGET') {
                                                 if (board[x] && board[x][y]) {
                                                     $('board_' + x + '_' + y).removeClass('attackUnit');
-                                                    $('overboard_' + x + '_' + y).removeClass('cursor_attack');
+                                                    $('overboard_' + x + '_' + y).removeClass('cursor_shoot');
                                                 }
                                             } else
                                                 //SELECTING A UNIT
@@ -1362,6 +1365,70 @@ function getUnitPath(ux, uy, x, y, knight, size) {
     }
 }
 
+// draws shooting on player move unit, returns true, if there was something to draw
+function draw_shooting(x, y) {
+    var coords = unit.toString().split(',');
+    var ux = coords[0].toInt();
+    var uy = coords[1].toInt();
+    var id;
+    var munit;
+    if ($chk(board[ux]) && $chk(board[ux][uy]) && $chk(board[ux][uy]['ref'])) {
+        id = board[ux][uy]["ref"];
+        munit = units[board_units[id]["unit_id"]];
+        var shooting_params = get_shooting_params(munit['id']);
+        if (shooting_params["range_max"] != -1) { //unit can shoot
+            if (board_units[id]["moves_left"].toInt() > 0 && !$chk(board_units[id]['paralich'])) { //can move
+                if ($chk(board[x]) && $chk(board[x][y]) && $chk(board[x][y]['ref'])) { //there is something to shot at
+                    var target_type = board[x][y]['type'];
+                    var x_dist = Math.abs(x - ux);
+                    var y_dist = Math.abs(y - uy);
+                    var target_p_num;
+                    //can shoot at target
+                    if (shooting_params["aim_types"][target_type] && ((x_dist >= shooting_params["range_min"] && x_dist <= shooting_params["range_max"]) || (y_dist >= shooting_params["range_min"]  && y_dist <= shooting_params["range_max"]))) {
+                        if (target_type == 'unit') {
+                            target_p_num = board_units[board[x][y]['ref']]['player_num'];
+                        } else {
+                            target_p_num = board_buildings[board[x][y]['ref']]['player_num'];
+                        }
+                        if (players_by_num[target_p_num] && board_units[id]['player_num'] != target_p_num && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[target_p_num]['team']) {
+                            addAttackClass(x, y);
+                            show_shoot_radius(ux, uy, shooting_params);
+                            $('overboard').addClass('cursor_shoot');
+                            $('overboard_' + x + '_' + y).addClass('cursor_shoot');
+                            do_shoot = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+function clean_shooting(x, y) {
+    do_shoot = false;
+
+    var coords = unit.toString().split(',');
+    var ux = coords[0].toInt();
+    var uy = coords[1].toInt();
+    var id;
+    var munit;
+    if ($chk(board[ux]) && $chk(board[ux][uy]) && $chk(board[ux][uy]['ref'])) {
+        id = board[ux][uy]["ref"];
+        munit = units[board_units[id]["unit_id"]];
+        var shooting_params = get_shooting_params(munit['id']);
+        if (shooting_params["range_max"] != -1) { //unit can shoot
+            if (board_units[id]["moves_left"].toInt() > 0 && !$chk(board_units[id]['paralich'])) { //can move
+                if ($chk(board[x]) && $chk(board[x][y]) && $chk(board[x][y]['ref'])) { //there is something to shot at
+                    removeAttackClass(x, y);
+                    hide_shoot_radius(ux, uy, shooting_params);
+                }
+            }
+        }
+    }
+    return false;
+}
+
 function draw_unit(x, y) {
     var found_move = false;
     var move_kind = 'move';
@@ -1375,9 +1442,14 @@ function draw_unit(x, y) {
     var ty = 0;
     var tid;
     var makeGreen;
+    var shooting_params;
+    if (draw_shooting(x, y)) { //exit if we draw shooting
+        return;
+    }
     if ($chk(board[ux]) && $chk(board[ux][uy]) && $chk(board[ux][uy]['ref'])) {
         id = board[ux][uy]["ref"];
         size = units[board_units[id]["unit_id"]]['size'].toInt();
+        shooting_params = get_shooting_params(board_units[id]["unit_id"]);
         if (size > 1) {
             //get left up corner
             board.each(function(items, index) {
@@ -1391,6 +1463,7 @@ function draw_unit(x, y) {
             });
         }
         //teleport
+        var distance = 999999;
         board_buildings.each(function(item, index) {
             if (item)
                 if ($chk(players_by_num[item['player_num']])) //player num 9 for trees,moat ... doesnt exists
@@ -1402,8 +1475,14 @@ function draw_unit(x, y) {
                             if (items) items.each(function(item, index) {
                                 if (item)
                                     if (item["ref"] == tid && item["type"] == "building") {
-                                        tx = item["x"].toInt();
-                                        ty = item["y"].toInt();
+                                        var a = x - item["x"].toInt();
+                                        var b = y - item["y"].toInt();
+                                        var dist = Math.sqrt(a*a + b*b);
+                                        if (dist < distance) { // in case of 2 teleports
+                                            distance = dist;
+                                            tx = item["x"].toInt();
+                                            ty = item["y"].toInt();
+                                        }
                                     }
                             });
                         });
@@ -1447,13 +1526,13 @@ function draw_unit(x, y) {
                         } else {
                             if (((x >= ux - 1 && x <= ux + 1) && (y >= uy - 1 && y <= uy + 1) && !$chk(board_units[id]["knight"])) || ($chk(board_units[id]["knight"]) && ((Math.abs(x - ux) == 1 && Math.abs(y - uy) == 2) || (Math.abs(x - ux) == 2 && Math.abs(y - uy) == 1))))
                                 if (ux != x || uy != y)
-                                    if (board[x][y]['type'] == 'unit') {
+                                    if (board[x][y]['type'] == 'unit' && shooting_params["range_max"] == -1) {
                                         if (board_units[id]['player_num'] != board_units[board[x][y]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_units[board[x][y]['ref']]['player_num']]['team']) {
                                             addAttackClass(x, y);
                                             move_kind = 'attack';
                                             found_move = true;
                                         }
-                                    } else if (board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') {
+                                    } else if ((board[x][y]['type'] == 'building' || board[x][y]['type'] == 'castle') && shooting_params["range_max"] == -1) {
                                 if (!players_by_num[board_buildings[board[x][y]['ref']]['player_num']] || (board_units[id]['player_num'] != board_buildings[board[x][y]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_buildings[board[x][y]['ref']]['player_num']]['team'])) {
                                     addAttackClass(x, y);
                                     move_kind = 'attack';
@@ -1488,13 +1567,13 @@ function draw_unit(x, y) {
                                                 if (board[mx][my])
                                                     if (board[mx][my]["ref"])
                                                         if (board[mx][my]['ref'] != id)
-                                                            if (board[mx][my]['type'] == 'unit') {
+                                                            if (board[mx][my]['type'] == 'unit' && shooting_params["range_max"] == -1) {
                                                                 if (board_units[id]['player_num'] != board_units[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_units[board[mx][my]['ref']]['player_num']]['team']) {
                                                                     addAttackClass(mx, my);
                                                                     move_kind = 'attack';
                                                                     found_move = true;
                                                                 }
-                                                            } else if (board[mx][my]['type'] == 'building' || board[mx][my]['type'] == 'castle') {
+                                                            } else if ((board[mx][my]['type'] == 'building' || board[mx][my]['type'] == 'castle') && shooting_params["range_max"] == -1) {
                                 if (board_units[id]['player_num'] != board_buildings[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_buildings[board[mx][my]['ref']]['player_num']]['team']) {
                                     addAttackClass(mx, my);
                                     move_kind = 'attack';
@@ -1531,13 +1610,13 @@ function draw_unit(x, y) {
                                             if (board[mx][my])
                                                 if (board[mx][my]["ref"])
                                                     if (board[mx][my]['ref'] != id)
-                                                        if (board[mx][my]['type'] == 'unit') {
+                                                        if (board[mx][my]['type'] == 'unit' && shooting_params["range_max"] == -1) {
                                                             if (board_units[id]['player_num'] != board_units[board[mx][my]['ref']]['player_num'] && players_by_num[board_units[id]['player_num']]['team'] != players_by_num[board_units[board[mx][my]['ref']]['player_num']]['team']) {
                                                                 addAttackClass(mx, my);
                                                                 move_kind = 'attack';
                                                                 found_move = true;
                                                             }
-                                                        } else if (board[mx][my]['type'] == 'building' || board[mx][my]['type'] == 'castle') {
+                                                        } else if ((board[mx][my]['type'] == 'building' || board[mx][my]['type'] == 'castle') && shooting_params["range_max"] == -1) {
                                 if (!players_by_num[board_buildings[board[mx][my]['ref']]['player_num']]
                                   ||(
                                       board_units[id]['player_num'] != board_buildings[board[mx][my]['ref']]['player_num']
@@ -1564,12 +1643,12 @@ function draw_unit(x, y) {
                         } else if (size > 1 && path_actions[i] == 'a') { //if the dragon last move is attack
                             for (mx = x_path[i]; mx < x_path[i] + size; mx++)
                                 for (my = y_path[i]; my < y_path[i] + size; my++) {
-                                    if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
+                                    if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref']) && shooting_params["range_max"] == -1) {
                                         $('board_' + mx + '_' + my).addClass('attackUnit');
                                         move_kind = 'attack';
                                     }
                                 }
-                        } else {
+                        } else if (shooting_params["range_max"] == -1) {
                             addAttackClass(x_path[i], y_path[i]);
                             move_kind = 'attack';
                         }
@@ -1577,7 +1656,7 @@ function draw_unit(x, y) {
                         if (size > 1 && path_actions[i] == 'a') { //if the dragon last move is attack
                             for (mx = x_path[i]; mx < x_path[i] + size; mx++)
                                 for (my = y_path[i]; my < y_path[i] + size; my++) {
-                                    if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref'])) {
+                                    if ($chk(board[mx]) && $chk(board[mx][my]) && $chk(board[mx][my]['ref']) && shooting_params["range_max"] == -1) {
                                         $('board_' + mx + '_' + my).addClass('attackUnit');
                                         move_kind = 'attack';
                                     }
@@ -1609,11 +1688,12 @@ function draw_unit(x, y) {
 }
 
 function clean_unit(x, y) {
-
     $('overboard').removeClass('cursor_move');
     $('overboard_' + x + '_' + y).removeClass('cursor_move');
     $('overboard').removeClass('cursor_attack');
     $('overboard_' + x + '_' + y).removeClass('cursor_attack');
+    $('overboard').removeClass('cursor_shoot');
+    $('overboard_' + x + '_' + y).removeClass('cursor_shoot');
 
     var coords = unit.toString().split(',');
     var ux = coords[0].toInt();
@@ -1623,6 +1703,7 @@ function clean_unit(x, y) {
     var mx;
     var my;
     var i = 0;
+    clean_shooting(x, y);
     if ($chk(board[ux]) && $chk(board[ux][uy]) && $chk(board[ux][uy]['ref'])) {
         id = board[ux][uy]["ref"];
         size = units[board_units[id]["unit_id"]]['size'].toInt();

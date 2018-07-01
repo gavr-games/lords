@@ -2489,6 +2489,7 @@ function clean_everything() {
     var ny = 0;*/
     $('overboard').removeClass('cursor_move');
     $('overboard').removeClass('cursor_attack');
+    $('overboard').removeClass('cursor_shoot');
     backlight_out(mouse_x, mouse_y);
     if (building != "") {
         var coords = building.toString().split(',');

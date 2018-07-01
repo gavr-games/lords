@@ -250,6 +250,8 @@ function board_clicked(x, y) {
             $('overboard_' + x + '_' + y).removeClass('cursor_move');
             $('overboard').removeClass('cursor_attack');
             $('overboard_' + x + '_' + y).removeClass('cursor_attack');
+            $('overboard').removeClass('cursor_shoot');
+            $('overboard_' + x + '_' + y).removeClass('cursor_shoot');
             if (executable_procedure == 'player_move_unit') {
                 var coords = unit.toString().split(',');
                 ux = coords[0].toInt();
@@ -268,6 +270,18 @@ function board_clicked(x, y) {
                         });
                     });
                     unit = ux + ',' + uy;
+                }
+                //shoot as default action
+                if (board[x] && board[x][y] && do_shoot && $('board_' + x + '_' + y).hasClass('attackUnit')) {
+                    game_state = 'SELECTED_SHOOT_TARGET';
+                    executable_procedure = 'unit_shoot';
+                    selected_params++;
+                    shoot_target = x.toString() + ',' + y.toString();
+                    if (eval("typeof on_shoot_target_select == 'function'")) eval('on_shoot_target_select();'); //call on_param_select function if exists
+                    $('board_' + x + '_' + y).removeClass('attackUnit');
+                    execute_procedure(executable_procedure);
+                    do_shoot = false;
+                    return 1;
                 }
                 if (path_mode) { //make several actions
                     if (x_path[0] == -1 || y_path[0] == -1) return 1;
@@ -848,8 +862,9 @@ function post_unit_shoot(){
         var coords = shoot_target.toString().split(',');
         var tx = coords[0].toInt();
         var ty = coords[1].toInt();
-        $('overboard_' + tx + '_' + ty).removeClass('cursor_attack');
+        $('overboard_' + tx + '_' + ty).removeClass('cursor_shoot');
     }
+    do_shoot = false;
 }
 
 function hide_shoot_radius(ux, uy, shoot_params, shoot_class){

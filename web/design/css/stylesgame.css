@@ -1160,6 +1160,10 @@ ul {
 	cursor: url(../images/cursor_attack.cur), crosshair !important;
 }
 
+.cursor_shoot {
+	cursor: url(../images/cursor_shoot.cur), crosshair !important;
+}
+
 #cancel_action {
 	position: absolute;
 	height: 10000px;
