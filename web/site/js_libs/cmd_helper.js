@@ -20,6 +20,9 @@ function getErrorMsg(code, params) {
 
 function showError(code, params) {
     alert(getErrorMsg(code, params));
+    if (current_window.contentWindow.$ && current_window.contentWindow.$('i_frame') && current_window.contentWindow.$('i_frame').contentWindow.$) {
+        current_window.contentWindow.$('i_frame').contentWindow.$$('.loading').removeClass('loading')
+    }
     if (code == '004' || code == '1003') window.location.reload();
 }
 

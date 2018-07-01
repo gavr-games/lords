@@ -122,6 +122,7 @@ function exitGame() {
 }
 
 function startGame() {
+    $('start_game').addClass('loading');
     parent.parent.WSClient.sendLoggedProtocolCmd({
         action: 'arena_game_start',
         params: {

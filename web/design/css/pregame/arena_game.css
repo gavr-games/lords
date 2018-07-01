@@ -209,6 +209,13 @@ h3.arena_header {
 	padding:5px 0px 0px 0px;
 }
 
+.loading{
+	text-decoration:none !important;
+	color: #515150;
+	border: 1px solid #515150;
+	background:  url(../../images/pregame/loading.gif) top left repeat;
+}
+
 .current_game .content .btn{
 	display: block;
     width: 205px;
@@ -225,4 +232,5 @@ h3.arena_header {
 
 .current_game .content .btn:hover{
 	border: 1px solid #3f3f3f;
+	color: black;
 }

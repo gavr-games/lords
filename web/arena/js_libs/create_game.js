@@ -19,6 +19,7 @@ function validateForm(button, pass_mismatch, fields_blank) {
         button.addClass('loading');
         var passwd = '"' + $('pass_i').get('value').replace(new RegExp('"', 'g'), '\\"') + '"';
         if (passwd == '""') passwd = 'null';
+        button.addClass('loading');
         parent.parent.WSClient.sendLoggedProtocolCmd({
             action: 'arena_game_create',
             params: {

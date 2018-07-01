@@ -169,7 +169,7 @@
 						<?php echoFeatures($features); ?>
 					</div>
 					<a class="btn" href="#" onclick="addBot();return false;"><?= L::arena_game_add_bot ?></a>
-					<a class="btn" href="#" onclick="startGame();return false;"><?= L::arena_game_start ?></a>
+					<a class="btn" href="#" onclick="startGame();return false;" id="start_game"><?= L::arena_game_start ?></a>
 					
 					<?php } ?>
 					<br/>

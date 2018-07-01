@@ -2109,7 +2109,7 @@ function end_game() {
     if ($('window_m').getStyle('display') == 'block')
         appendWindow(i18n[USER_LANGUAGE]['game']['game_end'], text, 500, 310, true);
     else
-        showWindow(i18n[USER_LANGUAGE]['game']['game_end'], text, 200, 310, true);
+        showWindow(i18n[USER_LANGUAGE]['game']['game_end'], text, 200, 200, true);
 }
 
 function get_stats() {

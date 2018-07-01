@@ -114,3 +114,22 @@ h3.arena_header {
 	border: 1px solid #515150;
 	background:  url(../../images/pregame/loading.gif) top left repeat;
 }
+
+.create_game .btn{
+	display: block;
+    width: 205px;
+    height: 36px;
+    font-family: Lucida Grande;
+    font-size: 13px;
+    color: #4b4b4b;
+    border: 1px solid #9d9379;
+    line-height: 34px;
+    text-decoration: none;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.create_game .btn:hover{
+	border: 1px solid #3f3f3f;
+	color: black;
+}
