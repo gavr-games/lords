@@ -2073,15 +2073,19 @@ function removeBuildingTip(id, b_id) {
     });
 }
 
-function play_video(code, file_name) {
+function play_video(code, file_name, loop) {
     last_executed_api = 'play_video';
     var obj = new Element('video', {
         'src': '../../design/video/' + file_name,
         'width': 480,
         'height': 270,
-        'autoplay': true,
-        'loop': 'loop'
+        'autoplay': true
     });
+    if (loop) {
+        obj.loop = 'loop';
+    } else {
+        obj.onended = doCancel;
+    }
     $('window_c').grab(obj, 'bottom');
     $('window_h').set('text', video_title(code));
     $('window_c').setStyle('width', 500);
