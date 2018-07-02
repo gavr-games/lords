@@ -179,7 +179,10 @@ function unit_set_moves_left(x, y, moves_left) {
     /*if (!$('board_'+x+'_'+y).getChildren('.unitdiv')[0])	{ //unit haven't appeared after move animation
 			setTimeout('unit_set_moves_left('+x+','+y+','+moves_left+');',2100);
 			return 0;
-	}*/
+    }*/
+    if (!$chk(board[x]) || !$chk(board[x][y]) || !$chk(board[x][y]['ref'])) {
+        return;
+    }
     var id = board[x][y]["ref"];
     board_units[id]["moves_left"] = moves_left;
     var size = units[board_units[id]['unit_id']]["size"].toInt();
@@ -2051,6 +2054,13 @@ function removeUnitBoardTip(id, unit_id) {
     myHints.each(function(hint, index) {
         if (hint) hint.destroy();
     });
+    // very stupid fix, but I cannot spend anymore time on this bug. it makes me crazy
+    setTimeout(function() {
+        var myHints = $$('div.unittip' + unit_id);
+        myHints.each(function(hint, index) {
+            if (hint) hint.destroy();
+        });
+    },1000);
 }
 
 function removeBuildingTip(id, b_id) {
