@@ -459,8 +459,10 @@ function check_next_available_unit() {
             if (items) items.each(function (item, index) {
                 if (item) if (item["type"] == 'unit' && !found) {
                     if (board_units[item["ref"]]['player_num'] == my_player_num && board_units[item["ref"]]['moves_left'] > 0 && !$chk(board_units[item["ref"]]["paralich"])) {
-                        nx = item["x"].toInt();
-                        ny = item["y"].toInt();
+                        var unit = units[board_units[item["ref"]]['unit_id']]
+                        var size = unit["size"].toInt();
+                        nx = item["x"].toInt() + size - 1;
+                        ny = item["y"].toInt() + size - 1;
                         found = true;
                     }
                 }
