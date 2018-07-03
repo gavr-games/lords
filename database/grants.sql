@@ -30,7 +30,6 @@ GRANT EXECUTE ON PROCEDURE `lords`.`cast_teleport` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_mind_control` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_show_cards` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_telekinesis` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_eagerness` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_speeding` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_unit_upgrade_all` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_unit_upgrade_random` TO 'lords_client'@'%';
@@ -63,6 +62,9 @@ GRANT EXECUTE ON PROCEDURE `lords`.`unit_level_up_health` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`unit_level_up_moves` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`wall_open` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`wall_close` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_iron_skin` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_knights_move` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_berserk` TO 'lords_client'@'%';
 
 # F5
 GRANT EXECUTE ON PROCEDURE `lords`.`get_all_game_info` TO 'lords_client'@'%';
