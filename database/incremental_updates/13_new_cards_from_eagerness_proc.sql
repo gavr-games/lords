@@ -37,15 +37,15 @@ BEGIN
 
 END$$
 
-DROP PROCEDURE IF EXISTS `lords`.`cast_knights_move` $$
+DROP PROCEDURE IF EXISTS `lords`.`cast_horseshoe` $$
 
-CREATE PROCEDURE `cast_knights_move`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+CREATE PROCEDURE `cast_horseshoe`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
   DECLARE bonus INT DEFAULT 2;
 
-  SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_knights_move');
+  SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_horseshoe');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN

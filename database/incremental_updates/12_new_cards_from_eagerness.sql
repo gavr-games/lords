@@ -15,13 +15,13 @@ insert into modes_cards(mode_id, card_id, quantity) values(9, @card_id, 1);
 
 
 
-insert into cards(image, cost, type, ref, code) values('knights_move.png', 10, 'm', 0, 'knights_move');
+insert into cards(image, cost, type, ref, code) values('horseshoe.png', 10, 'm', 0, 'horseshoe');
 set @card_id = LAST_INSERT_ID();
 
-insert into cards_i18n(card_id, language_id, name, description) values(@card_id, 1, 'Knight''s move', 'Chosen unit starts to move as a chess knight'),
-	(@card_id, 2, 'Ход конем', 'Выбранный юнит начинает ходить шахматным конем.');
+insert into cards_i18n(card_id, language_id, name, description) values(@card_id, 1, 'Horseshoe', 'Chosen unit starts to move as a chess knight'),
+	(@card_id, 2, 'Подкова', 'Выбранный юнит начинает ходить шахматным конем.');
 
-insert into procedures(name, params) values('cast_knights_move', 'card,unit');
+insert into procedures(name, params) values('cast_horseshoe', 'card,unit');
 set @proc_id = LAST_INSERT_ID();
 
 insert into cards_procedures(card_id, procedure_id) values(@card_id, @proc_id);

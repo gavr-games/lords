@@ -63,7 +63,7 @@ GRANT EXECUTE ON PROCEDURE `lords`.`unit_level_up_moves` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`wall_open` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`wall_close` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_iron_skin` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_knights_move` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_horseshoe` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_berserk` TO 'lords_client'@'%';
 
 # F5
