@@ -36,11 +36,17 @@
 	    	<span class="logfields"><?= L::signup_repeat_pass ?>*:<p class="txtfield"><input class="pas" type="password" name="pass2" id="pass2_i"></p></span>
 	    	<span class="logfields">E-mail:<p class="txtfield"><input class="pas" type="text" name="email" id="email" title="для восстановления пароля" /></p></span>
 	    	</div>
-	    	<div class="button register"><span class="in_b_1"><p class="in_b_2"><a href="#" id="do_reg" onclick="doReg($('do_reg'), '<?= L::signup_pass_mismatch ?>', '<?= L::login_fields_blank ?>', '<?= L::loading_text ?>');return false;"><?= L::signup_do_signup ?></a></p></span></div>
+	    	<div class="button register">
+				<b class="help" title="<?= L::signup_email_help ?>"></b>
+				<span class="in_b_1"><p class="in_b_2"><a href="#" id="do_reg" onclick="doReg($('do_reg'), '<?= L::signup_pass_mismatch ?>', '<?= L::login_fields_blank ?>', '<?= L::loading_text ?>');return false;"><?= L::signup_do_signup ?></a></p></span>
+			</div>
 	    </form>
 	    <div class="button back" style="margin-right:30px;margin-top:10px;"><span class="in_b_1"><p class="in_b_2"><a id="to_main" href="#" onclick="if (!parent.window_loading){ parent.load_window('site/login.php','left'); doLoading($('to_main'), '<?= L::loading_text ?>');}return false;"><?= L::back ?></a></p></span></div>
 	    <p id="reg_ok" style="display:none;"><?= L::signup_success ?></p>
 	    </div>
 	    
 	</div>
+	<script>
+		var myTips = new Tips('.help');
+	</script>
 </body>

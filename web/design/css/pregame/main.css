@@ -120,7 +120,8 @@ body {
 .button {
 	border-color: #4E4E4E #B0B0B0 #C0C0C0 #7F7F7F;
 	border-style: solid;
-    border-width: 1px;
+	border-width: 1px;
+	position: relative;
 }
 .button .in_b_1 {
 	float:left;
@@ -395,4 +396,28 @@ body {
 }
 #opened_map a.login-arena-btn{
 	font-size: 32px;
+}
+.help {
+	background:  url(../../images/pregame/help_sign.png) top left no-repeat;
+	width: 20px !important;
+	height: 26px;
+	position: absolute;
+	left: 167px;
+	cursor: pointer;
+	top: 8px;
+}
+.tip-wrap {
+	padding:5px;
+	background:  url(../../images/tip_opacity_bg.png) top left repeat;
+	font-family: Lucida Grande;
+    font-size: 14px;
+    position:absolute;
+    top:0px;
+    left:150px;
+    border:0px;
+    z-index:50;
+	-moz-border-radius: 1em;
+	border-radius: 1em;
+	color: white;
+	max-width: 200px;
 }
