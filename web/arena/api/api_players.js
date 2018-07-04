@@ -66,6 +66,7 @@ function arena_player_add(user_id, nick, avatar_filename, status_id) {
     dt = dt.getTime();
     dt = parseInt(dt / 1000);
     chat_add_service_message(0, dt, nick + ' вошел в Арену.');
+    sort_players();
 }
 
 function arena_player_remove(user_id) {
@@ -89,7 +90,9 @@ function arena_player_set_status(user_id, status_id) {
     last_executed_api = 'arena_player_set_status(' + user_id + ',' + status_id + ')';
     if ($('pstatus_' + user_id)) {
         $('pstatus_' + user_id).set('class', 'status_' + status_id);
+        $('pstatus_' + user_id).getParent().set('data-status', status_id);
         $('pstatus_' + user_id).set('title', parent.player_status(status_id));
+        sort_players();
         users[user_id]['status_id'] = status_id;
         //redirect to game if I am playing
         //console.log(window.location.toString().replace('arena/','')+'game/mode'+$('i_frame').contentWindow.cur_game_mode_id);
@@ -98,4 +101,15 @@ function arena_player_set_status(user_id, status_id) {
             parent.window.location.reload();
         }
     }
+}
+
+function sort_players() {
+    var sortedPlayers = $('players_list').getChildren().sort(function (a, b) {
+        if (b.get('data-status').toInt() != a.get('data-status').toInt()) {
+            return b.get('data-status').toInt() - a.get('data-status').toInt();
+        }
+        return b.get('data-nick') > a.get('data-nick') ? 1 : -1;
+    }).reverse();
+    $('players_list').empty();
+    $('players_list').adopt(sortedPlayers);
 }
