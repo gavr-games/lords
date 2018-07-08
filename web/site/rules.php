@@ -1,4 +1,5 @@
 <?php
+	$no_redirect = true;
 	include_once('init.php');
 	include_once('../general_classes/rules.class.php');
 ?>

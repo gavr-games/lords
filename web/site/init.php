@@ -33,7 +33,7 @@ $load_frame = '';
 
 if (isset($clear_user) && $clear_user==1) $_SESSION['user_id']='';
 
-if ($_SESSION['user_id'] != '') {
+if ($_SESSION['user_id'] != '' && !isset($no_redirect) ) {
 	$query = 'call ' . $DB_conf['site'] . '.get_my_location(' . $_SESSION['user_id'] . ');'; //check where to redirect user
 	 $result = $dataBase->multi_query($query);
 	 do {
