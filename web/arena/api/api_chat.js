@@ -92,7 +92,7 @@ function chat_add_player(chat_id, user_id) {
         var dt = new Date();
         dt = dt.getTime();
         dt = parseInt(dt / 1000);
-        chat_add_service_message(chat_id, dt, nick + ' вошел в чат.');
+        chat_add_service_message(chat_id, dt, nick + i18n[parent.USER_LANGUAGE]['arena_chat']['entered_chat']);
         if (chats[chat_id]['topic'] == '') {
             if ($('topic_val_' + chat_id)) {
                 $('topic_val_' + chat_id).set('value', $('topic_val_' + chat_id).get('value') + convertFromChars(nick) + ' ');
@@ -111,7 +111,7 @@ function chat_remove_player(chat_id, user_id) {
         var dt = new Date();
         dt = dt.getTime();
         dt = parseInt(dt / 1000);
-        chat_add_service_message(chat_id, dt, nick + ' покинул чат.');
+        chat_add_service_message(chat_id, dt, nick + i18n[parent.USER_LANGUAGE]['arena_chat']['left_chat']);
     }
     if (user_id == my_user_id) {
         chat_destroy(chat_id);

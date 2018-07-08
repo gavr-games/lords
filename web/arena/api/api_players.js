@@ -65,7 +65,7 @@ function arena_player_add(user_id, nick, avatar_filename, status_id) {
     var dt = new Date();
     dt = dt.getTime();
     dt = parseInt(dt / 1000);
-    chat_add_service_message(0, dt, nick + ' вошел в Арену.');
+    chat_add_service_message(0, dt, nick + i18n[parent.USER_LANGUAGE]['arena_chat']['entered_arena']);
     sort_players();
 }
 

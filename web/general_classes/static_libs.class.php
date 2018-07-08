@@ -141,9 +141,11 @@ class StaticLibs {
             if (is_array($value)) {
                 $js_string .= "i18n[$langId]['$key'] = new Array();".PHP_EOL;
                 foreach($value as $k => $v) {
+                    $v = addslashes($v);
                     $js_string .= "i18n[$langId]['$key']['$k'] = '$v';".PHP_EOL;
                 }
             } else {
+                $value = addslashes($value);
                 $js_string .= "i18n[$langId]['$key'] = '$value';".PHP_EOL;
             }
         }
