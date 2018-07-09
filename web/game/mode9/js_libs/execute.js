@@ -256,6 +256,10 @@ function board_clicked(x, y) {
                 var coords = unit.toString().split(',');
                 ux = coords[0].toInt();
                 uy = coords[1].toInt();
+                if (!$chk(board[ux]) || !$chk(board[ux][uy]) || !$chk(board[ux][uy]['ref'])) {
+                    cancel_execute();
+                    return;
+                }
                 id = board[ux][uy]["ref"];
                 var save_id = id;
                 size = units[board_units[id]["unit_id"]]['size'].toInt();
