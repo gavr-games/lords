@@ -232,7 +232,7 @@
 	                }
 	                payload.commands = decodeURIComponent(payload.commands);
 	                //handling ' (apostrophe) symmetric to game_protocol.php
-	                payload.commands = payload.commands.replace(/\\u0027/g, "'");
+	                payload.commands = payload.commands.replace(/\\u0027/g, "'").replace(/\r/g, "").replace(/\n/g, "\\n");
 	                //console.log(payload.commands);
 	                showHint = false;
 	                wasError = false;
@@ -244,6 +244,7 @@
 	                    }
 	                    no_backlight = true;
 	                    commands_executing = true;
+	                    console.log(payload.commands);
 	                    eval(payload.commands);
 	                    commands_executing = false;
 	                    no_backlight = false;

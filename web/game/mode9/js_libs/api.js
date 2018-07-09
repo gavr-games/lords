@@ -2304,7 +2304,7 @@ function chat_add_user_message(p_num, message) {
     var time = new Date();
     time = time.format('db');
 
-    message = message.replace(/\*([^\s\*]+)\*/g, "<img src=\"../../design/images/pregame/smiles/Animated22/$1.gif\" />");
+    message = message.replace(/\*([^\s\*]+)\*/g, "<img src=\"../../design/images/pregame/smiles/Animated22/$1.gif\" />").replace(/\n/g, "<br>");
     message = linkify(message);
     var message_str = '<span><span class="mes"><p style="color:' + color + '">' + nick + '[' + time + ']</p><span>' + message + '</span></span></span>';
     var els = Elements.from(message_str);

@@ -119,9 +119,9 @@ export class WSClient {
         channel.on("new_msg", payload => {
             let chatId = channelName.split(":")[1]
             if (this.debug) {
-                console.log("chat_add_user_message(" + chatId + ", " + payload.from_user_id + ", " + decodeURIComponent(payload.msg) + ")")
+                console.log("chat_add_user_message(" + chatId + ", " + payload.from_user_id + ", " + decodeURIComponent(payload.msg).replace(/\r/g, "").replace(/\n/g, "\\n") + ")")
             }
-            window.current_window.contentWindow.chat_add_user_message(chatId, payload.from_user_id, payload.time, decodeURIComponent(payload.msg))
+            window.current_window.contentWindow.chat_add_user_message(chatId, payload.from_user_id, payload.time, decodeURIComponent(payload.msg).replace(/\r/g, "").replace(/\n/g, "\\n"))
         })
 
         channel.on("protocol_raw", payload => {
@@ -140,7 +140,7 @@ export class WSClient {
             }
             payload.commands = decodeURIComponent(payload.commands);
             //handling ' (apostrophe) symmetric to game_protocol.php
-            payload.commands = payload.commands.replace(/\\u0027/g, "'");
+            payload.commands = payload.commands.replace(/\\u0027/g, "'").replace(/\r/g, "").replace(/\n/g, "\\n");
             //console.log(payload.commands);
             showHint = false;
             wasError = false;
@@ -152,6 +152,7 @@ export class WSClient {
                 }
                 no_backlight = true;
                 commands_executing = true;
+                console.log(payload.commands);
                 eval(payload.commands);
                 commands_executing = false;
                 no_backlight = false;
