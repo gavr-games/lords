@@ -62,29 +62,29 @@
 		<div id="profile">
 			<h3 class="arena_header"><?= L::profile_profile ?></h3>
 		  <form action="" method="post" enctype="multipart/form-data">
-			  <span class="title"> - Великий Лорд <p class="nick"><?php echo $user['login']; ?></p></span>
+			  <span class="title"> - <?= L::profile_great_lord ?> <p class="nick"><?php echo $user['login']; ?></p></span>
 			  <br clear="all" />
 			  <div class="profile_cont">
 			    <div class="profile_image">
-			      <h3 style="margin-left:14px;">Герб лорда</h3>
+			      <h3 style="margin-left:14px;"><?= L::profile_coat_of_arms ?></h3>
 			      <img src="<?php echo $SITE_conf['domen'].$prof_img;?>?cache=<?php echo time(); ?>" alt="Герб" />
 			    </div>
 			    <div class="profile_stats">
 			    <table>
 			    <tr>
-			      <td><h5>Дата последней игры:</h5></td><td> <?php echo $user['last_played_game']; ?></td>
+			      <td><h5><?= L::profile_last_game_date ?>:</h5></td><td> <?php echo $user['last_played_game']; ?></td>
 			    </tr>
 			    </table>
 			    <br />
-			    <h3>Статистика</h3>
+			    <h3><?= L::profile_statistics ?></h3>
 			    <table class="stats">
 			    <tr>
-			      <td><h5>Мод</h5></td>
-			      <td><h5>Всего игр</h5></td>
-			      <td><h5>Победы</h5></td>
-			      <td><h5>Поражения</h5></td>
-			      <td><h5>Ничьи</h5></td>
-			      <td><h5>Вышел из игры</h5></td>
+						<td><h5><?= L::profile_mode ?></h5></td>
+			      <td><h5><?= L::profile_total_games ?></h5></td>
+			      <td><h5><?= L::profile_victories ?></h5></td>
+			      <td><h5><?= L::profile_defeats ?></h5></td>
+			      <td><h5><?= L::profile_draws ?></h5></td>
+			      <td><h5><?= L::profile_left_the_game ?></h5></td>
 			    </tr>
 			    <tr>
 			      <?php
