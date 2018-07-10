@@ -885,8 +885,7 @@ function draw_building(x, y) {
     var b = null;
     if (card != "") {
         b = buildings[cards[card]["ref"]];
-    }
-    if (building != "") {
+    } else if (building != "") {
         var coords = building.toString().split(',');
         var ux = coords[0].toInt();
         var uy = coords[1].toInt();
@@ -1008,8 +1007,7 @@ function clean_building(x, y) {
     var b = null;
     if (card != "") {
         b = buildings[cards[card]["ref"]];
-    }
-    if (building != "") {
+    } else if (building != "") {
         var coords = building.toString().split(',');
         var ux = coords[0].toInt();
         var uy = coords[1].toInt();
