@@ -1795,6 +1795,8 @@ function add_building_cell(id, p_num, mx, my, b, card_id, nrotation, nflip, i) {
     });
     if (b["type"] == 'castle')
         addCastleTip('overboard_' + mx + '_' + my, id);
+    else if (b["ui_code"]== 'ruins')
+        addRuinsTip('overboard_' + mx + '_' + my, id);
     else
         addBuildingTip('overboard_' + mx + '_' + my, id);
     myDiv.fade('in');
@@ -1956,6 +1958,18 @@ function addUnitTip(dom_id, id) {
 }
 
 function addBuildingTip(dom_id, id) {
+    var building_id = board_buildings[id]['building_id'];
+    var image = buildings[building_id]['ui_code'] + '.png';
+    addBaseBuildingTip(dom_id, id, image);
+}
+
+function addRuinsTip(dom_id, id) {
+    var p_num = board_buildings[id]['player_num'];
+    var image = 'ruins_' + p_num + '.png';
+    addBaseBuildingTip(dom_id, id, image);
+}
+
+function addBaseBuildingTip(dom_id, id, image) {
     var effects = '';
     var building_id = board_buildings[id]['building_id'];
     var p_num = board_buildings[id]['player_num'];
@@ -1968,7 +1982,7 @@ function addBuildingTip(dom_id, id) {
     var b_max_health = board_buildings[id]["max_health"];
     var b_income =  board_buildings[id]["income"];
     addBoardTip(dom_id, '<table><tr><td><p class="con_img"><span><img src="../../design/images/buildings/' +
-        buildings[building_id]['ui_code'] + '.png"></span></p></td><td><ul>' +
+        image + '"></span></p></td><td><ul>' +
         '<li class="name">' + b_name + '</li>' +
         (b_health.toInt() != 0 && b_max_health.toInt() != 0 ? '<li class="health">-&nbsp;&nbsp;' + b_health + '/' + b_max_health + '</li>' : '') +
         (b_income.toInt() > 0 ? '<li class="income"><font color="white">-&nbsp;&nbsp;' + b_income + '</font></li>' : '') +
