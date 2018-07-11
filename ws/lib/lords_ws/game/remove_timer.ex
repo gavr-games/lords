@@ -2,12 +2,21 @@ defmodule LordsWs.Game.RemoveTimer do
   use GenServer
   require Logger
 
+  def create(state) do
+    case GenServer.whereis(ref(state["game_id"])) do
+      nil ->
+        Supervisor.start_child(LordsWs.Game.RemoveSupervisor, [state])
+      _game ->
+        {:error, :remove_game_already_exists}
+    end
+  end
+
   def start_link(state) do
-    GenServer.start_link __MODULE__, state, name: ref(state[:game_id])
+    GenServer.start_link __MODULE__, state, name: ref(state["game_id"])
   end
 
   defp ref(game_id) do
-    {:global, {:remove, game_id}}
+    {:global, {:remove_game, game_id}}
   end
 
   def init(state) do

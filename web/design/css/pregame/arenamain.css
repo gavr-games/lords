@@ -423,6 +423,7 @@ body {
     border:0px;
 	-moz-border-radius: 1em;
 	border-radius: 1em;
+	z-index: 1;
 }
 .arena_game .pass_inp .inner {
 	width:250px;

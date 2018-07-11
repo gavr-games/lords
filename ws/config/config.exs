@@ -14,9 +14,14 @@ config :lords_ws, LordsWs.Endpoint,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
-config :logger, :console,
+config :logger,
+  backends: [:console, {LoggerFileBackend, :file_log}],
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+
+config :logger, :file_log, 
+  path: "/var/log/ws/ws.log",
+  level: :debug
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

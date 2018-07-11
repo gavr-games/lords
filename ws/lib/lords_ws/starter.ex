@@ -29,7 +29,7 @@ defmodule LordsWs.Starter do
                 GenServer.start_link(LordsWs.Npc.Worker, %{game: game, p_num: game["active_player_num"]})
               end
             "3" ->
-              GenServer.start_link(LordsWs.Game.RemoveTimer, game)
+              LordsWs.Game.RemoveTimer.create(game)
             _ -> nil
           end
         end)
