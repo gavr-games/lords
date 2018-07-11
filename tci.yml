@@ -3,6 +3,7 @@ steps:
   - command: mkdir -p log/ai
   - command: mkdir -p log/web
   - command: mkdir -p log/web-internal
+  - command: mkdir -p log/ws
   - command: docker exec $(docker ps -q -f name=lords_db) /database/bin/create_dump.sh
     shell: true
   - command: docker service create --name registry --publish published=5000,target=5000 registry:2

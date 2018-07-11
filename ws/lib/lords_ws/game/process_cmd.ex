@@ -16,7 +16,7 @@ defmodule LordsWs.Game.ProcessCmd do
             Enum.each ans["data_result"], fn cmd -> 
                 if cmd["command"] == "end_game()" do
                     LordsWs.Bot.Ai.stop_for_game(game)
-                    GenServer.start_link(LordsWs.Game.RemoveTimer, game)
+                    LordsWs.Game.RemoveTimer.create(game)
                 end
                 # Next turn
                 if cmd["command"] =~ "set_active_player(" do

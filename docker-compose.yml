@@ -26,6 +26,7 @@ services:
       PORT: 4000
     volumes:
       - ./ws:/app
+      - ./log/ws:/var/log/ws/
     networks:
       - lords-network
 

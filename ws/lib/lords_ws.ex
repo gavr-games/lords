@@ -15,8 +15,10 @@ defmodule LordsWs do
       supervisor(LordsWs.UserPresence, []),
       supervisor(LordsWs.NextTurn.Supervisor, []),
       supervisor(LordsWs.SendPhrase.Supervisor, []),
+      supervisor(LordsWs.Game.RemoveSupervisor, []),
       supervisor(LordsWs.Bot.Supervisor, []),
-      worker(LordsWs.Starter, [], restart: :transient)
+      worker(LordsWs.Starter, [], restart: :transient),
+      worker(LordsWs.Cleaner, [], restart: :transient)
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

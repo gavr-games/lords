@@ -40,7 +40,8 @@ defmodule LordsWs.Mixfile do
       {:cowboy, "~> 1.0"},
       {:httpoison, "~> 1.0"},
       {:poison, "~> 3.1"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      {:logger_file_backend, "~> 0.0.10"}
     ]
   end
 end
