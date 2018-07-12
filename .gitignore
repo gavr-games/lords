@@ -7,3 +7,4 @@ database/dump
 .idea
 .env
 .DS_store
+.caddy

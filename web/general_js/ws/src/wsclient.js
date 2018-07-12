@@ -13,7 +13,7 @@ export class WSClient {
         this.game_id = null
     }
     connect() {
-        this.socket = new Socket("ws://" + window.location.hostname + ":4000/socket", {
+        this.socket = new Socket("ws://" + window.location.hostname + "/socket", {
             params: {
                 token: Cookie.read("PHPSESSID")
             }

@@ -12,7 +12,7 @@ $DB_conf['site']   = 'lords_site';
 $DB_conf['server'] = 'db';
 
 // Site
-$SITE_conf['domen'] = 'http://'.$_ENV['LORDS_DOMAIN'].'/';
+$SITE_conf['domen'] = 'https://'.$_ENV['LORDS_DOMAIN'].'/';
 $SITE_conf['mantis'] = 'http://mantis.kissdesign.com.ua';
 $SITE_conf['ai_service'] = 'http://ai:5600/ai?wsdl';
 $SITE_conf['revision'] = $_ENV['REVISION'];

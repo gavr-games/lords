@@ -1,0 +1,11 @@
+lords.world:443 {
+    proxy / web:80 {
+        transparent
+    }
+    proxy /socket ws:4000 {
+        websocket
+    }
+	log stdout
+	errors stdout
+    tls lords.web.game@gmail.com
+}
