@@ -1,9 +1,9 @@
 lords.world:443 {
-    proxy / web:80 {
-        transparent
-    }
     proxy /socket ws:4000 {
         websocket
+    }
+    proxy / web:80 {
+        transparent
     }
 	log stdout
 	errors stdout
