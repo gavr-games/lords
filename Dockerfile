@@ -10,3 +10,5 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && a2enmod rewrite \
     && a2enmod expires
+
+EXPOSE 80

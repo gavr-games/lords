@@ -23,7 +23,7 @@ services:
       context: ws
       dockerfile: Dockerfile
     command: bash -c "mix deps.get && mix phx.server"
-    ports:
+    expose:
       - 4000
     environment:
       MIX_ENV: dev
@@ -41,7 +41,7 @@ services:
   web:
     image: 127.0.0.1:5000/web
     build: .
-    ports:
+    expose:
       - 80
     environment:
       LORDS_DOMAIN: ${LORDS_DOMAIN}
@@ -95,22 +95,7 @@ services:
       restart_policy:
         condition: on-failure
   
-  caddy:
-    image: abiosoft/caddy:0.10.14
-    volumes:
-      - ./caddy/Caddyfile:/etc/Caddyfile
-      - ./.caddy:/root/.caddy
-    ports:
-      - 80:80
-      - 443:443
-    environment:
-      - ACME_AGREE=true
-    networks:
-      - lords-network
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
+  
 
 volumes:
   mysql-data:
