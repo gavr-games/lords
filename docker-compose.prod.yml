@@ -1,23 +1,6 @@
 version: '3.4'
 
 services:
-  caddy:
-    image: abiosoft/caddy:0.10.14
-    volumes:
-      - ./caddy/Caddyfile:/etc/Caddyfile
-      - ./.caddy:/root/.caddy
-    ports:
-      - 80:80
-      - 443:443
-    environment:
-      - ACME_AGREE=true
-    networks:
-      - lords-network
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-
   db:
     image: "mysql:5.5"
     environment:
@@ -105,6 +88,23 @@ services:
       - ./ai:/ai
       - ./log/ai:/tmp/log
     command: bash -c "cd /deployment ; chmod 755 ./deploy_ai.sh ; ./deploy_ai.sh"
+    networks:
+      - lords-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+  
+  caddy:
+    image: abiosoft/caddy:0.10.14
+    volumes:
+      - ./caddy/Caddyfile:/etc/Caddyfile
+      - ./.caddy:/root/.caddy
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - ACME_AGREE=true
     networks:
       - lords-network
     deploy:
