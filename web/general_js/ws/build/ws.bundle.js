@@ -82,7 +82,11 @@
 	    _createClass(WSClient, [{
 	        key: "connect",
 	        value: function connect() {
-	            this.socket = new _phoenix.Socket("ws://" + window.location.hostname + ":4000/socket", {
+	            var wsUrl = "ws://" + window.location.hostname + "/socket";
+	            if (wsUrl.includes("lords.local")) {
+	                wsUrl = "ws://" + window.location.hostname + ":4000/socket";
+	            }
+	            this.socket = new _phoenix.Socket(wsUrl, {
 	                params: {
 	                    token: Cookie.read("PHPSESSID")
 	                }
@@ -212,9 +216,9 @@
 	            channel.on("new_msg", function (payload) {
 	                var chatId = channelName.split(":")[1];
 	                if (_this.debug) {
-	                    console.log("chat_add_user_message(" + chatId + ", " + payload.from_user_id + ", " + decodeURIComponent(payload.msg) + ")");
+	                    console.log("chat_add_user_message(" + chatId + ", " + payload.from_user_id + ", " + decodeURIComponent(payload.msg).replace(/\r/g, "").replace(/\n/g, "\\n") + ")");
 	                }
-	                window.current_window.contentWindow.chat_add_user_message(chatId, payload.from_user_id, payload.time, decodeURIComponent(payload.msg));
+	                window.current_window.contentWindow.chat_add_user_message(chatId, payload.from_user_id, payload.time, decodeURIComponent(payload.msg).replace(/\r/g, "").replace(/\n/g, "\\n"));
 	            });
 	
 	            channel.on("protocol_raw", function (payload) {
