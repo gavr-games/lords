@@ -82,8 +82,8 @@
 	    _createClass(WSClient, [{
 	        key: "connect",
 	        value: function connect() {
-	            var wsUrl = "ws://" + window.location.hostname + "/socket";
-	            if (wsUrl.includes("lords.local")) {
+	            var wsUrl = "wss://" + window.location.hostname + "/socket";
+	            if (wsUrl.includes("lords.local") || wsUrl.includes("the-lords.org")) {
 	                wsUrl = "ws://" + window.location.hostname + ":4000/socket";
 	            }
 	            this.socket = new _phoenix.Socket(wsUrl, {

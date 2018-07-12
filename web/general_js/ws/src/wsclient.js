@@ -13,8 +13,8 @@ export class WSClient {
         this.game_id = null
     }
     connect() {
-        let wsUrl = "ws://" + window.location.hostname + "/socket"
-        if (wsUrl.includes("lords.local")) {
+        let wsUrl = "wss://" + window.location.hostname + "/socket"
+        if (wsUrl.includes("lords.local") || wsUrl.includes("the-lords.org")) {
             wsUrl = "ws://" + window.location.hostname + ":4000/socket"
         }
         this.socket = new Socket(wsUrl, {
