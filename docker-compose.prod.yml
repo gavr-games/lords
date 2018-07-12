@@ -23,7 +23,7 @@ services:
       context: ws
       dockerfile: Dockerfile
     command: bash -c "mix deps.get && mix phx.server"
-    expose:
+    ports:
       - 4000
     environment:
       MIX_ENV: dev
@@ -41,7 +41,7 @@ services:
   web:
     image: 127.0.0.1:5000/web
     build: .
-    expose:
+    ports:
       - 80
     environment:
       LORDS_DOMAIN: ${LORDS_DOMAIN}
