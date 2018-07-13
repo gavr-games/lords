@@ -1384,7 +1384,7 @@ function draw_shooting(x, y) {
                     board.each(function(items, index) {
                         if (items) items.each(function(item, index) {
                             if (item)
-                                if (item["ref"] == target_ref) {
+                                if (item["ref"] == target_ref && item["type"] == target_type) {
                                     var new_dist = Math.max(Math.abs(ux - item["x"].toInt()), Math.abs(uy - item["y"].toInt()));
                                     if (new_dist < dist) {
                                         dist = new_dist;
