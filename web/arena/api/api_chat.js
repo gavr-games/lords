@@ -7,7 +7,7 @@ function chat_add_user_message(chat_id, user_id, mtime, message) {
         var time = new Date();
         time.setTime(mtime * 1000);
         time = time.format('%T');
-        message = message.replace(/\*([^\s\*]+)\*/g, "<img src=\"../design/images/pregame/smiles/Animated22/$1.gif\" />").replace(/\n/g, "<br>");
+        message = message.replace(/\*([^\s\*]+)\*/g, "<img src=\"../design/images/pregame/smiles/Animated22/$1.gif\" />").replace(/\\n/g, "<br>");
         message = linkify(message);
         var message_str = '';
         eval('message_str = ' + chat_message);
