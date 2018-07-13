@@ -1246,6 +1246,7 @@ function kill_unit(x, y, noanim) {
     if (p_num.toInt() >= 10) el_class = 'newtrl';
     else el_class = 'pl' + (p_num.toInt() + 1);
     var size = units[board_units[id]['unit_id']]["size"].toInt();
+    clean_shoot_radius(x, y); //in case unit was killed when someone hovered it
     if (!noanim) {
         if (!$('board_' + (x + size - 1) + '_' + (y + size - 1)).getChildren('.unitdiv')[0]) { //unit haven't appeared after move animation
             setTimeout('kill_unit(' + x + ',' + y + ',' + noanim + ');', 2000);
