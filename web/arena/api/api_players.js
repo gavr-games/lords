@@ -104,9 +104,7 @@ function arena_player_set_status(user_id, status_id) {
 }
 
 function sort_players() {
-    var sortedPlayers = $('players_list').getChildren().filter(function(p) {
-        return p.get('data-status').toInt() != 4; // show all not offline
-    }).sort(function (a, b) {
+    var sortedPlayers = $('players_list').getChildren().sort(function (a, b) {
         if (b.get('data-status').toInt() != a.get('data-status').toInt()) {
             return b.get('data-status').toInt() - a.get('data-status').toInt();
         }
