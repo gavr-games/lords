@@ -1,0 +1,4 @@
+/srv/lords/log/*.log /srv/lords/log/*/*.log {
+    daily
+    rotate 5
+}
