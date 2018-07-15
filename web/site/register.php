@@ -24,6 +24,7 @@
 	</script>
 </head>
 <body>
+	<a href="<?= $SITE_conf['feedback_url'] ?>" id="feedback" target="_blank"><?= L::feedback ?></a>
 	<div id="reg_cont">
 		<div id="regout_form">
 		<span class="header_line"><?= L::signup_signup ?></span>

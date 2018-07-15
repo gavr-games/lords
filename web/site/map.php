@@ -25,6 +25,7 @@
 	</script>
 </head>
 <body>
+	<a href="<?= $SITE_conf['feedback_url'] ?>" id="feedback" target="_blank"><?= L::feedback ?></a>
 	<div id="wrap" class="map">
 		<div id="map">
 			<div id="opened_map">

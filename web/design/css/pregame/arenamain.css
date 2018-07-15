@@ -751,3 +751,24 @@ body {
     background-color:white;
     border:1px solid black;
 }
+
+#feedback {
+	position: fixed;
+	transform: rotate(270deg);
+	width: 78px;
+	right: -35px;
+	top: 50%;
+	background-color: green;
+    color: white;
+	padding: 5px 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    opacity: 0.6;
+	z-index: 9999;
+	text-decoration: none;
+	text-align: center;
+}
+
+#feedback:hover {
+	opacity: 1;
+}

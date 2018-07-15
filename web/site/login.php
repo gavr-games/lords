@@ -26,7 +26,7 @@
 	</script>
 </head>
 <body>
-		
+	<a href="<?= $SITE_conf['feedback_url'] ?>" id="feedback" target="_blank"><?= L::feedback ?></a>
 		<div id="log_cont">
 			<div id="log_form" class="<?php  echo getSeason(); ?>">
 				<form action="ajax/authorize_user.php" method="post" id="login_form" onsubmit="return false;">

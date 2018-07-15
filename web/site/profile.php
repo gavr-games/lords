@@ -58,6 +58,7 @@
 	</script>
 </head>
 <body>
+	<a href="<?= $SITE_conf['feedback_url'] ?>" id="feedback" target="_blank"><?= L::feedback ?></a>
 	<div id="wrap" class="profile">
 		<div id="profile">
 			<h3 class="arena_header"><?= L::profile_profile ?></h3>

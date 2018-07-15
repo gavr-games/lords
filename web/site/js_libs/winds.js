@@ -81,12 +81,24 @@ function load_window(src, dir) {
 function move_window(dir) {
     var pan_x = Math.ceil(screen_size.x / 5);
 
+    // Hide feedback
+    if ($chk(old_window.contentWindow.$('feedback'))) {
+        old_window.contentWindow.$('feedback').hide();
+    }
+    if ($chk(current_window.contentWindow.$('feedback'))) {
+        current_window.contentWindow.$('feedback').hide();
+    }
+
     jQuery(current_window).animate({
         left: ((dir == 'right') ? ("-=" + screen_size.x + 'px') : ("+=" + screen_size.x + "px"))
     }, 0, "linear");
     jQuery(old_window).animate({
         left: ((dir == 'right') ? ("-=" + screen_size.x + 'px') : ("+=" + screen_size.x + "px"))
     }, 0, "linear");
+
+    setTimeout(function() { // show feedback
+        current_window.contentWindow.$('feedback').show();
+    }, 3000);
 
     setTimeout(function() {
         old_window.destroy();

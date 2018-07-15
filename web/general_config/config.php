@@ -16,6 +16,7 @@ $SITE_conf['domen'] = $_ENV['LORDS_DOMAIN'].'/';
 $SITE_conf['mantis'] = 'http://mantis.kissdesign.com.ua';
 $SITE_conf['ai_service'] = 'http://ai:5600/ai?wsdl';
 $SITE_conf['revision'] = $_ENV['REVISION'];
+$SITE_conf['feedback_url'] = 'https://docs.google.com/forms/d/e/1FAIpQLSfC2DZGpMZLakg2M4ykfZvLBt6rsXdSp2nZRigoxXKUXb-Vwg/viewform';
 
 // Lang
 $i18n = new i18n();

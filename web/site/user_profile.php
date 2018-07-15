@@ -57,6 +57,7 @@
 	</style>
 </head>
 <body onload="current_window.fade(1);current_window.contentWindow.document.body.style.overflow = 'visible';">
+	<a href="<?= $SITE_conf['feedback_url'] ?>" id="feedback" target="_blank"><?= L::feedback ?></a>
 	<div id="wind">
 		<div id="panor"> 
 				<div class="rel" id="rel">

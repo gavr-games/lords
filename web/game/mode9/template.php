@@ -26,6 +26,7 @@
 	</script>
 </head>
 <body onload="onPageLoad('<?= $SITE_conf['revision'] ?>')" onclick="stopShield();">
+<a href="<?= $SITE_conf['feedback_url'] ?>" id="feedback" target="_blank"><?= L::feedback ?></a>
 <div id="loading">
 	<div class="phrase">
 		<div><span id="phrase"></span></div>

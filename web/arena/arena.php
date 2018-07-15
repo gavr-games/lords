@@ -139,6 +139,7 @@ $markers['###IFRAME_LINK###'] = $iframe_link;
 $markers['###REVISION###'] = $SITE_conf['revision'];
 $markers['###USER_LANGUAGE###'] = LangUtils::getCurrentLangNumber($_SESSION['lang']);
 $markers['###GOOGLE_ANALYTICS###'] = GoogleAnalytics::globalSiteTag();
+$markers['###FEEDBACK_URL###'] = $SITE_conf['feedback_url'];
 
 // Print template of html page
 $replace = $values = array();
