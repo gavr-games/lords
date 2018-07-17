@@ -634,7 +634,7 @@ function log_message_add_card_tooltips(elem) {
 function parse_log_message(message_code, message_parameters) {
     var messageText = log_message_text(message_code);
     var placeholders = messageText.match(/\{[^}]+\}/g);
-    if (placeholders) {
+    if (placeholders && message_parameters != '') {
         var params = message_parameters.split(';');
         placeholders.forEach(function(placeholder) {
             var paramCode = placeholder.match(/[a-z]+/);
