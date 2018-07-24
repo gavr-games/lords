@@ -69,8 +69,12 @@ function showRandomPhrase()	{
 			addLoadingItem(i18n[USER_LANGUAGE]["loading"]["script"] + ' Execute','exec_script');
 			Asset.javascript('js_libs/execute.js?'+revision, {onLoad: function(){removeLoadingItem('exec_script');}});
 			addLoadingItem(i18n[USER_LANGUAGE]["loading"]["api_script"],'api_script');
-			Asset.javascript('js_libs/api.js?'+revision, {onLoad: function(){removeLoadingItem('api_script');}});
-			
+      Asset.javascript('js_libs/api.js?'+revision, {onLoad: function(){removeLoadingItem('api_script');}});
+      addLoadingItem(i18n[USER_LANGUAGE]["loading"]["script"] + ' Eventbus','event_bus_script');
+			Asset.javascript('js_libs/event_bus.js?'+revision, {onLoad: function(){removeLoadingItem('event_bus_script');}});
+      addLoadingItem(i18n[USER_LANGUAGE]["loading"]["script"] + ' Tutorial','tutorial_script');
+			Asset.javascript('js_libs/tutorial.js?'+revision, {onLoad: function(){removeLoadingItem('tutorial_script');}});
+      
 			addLoadingItem(i18n[USER_LANGUAGE]["loading"]["game_styles"],'game_styles');
 			Asset.css('../../design/css/stylesgame.css?'+revision).addEvent('onload',removeLoadingItem('game_styles'));
 			Asset.css('../../design/css/mobile.css?'+revision);
@@ -90,7 +94,11 @@ function showRandomPhrase()	{
 			Asset.css('../../design/css/styleswindow.css?'+revision).addEvent('onload',removeLoadingItem('window_styles'));
 			addLoadingItem(i18n[USER_LANGUAGE]["loading"]["mes_styles"],'mes_styles');
 			Asset.css('../../design/css/stylesunitmes.css?'+revision).addEvent('onload',removeLoadingItem('mes_styles'));
-			
+      
+      addLoadingItem(i18n[USER_LANGUAGE]["loading"]["script"] + ' Intro','intro_script');
+      Asset.css('../../general_js/intro/introjs.min.css?'+revision);
+      Asset.javascript('../../general_js/intro/intro.min.js?'+revision).addEvent('onload',removeLoadingItem('intro_script'));
+
 			addLoadingItem(i18n[USER_LANGUAGE]["loading"]["field_img"],'field_img');
 			Asset.image('../../design/images/gamefield.jpg', {onLoad: function(){removeLoadingItem('field_img');}});
 			checkLoadInterval = setInterval("checkLoadList();",500);

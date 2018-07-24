@@ -813,7 +813,7 @@ ul {
 .ctrl_block .block .buttons .btn_buycard {
 	float: left;
 	height: 24px;
-	width: 152px;
+	width: 120px;
 	margin-top: 2px;
 	background: url(../images/btn_buycard.png) bottom left no-repeat;
 }

@@ -66,7 +66,9 @@
 						<br />
 						<input type="checkbox" id="noSound" onclick="turnNoSound();"> <?= L::game_turn_off_sound ?><br />
 						<input type="checkbox" id="noNextUnit" onclick="turnNoNextUnit();"> <?= L::game_turn_off_next_unit ?><br />
-						<input type="checkbox" id="noNpcTalk" onclick="turnNoNpcTalk();"> <?= L::game_turn_off_unit_phrases ?>
+						<input type="checkbox" id="noNpcTalk" onclick="turnNoNpcTalk();"> <?= L::game_turn_off_unit_phrases ?><br />
+            <input type="checkbox" id="noTutorial" onclick="turnNoTutorial();"> <?= L::tutorial_turn_off ?><br />
+            <input type="button"   id="resetTutorialBtn" onclick="tutorialReset();" value="<?= L::tutorial_reset ?>">
                </div>
            </td><td class="rightrep"></td></tr></table>
            <table cellpadding="0" cellspacing="0"><tr><td class="leftbottom"></td><td class="bottomrep"> &nbsp;</td><td class="rightbottom"></td></tr></table>

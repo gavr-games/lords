@@ -19,8 +19,15 @@ var last_moved_unit = 0;
 var saved_chat_messages = [];
 var level_menu_id = 0;
 
+function publish_api_call() {
+  var callerName = publish_api_call.caller.name;
+  var arguments = Array.prototype.slice.call(publish_api_call.caller.arguments);
+  last_executed_api = callerName + '(' + arguments.join(',') + ')'; // set global variable
+  EventBus.publish(callerName, arguments); // publish api call event
+}
+
 function player_set_gold(p_num, amount) {
-    last_executed_api = 'player_set_gold()';
+    publish_api_call();
     players_by_num[p_num]["gold"] = amount;
     update_game_info_window();
     if (p_num == my_player_num && turn_state == MY_TURN && amount >= mode_config["card cost"]) //activate buy card
@@ -59,7 +66,7 @@ function player_set_gold(p_num, amount) {
 }
 
 function add_player(p_num, name, gold, owner, team) {
-    last_executed_api = 'add_player()';
+    publish_api_call();
     players_by_num[p_num] = new Array();
     players_by_num[p_num]['player_num'] = p_num;
     players_by_num[p_num]['name'] = name;
@@ -99,7 +106,7 @@ function add_player(p_num, name, gold, owner, team) {
 }
 
 function delete_player(p_num) {
-    last_executed_api = 'delete_player';
+    publish_api_call();
     delete players_by_num[p_num];
     if (p_num < 10) { //not neutral
         if ($('player' + p_num)) {
@@ -113,7 +120,7 @@ function delete_player(p_num) {
 }
 
 function unit_set_health(x, y, health) {
-    last_executed_api = 'unit_set_health';
+    publish_api_call();
     var id = board[x][y]["ref"];
 
     //highlight
@@ -136,7 +143,7 @@ function unit_set_health(x, y, health) {
 }
 
 function unit_set_max_health(x, y, health) {
-    last_executed_api = 'unit_set_max_health';
+    publish_api_call();
     var id = board[x][y]["ref"];
     board_units[id]["max_health"] = health;
     board.each(function(items, index) {
@@ -152,7 +159,7 @@ function unit_set_max_health(x, y, health) {
 }
 
 function unit_set_shield(x, y, shield) {
-    last_executed_api = 'unit_set_shield';
+    publish_api_call();
     var id = board[x][y]["ref"];
 
     //highlight
@@ -175,7 +182,7 @@ function unit_set_shield(x, y, shield) {
 }
 
 function unit_set_moves_left(x, y, moves_left) {
-    last_executed_api = 'unit_set_moves_left';
+    publish_api_call();
     /*if (!$('board_'+x+'_'+y).getChildren('.unitdiv')[0])	{ //unit haven't appeared after move animation
 			setTimeout('unit_set_moves_left('+x+','+y+','+moves_left+');',2100);
 			return 0;
@@ -216,7 +223,7 @@ function unit_set_moves_left(x, y, moves_left) {
 }
 
 function unit_set_attack(x, y, attack) {
-    last_executed_api = 'unit_set_attack';
+    publish_api_call();
     var id = board[x][y]["ref"];
     board_units[id]["attack"] = attack;
     board.each(function(items, index) {
@@ -232,7 +239,7 @@ function unit_set_attack(x, y, attack) {
 }
 
 function unit_set_moves(x, y, moves) {
-    last_executed_api = 'unit_set_moves';
+    publish_api_call();
     var id = board[x][y]["ref"];
     board_units[id]["moves"] = moves;
     board.each(function(items, index) {
@@ -248,7 +255,7 @@ function unit_set_moves(x, y, moves) {
 }
 
 function unit_add_effect(x, y, effect, param) {
-    last_executed_api = 'unit_add_effect';
+    publish_api_call();
     var id = board[x][y]["ref"];
     var fval;
     if (param == '') fval = 1;
@@ -269,7 +276,7 @@ function unit_add_effect(x, y, effect, param) {
 }
 
 function unit_remove_effect(x, y, effect) {
-    last_executed_api = 'unit_remove_effect';
+    publish_api_call();
     var id = board[x][y]["ref"];
     delete board_units[id][effect];
     board.each(function(items, index) {
@@ -287,7 +294,7 @@ function unit_remove_effect(x, y, effect) {
 }
 
 function unit_set_owner(x, y, p_num) {
-    last_executed_api = 'unit_set_owner';
+    publish_api_call();
     var id = board[x][y]["ref"];
     var card_id = '';
     var unit_id = '';
@@ -303,7 +310,7 @@ function unit_set_owner(x, y, p_num) {
 }
 
 function unit_level_up_attack(x, y) {
-    last_executed_api = 'unit_level_up_attack';
+    publish_api_call();
     var id = board[x][y]["ref"];
     board_units[id]["level"] = board_units[id]["level"].toInt() + 1;
     unit_set_attack(x, y, board_units[id]["attack"].toInt() + 1);
@@ -314,7 +321,7 @@ function unit_level_up_attack(x, y) {
 }
 
 function unit_level_up_moves(x, y) {
-    last_executed_api = 'unit_level_up_moves';
+    publish_api_call();
     var id = board[x][y]["ref"];
     board_units[id]["level"] = board_units[id]["level"].toInt() + 1;
     unit_set_moves(x, y, board_units[id]["moves"].toInt() + 1);
@@ -325,7 +332,7 @@ function unit_level_up_moves(x, y) {
 }
 
 function unit_level_up_health(x, y) {
-    last_executed_api = 'unit_level_up_health';
+    publish_api_call();
     var id = board[x][y]["ref"];
     board_units[id]["level"] = board_units[id]["level"].toInt() + 1;
     unit_set_max_health(x, y, board_units[id]["max_health"].toInt() + 1);
@@ -337,7 +344,7 @@ function unit_level_up_health(x, y) {
 }
 
 function unit_add_exp(x, y, exps) {
-    last_executed_api = 'unit_add_exp';
+    publish_api_call();
     var id = board[x][y]["ref"];
     board_units[id]["experience"] = board_units[id]["experience"].toInt() + exps;
     //show star
@@ -350,6 +357,7 @@ function unit_add_exp(x, y, exps) {
         for (y = oldy; y < maxy; y++) {
             if (board_units[id]['experience'] >= units_levels[board_units[id]['unit_id'].toInt()][board_units[id]['level'].toInt() + 1] && x == maxx - 1 && y == oldy) {
                 if ($('overboard_' + x + '_' + y).getChildren('.level-star').length == 0) {
+                   EventBus.publish('show_levelup_star', [x, y, exps]);
                     var star = new Element('a', {
                         'html': '',
                         'class': 'level-star',
@@ -467,7 +475,7 @@ function highlight_action(x, y, hclass) {
 }
 
 function log_add_independent_message(p_num, message_code, message_parameters) {
-    last_executed_api = 'log_add_independent_message';
+    publish_api_call();
 
     //log statistics of time
     logTimeStats(p_num);
@@ -516,7 +524,7 @@ function log_add_independent_message(p_num, message_code, message_parameters) {
 }
 
 function log_add_container(p_num, message_code, message_parameters) {
-    last_executed_api = 'log_add_container';
+    publish_api_call();
     //log statistics of time
     logTimeStats(p_num);
     var message = parse_log_message(message_code, message_parameters);
@@ -583,14 +591,14 @@ function log_add_container(p_num, message_code, message_parameters) {
 }
 
 function log_close_container() {
-    last_executed_api = 'log_close_container';
+    publish_api_call();
     if ($('game_log').getStyle('display') == 'none') logContainer.slide("hide"); //by f5
     else
         setTimeout('$("' + logContainerId + '").slide("in");$("' + logContainerId + '").slide("out");', 2500);
 }
 
 function log_add_message(message_code, message_parameters) {
-    last_executed_api = 'log_add_message';
+    publish_api_call();
     //log statistics of time
     if (turn_state == MY_TURN)
         logTimeStats(my_player_num);
@@ -756,7 +764,7 @@ function log_player_class(p_num) {
 }
 
 function log_add_move_message(x, y, x2, y2, p_num, unit_id, npc_name) {
-    last_executed_api = 'log_add_move_message';
+    publish_api_call();
     //log statistics of time
     logTimeStats(p_num);
     var short_name = npc_name ? npc_player_name_log(npc_name) : unit_log_name(unit_id);
@@ -817,7 +825,7 @@ function log_add_attack_building_message(x, y, x2, y2, p_num, unit_id, p_num2, a
 }
 
 function log_add_attack_message(x, y, x2, y2, p_num, short_name, p_num2, short_name2, attack_success, critical, damage) {
-    last_executed_api = 'log_add_attack_message';
+    publish_api_call();
     //log statistics of time
     logTimeStats(p_num);
     var arrow_colr;
@@ -919,8 +927,8 @@ function logTimeStats(p_num) {
 }
 
 function add_card(pd_id, card_id, no_anim) {
+    publish_api_call();
     no_anim = no_anim || false;
-    last_executed_api = 'add_card';
     var myDiv = new Element('div', {
         'class': 'card',
         'id': 'card_' + pd_id
@@ -1011,7 +1019,7 @@ function cardTitleDiv(card_id) {
 }
 
 function remove_card(card_id) {
-    last_executed_api = 'remove_card';
+    publish_api_call();
     removeBoardTip('card_' + card_id);
     $('card_' + card_id).destroy();
     hideSliders();
@@ -1019,7 +1027,7 @@ function remove_card(card_id) {
 }
 
 function add_spectator(p_num, name) {
-    last_executed_api = 'add_spectator';
+    publish_api_call();
     var myDiv = new Element('div', {
         'html': name,
         'class': 'spectator',
@@ -1037,7 +1045,7 @@ function add_spectator(p_num, name) {
 }
 
 function add_spectator_init(p_num, name) {
-    last_executed_api = 'add_spectator';
+    publish_api_call();
     var myDiv = new Element('div', {
         'html': name,
         'class': 'spectator',
@@ -1051,7 +1059,7 @@ function add_spectator_init(p_num, name) {
 }
 
 function remove_spectator(p_num) {
-    last_executed_api = 'remove_spectator';
+    publish_api_call();
     var dt = new Date();
     dt = dt.getTime();
     dt = parseInt(dt / 1000);
@@ -1062,7 +1070,7 @@ function remove_spectator(p_num) {
 
 function add_unit(id, p_num, x, y, card_id) {
     if (!players_by_num[p_num]) return 0;
-    last_executed_api = 'add_unit';
+    publish_api_call();
     if (card_id != 0) {
         var check1 = typeof(board_units[id]);
         if (check1 != "undefined") var check2 = typeof(board_units[id]["id"]);
@@ -1157,7 +1165,7 @@ function add_unit(id, p_num, x, y, card_id) {
 
 function add_unit_by_id(id, p_num, x, y, unit_id) {
     if (!players_by_num[p_num]) return 0;
-    last_executed_api = 'add_unit_by_id(' + id + ',' + p_num + ',' + x + ',' + y + ',' + unit_id + ')';
+    publish_api_call();
     var check1 = typeof(board_units[id]);
     if (check1 != "undefined") var check2 = typeof(board_units[id]["id"]);
     if (check1 == "undefined" || check2 == "undefined") {
@@ -1238,7 +1246,7 @@ function add_unit_by_id(id, p_num, x, y, unit_id) {
 }
 
 function kill_unit(x, y, noanim) {
-    last_executed_api = 'kill_unit(' + x + ',' + y + ')';
+    publish_api_call();
     noanim = noanim || 0;
     var id = board[x][y]["ref"];
     var p_num = board_units[id]['player_num'];
@@ -1317,7 +1325,7 @@ function kill_unit(x, y, noanim) {
 }
 
 function visual_kill_unit(x, y) {
-    last_executed_api = 'visual_kill_unit';
+    publish_api_call();
     var id = board[x][y]["ref"];
     var temp_unit = new Array();
     temp_unit = board_units[id];
@@ -1438,7 +1446,7 @@ function deactivate_buy_ressurect_play_card() {
 }
 
 function building_set_health(x, y, health) {
-    last_executed_api = 'building_set_health';
+    publish_api_call();
     var id = board[x][y]["ref"];
     board_buildings[id]["health"] = health;
     //tip
@@ -1458,7 +1466,7 @@ function building_set_health(x, y, health) {
 }
 
 function building_set_owner(x, y, p_num) {
-    last_executed_api = 'building_set_owner';
+    publish_api_call();
     var id = board[x][y]["ref"];
     var b = board_buildings[id];
 
@@ -1488,7 +1496,7 @@ function building_set_owner(x, y, p_num) {
 }
 
 function move_building(old_x, old_y, new_x, new_y, new_rotation, new_flip, new_income) {
-    last_executed_api = 'move_building';
+    publish_api_call();
     var id = board[old_x][old_y]["ref"];
     var bl = board_buildings[id];
 
@@ -1505,7 +1513,7 @@ function move_building(old_x, old_y, new_x, new_y, new_rotation, new_flip, new_i
 }
 
 function visual_destroy_building(x, y) {
-    last_executed_api = 'visual_move_building';
+    publish_api_call();
     var id = board[x][y]["ref"];
     var temp_building = new Array();
     temp_building = board_buildings[id];
@@ -1514,7 +1522,7 @@ function visual_destroy_building(x, y) {
 }
 
 function destroy_building(x, y) {
-    last_executed_api = 'destroy_building';
+    publish_api_call();
     var id = board[x][y]["ref"];
 
     var p_num = board_buildings[id]['player_num'];
@@ -1557,7 +1565,7 @@ function destroy_building(x, y) {
 }
 
 function put_building(id, p_num, x, y, nrotation, nflip, card_id, income) {
-    last_executed_api = 'put_building';
+    publish_api_call();
     var check1 = typeof(board_buildings[id]);
     if (check1 != "undefined") var check2 = typeof(board_buildings[id]["id"]);
     if (check1 == "undefined" || check2 == "undefined") {
@@ -1642,7 +1650,7 @@ function put_building(id, p_num, x, y, nrotation, nflip, card_id, income) {
 }
 
 function put_building_by_id(id, p_num, x, y, nrotation, nflip, card_id, income) {
-    last_executed_api = 'put_building_by_id';
+    publish_api_call();
     var check1 = typeof(board_buildings[id]);
     if (check1 != "undefined") var check2 = typeof(board_buildings[id]["id"]);
     if (check1 == "undefined" || check2 == "undefined") {
@@ -1727,7 +1735,7 @@ function put_building_by_id(id, p_num, x, y, nrotation, nflip, card_id, income) 
 }
 
 function put_radius(x, y, radius, x_len, y_len) {
-    last_executed_api = 'put_radius';
+    publish_api_call();
     var mx = 0;
     var my = 0;
     if (radius > 0) {
@@ -1744,7 +1752,7 @@ function put_radius(x, y, radius, x_len, y_len) {
 }
 
 function clean_radius(x, y, radius, x_len, y_len) {
-    last_executed_api = 'clean_radius';
+    publish_api_call();
     var mx = 0;
     var my = 0;
     if (radius > 0) {
@@ -1759,7 +1767,7 @@ function clean_radius(x, y, radius, x_len, y_len) {
 }
 
 function add_building_cell(id, p_num, mx, my, b, card_id, nrotation, nflip, i) {
-    last_executed_api = 'add_building_cell';
+    publish_api_call();
     if (!board[mx]) board[mx] = new Array();
     board[mx][my] = new Array();
     board[mx][my]["x"] = mx;
@@ -1804,7 +1812,7 @@ function add_building_cell(id, p_num, mx, my, b, card_id, nrotation, nflip, i) {
 }
 
 function add_to_grave(grave_id, card_id, x, y, size, turn_when_killed) {
-    last_executed_api = 'add_to_grave';
+    publish_api_call();
     turn_when_killed = turn_when_killed || active_players['turn'];
     var myDiv = new Element('div', {
         'html': '',
@@ -1862,17 +1870,17 @@ function add_to_grave(grave_id, card_id, x, y, size, turn_when_killed) {
 }
 
 function show_grave(grave_id, x, y, size) {
-    last_executed_api = 'show_grave';
+    publish_api_call();
     $('grave' + grave_id + '_' + x + '_' + y).setStyle('display', 'block');
 }
 
 function hide_grave(grave_id, x, y, size) {
-    last_executed_api = 'hide_grave';
+    publish_api_call();
     $('grave' + grave_id + '_' + x + '_' + y).setStyle('display', 'none');
 }
 
 function show_all_graves() {
-    last_executed_api = 'show_all_graves';
+    publish_api_call();
     vwGrave.each(function(item, index) {
         if (item) {
             show_grave(index, item['x'], item['y'], item['size']);
@@ -1881,7 +1889,7 @@ function show_all_graves() {
 }
 
 function hide_all_graves() {
-    last_executed_api = 'hide_all_graves';
+    publish_api_call();
     vwGrave.each(function(item, index) {
         if (item) {
             hide_grave(index, item['x'], item['y'], item['size']);
@@ -1890,7 +1898,7 @@ function hide_all_graves() {
 }
 
 function remove_from_grave(grave_id) {
-    last_executed_api = 'remove_from_grave';
+    publish_api_call();
     removeBoardTip('dead_unit' + grave_id);
     $('dead_unit' + grave_id).destroy();
     $('grave' + grave_id + '_' + vwGrave[grave_id]['x'] + '_' + vwGrave[grave_id]['y']).destroy();
@@ -2096,7 +2104,7 @@ function removeBuildingTip(id, b_id) {
 }
 
 function play_video(code, file_name, loop) {
-    last_executed_api = 'play_video';
+    publish_api_call();
     var obj = new Element('video', {
         'src': '../../design/video/' + file_name,
         'width': 480,
@@ -2122,7 +2130,7 @@ function play_sound(file_name) {
 }
 
 function end_game() {
-    last_executed_api = 'end_game';
+    publish_api_call();
     cancel_execute();
     localStorage.removeItem("saved_messages_" + game_info["game_id"] + "_" + my_player_num);
     clearTimeout(remindMoveTimer);
@@ -2139,12 +2147,12 @@ function end_game() {
 }
 
 function get_stats() {
-    last_executed_api = 'get_stats';
+    publish_api_call();
     parent.WSClient.getGameStatistic();
 }
 
 function show_stats(data) {
-    last_executed_api = 'show_stats';
+    publish_api_call();
     try {
         eval(data);
         myDiv = $('window_c');
@@ -2306,7 +2314,7 @@ function linkify(inputText) {
 }
 
 function chat_add_user_message(p_num, message) {
-    last_executed_api = 'chat_add_user_message(' + p_num + ',' + message + ')';
+    publish_api_call();
     if ($chk(players_by_num[p_num])) {
         var nick = players_by_num[p_num]['name'];
     } else {
@@ -2335,7 +2343,7 @@ function chat_add_user_message(p_num, message) {
 }
 
 function chat_add_service_message(mtime, message) {
-    last_executed_api = 'chat_add_service_message(' + mtime + ',' + message + ')';
+    publish_api_call();
     var time = new Date();
     time.setTime(mtime * 1000);
     time = time.format('db');
@@ -2357,7 +2365,7 @@ function chat_add_service_message(mtime, message) {
 
 // From server we receive set_active_player($p_num,$last_turn,$turn_num,$npc_flag), other flags are set in initialization.js after refresh
 function set_active_player(player_num, last_end_turn, turn, npc_flag, units_moves_flag, card_played_flag, subsidy_flag, from_init) {
-    last_executed_api = 'set_active_player';
+    publish_api_call();
     units_moves_flag = units_moves_flag || 0;
     card_played_flag = card_played_flag || 0;
     subsidy_flag = subsidy_flag || 0;
@@ -2507,7 +2515,7 @@ function activate_button(but) {
 }
 
 function refresh() {
-    last_executed_api = 'refresh';
+    publish_api_call();
 }
 
 function clean_everything() {
@@ -2638,7 +2646,7 @@ function unhighlight_building(id) {
 }
 
 function show_unit_message(b_unit_id, mes_id) {
-    last_executed_api = 'show_unit_message(' + b_unit_id + ',' + mes_id + ')';
+    publish_api_call();
     if (noNpcTalk != 1) {
         var mes = dic_unit_phrases[mes_id]["phrase"];
         var x = 0;

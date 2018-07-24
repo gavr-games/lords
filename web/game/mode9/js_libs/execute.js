@@ -450,6 +450,9 @@ function execute_card(pd_id,id) {
                 });
                 addCancelAction();
             }
+            if (cards[id]['type'] == 'b') {
+              EventBus.publish('execute_building_card', [id]); 
+            }
         } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("2"), 200, 20, false); // Not enough gold
     } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("1"), 200, 20, false); // Not your turn
 }
@@ -529,6 +532,7 @@ function execute_unit(x, y) {
             });
             addCancelAction();
             if (default_proc != '') execute_procedure(default_proc);
+            EventBus.publish('execute_unit_with_many_actions', [x, y]);
         }
     }
 }

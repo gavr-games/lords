@@ -461,6 +461,7 @@ function initialization() {
             eval(ws_exec_cmds);
             exec_commands_now = true;
             hideLoading();
+            EventBus.publish("game_loading_finished");
         } // end if game finished
     } catch (e) {
         if (DEBUG_MODE) {
@@ -835,6 +836,12 @@ function turnNoSound() {
     });
 }
 
+function tutorialReset() {
+  Tutorial.reset();
+  $('windowsettings').setStyle('display','none');
+  EventBus.publish("game_loading_finished");
+}
+
 function turnNoNextUnit() {
     if ($('noNextUnit').getProperty('checked')) noNextUnit = 1;
     else noNextUnit = 0;
@@ -849,6 +856,17 @@ function turnNoNpcTalk() {
     Cookie.write('arena_noNpcTalk', noNpcTalk, {
         duration: 365
     });
+}
+
+function turnNoTutorial() {
+  if ($('noTutorial').getProperty('checked')) {
+    noTutorial = '1';
+    jQuery('#resetTutorialBtn').prop('disabled', true);
+  } else {
+    noTutorial = '0';
+    jQuery('#resetTutorialBtn').prop('disabled', false);
+  }
+  Tutorial.setDisabled(noTutorial);
 }
 
 function changeDraw() {

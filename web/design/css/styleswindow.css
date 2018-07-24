@@ -104,3 +104,7 @@
 .windowcont .window table .midrep .content .pl3 {
 	color: #00e4ff;
 }
+
+.windowcont #resetTutorialBtn:disabled {
+  color: black;
+}
