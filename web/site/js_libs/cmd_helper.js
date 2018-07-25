@@ -51,9 +51,10 @@ function convertChars(s) {
         '<': '&lt;',
         '>': '&gt;',
         '\\': '&#92;',
-        '\'': '&apos;'
+        '\'': '&apos;',
+        '%': '&#37;'
     };
-    return s.replace(/([\&"<>\\\'])/g, function (str, item) {
+    return s.replace(/([\%\&"<>\\\'])/g, function (str, item) {
         return xml_special_to_escaped_one_map[item];
     });
 }

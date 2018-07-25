@@ -164,9 +164,10 @@ function convertChars(s) {
         '<': '&lt;',
         '>': '&gt;',
         '\\': '&#92;',
-        '\'': '&apos;'
+        '\'': '&apos;',
+        '%': '&#37;'
     };
-    return s.replace(/([\&"<>\\\'])/g, function(str, item) {
+    return s.replace(/([\%\&"<>\\\'])/g, function(str, item) {
         return xml_special_to_escaped_one_map[item];
     });
 }
@@ -178,9 +179,10 @@ function convertFromChars(s) {
         '&lt;': '<',
         '&gt;': '>',
         '&#92;': '\\',
-        '&apos;': '\''
+        '&apos;': '\'',
+        '&#37;': '%'
     };
-    return s.replace(/(&quot;|&lt;|&gt;|&amp;|&#92;|&apos;)/g,
+    return s.replace(/(&quot;|&lt;|&gt;|&amp;|&#92;|&apos;|&#37;)/g,
         function(str, item) {
             return escaped_one_to_xml_special_map[item];
         });

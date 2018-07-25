@@ -263,9 +263,10 @@ export class WSClient {
             '&gt;': '>',
             '&#92;': '\\',
             '&apos;': '\'',
-            '&#39;': '\''
+            '&#39;': '\'',
+            '&#37;': '%'
         };
-        return s.replace(/(&quot;|&lt;|&gt;|&amp;|&#92;|&apos;|&#39;)/g, function (str, item) {
+        return s.replace(/(&quot;|&lt;|&gt;|&amp;|&#92;|&apos;|&#39;|&#37;)/g, function (str, item) {
             return escaped_one_to_xml_special_map[item];
         });
     }
