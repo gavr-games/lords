@@ -80,7 +80,7 @@ CREATE TABLE `replay_init_board` (
 
 DROP TABLE IF EXISTS `replay_init_board_buildings`;
 CREATE TABLE `replay_init_board_buildings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `game_id` int(10) unsigned NOT NULL,
   `building_id` int(10) unsigned NOT NULL DEFAULT '0',
   `player_num` int(10) unsigned NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE `replay_init_board_buildings_features` (
 
 DROP TABLE IF EXISTS `replay_init_board_units`;
 CREATE TABLE `replay_init_board_units` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `game_id` int(10) unsigned NOT NULL,
   `player_num` int(10) unsigned NOT NULL,
   `unit_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -145,6 +145,30 @@ CREATE TABLE `replay_statistic_values` (
   `name` varchar(500) NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (game_id) REFERENCES replay_games(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `replay_actions`;
+CREATE TABLE `replay_actions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` int(10) unsigned NOT NULL,
+  `player_num` int(10) unsigned NOT NULL,
+  `action` varchar(1000) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (game_id) REFERENCES replay_games(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `replay_commands`;
+CREATE TABLE `replay_commands` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `action_id` int(10) unsigned NOT NULL,
+    `game_id` int(10) unsigned NOT NULL,
+    `player_num` int(10) unsigned NOT NULL,
+    `command` varchar(1000) NOT NULL,
+    `hidden_flag` int(11) NOT NULL DEFAULT '0',
+    `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (action_id) REFERENCES replay_actions(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS=1;
