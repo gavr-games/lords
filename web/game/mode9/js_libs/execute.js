@@ -451,7 +451,9 @@ function execute_card(pd_id,id) {
                 addCancelAction();
             }
             if (cards[id]['type'] == 'b') {
-              EventBus.publish('execute_building_card', [id]); 
+              EventBus.publish('execute_building_card', [id, procedures]);
+            } else if (cards[id]['type'] == 'm') {
+              EventBus.publish('execute_magic_card', [id, procedures]);
             }
         } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("2"), 200, 20, false); // Not enough gold
     } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("1"), 200, 20, false); // Not your turn
@@ -507,7 +509,7 @@ function execute_unit(x, y) {
         i = 0;
         var default_proc = '';
         procedures = Array();
-        //if (players_by_num[my_player_num]['name']=='skoba') console.log('unit_id=',board_units[id]['unit_id']);
+        
         units_procedures_1.each(function (item, index) {
             if (item) if (item['unit_id'] == board_units[id]['unit_id']) {
                 procedures[i] = procedures_mode_1[item['procedure_id']];
@@ -515,8 +517,7 @@ function execute_unit(x, y) {
                 i++;
             }
         });
-        //if (players_by_num[my_player_num]['name']=='skoba') console.log('procedures=',procedures);
-        //if (players_by_num[my_player_num]['name']=='skoba') console.log('i=',i);
+        
         if (i != 0) if (i == 1) execute_procedure(procedures[0]['name']);
         else //1 procedure for unit
         //many procedures for unit
@@ -532,7 +533,7 @@ function execute_unit(x, y) {
             });
             addCancelAction();
             if (default_proc != '') execute_procedure(default_proc);
-            EventBus.publish('execute_unit_with_many_actions', [x, y]);
+            EventBus.publish('execute_unit_with_many_actions', [x, y, id]);
         }
     }
 }
