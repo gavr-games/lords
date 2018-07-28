@@ -1599,7 +1599,7 @@ CREATE TABLE `replay_actions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `game_id` int(10) unsigned NOT NULL,
   `player_num` int(10) unsigned NOT NULL,
-  `action` varchar(1000) NOT NULL,
+  `action` varchar(1000),
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `game_id` (`game_id`),
@@ -12439,7 +12439,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_action_begin`(g_id INT, p_num INT)
 BEGIN
 
-  INSERT INTO replay_actions (game_id, player_num, action) VALUES(g_id, p_num, IFNULL(@current_procedure_call, 'ACTION_NOT_SET'));
+  INSERT INTO replay_actions (game_id, player_num, action) VALUES(g_id, p_num, @current_procedure_call);
   SET @current_action_id = LAST_INSERT_ID();
 
   CREATE TEMPORARY TABLE IF NOT EXISTS `lords`.`command` (
