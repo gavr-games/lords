@@ -152,7 +152,7 @@ CREATE TABLE `replay_actions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `game_id` int(10) unsigned NOT NULL,
   `player_num` int(10) unsigned NOT NULL,
-  `action` varchar(1000) NOT NULL,
+  `action` varchar(1000),
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (game_id) REFERENCES replay_games(id) ON DELETE CASCADE
