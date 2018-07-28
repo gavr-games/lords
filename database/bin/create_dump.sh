@@ -2,7 +2,7 @@
 
 DUMP_DIR=/database/dump/
 mkdir -p $DUMP_DIR
-DUMP_FILE_NAME=dump_$(date +%Y%m%d%H%M%S).sql
+DUMP_FILE_NAME=${1:-dump_$(date +%Y%m%d%H%M%S).sql}
 DUMP_PATH=$DUMP_DIR$DUMP_FILE_NAME
 
 echo Creating MySQL dump to $DUMP_PATH
