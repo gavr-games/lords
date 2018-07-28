@@ -136,6 +136,7 @@ class cDataBase {
 	
 	//for different queries like call stored proc
 	function query($query)	{
+		mysqli_query($this->dbLink,"set @current_procedure_call='".$query."'");
 		$res = mysqli_query($this->dbLink,$query);
 		
 		if (!$this->checkForErrors()) return false;
@@ -145,6 +146,7 @@ class cDataBase {
 	
 	//for different multi queries like call stored proc multiple_actions
 	function multi_query($query)	{
+		mysqli_query($this->dbLink,"set @current_procedure_call='".$query."'");
 		$res = mysqli_multi_query($this->dbLink,$query);
 		
 		if (!$this->checkForErrors()) return false;
