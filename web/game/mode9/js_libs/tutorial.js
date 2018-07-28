@@ -329,7 +329,7 @@ var Tutorial = {
     }
 
     // send money
-    if (amount.toInt() < 20 && p_num.toInt() != my_player_num.toInt() && players_by_num[p_num]['team'] == players_by_num[my_player_num]['team'] && !Tutorial.isDone('send_money')) {
+    if (amount.toInt() < 20 && p_num.toInt() != my_player_num.toInt() && players_by_num[p_num]['team'] == players_by_num[my_player_num]['team'] && p_num.toInt() < 10 && !Tutorial.isDone('send_money')) {
       eventNames.push('send_money');
       steps.push({
         element: document.querySelector('.btn_sendm'),
