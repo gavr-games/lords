@@ -17,4 +17,10 @@ INSERT INTO `lords`.`log_message_text_i18n`(`code`,`language_id`,`message`)
 VALUES ('building_captured', 1, '{building0} is captured by {player1}'),
 ('building_captured', 2, 'Здание {building0} захвачено игроком {player1}');
 
+INSERT INTO `lords`.`log_message_text_i18n`(`code`,`language_id`,`message`)
+VALUES ('building_captured_own', 1, '{player1} captures own {building0}'),
+('building_captured_own', 2, 'Игрок {player1} захватывает свое собственное здание {building0}');
+
+update log_message_text_i18n set message = '{player1} continues to control {unit0}'
+where message = '{player1} continues to controls {unit0}';
 

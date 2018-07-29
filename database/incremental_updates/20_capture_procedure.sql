@@ -39,6 +39,10 @@ BEGIN
         CALL user_action_begin(g_id, p_num);
         CALL play_card_actions(g_id,p_num,player_deck_id); 
 
+        IF p_num = (SELECT bb.player_num FROM board_buildings bb WHERE bb.id = board_building_id) THEN
+          SET log_msg_code = 'building_captured_own';
+        END IF;
+
         CALL cmd_log_add_message(g_id, p_num, log_msg_code, CONCAT_WS(';', log_building(board_building_id), log_player(g_id, p_num)));
 
         UPDATE board_buildings SET player_num=p_num WHERE id=board_building_id;
