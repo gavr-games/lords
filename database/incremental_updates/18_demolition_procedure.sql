@@ -27,11 +27,6 @@ BEGIN
   END IF;
 END$$
 
-
-use lords;
-
-DELIMITER $$
-
 DROP PROCEDURE IF EXISTS `lords`.`cast_polza_move_building` $$
 
 CREATE PROCEDURE `cast_polza_move_building`(g_id INT,  p_num INT,  b_x INT,  b_y INT,  x INT,  y INT,  rot INT,  flp INT)

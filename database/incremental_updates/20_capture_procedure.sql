@@ -46,6 +46,11 @@ BEGIN
         CALL cmd_log_add_message(g_id, p_num, log_msg_code, CONCAT_WS(';', log_building(board_building_id), log_player(g_id, p_num)));
 
         UPDATE board_buildings SET player_num=p_num WHERE id=board_building_id;
+
+        IF(building_feature_check(board_building_id,'ally') = 1)THEN
+          CALL building_feature_set(board_building_id,'summon_team',get_player_team(g_id, p_num));
+        END IF;
+
         CALL count_income(board_building_id);
         CALL cmd_building_set_owner(g_id,p_num,board_building_id);
 
