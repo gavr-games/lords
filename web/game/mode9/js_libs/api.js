@@ -1465,7 +1465,7 @@ function building_set_health(x, y, health) {
     });
 }
 
-function building_set_owner(x, y, p_num) {
+function building_set_owner(x, y, p_num, new_income) {
     publish_api_call();
     var id = board[x][y]["ref"];
     var b = board_buildings[id];
@@ -1490,6 +1490,7 @@ function building_set_owner(x, y, p_num) {
     visual_destroy_building(x, y);
 
     board_buildings[id]["player_num"] = p_num;
+    board_buildings[id]["income"] = new_income;
     b = board_buildings[id];
 
     put_building(id, p_num, bx, by, b['rotation'], b['flip'], card_id, b['income']);
