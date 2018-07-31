@@ -340,7 +340,7 @@ function board_clicked(x, y) {
                     } else if (!$('board_' + x + '_' + y).hasClass('green')) return 1;
                 }
             }
-            if (executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building') {
+            if (executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building' || isPutBuildingInEmptyCoord(executable_procedure)) {
                 clean_building(x, y);
             }
             game_state = 'SELECTED_EMPTY_COORD';
@@ -357,7 +357,7 @@ function board_clicked(x, y) {
             }
             empty_coord = newx.toString() + ',' + newy.toString();
             if (eval("typeof on_empty_coord_select == 'function'")) eval('on_empty_coord_select();'); //call on_param_select function if exists
-            if (executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building') clean_player_move_unit();
+            if (executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building' && !isPutBuildingInEmptyCoord(executable_procedure)) clean_player_move_unit();
             execute_procedure(executable_procedure);
         } else if (game_state == 'SELECTING_ATTACK_COORD') {
             $('overboard').removeClass('cursor_attack');
@@ -938,6 +938,11 @@ function on_building_select() {
         var by = coords[1].toInt();
         card = board_buildings[board[bx][by]['ref']]['card_id'];
         pre_put_building();
+    }
+    if (isPutBuildingInEmptyCoord(executable_procedure)) {
+      clearActions();
+      pre_put_building();
+      addCancelAction();
     }
 }
 
