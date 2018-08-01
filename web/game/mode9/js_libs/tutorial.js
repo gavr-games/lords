@@ -19,7 +19,8 @@ var Tutorial = {
       'show_levelup_star',
       'player_set_gold',
       'add_unit',
-      'add_unit_by_id'
+      'add_unit_by_id',
+      'move_unit'
     ];
   },
 
@@ -42,6 +43,7 @@ var Tutorial = {
       'unit_archer',
       'unit_arbalester',
       'unit_catapult',
+      'income_unit_zone'
     ];
   },
 
@@ -378,6 +380,24 @@ var Tutorial = {
           });
         }
     });
+
+    if (eventNames.length > 0) {
+      Tutorial.startIntro(eventNames, { steps: steps }, 1000);
+    }
+  },
+
+  on_move_unit: function(e, x, y, x2, y2) {
+    var eventNames = [];
+    var steps = [];
+
+    // income for unit out of my zone
+    if (!my_quart(x2, y2) && board_units[board[x][y]["ref"]]['player_num'].toInt() == my_player_num.toInt()) {
+      eventNames.push('income_unit_zone');
+      steps.push({
+        element: document.querySelector('#board_' + x2 + '_' + y2),
+        intro: i18n[USER_LANGUAGE]["tutorial"]["income_unit_zone"]
+      });
+    }
 
     if (eventNames.length > 0) {
       Tutorial.startIntro(eventNames, { steps: steps }, 1000);
