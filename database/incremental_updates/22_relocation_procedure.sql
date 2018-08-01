@@ -48,11 +48,6 @@ BEGIN
   END IF;
 END$$
 
-
-use lords;
-
-DELIMITER $$
-
 DROP PROCEDURE IF EXISTS `lords`.`put_building` $$
 
 CREATE PROCEDURE `put_building`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT,  rotation INT,  flip INT)
