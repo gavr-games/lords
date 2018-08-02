@@ -1027,6 +1027,14 @@ ul {
 	background: url(../images/act_wall_close.png) top no-repeat;
 }
 
+.ctrl_block .block .main_cont .acts .act_express_into_zone {
+	background: url(../images/act_express_into_zone.png) top no-repeat;
+}
+
+.ctrl_block .block .main_cont .acts .act_express_out_of_zone {
+	background: url(../images/act_express_out_of_zone.png) top no-repeat;
+}
+
 .ctrl_block .block .main_cont .acts .act:hover {
 	background-position: bottom;
 }
