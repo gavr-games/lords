@@ -1576,6 +1576,8 @@ function put_building(id, p_num, x, y, nrotation, nflip, card_id, income) {
         board_buildings[id]["vamp"] = "0";
         board_buildings[id]["card_id"] = card_id;
         board_buildings[id]["income"] = income;
+        board_buildings[id]["rotation"] = nrotation;
+        board_buildings[id]["flip"] = nflip;
     }
     var b = buildings[board_buildings[id]["building_id"]];
     put_radius(x, y, b["radius"], b["x_len"], b["y_len"]);
@@ -1661,6 +1663,8 @@ function put_building_by_id(id, p_num, x, y, nrotation, nflip, card_id, income) 
         board_buildings[id]["vamp"] = "0";
         board_buildings[id]["card_id"] = "";
         board_buildings[id]["income"] = income;
+        board_buildings[id]["rotation"] = nrotation;
+        board_buildings[id]["flip"] = nflip;
     }
     var b = buildings[board_buildings[id]["building_id"]];
     put_radius(x, y, b["radius"], b["x_len"], b["y_len"]);
