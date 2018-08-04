@@ -65,6 +65,12 @@ GRANT EXECUTE ON PROCEDURE `lords`.`wall_close` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_iron_skin` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_horseshoe` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_berserk` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_demolition` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_capture` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_relocation` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_zone_express_out` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_zone_express_into` TO 'lords_client'@'%';
+GRANT EXECUTE ON PROCEDURE `lords`.`cast_forest` TO 'lords_client'@'%';
 
 # F5
 GRANT EXECUTE ON PROCEDURE `lords`.`get_all_game_info` TO 'lords_client'@'%';

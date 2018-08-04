@@ -1337,11 +1337,7 @@ function move_unit(x, y, x2, y2) {
     if (!$chk(board[x]) || !$chk(board[x][y]) || !$chk(board[x][y]['ref'])) {
         return;
     }
-    last_executed_api = 'move_unit';
-    /*if (!$('board_'+x+'_'+y).getChildren('.unitdiv')[0])	{ //unit haven't appeared after move animation
-			setTimeout('move_unit('+x+','+y+','+x2+','+y2+');',2000);
-			return 0;
-	}*/
+    publish_api_call();
     var card_id = '';
     var unit_id = '';
     var id = board[x][y]["ref"];
@@ -1465,7 +1461,7 @@ function building_set_health(x, y, health) {
     });
 }
 
-function building_set_owner(x, y, p_num) {
+function building_set_owner(x, y, p_num, new_income) {
     publish_api_call();
     var id = board[x][y]["ref"];
     var b = board_buildings[id];
@@ -1490,6 +1486,7 @@ function building_set_owner(x, y, p_num) {
     visual_destroy_building(x, y);
 
     board_buildings[id]["player_num"] = p_num;
+    board_buildings[id]["income"] = new_income;
     b = board_buildings[id];
 
     put_building(id, p_num, bx, by, b['rotation'], b['flip'], card_id, b['income']);
@@ -1579,6 +1576,8 @@ function put_building(id, p_num, x, y, nrotation, nflip, card_id, income) {
         board_buildings[id]["vamp"] = "0";
         board_buildings[id]["card_id"] = card_id;
         board_buildings[id]["income"] = income;
+        board_buildings[id]["rotation"] = nrotation;
+        board_buildings[id]["flip"] = nflip;
     }
     var b = buildings[board_buildings[id]["building_id"]];
     put_radius(x, y, b["radius"], b["x_len"], b["y_len"]);
@@ -1664,6 +1663,8 @@ function put_building_by_id(id, p_num, x, y, nrotation, nflip, card_id, income) 
         board_buildings[id]["vamp"] = "0";
         board_buildings[id]["card_id"] = "";
         board_buildings[id]["income"] = income;
+        board_buildings[id]["rotation"] = nrotation;
+        board_buildings[id]["flip"] = nflip;
     }
     var b = buildings[board_buildings[id]["building_id"]];
     put_radius(x, y, b["radius"], b["x_len"], b["y_len"]);

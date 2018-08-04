@@ -638,6 +638,14 @@ function sendChatMessage() {
     } else $('chat_text').set('value', '');
 }
 
+function isPutBuildingInEmptyCoord(procedure_name) {
+  if (!procedures_names[procedure_name]) {
+    return false;
+  }
+  var procParams = procedures_names[procedure_name]['params'];
+  return procParams.includes('rotation') && procParams.includes('flip') && procParams.includes('empty_coord,');
+}
+
 //change color of cells on mouseover, show info boxes
 function backlight(x, y) {
     try {
@@ -661,7 +669,7 @@ function backlight(x, y) {
             // Draw shoot radius on hover
             draw_shoot_radius(x, y);
             //SETTING A BUILDING
-            if ((executable_procedure == 'put_building' && game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') || ((executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building') && game_state == 'SELECTING_EMPTY_COORD')) {
+            if ((executable_procedure == 'put_building' && game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') || ((executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building' || isPutBuildingInEmptyCoord(executable_procedure)) && game_state == 'SELECTING_EMPTY_COORD')) {
                 draw_building(x, y);
             } else
                 //SUMMON VAMPIRE
@@ -745,7 +753,7 @@ function backlight_out(x, y) {
             // Clean shoot radius on out
             clean_shoot_radius(x, y);
             //SETTING A BUILDING
-            if ((executable_procedure == 'put_building' && game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') || ((executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building') && game_state == 'SELECTING_EMPTY_COORD')) {
+            if ((executable_procedure == 'put_building' && game_state == 'SELECTING_EMPTY_COORD_MY_ZONE') || ((executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building' || isPutBuildingInEmptyCoord(executable_procedure)) && game_state == 'SELECTING_EMPTY_COORD')) {
                 clean_building(x, y);
             } else
                 //SUMMON VAMPIRE
@@ -901,7 +909,7 @@ function clean_shoot_radius(x, y) {
 
 function draw_building(x, y) {
     var b = null;
-    if (card != "") {
+    if (card != "" && cards[card]["type"] == 'b') {
         b = buildings[cards[card]["ref"]];
     } else if (building != "") {
         var coords = building.toString().split(',');
@@ -953,7 +961,7 @@ function draw_building(x, y) {
                 my = y_0 + Math.floor(i / b["x_len"].toInt());
                 if ($('board_' + mx + '_' + my)) {
                     $('board_' + mx + '_' + my).addClass('green');
-                    if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building') $('board_' + mx + '_' + my).addClass('red');
+                    if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building' && !isPutBuildingInEmptyCoord(executable_procedure)) $('board_' + mx + '_' + my).addClass('red');
                     else if (board[mx])
                         if (board[mx][my])
                             if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
@@ -972,7 +980,7 @@ function draw_building(x, y) {
                 my = y_0 + (i % b["x_len"].toInt());
                 if ($('board_' + mx + '_' + my)) {
                     $('board_' + mx + '_' + my).addClass('green');
-                    if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building') $('board_' + mx + '_' + my).addClass('red');
+                    if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building' && !isPutBuildingInEmptyCoord(executable_procedure)) $('board_' + mx + '_' + my).addClass('red');
                     else if (board[mx])
                         if (board[mx][my])
                             if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
@@ -991,7 +999,7 @@ function draw_building(x, y) {
                 my = y_0 - Math.floor(i / b["x_len"].toInt());
                 if ($('board_' + mx + '_' + my)) {
                     $('board_' + mx + '_' + my).addClass('green');
-                    if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building') $('board_' + mx + '_' + my).addClass('red');
+                    if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building' && !isPutBuildingInEmptyCoord(executable_procedure)) $('board_' + mx + '_' + my).addClass('red');
                     else if (board[mx])
                         if (board[mx][my])
                             if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
@@ -1010,7 +1018,7 @@ function draw_building(x, y) {
                 my = y_0 - (i % b["x_len"].toInt());
                 if ($('board_' + mx + '_' + my)) {
                     $('board_' + mx + '_' + my).addClass('green');
-                    if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building') $('board_' + mx + '_' + my).addClass('red');
+                    if (!my_quart(mx, my) && executable_procedure != 'cast_polza_move_building' && executable_procedure != 'cast_vred_move_building' && !isPutBuildingInEmptyCoord(executable_procedure)) $('board_' + mx + '_' + my).addClass('red');
                     else if (board[mx])
                         if (board[mx][my])
                             if (board[mx][my]["ref"] != '' && $defined(board[mx][my]["ref"])) $('board_' + mx + '_' + my).addClass('red');
@@ -1023,7 +1031,7 @@ function draw_building(x, y) {
 
 function clean_building(x, y) {
     var b = null;
-    if (card != "") {
+    if (card != "" && cards[card]["type"] == 'b') {
         b = buildings[cards[card]["ref"]];
     } else if (building != "") {
         var coords = building.toString().split(',');
