@@ -365,7 +365,7 @@ BEGIN
             CALL create_new_building(g_id, neutral_p_num, tree_building_id, NULL, tree_x, tree_y, 0, 0);
             SET new_bb_id = @new_board_building_id;
             IF new_bb_id > 0 THEN
-              CALL cmd_put_building_by_id(g_id, p_num, new_bb_id);
+              CALL cmd_put_building_by_id(g_id, neutral_p_num, new_bb_id);
             END IF;
           END IF;
           SET tree_y = tree_y + 1;
