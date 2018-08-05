@@ -370,7 +370,7 @@ CREATE TABLE `building_default_features` (
   KEY `building_default_features_features` (`feature_id`),
   CONSTRAINT `building_default_features_buildings` FOREIGN KEY (`building_id`) REFERENCES `buildings` (`id`) ON DELETE CASCADE,
   CONSTRAINT `building_default_features_features` FOREIGN KEY (`feature_id`) REFERENCES `building_features` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -379,7 +379,7 @@ CREATE TABLE `building_default_features` (
 
 LOCK TABLES `building_default_features` WRITE;
 /*!40000 ALTER TABLE `building_default_features` DISABLE KEYS */;
-INSERT INTO `building_default_features` VALUES (59,9,1,NULL),(60,10,3,3),(61,11,7,NULL),(62,12,2,NULL),(63,13,4,NULL),(64,13,6,NULL),(65,13,8,NULL),(66,14,5,NULL),(67,14,6,NULL),(68,17,9,NULL),(69,17,10,NULL),(70,18,11,4),(71,20,13,NULL),(72,19,14,NULL),(74,16,16,NULL),(75,21,8,NULL),(76,21,12,NULL),(77,22,17,NULL),(78,22,12,NULL),(79,23,18,NULL),(80,23,8,NULL),(81,23,12,NULL),(82,22,19,NULL),(83,22,20,30),(84,18,20,0),(85,18,19,NULL),(86,18,21,NULL),(87,22,21,NULL);
+INSERT INTO `building_default_features` VALUES (59,9,1,NULL),(60,10,3,3),(61,11,7,NULL),(62,12,2,NULL),(63,13,4,NULL),(64,13,6,NULL),(65,13,8,NULL),(66,14,5,NULL),(67,14,6,NULL),(68,17,9,NULL),(69,17,10,NULL),(70,18,11,4),(71,20,13,NULL),(72,19,14,NULL),(74,16,16,NULL),(75,21,8,NULL),(76,21,12,NULL),(77,22,17,NULL),(78,22,12,NULL),(79,23,18,NULL),(80,23,8,NULL),(81,23,12,NULL),(82,22,19,NULL),(83,22,20,30),(84,18,20,0),(85,18,19,NULL),(86,18,21,NULL),(87,22,21,NULL),(88,19,21,NULL),(89,20,21,NULL);
 /*!40000 ALTER TABLE `building_default_features` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -461,7 +461,7 @@ CREATE TABLE `buildings` (
 
 LOCK TABLES `buildings` WRITE;
 /*!40000 ALTER TABLE `buildings` DISABLE KEYS */;
-INSERT INTO `buildings` VALUES (9,3,1,1,1,'1','building','teleport'),(10,3,2,1,1,'1','building','magic_tower'),(11,4,2,1,1,'1','building','coin_factory'),(12,3,1,1,1,'1','building','healing_temple'),(13,0,0,4,3,'011011110110','obstacle','lake'),(14,0,0,5,4,'00011001100110011000','obstacle','mountain'),(15,10,0,2,2,'1110','castle','castle'),(16,0,0,2,2,'1110','obstacle','ruins'),(17,3,1,1,1,'1','building','barracks'),(18,2,0,1,1,'1','building','tree'),(19,100,0,4,4,'0001000100011111','building','wall_closed'),(20,100,0,4,4,'0001000100001100','building','wall_opened'),(21,0,0,8,8,'0011110000000000100000011000000110000001100000010000000000111100','obstacle','moat'),(22,10,0,2,2,'0110','building','bridge'),(23,0,0,2,2,'1110','obstacle','destroyed_bridge');
+INSERT INTO `buildings` VALUES (9,3,1,1,1,'1','building','teleport'),(10,3,2,1,1,'1','building','magic_tower'),(11,4,2,1,1,'1','building','coin_factory'),(12,3,1,1,1,'1','building','healing_temple'),(13,0,0,4,3,'011011110110','obstacle','lake'),(14,0,0,5,4,'00011001100110011000','obstacle','mountain'),(15,10,0,2,2,'1110','castle','castle'),(16,0,0,2,2,'1110','obstacle','ruins'),(17,3,1,1,1,'1','building','barracks'),(18,2,0,1,1,'1','building','tree'),(19,30,0,4,4,'0001000100011111','building','wall_closed'),(20,30,0,4,4,'0001000100001100','building','wall_opened'),(21,0,0,8,8,'0011110000000000100000011000000110000001100000010000000000111100','obstacle','moat'),(22,10,0,2,2,'0110','building','bridge'),(23,0,0,2,2,'1110','obstacle','destroyed_bridge');
 /*!40000 ALTER TABLE `buildings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -539,7 +539,7 @@ CREATE TABLE `cards` (
   `ref` int(10) unsigned NOT NULL,
   `code` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -548,7 +548,7 @@ CREATE TABLE `cards` (
 
 LOCK TABLES `cards` WRITE;
 /*!40000 ALTER TABLE `cards` DISABLE KEYS */;
-INSERT INTO `cards` VALUES (61,'teleport_building.png',0,'b',9,'teleport_building'),(62,'magic_tower.png',0,'b',10,'magic_tower'),(63,'coin_factory.png',0,'b',11,'coin_factory'),(64,'healing_temple.png',0,'b',12,'healing_temple'),(65,'lake.png',0,'b',13,'lake'),(66,'mountain.png',0,'b',14,'mountain'),(67,'spearman.png',2,'u',14,'spearman'),(68,'swordsman.png',3,'u',15,'swordsman'),(69,'knight_on_foot.png',10,'u',16,'knight_on_foot'),(70,'knight_with_horse.png',25,'u',17,'knight_with_horse'),(71,'ninja.png',30,'u',18,'ninja'),(72,'golem.png',30,'u',19,'golem'),(73,'taran.png',10,'u',20,'taran'),(74,'wizard.png',35,'u',21,'wizard'),(75,'necromancer.png',35,'u',22,'necromancer'),(76,'dragon.png',100,'u',23,'dragon'),(77,'fireball.png',5,'m',0,'fireball'),(78,'healing.png',5,'m',0,'healing'),(79,'lightening.png',10,'m',0,'lightening'),(80,'od.png',30,'m',0,'od'),(81,'teleport_magic.png',70,'m',0,'teleport_magic'),(82,'paralich.png',20,'m',0,'paralich'),(83,'armageddon.png',100,'m',0,'armageddon'),(84,'meteor.png',50,'m',0,'meteor'),(85,'shield.png',30,'m',0,'shield'),(86,'vred.png',20,'m',0,'vred'),(87,'mind_control.png',80,'m',0,'mind_control'),(89,'madness.png',30,'m',0,'madness'),(90,'open_cards.png',0,'m',0,'open_cards'),(91,'telekinesis.png',20,'m',0,'telekinesis'),(92,'half_money.png',1,'m',0,'half_money'),(93,'pooring.png',20,'m',0,'pooring'),(94,'riching.png',0,'m',0,'riching'),(95,'vampire.png',35,'m',0,'vampire'),(96,'fastening.png',10,'m',0,'fastening'),(98,'polza.png',20,'m',0,'polza'),(99,'upgrade.png',25,'m',0,'upgrade'),(100,'repair.png',0,'m',0,'repair'),(101,'archer.png',20,'u',27,'archer'),(102,'arbalester.png',30,'u',28,'arbalester'),(103,'catapult.png',15,'u',29,'catapult'),(104,'barracks.png',0,'b',17,'barracks'),(105,'wall.png',0,'b',19,'wall'),(106,'iron_skin.png',10,'m',0,'iron_skin'),(107,'berserk.png',10,'m',0,'berserk'),(108,'horseshoe.png',10,'m',0,'horseshoe');
+INSERT INTO `cards` VALUES (61,'teleport_building.png',0,'b',9,'teleport_building'),(62,'magic_tower.png',0,'b',10,'magic_tower'),(63,'coin_factory.png',0,'b',11,'coin_factory'),(64,'healing_temple.png',0,'b',12,'healing_temple'),(65,'lake.png',0,'b',13,'lake'),(66,'mountain.png',0,'b',14,'mountain'),(67,'spearman.png',2,'u',14,'spearman'),(68,'swordsman.png',3,'u',15,'swordsman'),(69,'knight_on_foot.png',10,'u',16,'knight_on_foot'),(70,'knight_with_horse.png',25,'u',17,'knight_with_horse'),(71,'ninja.png',30,'u',18,'ninja'),(72,'golem.png',30,'u',19,'golem'),(73,'taran.png',10,'u',20,'taran'),(74,'wizard.png',35,'u',21,'wizard'),(75,'necromancer.png',35,'u',22,'necromancer'),(76,'dragon.png',100,'u',23,'dragon'),(77,'fireball.png',5,'m',0,'fireball'),(78,'healing.png',5,'m',0,'healing'),(79,'lightening.png',10,'m',0,'lightening'),(80,'od.png',30,'m',0,'od'),(81,'teleport_magic.png',70,'m',0,'teleport_magic'),(82,'paralich.png',20,'m',0,'paralich'),(83,'armageddon.png',100,'m',0,'armageddon'),(84,'meteor.png',50,'m',0,'meteor'),(85,'shield.png',30,'m',0,'shield'),(86,'vred.png',20,'m',0,'vred'),(87,'mind_control.png',80,'m',0,'mind_control'),(89,'madness.png',30,'m',0,'madness'),(90,'open_cards.png',0,'m',0,'open_cards'),(91,'telekinesis.png',20,'m',0,'telekinesis'),(92,'half_money.png',1,'m',0,'half_money'),(93,'pooring.png',20,'m',0,'pooring'),(94,'riching.png',0,'m',0,'riching'),(95,'vampire.png',35,'m',0,'vampire'),(96,'fastening.png',10,'m',0,'fastening'),(98,'polza.png',20,'m',0,'polza'),(99,'upgrade.png',25,'m',0,'upgrade'),(100,'repair.png',0,'m',0,'repair'),(101,'archer.png',20,'u',27,'archer'),(102,'arbalester.png',30,'u',28,'arbalester'),(103,'catapult.png',15,'u',29,'catapult'),(104,'barracks.png',0,'b',17,'barracks'),(105,'wall.png',0,'b',19,'wall'),(106,'iron_skin.png',10,'m',0,'iron_skin'),(107,'berserk.png',10,'m',0,'berserk'),(108,'horseshoe.png',10,'m',0,'horseshoe'),(109,'demolition.png',40,'m',0,'demolition'),(110,'capture.png',65,'m',0,'capture'),(111,'relocation.png',40,'m',0,'relocation'),(112,'zone_express.png',20,'m',0,'zone_express'),(113,'forest.png',25,'m',0,'forest');
 /*!40000 ALTER TABLE `cards` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -568,7 +568,7 @@ CREATE TABLE `cards_i18n` (
   PRIMARY KEY (`id`),
   KEY `card_id` (`card_id`),
   CONSTRAINT `cards_i18n_ibfk_1` FOREIGN KEY (`card_id`) REFERENCES `cards` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -577,7 +577,7 @@ CREATE TABLE `cards_i18n` (
 
 LOCK TABLES `cards_i18n` WRITE;
 /*!40000 ALTER TABLE `cards_i18n` DISABLE KEYS */;
-INSERT INTO `cards_i18n` VALUES (41,61,2,'Телепорт',NULL),(42,62,2,'Магическая башня',NULL),(43,63,2,'Монетный двор',NULL),(44,64,2,'Храм лечения',NULL),(45,65,2,'Озеро',NULL),(46,66,2,'Горы',NULL),(47,67,2,'Копейщик',NULL),(48,68,2,'Мечник',NULL),(49,69,2,'Рыцарь',NULL),(50,70,2,'Конный рыцарь',NULL),(51,71,2,'Ниндзя',NULL),(52,72,2,'Голем',NULL),(53,73,2,'Таран',NULL),(54,74,2,'Маг',NULL),(55,75,2,'Некромант',NULL),(56,76,2,'Дракон',NULL),(57,77,2,'Огненный шар','Наносит 1 ед. урона по выбранному юниту.'),(58,78,2,'Лечение','Восстанавливает 1 ед. здоровья или снимает паралич или бешенство. Восстанавливает 1 щит магу.'),(59,79,2,'Молния','Слабая молния наносит 2 ед. урона по юнитам. Сильная молния наносит 3 ед. урона с вероятностью 2/3.'),(60,80,2,'Отделение души','С вероятностью 5/6 убивает юнит или 1/6 повергает в бешенство.'),(61,81,2,'Телепорт','Переместить любой юнит в свободную клетку.'),(62,82,2,'Паралич','Парализует любой юнит.'),(63,83,2,'Армагеддон','С вероятностью 5/6 уничтожает каждый объект на карте кроме замков'),(64,84,2,'Метеоритный дождь','Наносит 2ед урона зданиям и юнитам. Площадь атаки 2 на 2.'),(65,85,2,'Щит','+1 щит любому юниту.'),(66,86,2,'Вред','С вероятностью 1/6: -60 золота любому игроку; убить любого юнита; разрушить любое здание; переместить юнитов в случайную зону; вытянуть у всех остальных по карте; переместить чужое здание.'),(67,87,2,'Контроль разума','Дает контроль над выбранным юнитом.'),(69,89,2,'Бешенство','Повергает выбранного юнита в бешенство.'),(70,90,2,'Открыть карты выбранного игрока','1 раз открывает все карты выбранного игрока.'),(71,91,2,'Телекинез','Вытянуть у любого игрока 1 карту.'),(72,92,2,'Сокращение денег в два раза у всех игроков','Сокращает деньги в 2 раза у всех игроков.'),(73,93,2,'Обеднение','-50 золота у выбраного игрока.'),(74,94,2,'Обогащение','+50 золота.'),(75,95,2,'Вампир','Призывает Вампира, который действует сам по себе - бьет ближайших юнитов и здания.'),(76,96,2,'Ускорение','+2 хода выбранному юниту.'),(78,98,2,'Польза','С вероятностью 1/6: починка всех своих зданий включая Замок и исцеление всех своих юнитов; воскресить любого юнита; +60 золота; взять 2 карты; переместить всех юнитов из выбранной зоны; переместить и присвоить здание.'),(79,99,2,'Улучшение','На выбор игрока +1 к атаке, здоровью и ходьбе; или с вероятностью 1/3 +3 к атаке, здоровью или ходьбе.'),(80,100,2,'Починить здания','Починка всех своих здания включая Замок.'),(81,101,2,'Лучник',NULL),(82,102,2,'Арбалетчик',NULL),(83,103,2,'Катапульта',NULL),(84,104,2,'Казарма',NULL),(85,105,2,'Стена',NULL),(126,61,1,'Portal',NULL),(127,62,1,'Magic tower',NULL),(128,63,1,'Coin factory',NULL),(129,64,1,'Healing temple',NULL),(130,65,1,'Lake',NULL),(131,66,1,'Mountains',NULL),(132,67,1,'Spearman',NULL),(133,68,1,'Swordsman',NULL),(134,69,1,'Knight',NULL),(135,70,1,'Chevalier',NULL),(136,71,1,'Ninja',NULL),(137,72,1,'Golem',NULL),(138,73,1,'Ram',NULL),(139,74,1,'Wizard',NULL),(140,75,1,'Necromancer',NULL),(141,76,1,'Dragon',NULL),(142,77,1,'Fireball','Causes 1 damage to a chosen unit'),(143,78,1,'Healing','Restores 1 health to a chosen unit or removes madness/paralysis or restores wizard\'s shield'),(144,79,1,'Lightning','Causes 2 damage to units (weak lightning) or 3 damage with probability 2/3 (strong lightning)'),(145,80,1,'Soul detachment','Kills a unit with probability 5/6 or makes mad with probability 1/6'),(146,81,1,'Teleportation','Move any unit to any free square'),(147,82,1,'Paralysis','Paralyse any unit. Unit remains inactive until healed or attacked'),(148,83,1,'Armageddon','Destroys each object on board (except castles) with probability 5/6'),(149,84,1,'Meteor shower','Causes 2 damage to units and buildings (except castles) in area 2 x 2 squares'),(150,85,1,'Shield','Give a magical shield to any unit'),(151,86,1,'Black dice','One of the following events randomly: -60 gold to a chosen player; kill a chosen unit; destroy a chosen building (except castles); teleport someone else\'s building (except castles); move all units to a random zone; steal a card from every other player'),(152,87,1,'Mind control','Gives control over a chosen unit'),(154,89,1,'Madness','Makes a chosen unit mad. Mad units move to and attack the closest unit'),(155,90,1,'Reveal cards','Chosen player reveals cards'),(156,91,1,'Telekinesis','Steal a random card from a chosen player'),(157,92,1,'Crysis','All players loose half of their gold'),(158,93,1,'Empty chest','-50 gold to a chosen player'),(159,94,1,'Chest of gold','+50 gold'),(160,95,1,'Vampire','Summon a vampire in your zone. Vampire attacks closest units and buildings'),(161,96,1,'Acceleration','+2 movement points to any unit'),(163,98,1,'White dice','One of the following events randomly: repair all your buildings including the castle and heal all your units; resurrect any unit (if there are any); +60 gold; pick 2 cards from the deck; move all units out of a chosen zone; steal someone else\'s building and move it anywhere'),(164,99,1,'Enhancement','Either +1 attack, +1 move, +1 health to a chosen unit (uniform enhancement) or +3 to a random parameter (random enhancement)'),(165,100,1,'Repair','Repair all your buildings including the castle'),(166,101,1,'Archer',NULL),(167,102,1,'Marksman',NULL),(168,103,1,'Catapult',NULL),(169,104,1,'Barracks',NULL),(170,105,1,'Wall',NULL),(171,106,1,'Iron skin','+2 health to any unit'),(172,106,2,'Железная кожа','+2 здоровья выбранному юниту.'),(173,107,1,'Berserk','+2 attack to any unit'),(174,107,2,'Берсерк','+2 атаки выбранному юниту.'),(175,108,1,'Horseshoe','Chosen unit starts to move as a chess knight'),(176,108,2,'Подкова','Выбранный юнит начинает ходить шахматным конем.');
+INSERT INTO `cards_i18n` VALUES (41,61,2,'Телепорт',NULL),(42,62,2,'Магическая башня',NULL),(43,63,2,'Монетный двор',NULL),(44,64,2,'Храм лечения',NULL),(45,65,2,'Озеро',NULL),(46,66,2,'Горы',NULL),(47,67,2,'Копейщик',NULL),(48,68,2,'Мечник',NULL),(49,69,2,'Рыцарь',NULL),(50,70,2,'Конный рыцарь',NULL),(51,71,2,'Ниндзя',NULL),(52,72,2,'Голем',NULL),(53,73,2,'Таран',NULL),(54,74,2,'Маг',NULL),(55,75,2,'Некромант',NULL),(56,76,2,'Дракон',NULL),(57,77,2,'Огненный шар','Наносит 1 ед. урона по выбранному юниту.'),(58,78,2,'Лечение','Восстанавливает 1 ед. здоровья или снимает паралич или бешенство. Восстанавливает 1 щит магу.'),(59,79,2,'Молния','Слабая молния наносит 2 ед. урона по юнитам. Сильная молния наносит 3 ед. урона с вероятностью 2/3.'),(60,80,2,'Отделение души','С вероятностью 5/6 убивает юнит или 1/6 повергает в бешенство.'),(61,81,2,'Телепорт','Переместить любой юнит в свободную клетку.'),(62,82,2,'Паралич','Парализует любой юнит.'),(63,83,2,'Армагеддон','С вероятностью 5/6 уничтожает каждый объект на карте кроме замков'),(64,84,2,'Метеоритный дождь','Наносит 2ед урона зданиям и юнитам. Площадь атаки 2 на 2.'),(65,85,2,'Щит','+1 щит любому юниту.'),(66,86,2,'Вред','С вероятностью 1/6: -60 золота любому игроку; убить любого юнита; разрушить любое здание; переместить юнитов в случайную зону; вытянуть у всех остальных по карте; переместить чужое здание.'),(67,87,2,'Контроль разума','Дает контроль над выбранным юнитом.'),(69,89,2,'Бешенство','Повергает выбранного юнита в бешенство.'),(70,90,2,'Открыть карты выбранного игрока','1 раз открывает все карты выбранного игрока.'),(71,91,2,'Телекинез','Вытянуть у любого игрока 1 карту.'),(72,92,2,'Сокращение денег в два раза у всех игроков','Сокращает деньги в 2 раза у всех игроков.'),(73,93,2,'Обеднение','-50 золота у выбраного игрока.'),(74,94,2,'Обогащение','+50 золота.'),(75,95,2,'Вампир','Призывает Вампира, который действует сам по себе - бьет ближайших юнитов и здания.'),(76,96,2,'Ускорение','+2 хода выбранному юниту.'),(78,98,2,'Польза','С вероятностью 1/6: починка всех своих зданий включая Замок и исцеление всех своих юнитов; воскресить любого юнита; +60 золота; взять 2 карты; переместить всех юнитов из выбранной зоны; переместить и присвоить здание.'),(79,99,2,'Улучшение','На выбор игрока +1 к атаке, здоровью и ходьбе; или с вероятностью 1/3 +3 к атаке, здоровью или ходьбе.'),(80,100,2,'Починить здания','Починка всех своих здания включая Замок.'),(81,101,2,'Лучник',NULL),(82,102,2,'Арбалетчик',NULL),(83,103,2,'Катапульта',NULL),(84,104,2,'Казарма',NULL),(85,105,2,'Стена',NULL),(126,61,1,'Portal',NULL),(127,62,1,'Magic tower',NULL),(128,63,1,'Coin factory',NULL),(129,64,1,'Healing temple',NULL),(130,65,1,'Lake',NULL),(131,66,1,'Mountains',NULL),(132,67,1,'Spearman',NULL),(133,68,1,'Swordsman',NULL),(134,69,1,'Knight',NULL),(135,70,1,'Chevalier',NULL),(136,71,1,'Ninja',NULL),(137,72,1,'Golem',NULL),(138,73,1,'Ram',NULL),(139,74,1,'Wizard',NULL),(140,75,1,'Necromancer',NULL),(141,76,1,'Dragon',NULL),(142,77,1,'Fireball','Causes 1 damage to a chosen unit'),(143,78,1,'Healing','Restores 1 health to a chosen unit or removes madness/paralysis or restores wizard\'s shield'),(144,79,1,'Lightning','Causes 2 damage to units (weak lightning) or 3 damage with probability 2/3 (strong lightning)'),(145,80,1,'Soul detachment','Kills a unit with probability 5/6 or makes mad with probability 1/6'),(146,81,1,'Teleportation','Move any unit to any free square'),(147,82,1,'Paralysis','Paralyse any unit. Unit remains inactive until healed or attacked'),(148,83,1,'Armageddon','Destroys each object on board (except castles) with probability 5/6'),(149,84,1,'Meteor shower','Causes 2 damage to units and buildings (except castles) in area 2 x 2 squares'),(150,85,1,'Shield','Give a magical shield to any unit'),(151,86,1,'Black dice','One of the following events randomly: -60 gold to a chosen player; kill a chosen unit; destroy a chosen building (except castles); teleport someone else\'s building (except castles); move all units to a random zone; steal a card from every other player'),(152,87,1,'Mind control','Gives control over a chosen unit'),(154,89,1,'Madness','Makes a chosen unit mad. Mad units move to and attack the closest unit'),(155,90,1,'Reveal cards','Chosen player reveals cards'),(156,91,1,'Telekinesis','Steal a random card from a chosen player'),(157,92,1,'Crysis','All players loose half of their gold'),(158,93,1,'Empty chest','-50 gold to a chosen player'),(159,94,1,'Chest of gold','+50 gold'),(160,95,1,'Vampire','Summon a vampire in your zone. Vampire attacks closest units and buildings'),(161,96,1,'Acceleration','+2 movement points to any unit'),(163,98,1,'White dice','One of the following events randomly: repair all your buildings including the castle and heal all your units; resurrect any unit (if there are any); +60 gold; pick 2 cards from the deck; move all units out of a chosen zone; steal someone else\'s building and move it anywhere'),(164,99,1,'Enhancement','Either +1 attack, +1 move, +1 health to a chosen unit (uniform enhancement) or +3 to a random parameter (random enhancement)'),(165,100,1,'Repair','Repair all your buildings including the castle'),(166,101,1,'Archer',NULL),(167,102,1,'Marksman',NULL),(168,103,1,'Catapult',NULL),(169,104,1,'Barracks',NULL),(170,105,1,'Wall',NULL),(171,106,1,'Iron skin','+2 health to any unit'),(172,106,2,'Железная кожа','+2 здоровья выбранному юниту.'),(173,107,1,'Berserk','+2 attack to any unit'),(174,107,2,'Берсерк','+2 атаки выбранному юниту.'),(175,108,1,'Horseshoe','Chosen unit starts to move as a chess knight'),(176,108,2,'Подкова','Выбранный юнит начинает ходить шахматным конем.'),(177,109,1,'Demolition','4 damage to any building (except castles)'),(178,109,2,'Разрушение','4 урона любому зданию кроме замков.'),(179,110,1,'Capture','Chosen building becomes yours (except castles)'),(180,110,2,'Захват','Присвоить выбранное здание (кроме замков).'),(181,111,1,'Relocation','Move chosen building or obstacle (except castles) anywhere else'),(182,111,2,'Переезд','Переместить выбранное здание (кроме замков).'),(183,112,1,'Express','Move all units either into or out of a chosen zone'),(184,112,2,'Экспресс','Переместить всех юнитов либо из либо в выбранную зону.'),(185,113,1,'Forest','Creates a 5x5 square of trees around a chosen cell'),(186,113,2,'Чаща','Создает квадрат из деревьев 5x5 вокруг выбранной клетки.');
 /*!40000 ALTER TABLE `cards_i18n` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -597,7 +597,7 @@ CREATE TABLE `cards_procedures` (
   KEY `cards_procedures_procedures` (`procedure_id`),
   CONSTRAINT `cards_procedures_cards` FOREIGN KEY (`card_id`) REFERENCES `cards` (`id`) ON DELETE CASCADE,
   CONSTRAINT `cards_procedures_procedures` FOREIGN KEY (`procedure_id`) REFERENCES `procedures` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=383 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=389 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -606,7 +606,7 @@ CREATE TABLE `cards_procedures` (
 
 LOCK TABLES `cards_procedures` WRITE;
 /*!40000 ALTER TABLE `cards_procedures` DISABLE KEYS */;
-INSERT INTO `cards_procedures` VALUES (331,61,6),(332,62,6),(333,63,6),(334,64,6),(335,65,6),(336,66,6),(337,67,10),(338,68,10),(339,69,10),(340,70,10),(341,71,10),(342,72,10),(343,73,10),(344,74,10),(345,75,10),(346,76,10),(347,77,11),(348,78,24),(349,79,12),(350,79,13),(352,80,26),(353,81,27),(354,82,19),(355,83,35),(356,84,36),(357,85,23),(358,86,42),(359,87,28),(361,89,22),(362,90,29),(363,91,30),(364,92,9),(365,93,7),(366,94,8),(367,95,51),(368,96,32),(370,98,38),(371,99,33),(372,99,34),(374,100,37),(375,101,10),(376,102,10),(377,103,10),(378,104,6),(379,105,6),(380,106,62),(381,107,63),(382,108,64);
+INSERT INTO `cards_procedures` VALUES (331,61,6),(332,62,6),(333,63,6),(334,64,6),(335,65,6),(336,66,6),(337,67,10),(338,68,10),(339,69,10),(340,70,10),(341,71,10),(342,72,10),(343,73,10),(344,74,10),(345,75,10),(346,76,10),(347,77,11),(348,78,24),(349,79,12),(350,79,13),(352,80,26),(353,81,27),(354,82,19),(355,83,35),(356,84,36),(357,85,23),(358,86,42),(359,87,28),(361,89,22),(362,90,29),(363,91,30),(364,92,9),(365,93,7),(366,94,8),(367,95,51),(368,96,32),(370,98,38),(371,99,33),(372,99,34),(374,100,37),(375,101,10),(376,102,10),(377,103,10),(378,104,6),(379,105,6),(380,106,62),(381,107,63),(382,108,64),(383,109,65),(384,110,66),(385,111,67),(386,112,68),(387,112,69),(388,113,70);
 /*!40000 ALTER TABLE `cards_procedures` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -771,7 +771,7 @@ CREATE TABLE `error_dictionary` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -780,7 +780,7 @@ CREATE TABLE `error_dictionary` (
 
 LOCK TABLES `error_dictionary` WRITE;
 /*!40000 ALTER TABLE `error_dictionary` DISABLE KEYS */;
-INSERT INTO `error_dictionary` VALUES (1,'not_your_turn'),(2,'not_enough_gold'),(3,'no_more_cards'),(4,'incorrect_sum'),(5,'subsidy_already_taken'),(6,'not_enough_castle_hp'),(7,'already_started_moving_units'),(8,'no_such_dead_unit'),(9,'spawn_point_occupued'),(10,'you_dont_have_this_card'),(11,'building_outside_zone'),(12,'place_occupied'),(13,'invalid_player'),(14,'unit_not_selected'),(15,'invalid_card_action'),(16,'not_own_unit_selected'),(17,'unit_has_no_more_moves'),(18,'unit_is_paralyzed'),(19,'cant_step_on_cell'),(20,'cant_attack_cell'),(21,'no_valid_target'),(22,'player_doesnt_have_cards'),(23,'target_should_be_inside_board'),(24,'cant_finish_card_action'),(25,'invalid_zone'),(26,'building_not_selected'),(27,'you_should_select_other_players_building'),(28,'need_to_finish_card_action'),(29,'target_out_of_reach'),(30,'unit_doesnt_have_this_ability'),(31,'ram_can_be_attached_only_to_another_unit'),(32,'can_heal_only_other_unit'),(33,'can_cast_fireball_only_into_other_unit'),(34,'grave_out_of_reach'),(35,'vampire_not_in_own_zone'),(36,'cant_send_money_to_self'),(37,'sacrifice_not_chosen'),(38,'can_sacrifice_only_own_unit'),(39,'sacrifice_target_not_set'),(40,'sacrifice_target_is_not_unit'),(41,'unit_cannot_levelup'),(42,'can_play_card_or_resurrect_only_once_per_turn'),(43,'moving_this_building_disallowed'),(44,'not_own_building'),(45,'building_blocked'),(46,'building_doesnt_have_this_ability'),(47,'building_already_moved_this_turn'),(48,'send_money_invalid_player'),(49,'invalid_target_for_this_unit'),(50,'target_too_close'),(51,'target_too_far'),(52,'cant_resurrect_same_turn');
+INSERT INTO `error_dictionary` VALUES (1,'not_your_turn'),(2,'not_enough_gold'),(3,'no_more_cards'),(4,'incorrect_sum'),(5,'subsidy_already_taken'),(6,'not_enough_castle_hp'),(7,'already_started_moving_units'),(8,'no_such_dead_unit'),(9,'spawn_point_occupued'),(10,'you_dont_have_this_card'),(11,'building_outside_zone'),(12,'place_occupied'),(13,'invalid_player'),(14,'unit_not_selected'),(15,'invalid_card_action'),(16,'not_own_unit_selected'),(17,'unit_has_no_more_moves'),(18,'unit_is_paralyzed'),(19,'cant_step_on_cell'),(20,'cant_attack_cell'),(21,'no_valid_target'),(22,'player_doesnt_have_cards'),(23,'target_should_be_inside_board'),(24,'cant_finish_card_action'),(25,'invalid_zone'),(26,'building_not_selected'),(27,'you_should_select_other_players_building'),(28,'need_to_finish_card_action'),(29,'target_out_of_reach'),(30,'unit_doesnt_have_this_ability'),(31,'ram_can_be_attached_only_to_another_unit'),(32,'can_heal_only_other_unit'),(33,'can_cast_fireball_only_into_other_unit'),(34,'grave_out_of_reach'),(35,'vampire_not_in_own_zone'),(36,'cant_send_money_to_self'),(37,'sacrifice_not_chosen'),(38,'can_sacrifice_only_own_unit'),(39,'sacrifice_target_not_set'),(40,'sacrifice_target_is_not_unit'),(41,'unit_cannot_levelup'),(42,'can_play_card_or_resurrect_only_once_per_turn'),(43,'moving_this_building_disallowed'),(44,'not_own_building'),(45,'building_blocked'),(46,'building_doesnt_have_this_ability'),(47,'building_already_moved_this_turn'),(48,'send_money_invalid_player'),(49,'invalid_target_for_this_unit'),(50,'target_too_close'),(51,'target_too_far'),(52,'cant_resurrect_same_turn'),(53,'invalid_coord');
 /*!40000 ALTER TABLE `error_dictionary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -799,7 +799,7 @@ CREATE TABLE `error_dictionary_i18n` (
   PRIMARY KEY (`id`),
   KEY `error_id` (`error_id`),
   CONSTRAINT `error_dictionary_i18n_ibfk_1` FOREIGN KEY (`error_id`) REFERENCES `error_dictionary` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -808,7 +808,7 @@ CREATE TABLE `error_dictionary_i18n` (
 
 LOCK TABLES `error_dictionary_i18n` WRITE;
 /*!40000 ALTER TABLE `error_dictionary_i18n` DISABLE KEYS */;
-INSERT INTO `error_dictionary_i18n` VALUES (1,1,2,'Не ваш ход'),(2,2,2,'Недостаточно золота'),(3,3,2,'Карт больше нет'),(4,4,2,'Неправильная сумма'),(5,5,2,'Вы уже взяли субсидию в этом ходу'),(6,6,2,'Недостаточно хитов замка'),(7,7,2,'Вы уже начали ходить юнитами'),(8,8,2,'Нет такого мертвого юнита'),(9,9,2,'Место появления занято'),(10,10,2,'У вас нет такой карты'),(11,11,2,'Здание выходит за рамки вашей зоны'),(12,12,2,'Место занято'),(13,13,2,'Нет такого игрока'),(14,14,2,'Юнит не выбран'),(15,15,2,'Этой картой нельзя этого сделать :-P'),(16,16,2,'Выбран чужой юнит'),(17,17,2,'У юнита не осталось ходов'),(18,18,2,'Юнит парализован'),(19,19,2,'На эту клетку нельзя походить'),(20,20,2,'Эту клетку нельзя атаковать'),(21,21,2,'Здесь нечего атаковать'),(22,22,2,'У этого игрока нет карт'),(23,23,2,'Цель не может выходить за карту'),(24,24,2,'Нельзя доиграть пользу/вред'),(25,25,2,'Неправильная зона'),(26,26,2,'Здание не выбрано'),(27,27,2,'Нужно выбрать чужое здание'),(28,28,2,'Нужно доиграть пользу/вред'),(29,29,2,'Цель вне досягаемости'),(30,30,2,'Юнит это не умеет :-P'),(31,31,2,'Можно прицепить таран только к другому юниту'),(32,32,2,'Можно лечить только другого юнита'),(33,33,2,'Можно пустить огненный шар только в другого юнита'),(34,34,2,'Могила вне досягаемости'),(35,35,2,'Можно призвать вампира только в своей зоне'),(36,36,2,'Вы хотите отправить деньги себе. Они уже тут'),(37,37,2,'Жертва не выбрана'),(38,38,2,'Можно принести в жертву только своего юнита'),(39,39,2,'Цель для жертвоприношения не выбрана'),(40,40,2,'Нужно выбрать юнита в качестве цели'),(41,41,2,'Юнит не может перейти на следующий уровень'),(42,42,2,'Сыграть карту либо воскресить юнита можно только один раз за ход'),(43,43,2,'Извините, создатель мода не хотел, чтобы вы перемещали это здание'),(44,44,2,'Это не ваше здание'),(45,45,2,'Здание заблокировано'),(46,46,2,'Здание это не умеет :-P'),(47,47,2,'Здание уже действовало в этот ход'),(48,1,1,'Not your turn'),(49,2,1,'Not enough gold'),(50,3,1,'No more cards'),(51,4,1,'Invalid sum'),(52,5,1,'You can sell rocks only once per turn'),(53,6,1,'Not enough castle health points'),(54,7,1,'You already started moving units'),(55,8,1,'No such dead unit'),(56,9,1,'Spawn point occupied'),(57,10,1,'You don\'t have this card'),(58,11,1,'Building should be completely in your zone'),(59,12,1,'Place is occupied'),(60,13,1,'Invalid player'),(61,14,1,'Unit is not selected'),(62,15,1,'This card cannot do this :-P'),(63,16,1,'You need to select your own unit'),(64,17,1,'Unit has no more moves'),(65,18,1,'Unit is paralyzed'),(66,19,1,'Destination out of reach'),(67,20,1,'Attack destination out of reach'),(68,21,1,'Nothing to attack here'),(69,22,1,'This player has no cards'),(70,23,1,'Target should be on the board completely'),(71,24,1,'Invalid card action'),(72,25,1,'Invalid zone'),(73,26,1,'Building is not chosen'),(74,27,1,'You need to choose someone else\'s building'),(75,28,1,'You need to finish card action'),(76,29,1,'Target out of reach'),(77,30,1,'This unit cannot do this :-P'),(78,31,1,'You can only attach ram to another unit'),(79,32,1,'You can only heal another unit'),(80,33,1,'You can only cast fireball into another unit'),(81,34,1,'Grave out of reach'),(82,35,1,'You can only summon a vampire in your own zone'),(83,36,1,'You want to send money to yourself. It is already here'),(84,37,1,'Please choose someone to sacrifice'),(85,38,1,'You can sacrifice only your own unit'),(86,39,1,'Sacrifice target not chosen'),(87,40,1,'Sacrifice target should be another unit'),(88,41,1,'Unit cannot levelup'),(89,42,1,'You can play a card or resurrect only once per turn'),(90,43,1,'Sorry, the author of the mode didn\'t want you to move this'),(91,44,1,'This is not your building'),(92,45,1,'Building is blocked'),(93,46,1,'This building cannot do it :-P'),(94,47,1,'A building can act only once per turn'),(95,48,1,'Transaction cancelled, the recipient could not sign'),(96,48,2,'Перевод отменен, адресат не смог расписаться о получении'),(97,49,1,'Invalid target for this unit'),(98,49,2,'Юнит не может в это стрелять'),(99,50,1,'Target is too close'),(100,50,2,'Цель слишком близко'),(101,51,1,'Target is too far'),(102,51,2,'Цель слишком далеко'),(103,52,1,'Unit cannot be killed and resurrected within the same player\'s turn'),(104,52,2,'Юнит не может быть воскрешен в том же ходу, когда был убит');
+INSERT INTO `error_dictionary_i18n` VALUES (1,1,2,'Не ваш ход'),(2,2,2,'Недостаточно золота'),(3,3,2,'Карт больше нет'),(4,4,2,'Неправильная сумма'),(5,5,2,'Вы уже взяли субсидию в этом ходу'),(6,6,2,'Недостаточно хитов замка'),(7,7,2,'Вы уже начали ходить юнитами'),(8,8,2,'Нет такого мертвого юнита'),(9,9,2,'Место появления занято'),(10,10,2,'У вас нет такой карты'),(11,11,2,'Здание выходит за рамки вашей зоны'),(12,12,2,'Место занято'),(13,13,2,'Нет такого игрока'),(14,14,2,'Юнит не выбран'),(15,15,2,'Этой картой нельзя этого сделать :-P'),(16,16,2,'Выбран чужой юнит'),(17,17,2,'У юнита не осталось ходов'),(18,18,2,'Юнит парализован'),(19,19,2,'На эту клетку нельзя походить'),(20,20,2,'Эту клетку нельзя атаковать'),(21,21,2,'Здесь нечего атаковать'),(22,22,2,'У этого игрока нет карт'),(23,23,2,'Цель не может выходить за карту'),(24,24,2,'Нельзя доиграть пользу/вред'),(25,25,2,'Неправильная зона'),(26,26,2,'Здание не выбрано'),(27,27,2,'Нужно выбрать чужое здание'),(28,28,2,'Нужно доиграть пользу/вред'),(29,29,2,'Цель вне досягаемости'),(30,30,2,'Юнит это не умеет :-P'),(31,31,2,'Можно прицепить таран только к другому юниту'),(32,32,2,'Можно лечить только другого юнита'),(33,33,2,'Можно пустить огненный шар только в другого юнита'),(34,34,2,'Могила вне досягаемости'),(35,35,2,'Можно призвать вампира только в своей зоне'),(36,36,2,'Вы хотите отправить деньги себе. Они уже тут'),(37,37,2,'Жертва не выбрана'),(38,38,2,'Можно принести в жертву только своего юнита'),(39,39,2,'Цель для жертвоприношения не выбрана'),(40,40,2,'Нужно выбрать юнита в качестве цели'),(41,41,2,'Юнит не может перейти на следующий уровень'),(42,42,2,'Сыграть карту либо воскресить юнита можно только один раз за ход'),(43,43,2,'Извините, создатель мода не хотел, чтобы вы перемещали это здание'),(44,44,2,'Это не ваше здание'),(45,45,2,'Здание заблокировано'),(46,46,2,'Здание это не умеет :-P'),(47,47,2,'Здание уже действовало в этот ход'),(48,1,1,'Not your turn'),(49,2,1,'Not enough gold'),(50,3,1,'No more cards'),(51,4,1,'Invalid sum'),(52,5,1,'You can sell rocks only once per turn'),(53,6,1,'Not enough castle health points'),(54,7,1,'You already started moving units'),(55,8,1,'No such dead unit'),(56,9,1,'Spawn point occupied'),(57,10,1,'You don\'t have this card'),(58,11,1,'Building should be completely in your zone'),(59,12,1,'Place is occupied'),(60,13,1,'Invalid player'),(61,14,1,'Unit is not selected'),(62,15,1,'This card cannot do this :-P'),(63,16,1,'You need to select your own unit'),(64,17,1,'Unit has no more moves'),(65,18,1,'Unit is paralyzed'),(66,19,1,'Destination out of reach'),(67,20,1,'Attack destination out of reach'),(68,21,1,'Nothing to attack here'),(69,22,1,'This player has no cards'),(70,23,1,'Target should be on the board completely'),(71,24,1,'Invalid card action'),(72,25,1,'Invalid zone'),(73,26,1,'Building is not chosen'),(74,27,1,'You need to choose someone else\'s building'),(75,28,1,'You need to finish card action'),(76,29,1,'Target out of reach'),(77,30,1,'This unit cannot do this :-P'),(78,31,1,'You can only attach ram to another unit'),(79,32,1,'You can only heal another unit'),(80,33,1,'You can only cast fireball into another unit'),(81,34,1,'Grave out of reach'),(82,35,1,'You can only summon a vampire in your own zone'),(83,36,1,'You want to send money to yourself. It is already here'),(84,37,1,'Please choose someone to sacrifice'),(85,38,1,'You can sacrifice only your own unit'),(86,39,1,'Sacrifice target not chosen'),(87,40,1,'Sacrifice target should be another unit'),(88,41,1,'Unit cannot levelup'),(89,42,1,'You can play a card or resurrect only once per turn'),(90,43,1,'Sorry, the author of the mode didn\'t want you to move this'),(91,44,1,'This is not your building'),(92,45,1,'Building is blocked'),(93,46,1,'This building cannot do it :-P'),(94,47,1,'A building can act only once per turn'),(95,48,1,'Transaction cancelled, the recipient could not sign'),(96,48,2,'Перевод отменен, адресат не смог расписаться о получении'),(97,49,1,'Invalid target for this unit'),(98,49,2,'Юнит не может в это стрелять'),(99,50,1,'Target is too close'),(100,50,2,'Цель слишком близко'),(101,51,1,'Target is too far'),(102,51,2,'Цель слишком далеко'),(103,52,1,'Unit cannot be killed and resurrected within the same player\'s turn'),(104,52,2,'Юнит не может быть воскрешен в том же ходу, когда был убит'),(105,53,1,'Invalid coordinate'),(106,53,2,'Неправильная координата');
 /*!40000 ALTER TABLE `error_dictionary_i18n` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1016,7 +1016,7 @@ CREATE TABLE `log_message_text_i18n` (
   `language_id` int(10) unsigned NOT NULL,
   `message` varchar(500) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=165 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=171 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1025,7 +1025,7 @@ CREATE TABLE `log_message_text_i18n` (
 
 LOCK TABLES `log_message_text_i18n` WRITE;
 /*!40000 ALTER TABLE `log_message_text_i18n` DISABLE KEYS */;
-INSERT INTO `log_message_text_i18n` VALUES (1,'agrees_to_draw',2,'Согласен на ничью'),(2,'agrees_to_draw',1,'Agrees to draw'),(3,'disagrees_to_draw',2,'Не согласен на ничью'),(4,'disagrees_to_draw',1,'Disagrees to draw'),(5,'unit_shoots_unit',2,'{unit0} стреляет в {unitakk1} {damage2}'),(6,'unit_shoots_unit',1,'{unit0} shoots at {unit1} {damage2}'),(7,'unit_shoots_unit_miss',2,'{unit0} стреляет в {unitakk1} (Промах)'),(8,'unit_shoots_unit_miss',1,'{unit0} shoots at {unit1} (Miss)'),(9,'buys_card',2,'Купил карту'),(10,'buys_card',1,'Buys a card'),(11,'building_repair',2,'{building0} восстанавливает {health1}'),(12,'building_repair',1,'{building0} is repaired {health1}'),(13,'mind_control',2,'{unit0} начинает подчиняться игроку {player1}'),(14,'mind_control',1,'{player1} now controls {unit0}'),(15,'mind_control_own_unit',2,'{unit0} продолжает подчиняться игроку {player1}'),(16,'mind_control_own_unit',1,'{player1} continues to controls {unit0}'),(17,'polza_repair_and_heal',2,'Польза: Починить все здания и исцелить юнитов'),(18,'polza_repair_and_heal',1,'White dice: Repair all buildings and heal units'),(19,'polza_gold',2,'Польза: +60 золота'),(20,'polza_gold',1,'White dice: +60 gold'),(21,'polza_cards',2,'Польза: Взять 2 карты'),(22,'polza_cards',1,'White dice: take 2 cards'),(23,'polza_resurrect',2,'Польза: Воскресить любого юнита'),(24,'polza_resurrect',1,'White dice: Resurrect any unit'),(25,'polza_move_from_zone',2,'Польза: Переместить всех юнитов из выбранной зоны'),(26,'polza_move_from_zone',1,'White dice: Move all units out of a chosen zone'),(27,'polza_steal_move_building',2,'Польза: Переместить и присвоить чужое здание'),(28,'polza_steal_move_building',1,'White dice: Steal and move someone else\'s building'),(29,'new_card',2,'Новая карта {card0}'),(30,'new_card',1,'New card {card0}'),(31,'no_more_cards',2,'Карт больше нет'),(32,'no_more_cards',1,'No more cards in the deck'),(33,'player_loses_gold',2,'{player0} теряет {gold1}'),(34,'player_loses_gold',1,'{player0} loses {gold1}'),(35,'players_cards',2,'Карты игрока {player0}:'),(36,'players_cards',1,'{player0}\'s cards:'),(37,'card_name',2,'{card0}'),(38,'card_name',1,'{card0}'),(39,'card_stolen',2,'Похищена карта {card0}'),(40,'card_stolen',1,'{card0} is stolen'),(41,'unit_appears_in_cell',2,'В клетке {cell1} появляется {unit0}'),(42,'unit_appears_in_cell',1,'{unit0} appears in {cell1}'),(43,'vred_gold',2,'Вред: -60 золота выбранному игроку'),(44,'vred_gold',1,'Black dice: Chosen player loses 60 gold'),(45,'vred_kill',2,'Вред: Убить любого юнита'),(46,'vred_kill',1,'Black dice: Kill any unit'),(47,'vred_destroy_building',2,'Вред: Разрушить любое здание'),(48,'vred_destroy_building',1,'Black dice: Destroy any building (except castles)'),(49,'vred_move_units_to_random_zone',2,'Вред: Переместить всех юнитов в случайную зону'),(50,'vred_move_units_to_random_zone',1,'Black dice: Move all units to a random zone'),(51,'vred_player_takes_card_from_everyone',2,'Вред: Вытянуть у всех по карте'),(52,'vred_player_takes_card_from_everyone',1,'Black dice: Steal a card from each other player'),(53,'vred_move_building',2,'Вред: Переместить чужое здание'),(54,'vred_move_building',1,'Black dice: Move someone else\'s building'),(55,'unit_shoots_building',2,'{unit0} стреляет в {building1} {damage2}'),(56,'unit_shoots_building',1,'{unit0} shoots at {building1} {damage2}'),(57,'unit_shoots_building_miss',2,'{unit0} стреляет в {building1} (Промах)'),(58,'unit_shoots_building_miss',1,'{unit0} shoots at {building1} (Miss)'),(59,'unit_magic_resistance',2,'На {unitakk0} не действует магия'),(60,'unit_magic_resistance',1,'{unit0} resists magic'),(61,'unit_mechanical',2,'Механический {unit0} ничего не почувствовал'),(62,'unit_mechanical',1,'Mechanical {unit0} does not feel anything'),(63,'miss_unit',2,'Промах: {unit0}'),(64,'miss_unit',1,'Miss: {unit0}'),(65,'miss_building',2,'Промах: {building0}'),(66,'miss_building',1,'Miss: {building0}'),(67,'miss_rus_rul',2,'{unit0} отделался легким испугом'),(68,'miss_rus_rul',1,'{unit0} has a narrow escape'),(69,'end_turn',2,'{player0} завершил ход'),(70,'end_turn',1,'{player0} ends turn'),(71,'end_turn_timeout',2,'У игрока {player0} закончилось время хода'),(72,'end_turn_timeout',1,'{player0} has run out of time'),(73,'resurrect',2,'{player0} воскресил {unitakk1}'),(74,'resurrect',1,'{player0} resurrects {unit1}'),(75,'unit_goes_mad',2,'{unit0} сошел с ума'),(76,'unit_goes_mad',1,'{unit0} goes mad'),(77,'unit_becomes_not_mad',2,'{unit0} больше не сошел с ума'),(78,'unit_becomes_not_mad',1,'{unit0} restores sanity'),(79,'unit_chess_knight',2,'{unit0} начинает ходить шахматным конем'),(80,'unit_chess_knight',1,'{unit0} now moves as a chess knight'),(81,'unit_paralyzed',2,'{unit0} парализован'),(82,'unit_paralyzed',1,'{unit0} is paralyzed'),(83,'unit_unparalyzed',2,'{unit0} больше не парализован'),(84,'unit_unparalyzed',1,'{unit0} is not paralyzed anymore'),(85,'building_destroyed',2,'Здание {building0} разрушено'),(86,'building_destroyed',1,'{building0} is destroyed'),(87,'castle_destroyed',2,'{building0} разрушен'),(88,'castle_destroyed',1,'{building0} is destroyed'),(89,'unit_drinks_health',2,'{unit0} выпивает {health1}'),(90,'unit_drinks_health',1,'{unit0} drinks {health1}'),(91,'npc_turn',2,'Ход NPC'),(92,'npc_turn',1,'NPC turn'),(93,'unit_restores_health',2,'{unit0} восстанавливает {health1}'),(94,'unit_restores_health',1,'{unit0} restores {health1}'),(95,'unit_killed',2,'{unit0} убит'),(96,'unit_killed',1,'{unit0} is dead'),(97,'unit_damage',2,'{unit0} {damage1}'),(98,'unit_damage',1,'{unit0} {damage1}'),(99,'building_damage',2,'{building0} {damage1}'),(100,'building_damage',1,'{building0} {damage1}'),(101,'unit_already_mad',2,'{unit0} уже сошел с ума'),(102,'unit_already_mad',1,'{unit0} is already pretty mad'),(103,'unit_resurrects',2,'{unit0} воскрешает {unitakk1}'),(104,'unit_resurrects',1,'{unit0} resurrects {unit1}'),(105,'sacrifice',2,'{unit0} жертвует {unitakk1} за {unitakk2}'),(106,'sacrifice',1,'{unit0} sacrifices {unit1} for {unit2}'),(107,'unit_is_such_a_unit',2,'{unit0} такой {unit0}'),(108,'unit_is_such_a_unit',1,'{unit0} is such a {unit0}'),(109,'player_exit',2,'{player0} вышел из игры'),(110,'player_exit',1,'{player0} left the game'),(111,'plays_card',2,'Сыграл карту {card0}'),(112,'plays_card',1,'Plays {card0}'),(113,'building_completely_repaired',2,'Здание {building0} починено'),(114,'building_completely_repaired',1,'{building0} is repaired'),(115,'send_money',2,'Отправил игроку {player0} {gold1}'),(116,'send_money',1,'Sends {player0} {gold1}'),(117,'restore_magic_shield',2,'{unit0} восстанавливает магический щит'),(118,'restore_magic_shield',1,'{unit0} restores magical shield'),(119,'loses_magic_shield',2,'{unit0} теряет магический щит'),(120,'loses_magic_shield',1,'{unit0} loses magical shield'),(121,'gets_magic_shield',2,'{unit0} получает магический щит'),(122,'gets_magic_shield',1,'{unit0} gets magical shield'),(123,'building_sinks',2,'{building0} тонет в воде'),(124,'building_sinks',1,'{building0} sinks'),(125,'unit_drowns',2,'{unit0} тонет в воде'),(126,'unit_drowns',1,'{unit0} drowns'),(127,'moves_units',2,'Походил юнитами'),(128,'moves_units',1,'Moves units'),(129,'take_subsidy',2,'Взял субсидию: {building0} {health1}'),(130,'take_subsidy',1,'Sells stones: {building0} {health1}'),(131,'unit_attaches',2,'{unit0} цепляется к юниту {unit1}'),(132,'unit_attaches',1,'{unit0} is attached to {unit1}'),(133,'unit_healed',2,'{unit0} исцелен'),(134,'unit_healed',1,'{unit0} is healed'),(135,'unit_gets_attack',2,'{unit0} получает {attack1}'),(136,'unit_gets_attack',1,'{unit0} gets {attack1}'),(137,'unit_gets_moves',2,'{unit0} получает {moves1}'),(138,'unit_gets_moves',1,'{unit0} gets {moves1}'),(139,'unit_gets_health',2,'{unit0} получает {health1}'),(140,'unit_gets_health',1,'{unit0} gets {health1}'),(141,'unit_levelup_health',2,'{unit0} получает уровень и {health1}'),(142,'unit_levelup_health',1,'{unit0} achieves next level and gets {health1}'),(143,'unit_levelup_attack',2,'{unit0} получает уровень и {attack1}'),(144,'unit_levelup_attack',1,'{unit0} achieves next level and gets {attack1}'),(145,'unit_levelup_moves',2,'{unit0} получает уровень и {moves1}'),(146,'unit_levelup_moves',1,'{unit0} achieves next level and gets {moves1}'),(147,'unit_pushes',2,'{unit0} пихает {unitakk1}'),(148,'unit_pushes',1,'{unit0} pushes {unit1}'),(149,'unit_becomes_vampire',2,'{unitname0} становится вампиром'),(150,'unit_becomes_vampire',1,'{unitname0} turns into a vampire'),(151,'vred_got_card_from',2,'Новая карта {card1} от игрока {player0}'),(152,'vred_got_card_from',1,'Got {card1} from {player0}'),(153,'vred_gave_card_to',2,'{player0} вытянул карту {card1}'),(154,'vred_gave_card_to',1,'{player0} takes card {card1}'),(155,'building_opens',2,'{building0} открывается'),(156,'building_opens',1,'{building0} opens'),(157,'building_closes',2,'{building0} закрывается'),(158,'building_closes',1,'{building0} closes'),(159,'unit_casts_fb',2,'{unit0} колдует огненный шар на {unitakk1}'),(160,'unit_casts_fb',1,'{unit0} casts Fireball on {unit1}'),(161,'cast_unsuccessful',2,'Колдовство не удалось'),(162,'cast_unsuccessful',1,'Cast failed'),(163,'unit_heals',2,'{unit0} лечит {unitakk1}'),(164,'unit_heals',1,'{unit0} heals {unit1}');
+INSERT INTO `log_message_text_i18n` VALUES (1,'agrees_to_draw',2,'Согласен на ничью'),(2,'agrees_to_draw',1,'Agrees to draw'),(3,'disagrees_to_draw',2,'Не согласен на ничью'),(4,'disagrees_to_draw',1,'Disagrees to draw'),(5,'unit_shoots_unit',2,'{unit0} стреляет в {unitakk1} {damage2}'),(6,'unit_shoots_unit',1,'{unit0} shoots at {unit1} {damage2}'),(7,'unit_shoots_unit_miss',2,'{unit0} стреляет в {unitakk1} (Промах)'),(8,'unit_shoots_unit_miss',1,'{unit0} shoots at {unit1} (Miss)'),(9,'buys_card',2,'Купил карту'),(10,'buys_card',1,'Buys a card'),(11,'building_repair',2,'{building0} восстанавливает {health1}'),(12,'building_repair',1,'{building0} is repaired {health1}'),(13,'mind_control',2,'{unit0} начинает подчиняться игроку {player1}'),(14,'mind_control',1,'{player1} now controls {unit0}'),(15,'mind_control_own_unit',2,'{unit0} продолжает подчиняться игроку {player1}'),(16,'mind_control_own_unit',1,'{player1} continues to control {unit0}'),(17,'polza_repair_and_heal',2,'Польза: Починить все здания и исцелить юнитов'),(18,'polza_repair_and_heal',1,'White dice: Repair all buildings and heal units'),(19,'polza_gold',2,'Польза: +60 золота'),(20,'polza_gold',1,'White dice: +60 gold'),(21,'polza_cards',2,'Польза: Взять 2 карты'),(22,'polza_cards',1,'White dice: take 2 cards'),(23,'polza_resurrect',2,'Польза: Воскресить любого юнита'),(24,'polza_resurrect',1,'White dice: Resurrect any unit'),(25,'polza_move_from_zone',2,'Польза: Переместить всех юнитов из выбранной зоны'),(26,'polza_move_from_zone',1,'White dice: Move all units out of a chosen zone'),(27,'polza_steal_move_building',2,'Польза: Переместить и присвоить чужое здание'),(28,'polza_steal_move_building',1,'White dice: Steal and move someone else\'s building'),(29,'new_card',2,'Новая карта {card0}'),(30,'new_card',1,'New card {card0}'),(31,'no_more_cards',2,'Карт больше нет'),(32,'no_more_cards',1,'No more cards in the deck'),(33,'player_loses_gold',2,'{player0} теряет {gold1}'),(34,'player_loses_gold',1,'{player0} loses {gold1}'),(35,'players_cards',2,'Карты игрока {player0}:'),(36,'players_cards',1,'{player0}\'s cards:'),(37,'card_name',2,'{card0}'),(38,'card_name',1,'{card0}'),(39,'card_stolen',2,'Похищена карта {card0}'),(40,'card_stolen',1,'{card0} is stolen'),(41,'unit_appears_in_cell',2,'В клетке {cell1} появляется {unit0}'),(42,'unit_appears_in_cell',1,'{unit0} appears in {cell1}'),(43,'vred_gold',2,'Вред: -60 золота выбранному игроку'),(44,'vred_gold',1,'Black dice: Chosen player loses 60 gold'),(45,'vred_kill',2,'Вред: Убить любого юнита'),(46,'vred_kill',1,'Black dice: Kill any unit'),(47,'vred_destroy_building',2,'Вред: Разрушить любое здание'),(48,'vred_destroy_building',1,'Black dice: Destroy any building (except castles)'),(49,'vred_move_units_to_random_zone',2,'Вред: Переместить всех юнитов в случайную зону'),(50,'vred_move_units_to_random_zone',1,'Black dice: Move all units to a random zone'),(51,'vred_player_takes_card_from_everyone',2,'Вред: Вытянуть у всех по карте'),(52,'vred_player_takes_card_from_everyone',1,'Black dice: Steal a card from each other player'),(53,'vred_move_building',2,'Вред: Переместить чужое здание'),(54,'vred_move_building',1,'Black dice: Move someone else\'s building'),(55,'unit_shoots_building',2,'{unit0} стреляет в {building1} {damage2}'),(56,'unit_shoots_building',1,'{unit0} shoots at {building1} {damage2}'),(57,'unit_shoots_building_miss',2,'{unit0} стреляет в {building1} (Промах)'),(58,'unit_shoots_building_miss',1,'{unit0} shoots at {building1} (Miss)'),(59,'unit_magic_resistance',2,'На {unitakk0} не действует магия'),(60,'unit_magic_resistance',1,'{unit0} resists magic'),(61,'unit_mechanical',2,'Механический {unit0} ничего не почувствовал'),(62,'unit_mechanical',1,'Mechanical {unit0} does not feel anything'),(63,'miss_unit',2,'Промах: {unit0}'),(64,'miss_unit',1,'Miss: {unit0}'),(65,'miss_building',2,'Промах: {building0}'),(66,'miss_building',1,'Miss: {building0}'),(67,'miss_rus_rul',2,'{unit0} отделался легким испугом'),(68,'miss_rus_rul',1,'{unit0} has a narrow escape'),(69,'end_turn',2,'{player0} завершил ход'),(70,'end_turn',1,'{player0} ends turn'),(71,'end_turn_timeout',2,'У игрока {player0} закончилось время хода'),(72,'end_turn_timeout',1,'{player0} has run out of time'),(73,'resurrect',2,'{player0} воскресил {unitakk1}'),(74,'resurrect',1,'{player0} resurrects {unit1}'),(75,'unit_goes_mad',2,'{unit0} сошел с ума'),(76,'unit_goes_mad',1,'{unit0} goes mad'),(77,'unit_becomes_not_mad',2,'{unit0} больше не сошел с ума'),(78,'unit_becomes_not_mad',1,'{unit0} restores sanity'),(79,'unit_chess_knight',2,'{unit0} начинает ходить шахматным конем'),(80,'unit_chess_knight',1,'{unit0} now moves as a chess knight'),(81,'unit_paralyzed',2,'{unit0} парализован'),(82,'unit_paralyzed',1,'{unit0} is paralyzed'),(83,'unit_unparalyzed',2,'{unit0} больше не парализован'),(84,'unit_unparalyzed',1,'{unit0} is not paralyzed anymore'),(85,'building_destroyed',2,'Здание {building0} разрушено'),(86,'building_destroyed',1,'{building0} is destroyed'),(87,'castle_destroyed',2,'{building0} разрушен'),(88,'castle_destroyed',1,'{building0} is destroyed'),(89,'unit_drinks_health',2,'{unit0} выпивает {health1}'),(90,'unit_drinks_health',1,'{unit0} drinks {health1}'),(91,'npc_turn',2,'Ход NPC'),(92,'npc_turn',1,'NPC turn'),(93,'unit_restores_health',2,'{unit0} восстанавливает {health1}'),(94,'unit_restores_health',1,'{unit0} restores {health1}'),(95,'unit_killed',2,'{unit0} убит'),(96,'unit_killed',1,'{unit0} is dead'),(97,'unit_damage',2,'{unit0} {damage1}'),(98,'unit_damage',1,'{unit0} {damage1}'),(99,'building_damage',2,'{building0} {damage1}'),(100,'building_damage',1,'{building0} {damage1}'),(101,'unit_already_mad',2,'{unit0} уже сошел с ума'),(102,'unit_already_mad',1,'{unit0} is already pretty mad'),(103,'unit_resurrects',2,'{unit0} воскрешает {unitakk1}'),(104,'unit_resurrects',1,'{unit0} resurrects {unit1}'),(105,'sacrifice',2,'{unit0} жертвует {unitakk1} за {unitakk2}'),(106,'sacrifice',1,'{unit0} sacrifices {unit1} for {unit2}'),(107,'unit_is_such_a_unit',2,'{unit0} такой {unit0}'),(108,'unit_is_such_a_unit',1,'{unit0} is such a {unit0}'),(109,'player_exit',2,'{player0} вышел из игры'),(110,'player_exit',1,'{player0} left the game'),(111,'plays_card',2,'Сыграл карту {card0}'),(112,'plays_card',1,'Plays {card0}'),(113,'building_completely_repaired',2,'Здание {building0} починено'),(114,'building_completely_repaired',1,'{building0} is repaired'),(115,'send_money',2,'Отправил игроку {player0} {gold1}'),(116,'send_money',1,'Sends {player0} {gold1}'),(117,'restore_magic_shield',2,'{unit0} восстанавливает магический щит'),(118,'restore_magic_shield',1,'{unit0} restores magical shield'),(119,'loses_magic_shield',2,'{unit0} теряет магический щит'),(120,'loses_magic_shield',1,'{unit0} loses magical shield'),(121,'gets_magic_shield',2,'{unit0} получает магический щит'),(122,'gets_magic_shield',1,'{unit0} gets magical shield'),(123,'building_sinks',2,'{building0} тонет в воде'),(124,'building_sinks',1,'{building0} sinks'),(125,'unit_drowns',2,'{unit0} тонет в воде'),(126,'unit_drowns',1,'{unit0} drowns'),(127,'moves_units',2,'Походил юнитами'),(128,'moves_units',1,'Moves units'),(129,'take_subsidy',2,'Взял субсидию: {building0} {health1}'),(130,'take_subsidy',1,'Sells stones: {building0} {health1}'),(131,'unit_attaches',2,'{unit0} цепляется к юниту {unit1}'),(132,'unit_attaches',1,'{unit0} is attached to {unit1}'),(133,'unit_healed',2,'{unit0} исцелен'),(134,'unit_healed',1,'{unit0} is healed'),(135,'unit_gets_attack',2,'{unit0} получает {attack1}'),(136,'unit_gets_attack',1,'{unit0} gets {attack1}'),(137,'unit_gets_moves',2,'{unit0} получает {moves1}'),(138,'unit_gets_moves',1,'{unit0} gets {moves1}'),(139,'unit_gets_health',2,'{unit0} получает {health1}'),(140,'unit_gets_health',1,'{unit0} gets {health1}'),(141,'unit_levelup_health',2,'{unit0} получает уровень и {health1}'),(142,'unit_levelup_health',1,'{unit0} achieves next level and gets {health1}'),(143,'unit_levelup_attack',2,'{unit0} получает уровень и {attack1}'),(144,'unit_levelup_attack',1,'{unit0} achieves next level and gets {attack1}'),(145,'unit_levelup_moves',2,'{unit0} получает уровень и {moves1}'),(146,'unit_levelup_moves',1,'{unit0} achieves next level and gets {moves1}'),(147,'unit_pushes',2,'{unit0} пихает {unitakk1}'),(148,'unit_pushes',1,'{unit0} pushes {unit1}'),(149,'unit_becomes_vampire',2,'{unitname0} становится вампиром'),(150,'unit_becomes_vampire',1,'{unitname0} turns into a vampire'),(151,'vred_got_card_from',2,'Новая карта {card1} от игрока {player0}'),(152,'vred_got_card_from',1,'Got {card1} from {player0}'),(153,'vred_gave_card_to',2,'{player0} вытянул карту {card1}'),(154,'vred_gave_card_to',1,'{player0} takes card {card1}'),(155,'building_opens',2,'{building0} открывается'),(156,'building_opens',1,'{building0} opens'),(157,'building_closes',2,'{building0} закрывается'),(158,'building_closes',1,'{building0} closes'),(159,'unit_casts_fb',2,'{unit0} колдует огненный шар на {unitakk1}'),(160,'unit_casts_fb',1,'{unit0} casts Fireball on {unit1}'),(161,'cast_unsuccessful',2,'Колдовство не удалось'),(162,'cast_unsuccessful',1,'Cast failed'),(163,'unit_heals',2,'{unit0} лечит {unitakk1}'),(164,'unit_heals',1,'{unit0} heals {unit1}'),(165,'building_captured',1,'{building0} is captured by {player1}'),(166,'building_captured',2,'Здание {building0} захвачено игроком {player1}'),(167,'building_captured_own',1,'{player1} captures own {building0}'),(168,'building_captured_own',2,'Игрок {player1} захватывает свое собственное здание {building0}'),(169,'building_moved',1,'{building0} is moved from {cell1}'),(170,'building_moved',2,'Здание {building0} перемещено из {cell1}');
 /*!40000 ALTER TABLE `log_message_text_i18n` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1158,7 +1158,7 @@ CREATE TABLE `modes_cards` (
   KEY `modes_cards_cards` (`card_id`),
   CONSTRAINT `modes_cards_cards` FOREIGN KEY (`card_id`) REFERENCES `cards` (`id`) ON DELETE CASCADE,
   CONSTRAINT `modes_cards_modes` FOREIGN KEY (`mode_id`) REFERENCES `modes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=639 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=644 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1167,7 +1167,7 @@ CREATE TABLE `modes_cards` (
 
 LOCK TABLES `modes_cards` WRITE;
 /*!40000 ALTER TABLE `modes_cards` DISABLE KEYS */;
-INSERT INTO `modes_cards` VALUES (573,9,61,3),(574,9,62,3),(575,9,63,3),(576,9,64,3),(577,9,65,3),(578,9,66,3),(579,9,67,5),(580,9,68,4),(581,9,69,3),(582,9,70,2),(583,9,71,1),(584,9,72,1),(585,9,73,1),(586,9,74,1),(587,9,75,1),(588,9,76,1),(589,9,77,5),(590,9,78,4),(591,9,79,3),(592,9,80,2),(593,9,81,1),(594,9,82,1),(595,9,83,1),(596,9,84,1),(597,9,85,1),(598,9,86,1),(599,9,87,1),(601,9,89,1),(602,9,90,1),(603,9,91,1),(604,9,92,1),(605,9,93,1),(606,9,94,1),(607,9,95,1),(608,9,96,1),(610,9,98,1),(611,9,99,1),(612,9,100,1),(613,9,101,3),(614,9,102,2),(615,9,103,1),(616,9,104,3),(617,9,105,3),(636,9,106,1),(637,9,107,1),(638,9,108,1);
+INSERT INTO `modes_cards` VALUES (573,9,61,3),(574,9,62,3),(575,9,63,3),(576,9,64,3),(577,9,65,3),(578,9,66,3),(579,9,67,5),(580,9,68,4),(581,9,69,3),(582,9,70,2),(583,9,71,1),(584,9,72,1),(585,9,73,1),(586,9,74,1),(587,9,75,1),(588,9,76,1),(589,9,77,5),(590,9,78,4),(591,9,79,3),(592,9,80,2),(593,9,81,1),(594,9,82,1),(595,9,83,1),(596,9,84,1),(597,9,85,1),(599,9,87,1),(601,9,89,1),(602,9,90,1),(603,9,91,1),(604,9,92,1),(605,9,93,1),(606,9,94,1),(607,9,95,1),(608,9,96,1),(611,9,99,1),(612,9,100,1),(613,9,101,3),(614,9,102,2),(615,9,103,1),(616,9,104,3),(617,9,105,3),(636,9,106,1),(637,9,107,1),(638,9,108,1),(639,9,109,2),(640,9,110,1),(641,9,111,1),(642,9,112,1),(643,9,113,1);
 /*!40000 ALTER TABLE `modes_cards` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1457,7 +1457,7 @@ CREATE TABLE `procedures` (
   `params` varchar(100) NOT NULL DEFAULT '',
   `ui_action_name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1466,7 +1466,7 @@ CREATE TABLE `procedures` (
 
 LOCK TABLES `procedures` WRITE;
 /*!40000 ALTER TABLE `procedures` DISABLE KEYS */;
-INSERT INTO `procedures` VALUES (1,'player_end_turn','',NULL),(2,'send_money','player,amount',NULL),(3,'buy_card','',NULL),(4,'take_subsidy','',NULL),(5,'player_resurrect','dead_unit',NULL),(6,'put_building','card,empty_coord_my_zone,rotation,flip',NULL),(7,'cast_pooring','card,player',NULL),(8,'cast_riching','card',NULL),(9,'cast_half_money','card',NULL),(10,'summon_unit','card',NULL),(11,'cast_fireball','card,unit',NULL),(12,'cast_lightening_min','card,unit','lightening_min'),(13,'cast_lightening_max','card,unit','lightening_max'),(14,'player_move_unit','unit,empty_coord','move'),(15,'attack','unit,attack_coord','attack'),(16,'player_exit','',NULL),(17,'agree_draw','',NULL),(18,'disagree_draw','',NULL),(19,'cast_paralich','card,unit',NULL),(22,'cast_madness','card,unit',NULL),(23,'cast_shield','card,unit',NULL),(24,'cast_healing','card,unit',NULL),(26,'cast_o_d','card,unit',NULL),(27,'cast_teleport','card,unit,empty_coord',NULL),(28,'cast_mind_control','card,unit',NULL),(29,'cast_show_cards','card,player',NULL),(30,'cast_telekinesis','card,player',NULL),(32,'cast_speeding','card,unit',NULL),(33,'cast_unit_upgrade_all','card,unit','upgrade_all'),(34,'cast_unit_upgrade_random','card,unit','upgrade_random'),(35,'cast_armageddon','card',NULL),(36,'cast_meteor_shower','card,any_coord',NULL),(37,'cast_repair_buildings','card',NULL),(38,'cast_polza_main','card',NULL),(39,'cast_polza_resurrect','dead_unit',NULL),(40,'cast_polza_units_from_zone','zone',NULL),(41,'cast_polza_move_building','building,empty_coord,rotation,flip',NULL),(42,'cast_vred_main','card',NULL),(43,'cast_vred_pooring','player',NULL),(44,'cast_vred_kill_unit','unit',NULL),(45,'cast_vred_destroy_building','building',NULL),(46,'cast_vred_move_building','building,empty_coord,rotation,flip',NULL),(47,'taran_bind','unit,target_unit','taran_bind'),(48,'wizard_heal','unit,target_unit','wizard_heal'),(49,'wizard_fireball','unit,target_unit','wizard_fireball'),(50,'necromancer_resurrect','unit,dead_unit','necromancer_resurrect'),(51,'cast_vampire','card,empty_coord_my_zone',NULL),(52,'necromancer_sacrifice','unit,my_unit,target_unit','necromancer_sacrifice'),(56,'unit_level_up_attack','unit',NULL),(57,'unit_level_up_health','unit',NULL),(58,'unit_level_up_moves','unit',NULL),(59,'wall_open','building','wall_open'),(60,'wall_close','building','wall_close'),(61,'unit_shoot','unit,shoot_target','shoot'),(62,'cast_iron_skin','card,unit',NULL),(63,'cast_berserk','card,unit',NULL),(64,'cast_horseshoe','card,unit',NULL);
+INSERT INTO `procedures` VALUES (1,'player_end_turn','',NULL),(2,'send_money','player,amount',NULL),(3,'buy_card','',NULL),(4,'take_subsidy','',NULL),(5,'player_resurrect','dead_unit',NULL),(6,'put_building','card,empty_coord_my_zone,rotation,flip',NULL),(7,'cast_pooring','card,player',NULL),(8,'cast_riching','card',NULL),(9,'cast_half_money','card',NULL),(10,'summon_unit','card',NULL),(11,'cast_fireball','card,unit',NULL),(12,'cast_lightening_min','card,unit','lightening_min'),(13,'cast_lightening_max','card,unit','lightening_max'),(14,'player_move_unit','unit,empty_coord','move'),(15,'attack','unit,attack_coord','attack'),(16,'player_exit','',NULL),(17,'agree_draw','',NULL),(18,'disagree_draw','',NULL),(19,'cast_paralich','card,unit',NULL),(22,'cast_madness','card,unit',NULL),(23,'cast_shield','card,unit',NULL),(24,'cast_healing','card,unit',NULL),(26,'cast_o_d','card,unit',NULL),(27,'cast_teleport','card,unit,empty_coord',NULL),(28,'cast_mind_control','card,unit',NULL),(29,'cast_show_cards','card,player',NULL),(30,'cast_telekinesis','card,player',NULL),(32,'cast_speeding','card,unit',NULL),(33,'cast_unit_upgrade_all','card,unit','upgrade_all'),(34,'cast_unit_upgrade_random','card,unit','upgrade_random'),(35,'cast_armageddon','card',NULL),(36,'cast_meteor_shower','card,any_coord',NULL),(37,'cast_repair_buildings','card',NULL),(38,'cast_polza_main','card',NULL),(39,'cast_polza_resurrect','dead_unit',NULL),(40,'cast_polza_units_from_zone','zone',NULL),(41,'cast_polza_move_building','building,empty_coord,rotation,flip',NULL),(42,'cast_vred_main','card',NULL),(43,'cast_vred_pooring','player',NULL),(44,'cast_vred_kill_unit','unit',NULL),(45,'cast_vred_destroy_building','building',NULL),(46,'cast_vred_move_building','building,empty_coord,rotation,flip',NULL),(47,'taran_bind','unit,target_unit','taran_bind'),(48,'wizard_heal','unit,target_unit','wizard_heal'),(49,'wizard_fireball','unit,target_unit','wizard_fireball'),(50,'necromancer_resurrect','unit,dead_unit','necromancer_resurrect'),(51,'cast_vampire','card,empty_coord_my_zone',NULL),(52,'necromancer_sacrifice','unit,my_unit,target_unit','necromancer_sacrifice'),(56,'unit_level_up_attack','unit',NULL),(57,'unit_level_up_health','unit',NULL),(58,'unit_level_up_moves','unit',NULL),(59,'wall_open','building','wall_open'),(60,'wall_close','building','wall_close'),(61,'unit_shoot','unit,shoot_target','shoot'),(62,'cast_iron_skin','card,unit',NULL),(63,'cast_berserk','card,unit',NULL),(64,'cast_horseshoe','card,unit',NULL),(65,'cast_demolition','card,building',NULL),(66,'cast_capture','card,building',NULL),(67,'cast_relocation','card,building,empty_coord,rotation,flip',NULL),(68,'cast_zone_express_into','card,zone','express_into_zone'),(69,'cast_zone_express_out','card,zone','express_out_of_zone'),(70,'cast_forest','card,any_coord',NULL);
 /*!40000 ALTER TABLE `procedures` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1586,6 +1586,386 @@ LOCK TABLES `put_start_units_config` WRITE;
 /*!40000 ALTER TABLE `put_start_units_config` DISABLE KEYS */;
 INSERT INTO `put_start_units_config` VALUES (70,0,2,0,14,9),(71,0,0,2,14,9),(72,1,17,0,14,9),(73,1,19,2,14,9),(74,2,17,19,14,9),(75,2,19,17,14,9),(76,3,0,17,14,9),(77,3,2,19,14,9);
 /*!40000 ALTER TABLE `put_start_units_config` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_actions`
+--
+
+DROP TABLE IF EXISTS `replay_actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_actions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` int(10) unsigned NOT NULL,
+  `player_num` int(10) unsigned NOT NULL,
+  `action` varchar(1000) DEFAULT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `replay_actions_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `replay_games` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_actions`
+--
+
+LOCK TABLES `replay_actions` WRITE;
+/*!40000 ALTER TABLE `replay_actions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_actions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_commands`
+--
+
+DROP TABLE IF EXISTS `replay_commands`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_commands` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `action_id` int(10) unsigned NOT NULL,
+  `game_id` int(10) unsigned NOT NULL,
+  `player_num` int(10) unsigned NOT NULL,
+  `command` varchar(1000) NOT NULL,
+  `hidden_flag` int(11) NOT NULL DEFAULT '0',
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `action_id` (`action_id`),
+  CONSTRAINT `replay_commands_ibfk_1` FOREIGN KEY (`action_id`) REFERENCES `replay_actions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_commands`
+--
+
+LOCK TABLES `replay_commands` WRITE;
+/*!40000 ALTER TABLE `replay_commands` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_commands` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_games`
+--
+
+DROP TABLE IF EXISTS `replay_games`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_games` (
+  `id` int(10) unsigned NOT NULL,
+  `title` varchar(45) NOT NULL,
+  `owner_id` int(10) unsigned NOT NULL,
+  `time_restriction` int(10) unsigned NOT NULL DEFAULT '0',
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `mode_id` int(10) unsigned NOT NULL,
+  `type_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_games`
+--
+
+LOCK TABLES `replay_games` WRITE;
+/*!40000 ALTER TABLE `replay_games` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_games` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_games_features_usage`
+--
+
+DROP TABLE IF EXISTS `replay_games_features_usage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_games_features_usage` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` int(10) unsigned NOT NULL,
+  `feature_id` int(10) unsigned NOT NULL,
+  `param` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `replay_games_features_usage_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `replay_games` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_games_features_usage`
+--
+
+LOCK TABLES `replay_games_features_usage` WRITE;
+/*!40000 ALTER TABLE `replay_games_features_usage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_games_features_usage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_init_board`
+--
+
+DROP TABLE IF EXISTS `replay_init_board`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_init_board` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` int(10) unsigned NOT NULL,
+  `x` int(11) NOT NULL DEFAULT '0',
+  `y` int(11) NOT NULL DEFAULT '0',
+  `type` varchar(45) NOT NULL,
+  `ref` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `replay_init_board_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `replay_games` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_init_board`
+--
+
+LOCK TABLES `replay_init_board` WRITE;
+/*!40000 ALTER TABLE `replay_init_board` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_init_board` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_init_board_buildings`
+--
+
+DROP TABLE IF EXISTS `replay_init_board_buildings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_init_board_buildings` (
+  `id` int(10) unsigned NOT NULL,
+  `game_id` int(10) unsigned NOT NULL,
+  `building_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `player_num` int(10) unsigned NOT NULL,
+  `health` int(10) unsigned NOT NULL DEFAULT '0',
+  `max_health` int(10) unsigned NOT NULL DEFAULT '0',
+  `radius` int(10) NOT NULL DEFAULT '0',
+  `card_id` int(10) unsigned DEFAULT NULL,
+  `income` int(10) unsigned NOT NULL DEFAULT '0',
+  `rotation` int(10) unsigned NOT NULL DEFAULT '0',
+  `flip` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `replay_init_board_buildings_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `replay_games` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_init_board_buildings`
+--
+
+LOCK TABLES `replay_init_board_buildings` WRITE;
+/*!40000 ALTER TABLE `replay_init_board_buildings` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_init_board_buildings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_init_board_buildings_features`
+--
+
+DROP TABLE IF EXISTS `replay_init_board_buildings_features`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_init_board_buildings_features` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `board_building_id` int(10) unsigned NOT NULL,
+  `feature_id` int(10) unsigned NOT NULL,
+  `param` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `board_building_id` (`board_building_id`),
+  CONSTRAINT `replay_init_board_buildings_features_ibfk_1` FOREIGN KEY (`board_building_id`) REFERENCES `replay_init_board_buildings` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_init_board_buildings_features`
+--
+
+LOCK TABLES `replay_init_board_buildings_features` WRITE;
+/*!40000 ALTER TABLE `replay_init_board_buildings_features` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_init_board_buildings_features` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_init_board_units`
+--
+
+DROP TABLE IF EXISTS `replay_init_board_units`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_init_board_units` (
+  `id` int(10) unsigned NOT NULL,
+  `game_id` int(10) unsigned NOT NULL,
+  `player_num` int(10) unsigned NOT NULL,
+  `unit_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `card_id` int(10) unsigned DEFAULT NULL,
+  `health` int(11) NOT NULL DEFAULT '0',
+  `max_health` int(11) NOT NULL DEFAULT '0',
+  `attack` int(11) NOT NULL DEFAULT '0',
+  `moves_left` int(11) NOT NULL DEFAULT '0',
+  `moves` int(11) NOT NULL DEFAULT '0',
+  `shield` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `replay_init_board_units_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `replay_games` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_init_board_units`
+--
+
+LOCK TABLES `replay_init_board_units` WRITE;
+/*!40000 ALTER TABLE `replay_init_board_units` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_init_board_units` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_init_board_units_features`
+--
+
+DROP TABLE IF EXISTS `replay_init_board_units_features`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_init_board_units_features` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `board_unit_id` int(10) unsigned NOT NULL,
+  `feature_id` int(10) unsigned NOT NULL,
+  `param` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `board_unit_id` (`board_unit_id`),
+  CONSTRAINT `replay_init_board_units_features_ibfk_1` FOREIGN KEY (`board_unit_id`) REFERENCES `replay_init_board_units` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_init_board_units_features`
+--
+
+LOCK TABLES `replay_init_board_units_features` WRITE;
+/*!40000 ALTER TABLE `replay_init_board_units_features` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_init_board_units_features` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_init_player_deck`
+--
+
+DROP TABLE IF EXISTS `replay_init_player_deck`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_init_player_deck` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` int(10) unsigned NOT NULL,
+  `player_num` int(10) unsigned NOT NULL DEFAULT '0',
+  `card_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `replay_init_player_deck_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `replay_games` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_init_player_deck`
+--
+
+LOCK TABLES `replay_init_player_deck` WRITE;
+/*!40000 ALTER TABLE `replay_init_player_deck` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_init_player_deck` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_init_players`
+--
+
+DROP TABLE IF EXISTS `replay_init_players`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_init_players` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `game_id` int(10) unsigned NOT NULL,
+  `player_num` int(10) unsigned NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `gold` int(10) unsigned NOT NULL DEFAULT '0',
+  `owner` int(10) unsigned NOT NULL,
+  `team` int(10) unsigned NOT NULL DEFAULT '0',
+  `move_order` int(10) unsigned DEFAULT NULL,
+  `language_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `replay_init_players_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `replay_games` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_init_players`
+--
+
+LOCK TABLES `replay_init_players` WRITE;
+/*!40000 ALTER TABLE `replay_init_players` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_init_players` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_player_features_usage`
+--
+
+DROP TABLE IF EXISTS `replay_player_features_usage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_player_features_usage` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` int(10) unsigned NOT NULL,
+  `player_num` int(10) unsigned NOT NULL,
+  `feature_id` int(10) unsigned NOT NULL,
+  `param` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `replay_player_features_usage_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `replay_games` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_player_features_usage`
+--
+
+LOCK TABLES `replay_player_features_usage` WRITE;
+/*!40000 ALTER TABLE `replay_player_features_usage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_player_features_usage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `replay_statistic_values`
+--
+
+DROP TABLE IF EXISTS `replay_statistic_values`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `replay_statistic_values` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` int(10) unsigned NOT NULL,
+  `stat_value_config_id` int(10) unsigned NOT NULL,
+  `value` float DEFAULT NULL,
+  `name` varchar(500) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `replay_statistic_values_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `replay_games` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `replay_statistic_values`
+--
+
+LOCK TABLES `replay_statistic_values` WRITE;
+/*!40000 ALTER TABLE `replay_statistic_values` DISABLE KEYS */;
+/*!40000 ALTER TABLE `replay_statistic_values` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2819,6 +3199,25 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `get_game_mode` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `get_game_mode`(g_id INT) RETURNS int(11)
+BEGIN
+  RETURN (SELECT mode_id FROM games WHERE id = g_id LIMIT 1);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP FUNCTION IF EXISTS `get_health_after_hit` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3108,6 +3507,29 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `is_valid_cell` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `is_valid_cell`(g_id INT, x INT, y INT) RETURNS int(11)
+BEGIN
+  IF EXISTS (SELECT id FROM allcoords a WHERE a.x=x AND a.y=y AND a.mode_id = get_game_mode(g_id)) THEN
+    RETURN 1;
+  ELSE
+    RETURN 0;
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP FUNCTION IF EXISTS `log_building` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3337,9 +3759,9 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agree_draw`(g_id INT, p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agree_draw`(g_id INT,  p_num INT)
 BEGIN
-  CALL user_action_begin();
+  CALL user_action_begin(g_id, p_num);
 
   UPDATE players SET agree_draw=1 WHERE game_id=g_id AND player_num=p_num;
 
@@ -3349,7 +3771,7 @@ BEGIN
     CALL end_game(g_id);
   END IF;
 
-  CALL user_action_end();
+  CALL user_action_end(g_id, p_num);
 
 END ;;
 DELIMITER ;
@@ -3604,7 +4026,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `bridge_destroy`(g_id INT,p_num INT,x INT,y INT,rotation INT,flip INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `bridge_destroy`(g_id INT, p_num INT, x INT, y INT, rotation INT, flip INT)
 BEGIN
   DECLARE g_mode INT;
   DECLARE x_sink,y_sink INT;
@@ -3645,14 +4067,10 @@ BEGIN
   
   SELECT v.building_id INTO destroyed_bridge_building_id FROM  vw_mode_building_default_features v WHERE v.mode_id=g_mode AND v.feature_id=building_feature_get_id_by_code('destroyed_bridge');
   
-  INSERT INTO board_buildings(game_id,player_num,building_id,rotation,flip)VALUES (g_id,neutral_p_num,destroyed_bridge_building_id,rotation,flip);
-  SET new_board_building_id=@@last_insert_id;
-
-  CALL place_building_on_board(new_board_building_id,x,y,rotation,flip);
-
-  INSERT INTO board_buildings_features(board_building_id,feature_id,param) SELECT new_board_building_id,bf.feature_id,bf.param FROM building_default_features bf WHERE bf.building_id=destroyed_bridge_building_id;
+  CALL create_new_building(g_id, neutral_p_num, destroyed_bridge_building_id, NULL, x, y, rotation, flip);
+  SET new_board_building_id = @new_board_building_id;
   
-  CALL cmd_put_building_by_id(g_id,neutral_p_num,new_board_building_id);
+  CALL cmd_put_building_by_id(g_id, neutral_p_num, new_board_building_id);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -3694,7 +4112,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `buy_card`(g_id INT, p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `buy_card`(g_id INT,  p_num INT)
 BEGIN
   DECLARE mode_id INT;
   DECLARE card_cost INT;
@@ -3721,7 +4139,7 @@ BEGIN
             SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=3;
           ELSE
 
-            CALL user_action_begin();
+            CALL user_action_begin(g_id, p_num);
 
             UPDATE players SET gold=gold-card_cost WHERE game_id=g_id AND player_num=p_num;
             SELECT MIN(id) INTO first_card_id FROM deck WHERE game_id=g_id;
@@ -3740,7 +4158,7 @@ BEGIN
             INSERT INTO statistic_game_actions(game_id,player_num,`action`,`value`) VALUES(g_id,p_num,'buy_card',new_card);
             CALL end_cards_phase(g_id,p_num);
 
-            CALL user_action_end();
+            CALL user_action_end(g_id, p_num);
           END IF;
         END IF;
       END IF;
@@ -3855,7 +4273,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_armageddon`(g_id INT,   p_num INT,   player_deck_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_armageddon`(g_id INT,    p_num INT,    player_deck_id INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -3874,7 +4292,7 @@ BEGIN
   IF err_code<>0 THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
-    CALL user_action_begin();
+    CALL user_action_begin(g_id, p_num);
 
     CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -3907,7 +4325,7 @@ BEGIN
     CALL finish_playing_card(g_id,p_num);
     CALL end_cards_phase(g_id,p_num);
 
-    CALL user_action_end();
+    CALL user_action_end(g_id, p_num);
   END IF;
 END ;;
 DELIMITER ;
@@ -3925,7 +4343,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_berserk`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_berserk`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -3937,7 +4355,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -3952,10 +4370,99 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `cast_capture` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_capture`(g_id INT, p_num INT, player_deck_id INT, b_x INT, b_y INT)
+BEGIN
+  DECLARE err_code INT;
+  DECLARE board_building_id INT;
+  DECLARE log_msg_code VARCHAR(50) CHARSET utf8 DEFAULT 'building_captured';
+
+  SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_capture');
+  IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
+  ELSE
+    SELECT b.ref INTO board_building_id FROM board b WHERE b.game_id=g_id AND b.`type`='building' AND b.x=b_x AND b.y=b_y LIMIT 1;
+    IF board_building_id IS NULL THEN
+      SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='building_not_selected';
+    ELSE
+        CALL user_action_begin(g_id, p_num);
+        CALL play_card_actions(g_id,p_num,player_deck_id); 
+
+        IF p_num = (SELECT bb.player_num FROM board_buildings bb WHERE bb.id = board_building_id) THEN
+          SET log_msg_code = 'building_captured_own';
+        END IF;
+
+        CALL cmd_log_add_message(g_id, p_num, log_msg_code, CONCAT_WS(';', log_building(board_building_id), log_player(g_id, p_num)));
+
+        UPDATE board_buildings SET player_num=p_num WHERE id=board_building_id;
+
+        IF(building_feature_check(board_building_id,'ally') = 1)THEN
+          CALL building_feature_set(board_building_id,'summon_team',get_player_team(g_id, p_num));
+        END IF;
+
+        CALL count_income(board_building_id);
+        CALL cmd_building_set_owner(g_id,p_num,board_building_id);
+
+        CALL finish_playing_card(g_id,p_num);
+        CALL end_cards_phase(g_id,p_num);
+        CALL user_action_end(g_id, p_num);
+    END IF;
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `cast_demolition` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_demolition`(g_id INT, p_num INT, player_deck_id INT, b_x INT, b_y INT)
+BEGIN
+  DECLARE err_code INT;
+  DECLARE board_building_id INT;
+  DECLARE demolition_damage INT DEFAULT 4;
+
+  SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_demolition');
+  IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
+  ELSE
+    SELECT b.ref INTO board_building_id FROM board b WHERE b.game_id=g_id AND b.`type`='building' AND b.x=b_x AND b.y=b_y LIMIT 1;
+    IF board_building_id IS NULL THEN
+      SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='building_not_selected';
+    ELSE
+        CALL user_action_begin(g_id, p_num);
+        CALL play_card_actions(g_id,p_num,player_deck_id); 
+        CALL magical_damage(g_id,p_num,b_x,b_y,demolition_damage);
+        CALL finish_playing_card(g_id,p_num);
+        CALL end_cards_phase(g_id,p_num);
+        CALL user_action_end(g_id, p_num);
+    END IF;
+  END IF;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -3972,7 +4479,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_fireball`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_fireball`(g_id INT,   p_num INT,   player_deck_id INT,   x INT,   y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE fb_damage INT DEFAULT 1;
@@ -3983,7 +4490,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -3994,7 +4501,66 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
+    END IF;
+  END IF;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `cast_forest` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_forest`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+BEGIN
+  DECLARE neutral_p_num INT DEFAULT 9;
+  DECLARE err_code INT;
+  DECLARE forest_range INT DEFAULT 2;
+  DECLARE tree_building_id INT;
+  DECLARE tree_x, tree_y INT;
+  DECLARE new_bb_id INT;
+
+  SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_forest');
+  IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
+  ELSE
+    IF NOT is_valid_cell(g_id, x, y) THEN
+      SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='invalid_coord';
+    ELSE
+      CALL user_action_begin(g_id, p_num);
+      CALL play_card_actions(g_id,p_num,player_deck_id); 
+
+      SELECT b.id INTO tree_building_id FROM vw_mode_buildings b
+        WHERE b.mode_id = get_game_mode(g_id) AND b.ui_code = 'tree';
+
+      SET tree_x = x - forest_range;
+      WHILE tree_x <= x + forest_range DO
+        SET tree_y = y - forest_range;
+        WHILE tree_y <= y + forest_range DO
+          IF is_valid_cell(g_id, tree_x, tree_y) THEN
+            CALL create_new_building(g_id, neutral_p_num, tree_building_id, NULL, tree_x, tree_y, 0, 0);
+            SET new_bb_id = @new_board_building_id;
+            IF new_bb_id > 0 THEN
+              CALL cmd_put_building_by_id(g_id, neutral_p_num, new_bb_id);
+            END IF;
+          END IF;
+          SET tree_y = tree_y + 1;
+        END WHILE;
+        SET tree_x = tree_x + 1;
+      END WHILE;
+
+      CALL finish_playing_card(g_id,p_num);
+      CALL end_cards_phase(g_id,p_num);
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4014,7 +4580,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_half_money`(g_id INT,p_num INT,player_deck_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_half_money`(g_id INT, p_num INT, player_deck_id INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE p_num_cur INT;
@@ -4026,7 +4592,7 @@ BEGIN
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_half_money');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
-    CALL user_action_begin();
+    CALL user_action_begin(g_id, p_num);
 
     CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4046,7 +4612,7 @@ BEGIN
     CALL finish_playing_card(g_id,p_num);
     CALL end_cards_phase(g_id,p_num);
 
-    CALL user_action_end();
+    CALL user_action_end(g_id, p_num);
   END IF;
 
 END ;;
@@ -4065,7 +4631,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_healing`(g_id INT,p_num INT,player_deck_id INT,x INT,y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_healing`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE hp_heal INT DEFAULT 1;
@@ -4076,7 +4642,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4085,7 +4651,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4105,7 +4671,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_horseshoe`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_horseshoe`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -4117,7 +4683,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4135,7 +4701,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4155,7 +4721,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_iron_skin`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_iron_skin`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -4167,7 +4733,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4182,7 +4748,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4202,7 +4768,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_lightening_max`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_lightening_max`(g_id INT,   p_num INT,   player_deck_id INT,   x INT,   y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE li_damage INT DEFAULT 3;
@@ -4213,7 +4779,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4228,7 +4794,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4248,7 +4814,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_lightening_min`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_lightening_min`(g_id INT,   p_num INT,   player_deck_id INT,   x INT,   y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE li_damage INT DEFAULT 2;
@@ -4259,7 +4825,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4270,7 +4836,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4290,7 +4856,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_madness`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_madness`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -4302,7 +4868,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4322,7 +4888,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4342,7 +4908,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_meteor_shower`(g_id INT,p_num INT,player_deck_id INT,x INT,y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_meteor_shower`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE x1,y1 INT;
@@ -4362,7 +4928,7 @@ BEGIN
     IF (x<0 OR x>(20-meteor_size) OR y<0 OR y>(20-meteor_size)) THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=23;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4382,7 +4948,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4402,7 +4968,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_mind_control`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_mind_control`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -4417,7 +4983,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4478,7 +5044,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4498,7 +5064,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_o_d`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_o_d`(g_id INT,   p_num INT,   player_deck_id INT,   x INT,   y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -4510,7 +5076,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4535,7 +5101,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4555,7 +5121,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_paralich`(g_id INT,p_num INT,player_deck_id INT,x INT,y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_paralich`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -4567,7 +5133,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4588,7 +5154,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -4608,7 +5174,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_polza_main`(g_id INT,   p_num INT,   player_deck_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_polza_main`(g_id INT,    p_num INT,    player_deck_id INT)
 BEGIN
   DECLARE mode_id INT;
   DECLARE err_code INT;
@@ -4621,7 +5187,7 @@ BEGIN
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_polza_main');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
-    CALL user_action_begin();
+    CALL user_action_begin(g_id, p_num);
 
     CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4702,7 +5268,7 @@ BEGIN
       INSERT INTO command (game_id,player_num,command,hidden_flag) VALUES (g_id,p_num,cmd,1);
     END IF;
 
-    CALL user_action_end();
+    CALL user_action_end(g_id, p_num);
   END IF;
 
 END ;;
@@ -4721,12 +5287,11 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_polza_move_building`(g_id INT, p_num INT, b_x INT, b_y INT, x INT, y INT, rot INT, flp INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_polza_move_building`(g_id INT,  p_num INT,  b_x INT,  b_y INT,  x INT,  y INT,  rot INT,  flp INT)
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 3;
   DECLARE board_building_id INT;
   DECLARE p2_num INT;
-  DECLARE building_id INT;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
@@ -4743,10 +5308,9 @@ BEGIN
           SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=27;
         ELSE
           IF building_feature_check(board_building_id,'not_movable')=1 THEN
-            SELECT bb.building_id INTO building_id FROM board_buildings bb WHERE bb.id=board_building_id;
             SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=43;
           ELSE
-            CALL user_action_begin();
+            CALL user_action_begin(g_id, p_num);
 
 
             UPDATE board SET ref=0 WHERE game_id=g_id AND `type` IN ('building','obstacle') AND ref=board_building_id;
@@ -4773,7 +5337,7 @@ BEGIN
               CALL finish_playing_card(g_id,p_num);
               CALL end_cards_phase(g_id,p_num);
 
-              CALL user_action_end();
+              CALL user_action_end(g_id, p_num);
             END IF;
           END IF;
         END IF;
@@ -4797,7 +5361,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_polza_resurrect`(g_id INT, p_num INT, grave_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_polza_resurrect`(g_id INT,  p_num INT,  grave_id INT)
 BEGIN
   DECLARE mode_id INT;
   DECLARE nonfinished_action INT DEFAULT 1;
@@ -4817,7 +5381,7 @@ BEGIN
       IF NOT EXISTS(SELECT id FROM graves WHERE game_id=g_id AND id=grave_id LIMIT 1) THEN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=8;
       ELSE
-          CALL user_action_begin();
+          CALL user_action_begin(g_id, p_num);
 
           SELECT g.card_id INTO dead_card_id FROM graves g WHERE id=grave_id;
           SELECT ap.x,ap.y,ap.direction_into_board_x,ap.direction_into_board_y INTO x_appear,y_appear,x_dir,y_dir FROM appear_points ap WHERE ap.mode_id=mode_id AND ap.player_num=p_num;
@@ -4834,7 +5398,7 @@ BEGIN
             CALL finish_playing_card(g_id,p_num);
             CALL end_cards_phase(g_id,p_num);
 
-            CALL user_action_end();
+            CALL user_action_end(g_id, p_num);
           END IF;
       END IF;
     END IF;
@@ -4856,7 +5420,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_polza_units_from_zone`(g_id INT, p_num INT, zone INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_polza_units_from_zone`(g_id INT,  p_num INT,  zone INT)
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 2;
 
@@ -4869,7 +5433,7 @@ BEGIN
       IF zone NOT IN(0,1,2,3) THEN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=25;
       ELSE
-            CALL user_action_begin();
+            CALL user_action_begin(g_id, p_num);
 
             CALL units_from_zone(g_id, p_num, zone);
 
@@ -4878,7 +5442,7 @@ BEGIN
             CALL finish_playing_card(g_id,p_num);
             CALL end_cards_phase(g_id,p_num);
 
-            CALL user_action_end();
+            CALL user_action_end(g_id, p_num);
       END IF;
     END IF;
   END IF;
@@ -4899,7 +5463,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_pooring`(g_id INT, p_num INT, player_deck_id INT, p2_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_pooring`(g_id INT,  p_num INT,  player_deck_id INT,  p2_num INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE pooring_sum INT DEFAULT 50;
@@ -4910,7 +5474,7 @@ BEGIN
     IF NOT EXISTS(SELECT id FROM players WHERE game_id=g_id AND player_num=p2_num) THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=13;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4923,7 +5487,65 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
+    END IF;
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `cast_relocation` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_relocation`(g_id INT, p_num INT, player_deck_id INT, b_x INT, b_y INT, x INT, y INT, rot INT, flp INT)
+BEGIN
+  DECLARE err_code INT;
+  DECLARE board_building_id INT;
+  DECLARE log_msg_code VARCHAR(50) CHARSET utf8 DEFAULT 'building_moved';
+
+  SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_relocation');
+  IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
+  ELSE
+    SELECT b.ref INTO board_building_id FROM board b WHERE b.game_id=g_id AND b.`type` IN ('building','obstacle') AND b.x=b_x AND b.y=b_y LIMIT 1;
+    IF board_building_id IS NULL THEN
+      SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='building_not_selected';
+    ELSE
+      IF building_feature_check(board_building_id,'not_movable')=1 THEN
+        SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='moving_this_building_disallowed';
+      ELSE
+        UPDATE board SET ref=0 WHERE game_id=g_id AND `type` IN ('building','obstacle') AND ref=board_building_id;
+        CALL place_building_on_board(board_building_id,x,y,rot,flp);
+
+        IF NOT EXISTS(SELECT id FROM board WHERE game_id=g_id AND `type`<>'unit' AND ref=board_building_id) THEN 
+          UPDATE board SET ref=board_building_id WHERE game_id=g_id AND `type` IN ('building','obstacle') AND ref=0;
+          SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='place_occupied';
+        ELSE
+
+          CALL user_action_begin(g_id, p_num);
+          CALL play_card_actions(g_id,p_num,player_deck_id); 
+            
+          DELETE FROM board WHERE game_id=g_id AND `type` IN ('building','obstacle') AND ref=0;
+          UPDATE board_buildings SET rotation=rot,flip=flp WHERE id=board_building_id;
+
+          CALL count_income(board_building_id);
+
+          CALL cmd_move_building(g_id,p_num,b_x,b_y,board_building_id);
+          CALL cmd_log_add_message(g_id, p_num, log_msg_code, CONCAT_WS(';', log_building(board_building_id), log_cell(b_x, b_y)));
+
+          CALL finish_playing_card(g_id,p_num);
+          CALL end_cards_phase(g_id,p_num);
+          CALL user_action_end(g_id, p_num);
+        END IF;
+      END IF;
     END IF;
   END IF;
 END ;;
@@ -4942,14 +5564,14 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_repair_buildings`(g_id INT,p_num INT,player_deck_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_repair_buildings`(g_id INT, p_num INT, player_deck_id INT)
 BEGIN
   DECLARE err_code INT;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_repair_buildings');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
-    CALL user_action_begin();
+    CALL user_action_begin(g_id, p_num);
 
     CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4958,7 +5580,7 @@ BEGIN
     CALL finish_playing_card(g_id,p_num);
     CALL end_cards_phase(g_id,p_num);
 
-    CALL user_action_end();
+    CALL user_action_end(g_id, p_num);
   END IF;
 
 END ;;
@@ -4977,7 +5599,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_riching`(g_id INT,p_num INT,player_deck_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_riching`(g_id INT, p_num INT, player_deck_id INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE riching_sum INT DEFAULT 50;
@@ -4985,7 +5607,7 @@ BEGIN
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_riching');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
-    CALL user_action_begin();
+    CALL user_action_begin(g_id, p_num);
 
     CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -4996,7 +5618,7 @@ BEGIN
     CALL finish_playing_card(g_id,p_num);
     CALL end_cards_phase(g_id,p_num);
 
-    CALL user_action_end();
+    CALL user_action_end(g_id, p_num);
   END IF;
 
 END ;;
@@ -5015,7 +5637,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_shield`(g_id INT,p_num INT,player_deck_id INT,x INT,y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_shield`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -5026,7 +5648,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -5037,7 +5659,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -5057,7 +5679,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_show_cards`(g_id INT, p_num INT, player_deck_id INT, p2_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_show_cards`(g_id INT,  p_num INT,  player_deck_id INT,  p2_num INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE card_id INT;
@@ -5073,7 +5695,7 @@ BEGIN
     IF NOT EXISTS(SELECT id FROM players WHERE game_id=g_id AND player_num=p2_num) THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=13;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -5091,7 +5713,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -5111,7 +5733,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_speeding`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_speeding`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -5123,7 +5745,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -5138,7 +5760,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -5158,7 +5780,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_telekinesis`(g_id INT,  p_num INT,  player_deck_id INT,  p2_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_telekinesis`(g_id INT,   p_num INT,   player_deck_id INT,   p2_num INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE rand_card INT;
@@ -5174,7 +5796,7 @@ BEGIN
       IF NOT EXISTS(SELECT id FROM player_deck WHERE game_id=g_id AND player_num=p2_num LIMIT 1) THEN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=22;
       ELSE
-        CALL user_action_begin();
+        CALL user_action_begin(g_id, p_num);
 
         CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -5194,7 +5816,7 @@ BEGIN
         CALL finish_playing_card(g_id,p_num);
         CALL end_cards_phase(g_id,p_num);
 
-        CALL user_action_end();
+        CALL user_action_end(g_id, p_num);
       END IF;
     END IF;
   END IF;
@@ -5215,7 +5837,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_teleport`(g_id INT,p_num INT,player_deck_id INT,x INT,y INT, x2 INT, y2 INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_teleport`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT,  x2 INT,  y2 INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -5236,7 +5858,7 @@ BEGIN
       IF EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x BETWEEN x2 AND x2+size-1 AND b.y BETWEEN y2 AND y2+size-1 AND NOT(b.`type`='unit' AND b.ref=board_unit_id) LIMIT 1) THEN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=12;
       ELSE
-        CALL user_action_begin();
+        CALL user_action_begin(g_id, p_num);
 
         CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -5260,7 +5882,7 @@ BEGIN
         CALL finish_playing_card(g_id,p_num);
         CALL end_cards_phase(g_id,p_num);
 
-        CALL user_action_end();
+        CALL user_action_end(g_id, p_num);
       END IF;
     END IF;
   END IF;
@@ -5281,7 +5903,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_unit_upgrade_all`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_unit_upgrade_all`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -5295,7 +5917,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -5312,7 +5934,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -5332,7 +5954,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_unit_upgrade_random`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_unit_upgrade_random`(g_id INT,  p_num INT,  player_deck_id INT,  x INT,  y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
@@ -5347,7 +5969,7 @@ BEGIN
     IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -5371,7 +5993,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -5391,7 +6013,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vampire`(g_id INT,   p_num INT,   player_deck_id INT,   x INT,   y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vampire`(g_id INT,    p_num INT,    player_deck_id INT,    x INT,    y INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE mode_id INT;
@@ -5415,7 +6037,7 @@ BEGIN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=9;
       ELSE
 
-        CALL user_action_begin();
+        CALL user_action_begin(g_id, p_num);
 
         CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -5443,7 +6065,7 @@ BEGIN
         CALL finish_playing_card(g_id,p_num);
         CALL end_cards_phase(g_id,p_num);
 
-        CALL user_action_end();
+        CALL user_action_end(g_id, p_num);
       END IF;
     END IF;
   END IF;
@@ -5464,7 +6086,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_destroy_building`(g_id INT, p_num INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_destroy_building`(g_id INT,  p_num INT,  x INT,  y INT)
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 6;
   DECLARE board_building_id INT;
@@ -5479,7 +6101,7 @@ BEGIN
       IF board_building_id IS NULL THEN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=26;
       ELSE
-        CALL user_action_begin();
+        CALL user_action_begin(g_id, p_num);
 
         CALL destroy_building(board_building_id,p_num);
 
@@ -5488,7 +6110,7 @@ BEGIN
         CALL finish_playing_card(g_id,p_num);
         CALL end_cards_phase(g_id,p_num);
 
-        CALL user_action_end();
+        CALL user_action_end(g_id, p_num);
       END IF;
     END IF;
   END IF;
@@ -5509,7 +6131,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_kill_unit`(g_id INT, p_num INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_kill_unit`(g_id INT,  p_num INT,  x INT,  y INT)
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 5;
   DECLARE board_unit_id INT;
@@ -5523,7 +6145,7 @@ BEGIN
       IF NOT EXISTS(SELECT b.id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y AND b.`type`='unit') THEN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=14;
       ELSE
-        CALL user_action_begin();
+        CALL user_action_begin(g_id, p_num);
 
         SELECT b.ref INTO board_unit_id FROM board b WHERE b.game_id=g_id AND b.x=x AND b.y=y;
 
@@ -5534,7 +6156,7 @@ BEGIN
         CALL finish_playing_card(g_id,p_num);
         CALL end_cards_phase(g_id,p_num);
 
-        CALL user_action_end();
+        CALL user_action_end(g_id, p_num);
       END IF;
     END IF;
   END IF;
@@ -5555,7 +6177,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_main`(g_id INT,   p_num INT,   player_deck_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_main`(g_id INT,    p_num INT,    player_deck_id INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE dice INT;
@@ -5567,7 +6189,7 @@ BEGIN
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_vred_main');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
-    CALL user_action_begin();
+    CALL user_action_begin(g_id, p_num);
 
     CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -5623,7 +6245,7 @@ BEGIN
       INSERT INTO command (game_id,player_num,command,hidden_flag) VALUES (g_id,p_num,cmd,1);
     END IF;
 
-    CALL user_action_end();
+    CALL user_action_end(g_id, p_num);
   END IF;
 
 
@@ -5643,7 +6265,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_move_building`(g_id INT, p_num INT, b_x INT, b_y INT, x INT, y INT, rot INT, flp INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_move_building`(g_id INT,  p_num INT,  b_x INT,  b_y INT,  x INT,  y INT,  rot INT,  flp INT)
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 7;
   DECLARE board_building_id INT;
@@ -5668,7 +6290,7 @@ BEGIN
             SELECT bb.building_id INTO building_id FROM board_buildings bb WHERE bb.id=board_building_id;
             SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=43;
           ELSE
-            CALL user_action_begin();
+            CALL user_action_begin(g_id, p_num);
 
 
             UPDATE board SET ref=0 WHERE game_id=g_id AND `type` IN ('building','obstacle') AND ref=board_building_id;
@@ -5693,7 +6315,7 @@ BEGIN
               CALL finish_playing_card(g_id,p_num);
               CALL end_cards_phase(g_id,p_num);
 
-              CALL user_action_end();
+              CALL user_action_end(g_id, p_num);
             END IF;
           END IF;
         END IF;
@@ -5717,7 +6339,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_pooring`(g_id INT, p_num INT, p2_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_pooring`(g_id INT,  p_num INT,  p2_num INT)
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 4;
 
@@ -5730,7 +6352,7 @@ BEGIN
       IF NOT EXISTS(SELECT id FROM players WHERE game_id=g_id AND player_num=p2_num AND owner<>0) THEN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=13;
       ELSE
-        CALL user_action_begin();
+        CALL user_action_begin(g_id, p_num);
 
         CALL vred_pooring(g_id,p2_num);
 
@@ -5739,11 +6361,83 @@ BEGIN
         CALL finish_playing_card(g_id,p_num);
         CALL end_cards_phase(g_id,p_num);
 
-        CALL user_action_end();
+        CALL user_action_end(g_id, p_num);
       END IF;
     END IF;
   END IF;
 
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `cast_zone_express_into` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_zone_express_into`(g_id INT, p_num INT, player_deck_id INT, zone INT)
+BEGIN
+  DECLARE err_code INT;
+
+  SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_zone_express_into');
+  IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
+  ELSE
+    IF zone NOT IN(0,1,2,3) THEN
+      SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='invalid_zone';
+    ELSE
+        CALL user_action_begin(g_id, p_num);
+        CALL play_card_actions(g_id,p_num,player_deck_id); 
+
+        CALL units_to_zone(g_id, p_num, zone);
+
+        CALL finish_playing_card(g_id,p_num);
+        CALL end_cards_phase(g_id,p_num);
+        CALL user_action_end(g_id, p_num);
+    END IF;
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `cast_zone_express_out` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_zone_express_out`(g_id INT, p_num INT, player_deck_id INT, zone INT)
+BEGIN
+  DECLARE err_code INT;
+
+  SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_zone_express_out');
+  IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
+  ELSE
+    IF zone NOT IN(0,1,2,3) THEN
+      SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='invalid_zone';
+    ELSE
+        CALL user_action_begin(g_id, p_num);
+        CALL play_card_actions(g_id,p_num,player_deck_id); 
+
+        CALL units_from_zone(g_id, p_num, zone);
+
+        CALL finish_playing_card(g_id,p_num);
+        CALL end_cards_phase(g_id,p_num);
+        CALL user_action_end(g_id, p_num);
+    END IF;
+  END IF;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5949,17 +6643,20 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cmd_building_set_owner`(g_id INT,p_num INT,board_building_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cmd_building_set_owner`(g_id INT, p_num INT, board_building_id INT)
 BEGIN
-  DECLARE cmd VARCHAR(1000) CHARSET utf8 DEFAULT 'building_set_owner($x,$y,$p_num)';
+  DECLARE cmd VARCHAR(1000) CHARSET utf8 DEFAULT 'building_set_owner($x,$y,$p_num,$income)';
   DECLARE x,y INT;
+  DECLARE income INT;
 
   SELECT b.x,b.y INTO x,y FROM board b WHERE b.game_id=g_id AND b.`type`<>'unit' AND b.ref=board_building_id LIMIT 1;
+  SELECT bb.income INTO income FROM board_buildings bb WHERE bb.id=board_building_id LIMIT 1;
   SET cmd=REPLACE(cmd,'$x',x);
   SET cmd=REPLACE(cmd,'$y',y);
   SET cmd=REPLACE(cmd,'$p_num',(SELECT player_num FROM board_buildings WHERE id=board_building_id LIMIT 1));
+  SET cmd=REPLACE(cmd,'$income',income);
   INSERT INTO command (game_id,player_num,command) VALUES (g_id,p_num,cmd);
 
 END ;;
@@ -6957,6 +7654,53 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `create_new_building` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_new_building`(g_id INT, p_num INT, building_id INT, card_id INT, x INT, y INT, rot INT, flp INT)
+BEGIN
+  DECLARE bb_id INT;
+
+  INSERT INTO board_buildings(game_id,player_num,building_id,card_id,rotation,flip)
+    VALUES (g_id, p_num, IFNULL(building_id, 0), card_id, rot, flp);
+  SET bb_id = LAST_INSERT_ID();
+  SELECT bb.building_id INTO building_id FROM board_buildings bb WHERE bb.id = bb_id;
+
+  CALL place_building_on_board(bb_id, x, y, rot, flp);
+
+  IF NOT EXISTS(SELECT id FROM board WHERE game_id=g_id AND `type`<>'unit' AND ref=bb_id) THEN
+    DELETE FROM board_buildings WHERE id=bb_id;
+    SET bb_id = 0;
+  ELSE
+    INSERT INTO board_buildings_features(board_building_id, feature_id, param)
+      SELECT bb_id, bf.feature_id, bf.param FROM building_default_features bf
+      WHERE bf.building_id = building_id;
+
+    UPDATE board_buildings_features bbf
+      SET param=get_new_team_number(g_id)
+      WHERE bbf.board_building_id = bb_id AND bbf.feature_id = building_feature_get_id_by_code('summon_team');
+
+    IF building_feature_check(bb_id,'ally') = 1 THEN
+      CALL building_feature_set(bb_id,'summon_team', get_player_team(g_id, p_num));
+    END IF;
+
+    CALL count_income(bb_id);
+
+  END IF;
+  SET @new_board_building_id = bb_id;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `delete_game_data` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -7158,7 +7902,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `destroy_castle`(board_castle_id INT,   p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `destroy_castle`(board_castle_id INT,    p_num INT)
 BEGIN
   DECLARE g_id INT;
   DECLARE g_mode INT;
@@ -7188,10 +7932,8 @@ BEGIN
 
   SELECT v.building_id INTO ruins_building_id FROM vw_mode_building_default_features v WHERE v.mode_id=g_mode AND v.feature_id=building_feature_get_id_by_code('ruins');
 
-  INSERT INTO board_buildings(game_id,player_num,building_id,rotation,flip)VALUES (g_id,p2_num,ruins_building_id,destroyed_castle_rotation,destroyed_castle_flip);
-  SET ruins_board_building_id=@@last_insert_id;
-
-  CALL place_building_on_board(ruins_board_building_id,destroyed_castle_x,destroyed_castle_y,destroyed_castle_rotation,destroyed_castle_flip);
+  CALL create_new_building(g_id, p2_num, ruins_building_id, NULL, destroyed_castle_x, destroyed_castle_y, destroyed_castle_rotation, destroyed_castle_flip);
+  SET ruins_board_building_id = @new_board_building_id;
 
   CALL cmd_put_building_by_id(g_id,p2_num,ruins_board_building_id);
 
@@ -7234,14 +7976,14 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `disagree_draw`(g_id INT, p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `disagree_draw`(g_id INT,  p_num INT)
 BEGIN
-  CALL user_action_begin();
+  CALL user_action_begin(g_id, p_num);
 
   UPDATE players SET agree_draw=0 WHERE game_id=g_id AND player_num=p_num;
   CALL cmd_log_add_independent_message(g_id, p_num, 'disagrees_to_draw', NULL);
 
-  CALL user_action_end();
+  CALL user_action_end(g_id, p_num);
 
 END ;;
 DELIMITER ;
@@ -7396,7 +8138,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `end_turn`(g_id INT,  p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `end_turn`(g_id INT,   p_num INT)
 BEGIN
   DECLARE board_unit_id INT;
   DECLARE p_num2 INT;
@@ -7453,11 +8195,6 @@ BEGIN
       END IF;
     UNTIL done END REPEAT;
     CLOSE cur;
-
-
-  IF @player_end_turn IS NULL THEN
-    DELETE FROM player_features_usage WHERE game_id=g_id AND player_num=p_num AND feature_id=player_feature_get_id_by_code('end_turn');
-  END IF;
 
   SELECT p.owner INTO owner_p2 FROM players p WHERE p.game_id=g_id AND p.player_num=p_num2 LIMIT 1;
 
@@ -7935,7 +8672,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_random_free_cell_near_building`(board_building_id INT, OUT x INT, OUT y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_random_free_cell_near_building`(board_building_id INT,  OUT x INT,  OUT y INT)
 BEGIN
   DECLARE g_id INT;
   DECLARE g_mode INT;
@@ -7950,7 +8687,7 @@ BEGIN
       AND b.ref=board_building_id
       AND a.mode_id=g_mode
       AND (ABS(b.x-a.x)<=1 AND ABS(b.y-a.y)<=1)
-      AND NOT EXISTS (SELECT b2.id FROM board b2 WHERE b2.x=a.x AND b2.y=a.y)
+      AND NOT EXISTS (SELECT b2.id FROM board b2 WHERE b2.game_id=g_id AND b2.x=a.x AND b2.y=a.y)
     ORDER BY RAND() LIMIT 1;
 END ;;
 DELIMITER ;
@@ -8302,6 +9039,7 @@ BEGIN
   CALL init_units(g_id);
   CALL init_landscape(g_id);
   CALL init_statistics(g_id);
+  CALL init_replay_data(g_id);
 
   INSERT INTO active_players(game_id,player_num,turn,last_end_turn) SELECT g_id,MIN(player_num),0,CURRENT_TIMESTAMP FROM players WHERE game_id=g_id AND owner<>0; 
   UPDATE games SET `status_id`=started_game_status WHERE id=g_id;
@@ -8346,14 +9084,7 @@ BEGIN
   REPEAT
     FETCH cur INTO p_num,x,y,rotation,flip,building_id;
     IF NOT done THEN
-      INSERT INTO board_buildings(game_id,player_num,building_id,rotation,flip)VALUES (g_id,p_num,building_id,rotation,flip);
-      SET board_building_id=@@last_insert_id;
-
-      CALL place_building_on_board(board_building_id,x,y,rotation,flip);
-
-      INSERT INTO board_buildings_features(board_building_id,feature_id,param) SELECT board_building_id,bf.feature_id,bf.param FROM building_default_features bf WHERE bf.building_id=building_id;
-
-      CALL count_income(board_building_id);
+      CALL create_new_building(g_id, p_num, building_id, NULL, x, y, rotation, flip);
     END IF;
   UNTIL done END REPEAT;
   CLOSE cur;
@@ -8363,12 +9094,7 @@ BEGIN
   REPEAT
     FETCH cur_neutral INTO p_num,x,y,rotation,flip,building_id;
     IF NOT done THEN
-      INSERT INTO board_buildings(game_id,player_num,building_id,rotation,flip)VALUES (g_id,p_num,building_id,rotation,flip);
-      SET board_building_id=@@last_insert_id;
-
-      CALL place_building_on_board(board_building_id,x,y,rotation,flip);
-
-      INSERT INTO board_buildings_features(board_building_id,feature_id,param) SELECT board_building_id,bf.feature_id,bf.param FROM building_default_features bf WHERE bf.building_id=building_id;
+      CALL create_new_building(g_id, p_num, building_id, NULL, x, y, rotation, flip);
     END IF;
   UNTIL done END REPEAT;
   CLOSE cur_neutral;
@@ -8520,22 +9246,16 @@ BEGIN
         ORDER BY RAND()
         LIMIT 1;
 
-        INSERT INTO board_buildings(game_id,player_num,building_id,rotation,flip)VALUES (g_id,neutral_p_num,building_id,0,0);
-        SET board_building_id=@@last_insert_id;
+        CALL create_new_building(g_id, neutral_p_num, building_id, NULL, tree_x, tree_y, 0, 0);
+        SET board_building_id = @new_board_building_id;
 
-        CALL place_building_on_board(board_building_id,tree_x,tree_y,0,0);
-
-        IF NOT EXISTS(SELECT id FROM board WHERE game_id=g_id AND `type`<>'unit' AND ref=board_building_id) THEN 
-          DELETE FROM board_buildings WHERE id=board_building_id;
+        IF board_building_id = 0 THEN
           SET i=i+1;
         ELSE
-          INSERT INTO board_buildings_features(board_building_id,feature_id,param) SELECT board_building_id,bf.feature_id,bf.param FROM building_default_features bf WHERE bf.building_id=building_id;
-
           DELETE ac
               FROM available_cells_for_trees ac
               JOIN board b ON (ac.x = b.x) AND (ac.y = b.y)
-              WHERE b.game_id = g_id AND `type`<>'unit' AND ref=board_building_id;
-
+              WHERE b.game_id = g_id AND `type`<>'unit' AND ref = board_building_id;
         END IF;
 
         SET i=i-1;
@@ -8715,6 +9435,59 @@ BEGIN
   END IF;
 
   UPDATE players SET move_order = player_num WHERE game_id = g_id AND owner<>0;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `init_replay_data` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `init_replay_data`(g_id INT)
+BEGIN
+
+  INSERT INTO `replay_games` (`id`, `title`, `owner_id`, `time_restriction`, `mode_id`, `type_id`)
+    SELECT `id`, `title`, `owner_id`, `time_restriction`, `mode_id`, `type_id` FROM games WHERE id = g_id;
+
+  INSERT INTO `replay_games_features_usage` (`game_id`, `feature_id`, `param`)
+    SELECT `game_id`, `feature_id`, `param` FROM games_features_usage WHERE game_id = g_id;
+
+  INSERT INTO `replay_init_players` (`user_id`, `game_id`, `player_num`, `name`, `gold`, `owner`, `team`, `move_order`, `language_id`)
+    SELECT `user_id`, `game_id`, `player_num`, `name`, `gold`, `owner`, `team`, `move_order`, `language_id` FROM players WHERE game_id = g_id;
+
+  INSERT INTO `replay_player_features_usage` (`game_id`, `player_num`, `feature_id`, `param`)
+    SELECT `game_id`, `player_num`, `feature_id`, `param` FROM player_features_usage WHERE game_id = g_id;
+
+  INSERT INTO `replay_init_player_deck` (`game_id`, `player_num`, `card_id`)
+    SELECT `game_id`, `player_num`, `card_id` FROM player_deck WHERE game_id = g_id;
+
+  INSERT INTO `replay_init_board` (`game_id`, `x`, `y`, `type`, `ref`)
+    SELECT `game_id`, `x`, `y`, `type`, `ref` FROM board WHERE game_id = g_id;
+
+  INSERT INTO `replay_init_board_buildings` (`id`, `game_id`, `building_id`, `player_num`, `health`, `max_health`, `radius`, `card_id`, `income`, `rotation`, `flip`)
+    SELECT `id`, `game_id`, `building_id`, `player_num`, `health`, `max_health`, `radius`, `card_id`, `income`, `rotation`, `flip`
+      FROM board_buildings WHERE game_id = g_id;
+
+  INSERT INTO `replay_init_board_buildings_features` (`board_building_id`, `feature_id`, `param`)
+    SELECT `board_building_id`, `feature_id`, `param` FROM board_buildings_features
+      WHERE board_building_id IN (SELECT id FROM board_buildings WHERE game_id = g_id);
+
+  INSERT INTO `replay_init_board_units` (`id`, `game_id`, `player_num`, `unit_id`, `card_id`, `health`, `max_health`, `attack`, `moves_left`, `moves`, `shield`)
+    SELECT `id`, `game_id`, `player_num`, `unit_id`, `card_id`, `health`, `max_health`, `attack`, `moves_left`, `moves`, `shield`
+      FROM board_units WHERE game_id = g_id;
+
+  INSERT INTO `replay_init_board_units_features` (`board_unit_id`, `feature_id`, `param`)
+    SELECT `board_unit_id`, `feature_id`, `param` FROM board_units_features
+      WHERE board_unit_id IN (SELECT id FROM board_units WHERE game_id = g_id);
 
 END ;;
 DELIMITER ;
@@ -9759,14 +10532,13 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `necromancer_sacrifice`(g_id INT,  p_num INT,  x INT,  y INT,  x_sacr INT,  y_sacr INT,   x_target INT,   y_target INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `necromancer_sacrifice`(g_id INT,   p_num INT,   x INT,   y INT,   x_sacr INT,   y_sacr INT,    x_target INT,    y_target INT)
 BEGIN
   DECLARE err_code INT;
   DECLARE sacr_bu_id INT;
   DECLARE target_bu_id INT;
   DECLARE board_unit_id INT;
   DECLARE sacr_health INT;
-  DECLARE damage_bonus INT DEFAULT 1;
 
   SET err_code=check_unit_can_do_action(g_id,p_num,x,y,'necromancer_sacrifice'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -9805,8 +10577,8 @@ BEGIN
             CALL unit_feature_set(sacr_bu_id,'goes_to_deck_on_death',null);
             CALL kill_unit(sacr_bu_id,p_num);
             
-            IF(sacr_bu_id<>target_bu_id)THEN
-              CALL magical_damage(g_id,p_num,x_target,y_target,sacr_health+damage_bonus);
+            IF(sacr_bu_id <> target_bu_id)THEN
+              CALL magical_damage(g_id, p_num, x_target, y_target, sacr_health);
             END IF;
 
           END IF;
@@ -9943,20 +10715,21 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `player_end_turn`(g_id INT, p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `player_end_turn`(g_id INT,  p_num INT)
 BEGIN
   DECLARE moved_units INT;
-  DECLARE moves_to_auto_repair INT DEFAULT 2;
-  DECLARE moves_ended INT DEFAULT 2;
-  DECLARE end_turn_feature_id INT;
+  DECLARE did_card_action INT;
+  DECLARE taken_subsidy INT;
   DECLARE owner INT;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
   ELSE
-    CALL user_action_begin();
+    CALL user_action_begin(g_id, p_num);
 
-    SELECT units_moves_flag INTO moved_units FROM active_players WHERE game_id=g_id LIMIT 1;
+    SELECT units_moves_flag, card_played_flag, subsidy_flag
+      INTO moved_units, did_card_action, taken_subsidy
+      FROM active_players WHERE game_id=g_id LIMIT 1;
     SELECT p.owner INTO owner FROM players p WHERE p.game_id=g_id AND p.player_num=p_num LIMIT 1;
 
     IF moved_units=1 OR owner<>1 THEN
@@ -9965,35 +10738,14 @@ BEGIN
     ELSE
       CALL cmd_log_add_independent_message(g_id, p_num, 'end_turn', log_player(g_id, p_num));
     END IF;
-
     
-    IF moved_units=0 THEN
-      SET end_turn_feature_id=player_feature_get_id_by_code('end_turn');
-
-      IF EXISTS(SELECT pfu.id FROM player_features_usage pfu WHERE pfu.game_id=g_id AND pfu.player_num=p_num AND feature_id=end_turn_feature_id LIMIT 1)THEN
-        SELECT pfu.param INTO moves_ended FROM player_features_usage pfu WHERE pfu.game_id=g_id AND pfu.player_num=p_num AND feature_id=end_turn_feature_id LIMIT 1;
-
-        IF(moves_ended+1=moves_to_auto_repair)THEN
-          DELETE FROM player_features_usage WHERE game_id=g_id AND player_num=p_num AND feature_id=end_turn_feature_id;
-          CALL castle_auto_repair(g_id,p_num);
-        ELSE
-          SET @player_end_turn=1;
-          UPDATE player_features_usage pfu SET param=param+1 WHERE pfu.game_id=g_id AND pfu.player_num=p_num AND feature_id=end_turn_feature_id;
-        END IF;
-
-      ELSE
-        IF (moves_to_auto_repair=1) THEN
-          CALL castle_auto_repair(g_id,p_num);
-        ELSE
-          SET @player_end_turn=1;
-          INSERT INTO player_features_usage(game_id,player_num,feature_id,param) VALUES(g_id,p_num,end_turn_feature_id,1);
-        END IF;
-      END IF;
+    IF moved_units = 0 AND did_card_action = 0 AND taken_subsidy = 0 THEN
+      CALL castle_auto_repair(g_id,p_num);
     END IF;
 
     CALL end_turn(g_id,p_num);
 
-    CALL user_action_end();
+    CALL user_action_end(g_id, p_num);
   END IF;
 END ;;
 DELIMITER ;
@@ -10011,13 +10763,13 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `player_end_turn_by_timeout`(g_id INT, p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `player_end_turn_by_timeout`(g_id INT,  p_num INT)
 BEGIN
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
   ELSE
-    CALL user_action_begin();
+    CALL user_action_begin(g_id, p_num);
 
     IF(SELECT units_moves_flag FROM active_players WHERE game_id=g_id)=1 THEN
       CALL cmd_log_add_message(g_id, p_num, 'end_turn_timeout', log_player(g_id, p_num));
@@ -10028,7 +10780,7 @@ BEGIN
 
     CALL end_turn(g_id,p_num);
 
-    CALL user_action_end();
+    CALL user_action_end(g_id, p_num);
   END IF;
 
 END ;;
@@ -10047,7 +10799,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `player_exit`(g_id INT,   p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `player_exit`(g_id INT,    p_num INT)
 BEGIN
   DECLARE p_id INT;
   DECLARE finished_game_status INT DEFAULT 3; 
@@ -10057,7 +10809,7 @@ BEGIN
   DECLARE mode_id INT;
   DECLARE game_type_id INT;
 
-  CALL user_action_begin();
+  CALL user_action_begin(g_id, p_num);
 
   SELECT g.mode_id, g.type_id INTO mode_id, game_type_id FROM games g WHERE g.id = g_id;
 
@@ -10098,7 +10850,7 @@ BEGIN
     CALL delete_game_data(g_id);
   END IF;
 
-  CALL user_action_end();
+  CALL user_action_end(g_id, p_num);
   
   DELETE FROM players WHERE game_id=g_id AND player_num=p_num;  
 END ;;
@@ -10207,7 +10959,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `player_resurrect`(g_id INT,  p_num INT,  grave_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `player_resurrect`(g_id INT,   p_num INT,   grave_id INT)
 BEGIN
   DECLARE mode_id INT;
   DECLARE dead_card_id INT;
@@ -10252,7 +11004,7 @@ BEGIN
               IF EXISTS(SELECT id FROM board WHERE game_id=g_id AND x BETWEEN LEAST(x_appear,x_appear+x_dir*(size-1)) AND GREATEST(x_appear,x_appear+x_dir*(size-1)) AND y BETWEEN LEAST(y_appear,y_appear+y_dir*(size-1)) AND GREATEST(y_appear,y_appear+y_dir*(size-1)) LIMIT 1) THEN
                 SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code = 'spawn_point_occupued';
               ELSE
-                CALL user_action_begin();
+                CALL user_action_begin(g_id, p_num);
 
                 UPDATE players SET gold=gold-resur_cost WHERE game_id=g_id AND player_num=p_num;
                 CALL cmd_player_set_gold(g_id,p_num);
@@ -10264,7 +11016,7 @@ BEGIN
 
                 CALL end_cards_phase(g_id,p_num);
 
-                CALL user_action_end();
+                CALL user_action_end(g_id, p_num);
               END IF;
             END IF;
           END IF;
@@ -10329,14 +11081,13 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `put_building`(g_id INT, p_num INT, player_deck_id INT, x INT, y INT, rotation INT, flip INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `put_building`(g_id INT,   p_num INT,   player_deck_id INT,   x INT,   y INT,   rotation INT,   flip INT)
 BEGIN
   DECLARE crd_id INT;
   DECLARE err_code INT;
   DECLARE x_len,y_len INT;
   DECLARE x2,y2 INT; 
   DECLARE new_building_id INT;
-  DECLARE card_cost INT;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'put_building');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -10351,37 +11102,17 @@ BEGIN
       SET y2=y+x_len-1;
     END IF;
     IF (quart(x,y)<>p_num) OR (quart(x2,y2)<>p_num) THEN
-      SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=11;
+      SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='building_outside_zone';
     ELSE
-      CALL user_action_begin();
-
-      INSERT INTO board_buildings(game_id,player_num,card_id,rotation,flip)VALUES (g_id,p_num,crd_id,rotation,flip);
-      SET new_building_id=@@last_insert_id;
-
-      CALL place_building_on_board(new_building_id,x,y,rotation,flip);
-
-      IF NOT EXISTS(SELECT id FROM board WHERE game_id=g_id AND `type`<>'unit' AND ref=new_building_id) THEN 
-        DELETE FROM board_buildings WHERE id=new_building_id;
-        SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=12;
+      CALL create_new_building(g_id, p_num, NULL, crd_id, x, y, rotation, flip);
+      SET new_building_id = @new_board_building_id;
+      IF new_building_id = 0 THEN 
+        SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='place_occupied';
       ELSE
-
-        INSERT INTO board_buildings_features(board_building_id,feature_id,param) SELECT new_building_id,bfu.feature_id,bfu.param FROM board_buildings bb JOIN building_default_features bfu ON (bb.building_id=bfu.building_id) WHERE bb.id=new_building_id;
-
-        UPDATE board_buildings_features bbf
-        SET param=get_new_team_number(g_id)
-        WHERE bbf.board_building_id=new_building_id AND bbf.feature_id=building_feature_get_id_by_code('summon_team');
-
-        IF(building_feature_check(new_building_id,'ally') = 1)THEN
-          CALL building_feature_set(new_building_id,'summon_team',get_player_team(g_id, p_num));
-        END IF;
-
-        CALL count_income(new_building_id);
-
+        CALL user_action_begin(g_id, p_num);
         CALL play_card_actions(g_id,p_num,player_deck_id); 
 
-
         CALL cmd_put_building_by_card(g_id,p_num,new_building_id);
-
 
         IF EXISTS(SELECT sc.id FROM summon_cfg sc WHERE sc.building_id=(SELECT bb.building_id FROM board_buildings bb WHERE id=new_building_id)) THEN
           CALL summon_creatures(new_building_id);
@@ -10389,8 +11120,7 @@ BEGIN
 
         CALL finish_playing_card(g_id,p_num);
         CALL end_cards_phase(g_id,p_num);
-
-        CALL user_action_end();
+        CALL user_action_end(g_id, p_num);
       END IF;
     END IF;
   END IF;
@@ -10543,6 +11273,21 @@ BEGIN
   truncate table statistic_game_actions;
   truncate table statistic_players;
   truncate table player_features_usage;
+  
+  truncate table replay_games;
+  truncate table replay_games_features_usage;
+  truncate table replay_init_players;
+  truncate table replay_player_features_usage;
+  truncate table replay_init_player_deck;
+  truncate table replay_init_board;
+  truncate table replay_init_board_buildings;
+  truncate table replay_init_board_buildings_features;
+  truncate table replay_init_board_units;
+  truncate table replay_init_board_units_features;
+  truncate table replay_statistic_values;
+  truncate table replay_actions;
+  truncate table replay_commands;
+
   SET FOREIGN_KEY_CHECKS=1;
 END ;;
 DELIMITER ;
@@ -10604,7 +11349,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `send_money`(g_id INT,  p_num INT,  p2_num INT,  amount_input_str VARCHAR(100) CHARSET utf8)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `send_money`(g_id INT,   p_num INT,   p2_num INT,   amount_input_str VARCHAR(100) CHARSET utf8)
 BEGIN
   DECLARE amount INT;
 
@@ -10632,7 +11377,7 @@ BEGIN
           SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='send_money_invalid_player';
         ELSE
 
-          CALL user_action_begin();
+          CALL user_action_begin(g_id, p_num);
 
           UPDATE players SET gold=gold-amount WHERE game_id=g_id AND player_num=p_num;
           UPDATE players SET gold=gold+amount WHERE game_id=g_id AND player_num=p2_num;
@@ -10642,7 +11387,7 @@ BEGIN
 
           CALL cmd_log_add_independent_message(g_id, p_num, 'send_money', CONCAT_WS(';', log_player(g_id, p2_num), amount));
 
-          CALL user_action_end();
+          CALL user_action_end(g_id, p_num);
         END IF;
       END IF;
     END IF;
@@ -10874,6 +11619,9 @@ BEGIN
     UNTIL done END REPEAT;
     CLOSE cur;
 
+  INSERT INTO replay_statistic_values (game_id, stat_value_config_id, value, name)
+    SELECT game_id, stat_value_config_id, value, name FROM statistic_values WHERE game_id = g_id;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -11029,7 +11777,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `summon_unit`(g_id INT,p_num INT,player_deck_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `summon_unit`(g_id INT, p_num INT, player_deck_id INT)
 BEGIN
   DECLARE mode_id INT;
   DECLARE crd_id INT;
@@ -11049,7 +11797,7 @@ BEGIN
     IF EXISTS(SELECT id FROM board WHERE game_id=g_id AND x BETWEEN LEAST(x_appear,x_appear+x_dir*(size-1)) AND GREATEST(x_appear,x_appear+x_dir*(size-1)) AND y BETWEEN LEAST(y_appear,y_appear+y_dir*(size-1)) AND GREATEST(y_appear,y_appear+y_dir*(size-1)) LIMIT 1) THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=9;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       CALL play_card_actions(g_id,p_num,player_deck_id); 
 
@@ -11067,7 +11815,7 @@ BEGIN
       CALL finish_playing_card(g_id,p_num);
       CALL end_cards_phase(g_id,p_num);
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 
@@ -11087,7 +11835,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `take_subsidy`(g_id INT, p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `take_subsidy`(g_id INT,  p_num INT)
 BEGIN
   DECLARE mode_id INT;
   DECLARE subsidy_amt INT;
@@ -11108,7 +11856,7 @@ BEGIN
       IF (SELECT bb.health FROM board_buildings bb JOIN buildings b ON bb.building_id=b.id WHERE bb.game_id=g_id AND bb.player_num=p_num AND b.`type`='castle' LIMIT 1)<=subsidy_damage THEN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=6;
       ELSE
-        CALL user_action_begin();
+        CALL user_action_begin(g_id, p_num);
 
         SELECT bb.id INTO board_castle_id FROM board_buildings bb JOIN board b ON bb.id=b.ref WHERE b.`type`='castle' AND b.game_id=g_id AND bb.player_num=p_num LIMIT 1;
         UPDATE players SET gold=gold+subsidy_amt WHERE game_id=g_id AND player_num=p_num;
@@ -11122,7 +11870,7 @@ BEGIN
 
         CALL cmd_log_add_independent_message(g_id, p_num, 'take_subsidy', CONCAT_WS(';', log_building(board_castle_id), health_remaining));
 
-        CALL user_action_end();
+        CALL user_action_end(g_id, p_num);
       END IF;
     END IF;
   END IF;
@@ -11370,9 +12118,9 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unit_action_begin`(g_id INT, p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unit_action_begin`(g_id INT,  p_num INT)
 BEGIN
-  CALL user_action_begin();
+  CALL user_action_begin(g_id, p_num);
   IF(SELECT units_moves_flag FROM active_players WHERE game_id=g_id)=0 THEN
     CALL start_moving_units(g_id,p_num);
   END IF;
@@ -11392,7 +12140,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unit_action_end`(g_id INT,  p_num INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unit_action_end`(g_id INT,   p_num INT)
 BEGIN
   IF (check_all_units_moved(g_id,p_num) = 1)
     AND (SELECT player_num FROM active_players WHERE game_id=g_id)=p_num 
@@ -11401,7 +12149,7 @@ BEGIN
     CALL end_units_phase(g_id,p_num);
   END IF;
 
-  CALL user_action_end();
+  CALL user_action_end(g_id, p_num);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -11581,7 +12329,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unit_level_up`(g_id INT, p_num INT, x INT, y INT,  stat VARCHAR(10))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unit_level_up`(g_id INT,  p_num INT,  x INT,  y INT,   stat VARCHAR(10))
 BEGIN
   DECLARE board_unit_id INT;
   DECLARE level_up_bonus INT DEFAULT 1;
@@ -11606,7 +12354,7 @@ BEGIN
             SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=41;
           ELSE
 
-            CALL user_action_begin();
+            CALL user_action_begin(g_id, p_num);
             IF(SELECT units_moves_flag FROM active_players WHERE game_id=g_id)=0 THEN
               CALL start_moving_units(g_id,p_num);
             END IF;
@@ -11640,7 +12388,7 @@ BEGIN
               CALL end_units_phase(g_id,p_num);
             END IF;
 
-            CALL user_action_end();
+            CALL user_action_end(g_id, p_num);
           END IF;
         END IF;
       END IF;
@@ -11997,10 +12745,13 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `user_action_begin`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_action_begin`(g_id INT,  p_num INT)
 BEGIN
+
+  INSERT INTO replay_actions (game_id, player_num, action) VALUES(g_id, p_num, @current_procedure_call);
+  SET @current_action_id = LAST_INSERT_ID();
 
   CREATE TEMPORARY TABLE IF NOT EXISTS `lords`.`command` (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -12027,7 +12778,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `user_action_end`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_action_end`(g_id INT,  p_num INT)
 BEGIN
 
   INSERT INTO log_commands(game_id,player_num,command,hidden_flag)
@@ -12050,6 +12801,9 @@ BEGIN
     command.command LIKE 'log_add_attack_unit_message%'
     OR
     command.command LIKE 'log_add_attack_building_message%';
+
+  INSERT INTO replay_commands (action_id, game_id, player_num, command, hidden_flag)
+    SELECT @current_action_id, game_id, player_num, command, hidden_flag FROM command;
 
   SELECT p.user_id, command, hidden_flag
   FROM command c LEFT JOIN players p ON (c.game_id=p.game_id AND c.player_num=p.player_num);
@@ -12258,7 +13012,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `wall_close`(g_id INT, p_num INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `wall_close`(g_id INT,  p_num INT,  x INT,  y INT)
 BEGIN
   DECLARE g_mode INT;
   DECLARE err_code INT;
@@ -12293,7 +13047,7 @@ BEGIN
       UPDATE board_buildings SET building_id=old_wall_building_id WHERE id=board_building_id;
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=12;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       DELETE FROM board WHERE game_id=g_id AND `type` IN ('building','obstacle') AND ref=0; 
 
@@ -12309,7 +13063,7 @@ BEGIN
 
       CALL cmd_log_add_message(g_id, p_num, 'building_closes', log_building(board_building_id));
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 END ;;
@@ -12328,7 +13082,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `wall_open`(g_id INT, p_num INT, x INT, y INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `wall_open`(g_id INT,  p_num INT,  x INT,  y INT)
 BEGIN
   DECLARE g_mode INT;
   DECLARE err_code INT;
@@ -12363,7 +13117,7 @@ BEGIN
       UPDATE board_buildings SET building_id=old_wall_building_id WHERE id=board_building_id;
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=12;
     ELSE
-      CALL user_action_begin();
+      CALL user_action_begin(g_id, p_num);
 
       DELETE FROM board WHERE game_id=g_id AND `type` IN ('building','obstacle') AND ref=0; 
 
@@ -12379,7 +13133,7 @@ BEGIN
 
       CALL cmd_log_add_message(g_id, p_num, 'building_opens', log_building(board_building_id));
 
-      CALL user_action_end();
+      CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
 END ;;
@@ -12550,7 +13304,7 @@ BEGIN
           THEN
             SELECT gold INTO npc_gold FROM players WHERE game_id=g_id AND player_num=zombie_p_num LIMIT 1; 
             IF(npc_gold>0)THEN
-              UPDATE players SET gold=gold+riching_sum WHERE game_id=g_id AND player_num=nec_p_num;
+              UPDATE players SET gold = gold + npc_gold WHERE game_id = g_id AND player_num = nec_p_num;
               CALL cmd_player_set_gold(g_id,nec_p_num);
             END IF;
 
@@ -13414,11 +14168,13 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `arena_game_delete_inner`(g_id INT)
 BEGIN
-  DECLARE player_online_status_id INT DEFAULT 1; 
-  DECLARE player_ingame_status_id INT DEFAULT 2; 
+  DECLARE player_online_status_id INT DEFAULT 1;
+  DECLARE player_waiting_game_start_status_id INT DEFAULT 2;
+  DECLARE player_ingame_status_id INT DEFAULT 3;
 
   UPDATE arena_users au, arena_game_players agp SET au.status_id=player_online_status_id
-    WHERE au.user_id=agp.user_id AND agp.game_id=g_id AND au.status_id=player_ingame_status_id;
+    WHERE au.user_id=agp.user_id AND agp.game_id=g_id
+      AND au.status_id IN (player_waiting_game_start_status_id, player_ingame_status_id);
 
   DELETE FROM users 
     WHERE id IN (SELECT user_id FROM arena_game_players WHERE game_id = g_id)
@@ -14984,4 +15740,4 @@ USE `lords_site`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-12 18:38:34
+-- Dump completed on 2018-08-05 16:02:53
