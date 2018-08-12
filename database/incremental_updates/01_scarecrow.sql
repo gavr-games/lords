@@ -5,8 +5,8 @@ insert into buildings(health, radius, x_len, y_len, shape, type, ui_code)
 set @building_id = LAST_INSERT_ID();
 
 insert into buildings_i18n(building_id, language_id, name, description) values
-  (@building_id, 1, 'Scarecrow', 'Paralyses enemy units in its radius'),
-  (@building_id, 2, 'Пугало', 'Парализует вражеских юнитов в своем радиусе');
+  (@building_id, 1, 'Scarecrow', 'Paralyses enemy units which appear or move in its radius'),
+  (@building_id, 2, 'Пугало', 'Парализует вражеских юнитов которые появляются или перемещаются в радиусе');
 
 insert into building_features (code) values('paralysing');
 set @building_feature_id = LAST_INSERT_ID();
