@@ -1943,7 +1943,8 @@ function addUnitTip(dom_id, id) {
     unit_features.each(function(item, index) {
         if (item) {
             if ($chk(board_units[id][item['code']]))
-                effects += unit_feature_description(item['id']) + '<br />'
+                if (unit_feature_description(item['id']))
+                    effects += unit_feature_description(item['id']) + '<br />'
         }
     });
     var unitDisplayName;

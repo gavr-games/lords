@@ -674,6 +674,17 @@
 	height: 43px;
 }
 
+/*-------------------------------- bandit --------------------------------------*/
+
+.unit_bandit {
+	background: url(../images/units/bandit.png) top left no-repeat !important;
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	width: 35px;
+	height: 35px;
+}
+
 
 /*--------------------------------могилки--------------------------------------*/
 

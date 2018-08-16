@@ -60,7 +60,7 @@ for DB in $DBS
                 echo "" >> $FILE
                 $MYSQL -u$USERNAME -p$PASSWORD -h$HOST -Bse "SELECT CONCAT('DROP ', ROUTINE_TYPE, ' IF EXISTS \`', ROUTINE_SCHEMA, '\`.\`', ROUTINE_NAME, '\` \$\$') FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = '$DB' AND ROUTINE_NAME = '$ROUTINE'" >> $FILE
                 echo "" >> $FILE
-                $MYSQL -u$USERNAME -p$PASSWORD -h$HOST -Bse "SELECT CONCAT('CREATE ', type, ' \`', name, '\`(', REPLACE(param_list, ',', ', '), ')', case when returns != '' then CONCAT(' RETURNS ', returns) else '' end, CHAR(13), case when is_deterministic = 'YES' then CONCAT('DETERMINISTIC', CHAR(13)) else '' end, body, '\$\$', CHAR(13)) FROM mysql.proc WHERE db='$DB' and name='$ROUTINE'" | sed 's/\\n/\n/g' >> $FILE
+                $MYSQL -u$USERNAME -p$PASSWORD -h$HOST -Bse "SELECT CONCAT('CREATE ', type, ' \`', name, '\`(', REPLACE(param_list, ',', ','), ')', case when returns != '' then CONCAT(' RETURNS ', returns) else '' end, CHAR(13), case when is_deterministic = 'YES' then CONCAT('DETERMINISTIC', CHAR(13)) else '' end, body, '\$\$', CHAR(13)) FROM mysql.proc WHERE db='$DB' and name='$ROUTINE'" | sed 's/\\n/\n/g' >> $FILE
                 echo "" >> $FILE
                 echo 'DELIMITER ;' >> $FILE
         done
