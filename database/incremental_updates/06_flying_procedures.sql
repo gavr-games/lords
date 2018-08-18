@@ -50,7 +50,15 @@ BEGIN
 
     SET moveable=check_one_step_from_unit(g_id,x,y,x2,y2);
 
-    IF (moveable=0)AND(unit_feature_check(board_unit_id,'magic_immunity')=0) AND EXISTS
+    IF moveable=0
+       AND unit_feature_check(board_unit_id,'flying') AND NOT unit_feature_check(board_unit_id,'knight')
+       AND get_distance_between_cells(x0, y0, x2, y2) BETWEEN 1 AND moves_left
+    THEN
+      SET flyable = 1;
+      SET moves_spent = get_distance_between_cells(x0, y0, x2, y2);
+    END IF; 
+
+    IF (moveable=0 AND flyable=0) AND (unit_feature_check(board_unit_id,'magic_immunity')=0) AND EXISTS
     (SELECT a.id FROM board_buildings bb,board b,allcoords a
       WHERE bb.game_id=g_id AND building_feature_check(bb.id,'teleport')=1 AND check_building_deactivated(bb.id)=0
       AND b.`type`<>'unit' AND b.ref=bb.id
@@ -61,14 +69,6 @@ BEGIN
     THEN
       SET teleportable=1;
     END IF;
-    
-    IF moveable=0 AND teleportable=0
-       AND unit_feature_check(board_unit_id,'flying') AND NOT unit_feature_check(board_unit_id,'knight')
-       AND get_distance_between_cells(x0, y0, x2, y2) BETWEEN 1 AND moves_left
-    THEN
-      SET flyable = 1;
-      SET moves_spent = get_distance_between_cells(x0, y0, x2, y2);
-    END IF; 
     
     IF NOT (moveable OR teleportable OR flyable)
     THEN
