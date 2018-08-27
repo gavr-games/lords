@@ -1,6 +1,6 @@
 use lords;
 
-insert into unit_features(code) values('flying');
+insert into unit_features(code, log_key_add) values('flying', 'unit_flying');
 set @feature_id = LAST_INSERT_ID();
 
 insert into unit_features_i18n(feature_id, language_id, description) values
@@ -17,4 +17,8 @@ update units_i18n set description = 'Атакует несколько целе�
 
 update units_i18n set description = 'Attacks multiple targets simultaneously, can fly over obstacles'
   where unit_id = @dragon_id and language_id = 1;
+
+insert into log_message_text_i18n(code, language_id, message) values
+  ('unit_flying', 1, '{unit0} can fly'),
+  ('unit_flying', 2, '{unit0} может летать');
 
