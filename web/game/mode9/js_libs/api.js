@@ -2673,18 +2673,22 @@ function show_unit_message(b_unit_id, mes_id) {
         });
         $('unitmes_c').set('text', mes);
         //set position to be done and show
-        $('unitmes_w').setStyle('display', 'block');
         $('unitmes_w').position({
             relativeTo: $('board_' + x + '_' + y),
             position: 'center',
             edge: 'bottomRight'
         });
-        setTimeout('hide_unit_message();', 6000);
+        var newMes = $('unitmes_w').clone();
+        var mesId = Math.random().toString(36).substr(2, 9) + b_unit_id + mes_id;
+        newMes.set('id', mesId);
+        $(document.body).grab(newMes, 'bottom');
+        newMes.setStyle('display', 'block');
+        setTimeout('hide_unit_message("' + mesId + '");', 6000);
     }
 }
 
-function hide_unit_message() {
-    $('unitmes_w').setStyle('display', 'none');
+function hide_unit_message(domId) {
+    $(domId).setStyle('display', 'none');
 }
 
 function NPC(p_num) {
