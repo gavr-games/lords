@@ -215,8 +215,9 @@ function unit_set_moves_left(x, y, moves_left) {
                             if (moves_left == 0) {
                                 $('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0].fade(unactive_unit);
                                 $('board_' + item['x'] + '_' + item['y']).removeClass('my-brd-unit');
+                            } else if (!($chk(board_units[id]["paralich"]) && board_units[id]["paralich"] == 1)) {
+                              $('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0].fade(1);
                             }
-                        else $('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0].fade(1);
                     }
             });
     });
@@ -269,7 +270,14 @@ function unit_add_effect(x, y, effect, param) {
                         //tip
                         addUnitTip('overboard_' + item['x'] + '_' + item['y'], id);
                         //unactive
-                        if (effect == 'paralich') $('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0].fade(unactive_unit);
+                        if (effect == 'paralich') {
+                          var cmd = "$('board_" + item['x'] + "_" + item['y'] + "').getChildren('.unitdiv')[0].fade("+ unactive_unit + ");";
+                          if ($('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0] != undefined) {
+                            eval(cmd);
+                          } else {
+                            setTimeout(cmd, 500);
+                          }
+                        }
                     }
             });
     });
