@@ -3,7 +3,8 @@ package ai.ailogic;
 import ai.command.Command;
 import ai.command.EndTurnCommand;
 import ai.game.board.*;
-import ai.paths_finding.PathsFinderConnector;
+import ai.pathfinding.Path;
+import ai.pathfinding.PathFinder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,37 +27,22 @@ public class MultiTargetUnitAI implements PlayerAI {
 	@Override
 	public List<Command> getCommands(){
 
-		Map<BoardObject, List<BoardCell>> pathsToTargets = PathsFinderConnector.getPaths(board, myUnit, targets);
+		PathFinder pf = new PathFinder(board, myUnit, targets);
+		Map<BoardObject, Path> pathsToTargets = pf.findPaths(true);
 
 		List<Command> commands;
-		List<BoardObject> keysForShortestPaths;
-		List<BoardCell> finalPath;
-		int minPathLength = 10000;
 
 		if (pathsToTargets.isEmpty()) {
 			commands = new ArrayList<>();
 			commands.add(new EndTurnCommand());
 		} else {
 
-			keysForShortestPaths = new ArrayList<>();
-			for(BoardObject target : targets) {
-				if(pathsToTargets.get(target) != null) {
-					if (pathsToTargets.get(target).size() < minPathLength) {
-						minPathLength = pathsToTargets.get(target).size();
-						keysForShortestPaths.clear();
-						keysForShortestPaths.add(target);
-					} else if(pathsToTargets.get(target).size() == minPathLength) {
-						keysForShortestPaths.add(target);
-					}
-				}
-			}
-
 			if (myUnit instanceof RangeUnit) {
 				int minShootDistance = Integer.MAX_VALUE;
 				List<BoardObject> keysForShortestShots = new ArrayList<>();
-				for (BoardObject target : keysForShortestPaths) {
-					List<BoardCell> path = pathsToTargets.get(target);
-					BoardCell shootingPosition = path.get(path.size() - 2);
+				for (BoardObject target : pathsToTargets.keySet()) {
+					Path path = pathsToTargets.get(target);
+					BoardCell shootingPosition = path.getRandomPreviousStep().getCell();
 					int dist = myUnit.hypotheticalCopyAtPosition(shootingPosition).distanceTo(target);
 					if (dist < minShootDistance) {
 						minShootDistance = dist;
@@ -66,17 +52,14 @@ public class MultiTargetUnitAI implements PlayerAI {
 						keysForShortestShots.add(target);
 					}
 				}
-				keysForShortestPaths = keysForShortestShots;
+				pathsToTargets.keySet().retainAll(keysForShortestShots);
 			}
 
-			finalPath = pathsToTargets.get(keysForShortestPaths.get(new Random().nextInt(keysForShortestPaths.size())));
-			commands = pathToCommandsConverter.generateCommandsFromPath(finalPath);
+			List<BoardObject> keys = new ArrayList<>(pathsToTargets.keySet());
+			Path path = pathsToTargets.get(keys.get(new Random().nextInt(keys.size())));
+			commands = pathToCommandsConverter.generateCommandsFromPath(path, myUnit.getMoves());
 		}
 
-		if(commands.size() < myUnit.getMoves())
-			return commands;
-		else
-			return commands.subList(0, myUnit.getMoves());
-
+		return commands;
 	}
 }

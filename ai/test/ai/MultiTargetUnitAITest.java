@@ -347,6 +347,73 @@ public class MultiTargetUnitAITest
 	}
 
 	@Test
+	public void test_flying()
+	{
+		Unit me = getMe(0,0);
+		me.addFeature(new BoardObjectFeature("flying"));
+		int[][] obstacleCoords = {{0,1},{1,0},{1,1}};
+		BoardObject obstacle = getObstacle(obstacleCoords);
+		Unit enemy = getEnemy(3,3);
+
+		Board b = prepareBoard(4,4,me,obstacle,enemy);
+
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
+		List<Command> cmds = ai.getCommands();
+
+		assertTrue(cmds.size() == 2);
+		assertHitsOneCellAimInNumberOfMoves(cmds, 2, enemy);
+	}
+
+	@Test
+	public void test_flying_come_end_turn()
+	{
+		Unit me = getMe(0,0, 2);
+		me.addFeature(new BoardObjectFeature("flying"));
+		int[][] obstacleCoords = {{2,0},{2,1},{2,2},{2,3}};
+		BoardObject obstacle = getObstacle(obstacleCoords);
+		Unit enemy = getEnemy(3,3);
+
+		Board b = prepareBoard(4,4,me,obstacle,enemy);
+
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
+		List<Command> cmds = ai.getCommands();
+
+		assertTrue(cmds.size() == 2);
+		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
+		assertTrue(cmds.get(1) instanceof EndTurnCommand);
+	}
+
+	@Test
+	public void test_flying_randomness()
+	{
+		Unit me = getMe(0,1);
+		me.addFeature(new BoardObjectFeature("flying"));
+		int[][] obstacleCoords = {{1,0},{1,1},{1,2}};
+		BoardObject obstacle = getObstacle(obstacleCoords);
+		Unit enemy = getEnemy(2,1);
+
+		Board b = prepareBoard(3,3,me,obstacle,enemy);
+
+		MultiTargetUnitAI ai = getAi(b, me, Collections.singletonList(enemy));
+		List<Command> cmds = ai.getCommands();
+		BoardCell topCell = new BoardCell(2, 0);
+		BoardCell bottomCell = new BoardCell(2, 2);
+		int topPathCount = 0;
+		int bottomPathCount = 0;
+		for(int i = 0; i<1000; i++)
+		{
+			cmds = ai.getCommands();
+			BoardCell moveCell = ((UnitMoveCommand)cmds.get(0)).getTo();
+			if(moveCell.equals(topCell)) topPathCount++;
+			if(moveCell.equals(bottomCell)) bottomPathCount++;
+		}
+		System.out.println("top="+topPathCount+" bottom="+bottomPathCount);
+
+		assertTrue(topPathCount > 0);
+		assertTrue(bottomPathCount > 0);
+	}
+
+	@Test
 	public void test_dragon_knight()
 	{
 		Unit me = getMeDragon(0,0);

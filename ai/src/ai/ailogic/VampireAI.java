@@ -3,7 +3,8 @@ package ai.ailogic;
 import ai.command.Command;
 import ai.command.EndTurnCommand;
 import ai.game.board.*;
-import ai.paths_finding.PathsFinderConnector;
+import ai.pathfinding.Path;
+import ai.pathfinding.PathFinder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,6 @@ public class VampireAI implements PlayerAI
 		this.pathToCommandsConverter = pathToCommandsConverter;
 	}
 
-	
-	
 	@Override
 	public List<Command> getCommands()
 	{
@@ -33,16 +32,17 @@ public class VampireAI implements PlayerAI
 		int myTeam = myUnit.getPlayer().getTeam();
 		for(BoardObject bo:board.getObjects())
 		{
-			if(bo.getType() != BoardObjectType.OBSTACLE &&
-				(bo.getPlayer() == null || bo.getPlayer().getTeam() != myTeam) && 
-				!bo.checkFeature("not_interesting_for_npc"))
+			if(bo.getType() != BoardObjectType.OBSTACLE
+					&& (bo.getPlayer() == null || bo.getPlayer().getTeam() != myTeam)
+					&& !bo.checkFeature("not_interesting_for_npc"))
 			{
 				targets.add(bo);
 			}
 		}
 
-        List<Command> commands;
-		Map<BoardObject, List<BoardCell>> pathsToTargets = PathsFinderConnector.getPaths(board, myUnit, targets);
+		List<Command> commands;
+		PathFinder pf = new PathFinder(board, myUnit, targets);
+		Map<BoardObject, Path> pathsToTargets = pf.findPaths(false);
 
 		if (pathsToTargets.isEmpty())
 		{
@@ -67,7 +67,7 @@ public class VampireAI implements PlayerAI
 			{
 				if(pathsToTargets.containsKey(t))
 				{
-					int pathLength = pathsToTargets.get(t).size() - 1;
+					int pathLength = pathsToTargets.get(t).getDistance();
 					int priorityClass;
 					int currentTargetPriority;
 					if(t.getType() == BoardObjectType.UNIT && pathLength <= 4) priorityClass = 0;
@@ -97,8 +97,8 @@ public class VampireAI implements PlayerAI
 				int minShootDistance = Integer.MAX_VALUE;
 				List<BoardObject> keysForShortestShots = new ArrayList<>();
 				for (BoardObject target : highestPriorityTargets) {
-					List<BoardCell> path = pathsToTargets.get(target);
-					BoardCell shootingPosition = path.get(path.size() - 2);
+					Path path = pathsToTargets.get(target);
+					BoardCell shootingPosition = path.getRandomPreviousStep().getCell();
 					int dist = myUnit.hypotheticalCopyAtPosition(shootingPosition).distanceTo(target);
 					if (dist < minShootDistance) {
 						minShootDistance = dist;
@@ -111,14 +111,10 @@ public class VampireAI implements PlayerAI
 				highestPriorityTargets = keysForShortestShots;
 			}
 
-			List<BoardCell> finalPath = pathsToTargets.get(highestPriorityTargets.get(new Random().nextInt(highestPriorityTargets.size())));
-			commands = pathToCommandsConverter.generateCommandsFromPath(finalPath);
+			Path path = pathsToTargets.get(highestPriorityTargets.get(new Random().nextInt(highestPriorityTargets.size())));
+			commands = pathToCommandsConverter.generateCommandsFromPath(path, myUnit.getMoves());
 		}
-
-		if(commands.size() <= myUnit.getMoves())
-			return commands;
-		else
-			return commands.subList(0, myUnit.getMoves());
+		return commands;
 	}
 
 }
