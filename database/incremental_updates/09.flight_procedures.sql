@@ -60,6 +60,7 @@ BEGIN
       IF (unit_feature_check(board_unit_id,'magic_immunity')=0) THEN 
         UPDATE board_units SET moves = 1, moves_left = LEAST(moves_left, 1) WHERE id=board_unit_id;
         CALL unit_feature_set(board_unit_id,'knight',null);
+        CALL cmd_unit_set_moves(g_id,p_num,board_unit_id);
         CALL cmd_unit_set_moves_left(g_id,p_num,board_unit_id);
         CALL cmd_unit_add_effect(g_id,board_unit_id,'knight');
       ELSE
