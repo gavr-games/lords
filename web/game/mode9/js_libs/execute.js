@@ -279,7 +279,15 @@ function board_clicked(x, y) {
                     do_shoot = false;
                     return 1;
                 }
-                if (!$('board_' + x + '_' + y).hasClass('green') && !$('board_' + x + '_' + y).hasClass('attackUnit')) return 1;
+                var doAttack = false;
+                for(var mx = x; mx < x + mUnit.getSize(); mx++) {
+                  for(var my = y; my < y + mUnit.getSize(); my++) {
+                    if ($('board_' + mx + '_' + my).hasClass('attackUnit')) {
+                      doAttack = true;
+                    }
+                  }
+                }
+                if (!$('board_' + x + '_' + y).hasClass('green') && !doAttack) return 1;
                 //Move unit according to path
                 var path = mUnit.getMoveCmds(x, y);
                 var path_params = '';

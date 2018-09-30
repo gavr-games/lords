@@ -1239,7 +1239,6 @@ function draw_unit(x, y) {
 
         //Move unit according to path
         var path = mUnit.getMoveCmds(x, y);
-        console.log(path);
         if (path.length > 0) {
           for (var i = 0; i < path.length; i++) {
             if (path[i]["action"] == 'm') {
@@ -1251,7 +1250,7 @@ function draw_unit(x, y) {
               }
             } else {
               highlightUnitSizeAttack(path[i]["x"], path[i]["y"], id);
-              changeCursor(path[i]["x"], path[i]["y"], 'attack');
+              changeCursor(x, y, 'attack');
             }
           }
         }

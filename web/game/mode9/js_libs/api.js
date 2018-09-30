@@ -921,6 +921,7 @@ function log_add_attack_message(x, y, x2, y2, p_num, short_name, p_num2, short_n
             'color': '#fff',
             'background-color': '#322a1a'
         });
+        animateAction(x, y, x2, y2, 'attack');
     }
 
     var scroll = $('game_log').getScrollSize();
@@ -932,6 +933,24 @@ function logTimeStats(p_num) {
         answer_time = $time() / 1000 - start_proc_time / 1000;
         need_answer = false;
     }
+}
+
+function animateAction(x, y, x2, y2, actionKind) {
+  if (anim_is_running) {
+    setTimeout(function() {animateAction(x, y, x2, y2, actionKind)}, 300);
+  } else {
+    var animationDiv = jQuery("<div class=\"animate-" + actionKind + "-action\"></div>");
+    var p  = jQuery("#board_" + x + "_" + y).position();
+    var p2  = jQuery("#board_" + x2 + "_" + y2).position();
+    animationDiv.css({top: p.top + 5, left: p.left + 5});
+    jQuery(document.body).append(animationDiv);
+    animationDiv.animate({
+      left: p2.left + 5,
+      top: p2.top + 5
+    }, 300 * Math.max(Math.abs(x2-x), Math.abs(y2-y)), function() {
+      animationDiv.remove();
+    });
+  }
 }
 
 function add_card(pd_id, card_id, no_anim) {
