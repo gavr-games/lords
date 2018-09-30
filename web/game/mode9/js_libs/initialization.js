@@ -1245,19 +1245,19 @@ function draw_unit(x, y) {
             if (path[i]["action"] == 'm') {
               if (i == path.length - 1 || (i == path.length - 2 && path[i+1]["action"] == 'a')) { //last step or just before attack
                 highlightUnitSizeMove(path[i]["x"], path[i]["y"], size);
-                changeCursor('move');
+                changeCursor(path[i]["x"], path[i]["y"], 'move');
               } else {
                 highlightUnitSizeMove(path[i]["x"], path[i]["y"], 1);
               }
             } else {
               highlightUnitSizeAttack(path[i]["x"], path[i]["y"], id);
-              changeCursor('attack');
+              changeCursor(path[i]["x"], path[i]["y"], 'attack');
             }
           }
         }
       }
 }
-function changeCursor(kind) {
+function changeCursor(x, y, kind) {
   $('overboard').addClass('cursor_' + kind);
   $('overboard_' + x + '_' + y).addClass('cursor_' + kind);
 }
