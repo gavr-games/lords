@@ -253,7 +253,7 @@ function board_clicked(x, y) {
             $('overboard').removeClass('cursor_shoot');
             $('overboard_' + x + '_' + y).removeClass('cursor_shoot');
             if (executable_procedure == 'player_move_unit') {
-                var coords = unit.toString().split(',');
+                var coords = window.unit.toString().split(',');
                 ux = coords[0].toInt();
                 uy = coords[1].toInt();
                 if (!$chk(board[ux]) || !$chk(board[ux][uy]) || !$chk(board[ux][uy]['ref'])) {
@@ -261,20 +261,12 @@ function board_clicked(x, y) {
                     return;
                 }
                 id = board[ux][uy]["ref"];
+                var mUnit = new window.GameMode.Unit(id);
+                var leftUpCoord = mUnit.getLeftUpCoord();
+                ux = leftUpCoord.x;
+                uy = leftUpCoord.y;
+                unit = ux + ',' + uy;
                 var save_id = id;
-                size = units[board_units[id]["unit_id"]]['size'].toInt();
-                if (size > 1) {
-                    //get left up corner
-                    board.each(function (items, index) {
-                        if (items) items.each(function (item, index) {
-                            if (item) if (item["ref"] == id && item["type"] == "unit") {
-                                if (item["x"].toInt() < ux) ux = item["x"].toInt();
-                                if (item["y"].toInt() < uy) uy = item["y"].toInt();
-                            }
-                        });
-                    });
-                    unit = ux + ',' + uy;
-                }
                 //shoot as default action
                 if (board[x] && board[x][y] && do_shoot && $('board_' + x + '_' + y).hasClass('attackUnit')) {
                     game_state = 'SELECTED_SHOOT_TARGET';
@@ -287,58 +279,26 @@ function board_clicked(x, y) {
                     do_shoot = false;
                     return 1;
                 }
-                if (path_mode) { //make several actions
-                    if (x_path[0] == -1 || y_path[0] == -1) return 1;
-                    var path_params = '';
-                    i = 0;
-                    var oldx = ux;
-                    var oldy = uy;
-                    while (x_path[i] != -1 && y_path[i] != -1 && board_units[id]["moves_left"].toInt() != i) {
-                        if ($chk(board[x_path[i]]) && $chk(board[x_path[i]][y_path[i]]) && $chk(board[x_path[i]][y_path[i]]['ref'])) {
-                            if (board[x_path[i]][y_path[i]]['type'] == 'unit' && board[x_path[i]][y_path[i]]['ref'] == id) path_params += 'player_move_unit|' + oldx + ',' + oldy + ',' + x_path[i] + ',' + y_path[i] + ';';
-                            else path_params += 'attack|' + oldx + ',' + oldy + ',' + x_path[i] + ',' + y_path[i] + ';';
-                        } else if (size > 1 && path_actions[i] == 'a') {
-                            path_params += 'attack|' + oldx + ',' + oldy + ',' + x_path[i] + ',' + y_path[i] + ';';
-                        } else path_params += 'player_move_unit|' + oldx + ',' + oldy + ',' + x_path[i] + ',' + y_path[i] + ';';
-                        oldx = x_path[i];
-                        oldy = y_path[i];
-                        i++;
-                        path_moves = i;
+                if (!$('board_' + x + '_' + y).hasClass('green') && !$('board_' + x + '_' + y).hasClass('attackUnit')) return 1;
+                //Move unit according to path
+                var path = mUnit.getMoveCmds(x, y);
+                var path_params = '';
+                var oldx = ux;
+                var oldy = uy;
+                if (path.length > 0) {
+                  for (var i = 0; i < path.length; i++) {
+                    if (path[i]["action"] == 'm') {
+                      path_params += 'player_move_unit|' + oldx + ',' + oldy + ',' + path[i]['x'] + ',' + path[i]['y'] + ';';
+                    } else {
+                      path_params += 'attack|' + oldx + ',' + oldy + ',' + path[i]['x'] + ',' + path[i]['y'] + ';';
                     }
-                    clean_unit(x, y);
-                    cancel_execute();
-                    path_params += '';
-                    multiple_action_unit_id = save_id;
-                    send_multiple_actions(path_params);
-                    return 1;
-                } else {
-                    do_Attack = 0;
-                    board.each(function (items, index) {
-                        if (items) items.each(function (item, index) {
-                            if (item) if ($('board_' + item['x'] + '_' + item['y'])) if ($('board_' + item['x'] + '_' + item['y']).hasClass('attackUnit')) do_Attack = 1;
-                        });
-                    });
-                    if (do_Attack == 1) {
-                        executable_procedure = 'attack';
-                        game_state = 'SELECTED_ATTACK_COORD';
-                        selected_params++;
-                        newx = x;
-                        newy = y;
-                        if (size > 1 && !$chk(board_units[id]["knight"])) {
-                            if (x < ux) newx = x;
-                            else if (x > (ux + size - 1)) newx = x - size + 1;
-                            else newx = ux;
-                            if (y < uy) newy = y;
-                            else if (y > (uy + size - 1)) newy = y - size + 1;
-                            else newy = uy;
-                        }
-                        attack_coord = newx.toString() + ',' + newy.toString();
-                        if (eval("typeof on_attack_coord_select == 'function'")) eval('on_attack_coord_select();'); //call on_param_select function if exists
-                        clean_attack();
-                        execute_procedure(executable_procedure);
-                        return 1;
-                    } else if (!$('board_' + x + '_' + y).hasClass('green')) return 1;
-                }
+                    oldx = path[i]['x'];
+                    oldy = path[i]['y'];
+                  }
+                  multiple_action_unit_id = save_id;
+                  send_multiple_actions(path_params);
+                  return 1;
+                }   
             }
             if (executable_procedure == 'cast_polza_move_building' || executable_procedure == 'cast_vred_move_building' || isPutBuildingInEmptyCoord(executable_procedure)) {
                 clean_building(x, y);
