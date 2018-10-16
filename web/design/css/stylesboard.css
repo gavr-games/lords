@@ -238,6 +238,18 @@
 }
 
 
+/*--------------------------------scarecrow--------------------------------------*/
+
+.building_scarecrow {
+	background: url(../images/buildings/scarecrow.png) top left no-repeat !important;
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	width: 38px;
+	height: 39px;
+}
+
+
 /*--------------------------------стена закрытая--------------------------------------*/
 
 .building_wall_closed {
@@ -660,6 +672,17 @@
 	right: 0px;
 	width: 38px;
 	height: 43px;
+}
+
+/*-------------------------------- bandit --------------------------------------*/
+
+.unit_bandit {
+	background: url(../images/units/bandit.png) top left no-repeat !important;
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	width: 35px;
+	height: 35px;
 }
 
 

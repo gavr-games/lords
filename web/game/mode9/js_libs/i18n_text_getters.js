@@ -23,7 +23,7 @@ function unit_log_name(unit_id, akk = false) {
 }
 
 function unit_feature_description(feature_id) {
-	return unit_feature_names[USER_LANGUAGE][feature_id]["description"];
+	return unit_feature_names[USER_LANGUAGE][feature_id] ? unit_feature_names[USER_LANGUAGE][feature_id]["description"] : null;
 }
 
 function building_name(building_id) {

@@ -215,8 +215,9 @@ function unit_set_moves_left(x, y, moves_left) {
                             if (moves_left == 0) {
                                 $('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0].fade(unactive_unit);
                                 $('board_' + item['x'] + '_' + item['y']).removeClass('my-brd-unit');
+                            } else if (!($chk(board_units[id]["paralich"]) && board_units[id]["paralich"] == 1)) {
+                              $('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0].fade(1);
                             }
-                        else $('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0].fade(1);
                     }
             });
     });
@@ -269,7 +270,14 @@ function unit_add_effect(x, y, effect, param) {
                         //tip
                         addUnitTip('overboard_' + item['x'] + '_' + item['y'], id);
                         //unactive
-                        if (effect == 'paralich') $('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0].fade(unactive_unit);
+                        if (effect == 'paralich') {
+                          var cmd = "$('board_" + item['x'] + "_" + item['y'] + "').getChildren('.unitdiv')[0].fade("+ unactive_unit + ");";
+                          if ($('board_' + item['x'] + '_' + item['y']).getChildren('.unitdiv')[0] != undefined) {
+                            eval(cmd);
+                          } else {
+                            setTimeout(cmd, 500);
+                          }
+                        }
                     }
             });
     });
@@ -913,6 +921,7 @@ function log_add_attack_message(x, y, x2, y2, p_num, short_name, p_num2, short_n
             'color': '#fff',
             'background-color': '#322a1a'
         });
+        animateAction(x, y, x2, y2, 'attack');
     }
 
     var scroll = $('game_log').getScrollSize();
@@ -924,6 +933,24 @@ function logTimeStats(p_num) {
         answer_time = $time() / 1000 - start_proc_time / 1000;
         need_answer = false;
     }
+}
+
+function animateAction(x, y, x2, y2, actionKind) {
+  if (anim_is_running) {
+    setTimeout(function() {animateAction(x, y, x2, y2, actionKind)}, 300);
+  } else {
+    var animationDiv = jQuery("<div class=\"animate-" + actionKind + "-action\"></div>");
+    var p  = jQuery("#board_" + x + "_" + y).position();
+    var p2  = jQuery("#board_" + x2 + "_" + y2).position();
+    animationDiv.css({top: p.top + 5, left: p.left + 5});
+    jQuery(document.body).append(animationDiv);
+    animationDiv.animate({
+      left: p2.left + 5,
+      top: p2.top + 5
+    }, 300 * Math.max(Math.abs(x2-x), Math.abs(y2-y)), function() {
+      animationDiv.remove();
+    });
+  }
 }
 
 function add_card(pd_id, card_id, no_anim) {
@@ -1943,7 +1970,8 @@ function addUnitTip(dom_id, id) {
     unit_features.each(function(item, index) {
         if (item) {
             if ($chk(board_units[id][item['code']]))
-                effects += unit_feature_description(item['id']) + '<br />'
+                if (unit_feature_description(item['id']))
+                    effects += unit_feature_description(item['id']) + '<br />'
         }
     });
     var unitDisplayName;
@@ -2664,18 +2692,22 @@ function show_unit_message(b_unit_id, mes_id) {
         });
         $('unitmes_c').set('text', mes);
         //set position to be done and show
-        $('unitmes_w').setStyle('display', 'block');
         $('unitmes_w').position({
             relativeTo: $('board_' + x + '_' + y),
             position: 'center',
             edge: 'bottomRight'
         });
-        setTimeout('hide_unit_message();', 6000);
+        var newMes = $('unitmes_w').clone();
+        var mesId = Math.random().toString(36).substr(2, 9) + b_unit_id + mes_id;
+        newMes.set('id', mesId);
+        $(document.body).grab(newMes, 'bottom');
+        newMes.setStyle('display', 'block');
+        setTimeout('hide_unit_message("' + mesId + '");', 6000);
     }
 }
 
-function hide_unit_message() {
-    $('unitmes_w').setStyle('display', 'none');
+function hide_unit_message(domId) {
+    $(domId).setStyle('display', 'none');
 }
 
 function NPC(p_num) {

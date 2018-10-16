@@ -77,7 +77,20 @@ public class BoardObject
 		}
 		return new BoardCell(minX,minY);
 	}
-	
+
+	public BoardCell getBottomRightCell()
+	{
+		int maxX = Integer.MIN_VALUE;
+		int maxY = Integer.MIN_VALUE;
+
+		for(BoardCell cell : cells)
+		{
+			if(cell.x > maxX)maxX = cell.x;
+			if(cell.y > maxY)maxY = cell.y;
+		}
+		return new BoardCell(maxX,maxY);
+	}
+
 	public int getId()
 	{
 		return id;

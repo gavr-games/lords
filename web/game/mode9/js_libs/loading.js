@@ -73,7 +73,9 @@ function showRandomPhrase()	{
       addLoadingItem(i18n[USER_LANGUAGE]["loading"]["script"] + ' Eventbus','event_bus_script');
 			Asset.javascript('js_libs/event_bus.js?'+revision, {onLoad: function(){removeLoadingItem('event_bus_script');}});
       addLoadingItem(i18n[USER_LANGUAGE]["loading"]["script"] + ' Tutorial','tutorial_script');
-			Asset.javascript('js_libs/tutorial.js?'+revision, {onLoad: function(){removeLoadingItem('tutorial_script');}});
+      Asset.javascript('js_libs/tutorial.js?'+revision, {onLoad: function(){removeLoadingItem('tutorial_script');}});
+      addLoadingItem(i18n[USER_LANGUAGE]["loading"]["script"] + ' Mode','mode_script');
+			Asset.javascript('js_libs/mode.js?'+revision, {onLoad: function(){removeLoadingItem('mode_script');}});
       
 			addLoadingItem(i18n[USER_LANGUAGE]["loading"]["game_styles"],'game_styles');
 			Asset.css('../../design/css/stylesgame.css?'+revision).addEvent('onload',removeLoadingItem('game_styles'));

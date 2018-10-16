@@ -4,6 +4,8 @@ ape_scripts/bin/ape.log
 deployment/ai
 deployment/ai_bin
 database/dump
+ai/out
+ai/ai.iml
 .idea
 .env
 .DS_store

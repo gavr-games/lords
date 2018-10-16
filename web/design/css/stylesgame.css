@@ -1277,3 +1277,11 @@ ul {
 #feedback:hover {
 	opacity: 1;
 }
+
+.animate-attack-action {
+  position: absolute;
+  background: url(../images/cursor_attack.png);
+  width: 19px;
+  height: 24px;
+  z-index: 9999;
+}
