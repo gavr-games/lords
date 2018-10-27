@@ -193,6 +193,13 @@
 	            }return true;
 	        }
 	    }, {
+	        key: "distToCoord",
+	        value: function distToCoord(x, y) {
+	            var unitCoord = this.getLeftUpCoord();
+	            var movesLeft = this.getMovesLeft();
+	            return Math.max(Math.abs(unitCoord.x - x), Math.abs(unitCoord.y - y));
+	        }
+	    }, {
 	        key: "canFlyToCoord",
 	        value: function canFlyToCoord(x, y) {
 	            if (!this.fitsCoord(x, y)) {
@@ -205,7 +212,7 @@
 	            // Check flight distance
 	            var unitCoord = this.getLeftUpCoord();
 	            var movesLeft = this.getMovesLeft();
-	            if (Math.abs(unitCoord.x - x) > movesLeft || Math.abs(unitCoord.y - y) > movesLeft) {
+	            if (this.distToCoord(x, y) > movesLeft) {
 	                return false;
 	            }
 	
@@ -253,8 +260,8 @@
 	            //Move unit according to path
 	            var path = this.getPath(targetX, targetY).slice(0, this.getMovesLeft());
 	
-	            //Flight if cannot move to coords
-	            if (path.length == 0 && this.canFlyToCoord(targetX, targetY)) {
+	            //Fly if cannot move to coords or it takes less moves to fly
+	            if ((path.length == 0 || path.length >= this.distToCoord(targetX, targetY)) && this.canFlyToCoord(targetX, targetY)) {
 	                return [{
 	                    'x': targetX,
 	                    'y': targetY,
