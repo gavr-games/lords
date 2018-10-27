@@ -210,7 +210,6 @@
 	            }
 	
 	            // Check flight distance
-	            var unitCoord = this.getLeftUpCoord();
 	            var movesLeft = this.getMovesLeft();
 	            if (this.distToCoord(x, y) > movesLeft) {
 	                return false;
@@ -267,6 +266,12 @@
 	                    'y': targetY,
 	                    'action': 'm'
 	                }];
+	            }
+	
+	            //If out of range
+	            var movesLeft = this.getMovesLeft();
+	            if (this.distToCoord(targetX, targetY) > movesLeft) {
+	                return [];
 	            }
 	
 	            return path;

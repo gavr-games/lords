@@ -1244,21 +1244,25 @@ function draw_unit(x, y) {
             if (path[i]["action"] == 'm') {
               if (i == path.length - 1 || (i == path.length - 2 && path[i+1]["action"] == 'a')) { //last step or just before attack
                 highlightUnitSizeMove(path[i]["x"], path[i]["y"], size);
-                changeCursor(path[i]["x"], path[i]["y"], 'move');
+                changeUnitSizeCursor(path[i]["x"], path[i]["y"], 'move', size);
               } else {
                 highlightUnitSizeMove(path[i]["x"], path[i]["y"], 1);
               }
             } else {
               highlightUnitSizeAttack(path[i]["x"], path[i]["y"], id);
-              changeCursor(x, y, 'attack');
+              changeUnitSizeCursor(x, y, 'attack', size);
             }
           }
         }
       }
 }
-function changeCursor(x, y, kind) {
-  $('overboard').addClass('cursor_' + kind);
-  $('overboard_' + x + '_' + y).addClass('cursor_' + kind);
+function changeUnitSizeCursor(x, y, kind, size) {
+  var mx, my;
+  for (mx = x; mx < x + size; mx++)
+    for (my = y; my < y + size; my++) {
+      $('overboard').addClass('cursor_' + kind);
+      $('overboard_' + mx + '_' + my).addClass('cursor_' + kind);
+    }
 }
 
 function highlightUnitSizeMove(x, y, size) {
@@ -1287,13 +1291,9 @@ function highlightUnitSizeAttack(x, y, id) {
 }
 
 function clean_unit(x, y) {
-    $('overboard').removeClass('cursor_move');
-    $('overboard_' + x + '_' + y).removeClass('cursor_move');
     $('overboard').removeClass('cursor_attack');
-    $('overboard_' + x + '_' + y).removeClass('cursor_attack');
     $('overboard').removeClass('cursor_shoot');
-    $('overboard_' + x + '_' + y).removeClass('cursor_shoot');
-
+    $('overboard').removeClass('cursor_move');
     var coords = unit.toString().split(',');
     var ux = coords[0].toInt();
     var uy = coords[1].toInt();
@@ -1309,6 +1309,9 @@ function clean_unit(x, y) {
             $('board_' + mx + '_' + my).removeClass('attackUnit');
             removeAttackClass(mx, my);
             $('board_' + mx + '_' + my).removeClass('green');
+            $('overboard_' + mx + '_' + my).removeClass('cursor_move');
+            $('overboard_' + mx + '_' + my).removeClass('cursor_attack');
+            $('overboard_' + mx + '_' + my).removeClass('cursor_shoot');
           }
     } // end $chk
 }

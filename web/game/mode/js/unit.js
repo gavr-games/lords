@@ -123,7 +123,6 @@ export class Unit {
     }
 
     // Check flight distance
-    let unitCoord = this.getLeftUpCoord();
     let movesLeft = this.getMovesLeft();
     if (this.distToCoord(x, y) > movesLeft) {
       return false;
@@ -179,6 +178,12 @@ export class Unit {
         'y': targetY,
         'action': 'm'
       }];
+    }
+
+    //If out of range
+    let movesLeft = this.getMovesLeft();
+    if (this.distToCoord(targetX, targetY) > movesLeft) {
+      return [];
     }
 
     return path;
