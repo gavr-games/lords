@@ -108,6 +108,12 @@ export class Unit {
     return true;
   }
 
+  distToCoord(x, y) {
+    let unitCoord = this.getLeftUpCoord();
+    let movesLeft = this.getMovesLeft();
+    return Math.max(Math.abs(unitCoord.x - x), Math.abs(unitCoord.y - y));
+  }
+
   canFlyToCoord(x, y) {
     if (!this.fitsCoord(x, y)) {
       return false;
@@ -119,7 +125,7 @@ export class Unit {
     // Check flight distance
     let unitCoord = this.getLeftUpCoord();
     let movesLeft = this.getMovesLeft();
-    if (Math.abs(unitCoord.x - x) > movesLeft || Math.abs(unitCoord.y - y) > movesLeft) {
+    if (this.distToCoord(x, y) > movesLeft) {
       return false;
     }
 
@@ -166,8 +172,8 @@ export class Unit {
     //Move unit according to path
     let path = this.getPath(targetX, targetY).slice(0, this.getMovesLeft());
 
-    //Flight if cannot move to coords
-    if (path.length == 0 && this.canFlyToCoord(targetX, targetY)) {
+    //Fly if cannot move to coords or it takes less moves to fly
+    if ((path.length == 0 || path.length >= this.distToCoord(targetX, targetY)) && this.canFlyToCoord(targetX, targetY)) {
       return [{
         'x': targetX,
         'y': targetY,
