@@ -1261,7 +1261,9 @@ function changeUnitSizeCursor(x, y, kind, size) {
   for (mx = x; mx < x + size; mx++)
     for (my = y; my < y + size; my++) {
       $('overboard').addClass('cursor_' + kind);
-      $('overboard_' + mx + '_' + my).addClass('cursor_' + kind);
+      if ((new window.GameMode.Cell()).validCoords(mx, my)) {
+        $('overboard_' + mx + '_' + my).addClass('cursor_' + kind);
+      }
     }
 }
 
@@ -1269,7 +1271,9 @@ function highlightUnitSizeMove(x, y, size) {
   var mx, my;
   for (mx = x; mx < x + size; mx++)
     for (my = y; my < y + size; my++) {
+      if ((new window.GameMode.Cell()).validCoords(mx, my)) {
         $('board_' + mx + '_' + my).addClass('green');
+      }
     }
 }
 

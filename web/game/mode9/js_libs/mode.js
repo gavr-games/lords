@@ -52,6 +52,8 @@
 	
 	var _board_object = __webpack_require__(3);
 	
+	var _cell = __webpack_require__(4);
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var GameMode = function GameMode() {
@@ -60,6 +62,7 @@
 	  this.Unit = _unit.Unit;
 	  this.Building = _building.Building;
 	  this.BoardObject = _board_object.BoardObject;
+	  this.Cell = _cell.Cell;
 	};
 	
 	window.GameMode = new GameMode();
@@ -631,6 +634,39 @@
 	  }]);
 
 	  return BoardObject;
+	}();
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Cell = exports.Cell = function () {
+	  function Cell() {
+	    _classCallCheck(this, Cell);
+	  }
+	
+	  _createClass(Cell, [{
+	    key: "validCoords",
+	    value: function validCoords(x, y) {
+	      if (x < 0) return false;
+	      if (y < 0) return false;
+	      if (x > 19) return false;
+	      if (y > 19) return false;
+	      return true;
+	    }
+	  }]);
+
+	  return Cell;
 	}();
 
 /***/ })

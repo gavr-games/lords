@@ -282,7 +282,7 @@ function board_clicked(x, y) {
                 var doAttack = false;
                 for(var mx = x; mx < x + mUnit.getSize(); mx++) {
                   for(var my = y; my < y + mUnit.getSize(); my++) {
-                    if ($('board_' + mx + '_' + my).hasClass('attackUnit')) {
+                    if ((new window.GameMode.Cell()).validCoords(mx, my) && $('board_' + mx + '_' + my).hasClass('attackUnit')) {
                       doAttack = true;
                     }
                   }
