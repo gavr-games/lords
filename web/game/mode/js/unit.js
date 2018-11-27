@@ -130,7 +130,7 @@ export class Unit {
     // Check flight distance
     let movesLeft = this.getMovesLeft();
     if (this.getKnight()) {
-      let path = this.getPath(targetX, targetY, false).slice(0, movesLeft);
+      let path = this.getPath(x, y, false).slice(0, movesLeft);
       return path.find(function(p){
         return p['x'] == x && p['y'] == y;
       });

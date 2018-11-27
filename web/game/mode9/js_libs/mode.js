@@ -221,7 +221,7 @@
 	      // Check flight distance
 	      var movesLeft = this.getMovesLeft();
 	      if (this.getKnight()) {
-	        var path = this.getPath(targetX, targetY, false).slice(0, movesLeft);
+	        var path = this.getPath(x, y, false).slice(0, movesLeft);
 	        return path.find(function (p) {
 	          return p['x'] == x && p['y'] == y;
 	        });
