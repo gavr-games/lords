@@ -21,6 +21,11 @@ export class Unit {
     return players_by_num[this.getPlayerNum()]['team'];
   }
 
+  getKnight() {
+    var id = this.boardUnitId
+    return board_units[id]["knight"] == 1
+  }
+
   getLeftUpCoord() {
     let id = this.boardUnitId;
     let ux = 9999999;
@@ -124,11 +129,25 @@ export class Unit {
 
     // Check flight distance
     let movesLeft = this.getMovesLeft();
+    if (this.getKnight()) {
+      let path = this.getPath(targetX, targetY, false).slice(0, movesLeft);
+      return path.find(function(p){
+        return p['x'] == x && p['y'] == y;
+      });
+    } else
     if (this.distToCoord(x, y) > movesLeft) {
       return false;
     }
 
     return true;
+  }
+
+  directStepsToCoord(x, y) {
+    let distToCoord = this.distToCoord(x, y);
+    if (this.getKnight()) {
+      return distToCoord / 2;
+    }
+    return distToCoord;
   }
 
   getMoveCmds(x, y) {
@@ -172,7 +191,7 @@ export class Unit {
     let path = this.getPath(targetX, targetY).slice(0, this.getMovesLeft());
 
     //Fly if cannot move to coords or it takes less moves to fly
-    if ((path.length == 0 || path.length >= this.distToCoord(targetX, targetY)) && this.canFlyToCoord(targetX, targetY)) {
+    if ((path.length == 0 || path.length >= this.directStepsToCoord(targetX, targetY)) && this.canFlyToCoord(targetX, targetY)) {
       return [{
         'x': targetX,
         'y': targetY,
@@ -182,14 +201,22 @@ export class Unit {
 
     //If out of range
     let movesLeft = this.getMovesLeft();
-    if (this.distToCoord(targetX, targetY) > movesLeft) {
+    if ( (this.directStepsToCoord(targetX, targetY) > movesLeft) ) {
+      return [];
+    }
+
+    //Check "knight moves" unit can go to targetX and targetY
+    let found = path.find(function(p){
+      return p['x'] == targetX && p['y'] == targetY;
+    });
+    if (!found) {
       return [];
     }
 
     return path;
   }
 
-  getPath(x, y) {
+  getPath(x, y, renderObjects = true) {
     var path = []
     var not_reached = true;
     var path_board = new Array();
@@ -209,32 +236,35 @@ export class Unit {
         }
     }
     //fill path board
-    board.each(function(items, index) {
-        if (items) items.each(function(item, index) {
-            if (item) {
-                if (item['type'] == 'unit' && item['ref'].toInt() == id); //this unit 
-                else if (item['type'] == 'obstacle') //cant attack obstacle
-                    path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
-                else if (item['type'] == 'unit') { //attack unit
-                    //fixing bug if we suddenly get not killed unit with not existing player (which already delted)
-                    if (!$chk(players_by_num[board_units[item['ref']]['player_num']])) {
-                        delete board[item['x'].toInt()][item['y'].toInt()];
-                        if ($chk(board_units[item['ref']])) delete board_units[item['ref']];
-                    } else if (board_units[id]['player_num'] == board_units[item['ref']]['player_num'] || players_by_num[board_units[id]['player_num']]['team'] == players_by_num[board_units[item['ref']]['player_num']]['team']) path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
-                    else path_board[item['x'].toInt()][item['y'].toInt()] = 'u';
-                } else { //buildings, castle
-                    if ($chk(players_by_num[board_buildings[item['ref']]['player_num']])) { //player num 9 for trees,moat ... doesnt exists
-                        if (board_units[id]['player_num'] == board_buildings[item['ref']]['player_num'] || players_by_num[board_units[id]['player_num']]['team'] == players_by_num[board_buildings[item['ref']]['player_num']]['team']) path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
-                        else path_board[item['x'].toInt()][item['y'].toInt()] = 'b';
-                    } else
-                    if (board_buildings[item['ref']]['health'] > 0) //can kill bridge
-                        path_board[item['x'].toInt()][item['y'].toInt()] = 'b';
-                    else
-                        path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
-                }
-            }
-        });
-    });
+    if (renderObjects) {
+      board.each(function(items, index) {
+          if (items) items.each(function(item, index) {
+              if (item) {
+                  if (item['type'] == 'unit' && item['ref'].toInt() == id); //this unit 
+                  else if (item['type'] == 'obstacle') //cant attack obstacle
+                      path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
+                  else if (item['type'] == 'unit') { //attack unit
+                      //fixing bug if we suddenly get not killed unit with not existing player (which already delted)
+                      if (!$chk(players_by_num[board_units[item['ref']]['player_num']])) {
+                          delete board[item['x'].toInt()][item['y'].toInt()];
+                          if ($chk(board_units[item['ref']])) delete board_units[item['ref']];
+                      } else if (board_units[id]['player_num'] == board_units[item['ref']]['player_num'] || players_by_num[board_units[id]['player_num']]['team'] == players_by_num[board_units[item['ref']]['player_num']]['team']) path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
+                      else path_board[item['x'].toInt()][item['y'].toInt()] = 'u';
+                  } else { //buildings, castle
+                      if ($chk(players_by_num[board_buildings[item['ref']]['player_num']])) { //player num 9 for trees,moat ... doesnt exists
+                          if (board_units[id]['player_num'] == board_buildings[item['ref']]['player_num'] || players_by_num[board_units[id]['player_num']]['team'] == players_by_num[board_buildings[item['ref']]['player_num']]['team']) path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
+                          else path_board[item['x'].toInt()][item['y'].toInt()] = 'b';
+                      } else
+                      if (board_buildings[item['ref']]['health'] > 0) //can kill bridge
+                          path_board[item['x'].toInt()][item['y'].toInt()] = 'b';
+                      else
+                          path_board[item['x'].toInt()][item['y'].toInt()] = 'x';
+                  }
+              }
+          });
+      });
+    }
+
     var target_coord = path_board[x][y];
     if (path_board[x][y] != 't') path_board[x][y] = 't';
     var leftUpCoord = this.getLeftUpCoord();
@@ -308,8 +338,8 @@ export class Unit {
         step++;
     }
     //show board
-    // if (x==18 && y==17) for (i=0;i<20;i++)	{
-    //	console.log(path_board[0][i],path_board[1][i],path_board[2][i],path_board[3][i],path_board[4][i],path_board[5][i],path_board[6][i],path_board[7][i],path_board[8][i],path_board[9][i],path_board[10][i],path_board[11][i],path_board[12][i],path_board[13][i],path_board[14][i],path_board[15][i],path_board[16][i],path_board[17][i],path_board[18][i],path_board[19][i]);
+    //if (x==15 && y==1) for (i=0;i<20;i++)	{
+    //  console.log(path_board[0][i],path_board[1][i],path_board[2][i],path_board[3][i],path_board[4][i],path_board[5][i],path_board[6][i],path_board[7][i],path_board[8][i],path_board[9][i],path_board[10][i],path_board[11][i],path_board[12][i],path_board[13][i],path_board[14][i],path_board[15][i],path_board[16][i],path_board[17][i],path_board[18][i],path_board[19][i]);
     //}
     //generate 1 path
     step--;
@@ -423,7 +453,6 @@ export class Unit {
         y_path[step - 1] = u_y[ufound];
         cur_x = u_x[ufound];
         cur_y = u_y[ufound];
-
         step--;
         if (step < 0) stop = 1;
     } while (stop == 0);
