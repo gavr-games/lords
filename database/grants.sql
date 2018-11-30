@@ -36,15 +36,6 @@ GRANT EXECUTE ON PROCEDURE `lords`.`cast_unit_upgrade_random` TO 'lords_client'@
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_armageddon` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_meteor_shower` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`cast_repair_buildings` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_polza_main` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_polza_resurrect` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_polza_units_from_zone` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_polza_move_building` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_vred_main` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_vred_pooring` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_vred_kill_unit` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_vred_destroy_building` TO 'lords_client'@'%';
-GRANT EXECUTE ON PROCEDURE `lords`.`cast_vred_move_building` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`taran_bind` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`wizard_heal` TO 'lords_client'@'%';
 GRANT EXECUTE ON PROCEDURE `lords`.`wizard_fireball` TO 'lords_client'@'%';
