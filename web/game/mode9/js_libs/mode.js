@@ -214,18 +214,16 @@
 	      if (!this.fitsCoord(x, y)) {
 	        return false;
 	      }
+	      if (this.getKnight()) {
+	        return false;
+	      }
 	      if (board_units[this.boardUnitId].flying != 1) {
 	        return false;
 	      }
 	
 	      // Check flight distance
 	      var movesLeft = this.getMovesLeft();
-	      if (this.getKnight()) {
-	        var path = this.getPath(x, y, false).slice(0, movesLeft);
-	        return path.find(function (p) {
-	          return p['x'] == x && p['y'] == y;
-	        });
-	      } else if (this.distToCoord(x, y) > movesLeft) {
+	      if (this.distToCoord(x, y) > movesLeft) {
 	        return false;
 	      }
 	
@@ -262,7 +260,7 @@
 	      //Adjust move coords for big units
 	      var ux = this.getLeftUpCoord().x;
 	      var uy = this.getLeftUpCoord().y;
-	      if (this.isNear(x, y) && this.getSize() > 1) {
+	      if (this.isNear(x, y) && this.getSize() > 1 && !this.getKnight()) {
 	        if (x < ux) {
 	          targetX = x;
 	        } else if (x > ux + this.getSize() - 1) {

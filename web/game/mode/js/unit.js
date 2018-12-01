@@ -123,18 +123,15 @@ export class Unit {
     if (!this.fitsCoord(x, y)) {
       return false;
     }
+    if (this.getKnight()) {
+      return false;
+    }
     if (board_units[this.boardUnitId].flying != 1) {
       return false;
     }
 
     // Check flight distance
     let movesLeft = this.getMovesLeft();
-    if (this.getKnight()) {
-      let path = this.getPath(x, y, false).slice(0, movesLeft);
-      return path.find(function(p){
-        return p['x'] == x && p['y'] == y;
-      });
-    } else
     if (this.distToCoord(x, y) > movesLeft) {
       return false;
     }
@@ -170,7 +167,7 @@ export class Unit {
     //Adjust move coords for big units
     let ux = this.getLeftUpCoord().x;
     let uy = this.getLeftUpCoord().y;
-    if (this.isNear(x, y) && this.getSize() > 1) {
+    if (this.isNear(x, y) && this.getSize() > 1 && !this.getKnight()) {
       if (x < ux) {
         targetX = x;
       } else if (x > (ux + this.getSize() - 1)) {
