@@ -1,5 +1,8 @@
 package ai.ailogic;
 
+import ai.command.Command;
+import ai.command.ShootCommand;
+import ai.command.UnitAttackCommand;
 import ai.game.Game;
 import ai.game.Player;
 import ai.game.board.BoardObject;
@@ -46,14 +49,31 @@ public class PlayerAIFactory
 
 	public static PlayerAI createPlayerAI(Game g, int playerNum)
 	{
+		PlayerAI normalAI = createPlayerAIWithoutLevelUp(g, playerNum);
+
+		//level up
+		Player myPlayer = getMyPlayer(g,playerNum);
+		Unit myUnit = getMyUnit(g,myPlayer);
+		if(myUnit.canLevelUp()) {
+			List<Command> commands = normalAI.getCommands();
+			Command lastCommand = commands.get(commands.size() - 1);
+			if (!(lastCommand instanceof UnitAttackCommand || lastCommand instanceof ShootCommand))
+				return new LevelUpAI(myUnit);
+		}
+
+		return normalAI;
+	}
+
+	private static PlayerAI createPlayerAIWithoutLevelUp(Game g, int playerNum)
+	{
 		//find myPlayer
 		Player myPlayer = getMyPlayer(g,playerNum);
-		
+
 		if(myPlayer == null)
 		{
 			throw new IllegalArgumentException("Player "+playerNum+" was not found");
 		}
-		
+
 		//find myUnit
 		Unit myUnit = getMyUnit(g,myPlayer);
 		PathToCommandsConverter pathConverter;
@@ -74,11 +94,6 @@ public class PlayerAIFactory
 		if(myUnit.checkFeature("paralich"))
 		{
 			return new EndTurningAI();
-		}
-
-		//level up
-		if(myUnit.canLevelUp()) {
-			return new LevelUpAI(myUnit);
 		}
 
 		//mad

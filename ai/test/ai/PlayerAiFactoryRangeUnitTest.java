@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class PlayerAiFactoryRangeUnitTest {
@@ -72,7 +73,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addUnit(myUnitX + 4, myUnitY + 4);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		BoardCell moveFrom = ((UnitMoveCommand) cmds.get(0)).getFrom();
 		BoardCell moveTo = ((UnitMoveCommand) cmds.get(0)).getTo();
@@ -90,7 +91,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addUnit(myUnitX + 1, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		assertTrue(cmds.get(1) instanceof ShootCommand);
 	}
@@ -100,7 +101,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addUnit(myUnitX + 3, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof ShootCommand);
 	}
 
@@ -110,7 +111,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addUnit(myUnitX - 2, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof ShootCommand);
 		BoardCell shootTo = ((ShootCommand) cmds.get(0)).getTo();
 		assertTrue(shootTo.x == myUnitX - 2 && shootTo.y == myUnitY);
@@ -122,7 +123,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addObstacleBox(myUnitX - 2, myUnitY - 2, myUnitX + 2, myUnitY + 2);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		assertTrue(cmds.get(1) instanceof ShootCommand);
 	}
@@ -134,7 +135,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addObstacleBox(myUnitX - 7, myUnitY - 2, myUnitX + 2, myUnitY + 2);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		assertTrue(cmds.get(1) instanceof ShootCommand);
 		BoardCell shootTo = ((ShootCommand) cmds.get(1)).getTo();
@@ -147,7 +148,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addObstacleBox(myUnitX - 2, myUnitY - 2, myUnitX + 2, myUnitY + 2);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof EndTurnCommand);
 	}
 
@@ -156,7 +157,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addBoardObject(myUnitX + 3, myUnitY, BoardObjectType.BUILDING);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof EndTurnCommand);
 	}
 
@@ -166,7 +167,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addUnit(myUnitX + 3, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof ShootCommand);
 	}
 
@@ -179,7 +180,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addBoardObject(myUnitX + 3, myUnitY + 2, BoardObjectType.CASTLE);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof ShootCommand);
 		BoardCell shootTo = ((ShootCommand) cmds.get(0)).getTo();
 		assertTrue(shootTo.x == myUnitX + 3 && shootTo.y == myUnitY + 1);
@@ -194,7 +195,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addBoardObject(myUnitX + 3, myUnitY + 2, BoardObjectType.CASTLE);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof ShootCommand);
 		BoardCell shootTo = ((ShootCommand) cmds.get(0)).getTo();
 		assertTrue(shootTo.x == myUnitX + 3 && shootTo.y == myUnitY + 2);
@@ -206,7 +207,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		makeMyUnitDragon();
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		assertTrue(cmds.get(1) instanceof ShootCommand);
 	}
@@ -217,7 +218,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		makeMyUnitDragon();
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof ShootCommand);
 	}
 
@@ -231,7 +232,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addObstacle(myUnitX, myUnitY + 2);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof EndTurnCommand);
 	}
 
@@ -248,7 +249,7 @@ public class PlayerAiFactoryRangeUnitTest {
 		addObstacleBox(myUnitX - 1, myUnitY - 1, myUnitX + 1, myUnitY + 1);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		BoardCell moveFrom = ((UnitMoveCommand) cmds.get(0)).getFrom();
 		BoardCell moveTo = ((UnitMoveCommand) cmds.get(0)).getTo();
@@ -261,4 +262,24 @@ public class PlayerAiFactoryRangeUnitTest {
 		assertTrue(shootTo.x == myUnitX + 4 && shootTo.y == myUnitY + 5);
 	}
 
+	@Test
+	public void testWalkTowardsAndShootInsteadLevelup() {
+		myUnit.setCanLevelUp(true);
+		addUnit(myUnitX + 4, myUnitY);
+		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
+		List<Command> cmds = ai.getCommands();
+		assertEquals(2, cmds.size());
+		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
+		assertTrue(cmds.get(1) instanceof ShootCommand);
+	}
+
+	@Test
+	public void testLevelupIfTargetTooFar() {
+		myUnit.setCanLevelUp(true);
+		addUnit(myUnitX + 5, myUnitY);
+		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
+		List<Command> cmds = ai.getCommands();
+		assertEquals(1, cmds.size());
+		assertTrue(cmds.get(0) instanceof LevelUpCommand);
+	}
 }

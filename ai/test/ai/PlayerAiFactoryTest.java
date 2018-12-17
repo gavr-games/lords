@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class PlayerAiFactoryTest {
@@ -56,7 +57,7 @@ public class PlayerAiFactoryTest {
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		assertTrue(ai instanceof MultiTargetUnitAI);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		assertTrue(cmds.get(1) instanceof UnitAttackCommand);
 	}
@@ -66,7 +67,7 @@ public class PlayerAiFactoryTest {
 		addTrollHouse(myUnitX - 5, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		assertTrue(cmds.get(1) instanceof UnitMoveCommand);
 	}
@@ -76,7 +77,7 @@ public class PlayerAiFactoryTest {
 		addTrollHouse(myUnitX - 2, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		assertTrue(cmds.get(1) instanceof EndTurnCommand);
 	}
@@ -86,7 +87,7 @@ public class PlayerAiFactoryTest {
 		addTrollHouse(myUnitX - 1, myUnitY);
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof EndTurnCommand);
 	}
 
@@ -104,7 +105,7 @@ public class PlayerAiFactoryTest {
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		assertTrue(ai instanceof MultiTargetUnitAI);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 2);
+		assertEquals(2, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitMoveCommand);
 		assertTrue(cmds.get(1) instanceof UnitAttackCommand);
 	}
@@ -115,7 +116,7 @@ public class PlayerAiFactoryTest {
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		assertTrue(ai instanceof EndTurningAI);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof EndTurnCommand);
 	}
 
@@ -126,7 +127,7 @@ public class PlayerAiFactoryTest {
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		assertTrue(ai instanceof VampireAI);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitAttackCommand);
 	}
 
@@ -137,7 +138,7 @@ public class PlayerAiFactoryTest {
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		assertTrue(ai instanceof VampireAI);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitAttackCommand);
 	}
 
@@ -148,7 +149,7 @@ public class PlayerAiFactoryTest {
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		assertTrue(ai instanceof MultiTargetUnitAI);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitAttackCommand);
 	}
 
@@ -159,7 +160,7 @@ public class PlayerAiFactoryTest {
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		assertTrue(ai instanceof EndTurningAI);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof EndTurnCommand);
 	}
 
@@ -169,7 +170,7 @@ public class PlayerAiFactoryTest {
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		assertTrue(ai instanceof MultiTargetUnitAI);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof UnitAttackCommand);
 	}
 
@@ -179,9 +180,31 @@ public class PlayerAiFactoryTest {
 		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
 		assertTrue(ai instanceof LevelUpAI);
 		List<Command> cmds = ai.getCommands();
-		assertTrue(cmds.size() == 1);
+		assertEquals(1, cmds.size());
 		assertTrue(cmds.get(0) instanceof LevelUpCommand);
 	}
 
+	@Test
+	public void testDontLevelUpIfCanAttack() {
+		myPlayer.setOwner(2); //frog
+		myUnit.setCanLevelUp(true);
+		addUnit(myUnitX+2, myUnitY, 20);
+		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
+		assertTrue(ai instanceof MultiTargetUnitAI);
+		List<Command> cmds = ai.getCommands();
+		assertEquals(2, cmds.size());
+		assertTrue(cmds.get(1) instanceof UnitAttackCommand);
+	}
 
+	@Test
+	public void testLevelUpIfTargetTooFar() {
+		myPlayer.setOwner(2); //frog
+		myUnit.setCanLevelUp(true);
+		addUnit(myUnitX+3, myUnitY, 20);
+		PlayerAI ai = PlayerAIFactory.createPlayerAI(game, myPlayerNum);
+		assertTrue(ai instanceof LevelUpAI);
+		List<Command> cmds = ai.getCommands();
+		assertEquals(1, cmds.size());
+		assertTrue(cmds.get(0) instanceof LevelUpCommand);
+	}
 }
