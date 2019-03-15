@@ -1,6 +1,6 @@
 # The Lords
 
-It is a browser turn-based strategy game for 2-4 players available at <https://lords.world>. Below is the developer's guide to set up development environment.
+It is a browser turn-based strategy game for 2-4 players available at <https://gavr.games>. Below is the developer's guide to set up development environment.
 
 Getting Started
 ---------------
