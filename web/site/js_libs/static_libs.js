@@ -472,7 +472,7 @@ games_features["4"]["feature_type"] = "bool";
 games_features["5"] = new Array();
 games_features["5"]["id"] = "5";
 games_features["5"]["code"] = "realtime_cards";
-games_features["5"]["default_param"] = "0";
+games_features["5"]["default_param"] = "1";
 games_features["5"]["feature_type"] = "bool";
 
 var games_feature_names = new Array();
