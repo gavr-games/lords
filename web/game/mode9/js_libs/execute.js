@@ -14,10 +14,15 @@ var start_proc_time = 0;
 var need_answer = false;
 
 var proc_uid = 0; //need to mark answer
+
+var NOT_YOUR_TURN_ERROR_CODE = "1";
+var NOT_ENOUGH_GOLD_ERROR_CODE = "2";
+
 //ask params
 function execute_procedure(name) {
     try {
-        if (!no_new_execute) if (turn_state == MY_TURN || do_not_in_turn == 1) {
+        var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
+        if (!no_new_execute) if (turn_state == MY_TURN || do_not_in_turn == 1 || realtime_cards) {
             if (procedures_names[name]) {
                 var exec_procedure = procedures_names[name];
                 last_executed_procedure = name;
@@ -74,7 +79,7 @@ function execute_procedure(name) {
                     }
                 } // end of process
             } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], i18n[USER_LANGUAGE]['game']['wrong_action'] + ': ' + name, 200, 40, false);
-        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("1"), 200, 20, false); // Not your turn
+        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message(NOT_YOUR_TURN_ERROR_CODE), 200, 20, false); // Not your turn
     } catch (e) {
         if (DEBUG_MODE) {
             displayLordsError(e, 'execute_procedure(' + name + ');selected_params=' + selected_params + ';');
@@ -123,7 +128,7 @@ function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) 
                 'php_time':php_time
             });
             if (playingCard) {
-                deactivate_buy_ressurect_play_card();
+                deactivate_buy_ressurect_play_card(true); //force deactivation while playing other card
             }
         }
 
@@ -387,8 +392,9 @@ function money_amount_param() {
 
 //execute card click
 function execute_card(pd_id,id) {
+    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
     var i = 0;
-    if (turn_state == MY_TURN) {
+    if (turn_state == MY_TURN || realtime_cards) {
         if (players_by_num[my_player_num]["gold"].toInt() >= cards[id]['cost'].toInt()) {
             cancel_execute()
             pre_defined_param = '';
@@ -423,8 +429,8 @@ function execute_card(pd_id,id) {
             } else if (cards[id]['type'] == 'm') {
               EventBus.publish('execute_magic_card', [id, procedures]);
             }
-        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("2"), 200, 20, false); // Not enough gold
-    } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("1"), 200, 20, false); // Not your turn
+        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message(NOT_ENOUGH_GOLD_ERROR_CODE), 200, 20, false); // Not enough gold
+    } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message(NOT_YOUR_TURN_ERROR_CODE), 200, 20, false); // Not your turn
 }
 
 function check_next_available_unit() {

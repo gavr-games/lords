@@ -116,6 +116,7 @@ function initialization() {
         //init some variables
         time_restriction = game_info["time_restriction"].toInt();
         game_status = game_info["status_id"].toInt();
+        initGameFeatures();
 
         setLoadingText(i18n[USER_LANGUAGE]["loading"]["initialization"]);
         if (!Browser.ie) document.body.setStyle('overflow', 'visible');
@@ -470,6 +471,16 @@ function initialization() {
     }
 }
 
+function initGameFeatures() {
+  window.game_features = {}
+  games_features_usage.each(function(item, index) {
+    if (item) {
+      item['code'] = games_features[item['feature_id'].toInt()]['code'];
+      window.game_features[item['code']] = item;
+    }
+  });
+}
+
 function update_game_info_window() {
     var game_info_html = '<b>' + i18n[USER_LANGUAGE]["game"]["game_name"] + ': </b>' + game_info['title'] + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["creation_date"] + ': </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>' + i18n[USER_LANGUAGE]["game"]["player"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["team"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["gold"] + ':</th></tr>'
     players_by_num.each(function(item, index) {
@@ -548,7 +559,10 @@ function doSubsidy() {
     if (!chatFocused) {
         cancel_execute();
         execute_procedure('take_subsidy');
-        deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
+        var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
+        if (!realtime_cards || board_buildings[my_castle_id]['health'].toInt() == 2) {
+            deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
+        }
     }
 }
 

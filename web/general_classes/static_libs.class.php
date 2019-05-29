@@ -2,6 +2,7 @@
 class StaticLibs {
     public static function getCommonGameConfig() {
         return Array(
+            Array('name'=>'games_features'),
             Array('name'=>'procedures_params', 'type'=>'vars', 'field'=>'code'),
             Array('name'=>'procedures_params_i18n', 'js_name'=>'procedures_params_descriptions', 'keys'=>'language_id,param_id'),
             Array('name'=>'unit_features'),
