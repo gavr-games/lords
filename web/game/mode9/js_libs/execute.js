@@ -8,6 +8,7 @@ var error_msg = '';
 var error_procedure = '';
 var no_new_execute = false;
 var player_deck_id = 0;
+var currently_played_card_id = 0;
 
 var last_executed_procedure = '';
 var start_proc_time = 0;
@@ -126,7 +127,8 @@ function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) 
                 'ape_time':ape_time/1000,
                 'php_time':php_time
             });
-            if (playingCard) {
+            if (playingCard && (!realtime_cards || cards[currently_played_card_id]['type'] != 'm')) {
+                card_action_done_in_this_turn = 1;
                 deactivate_buy_ressurect_play_card(true); //force deactivation while playing other card
             }
         }
@@ -396,7 +398,7 @@ function execute_card(pd_id,id) {
         if (players_by_num[my_player_num]["gold"].toInt() >= cards[id]['cost'].toInt()) {
             cancel_execute()
             pre_defined_param = '';
-            card = id;
+            currently_played_card_id = id;
             player_deck_id = pd_id;
             playingCard = true;
             i = 0;
@@ -601,6 +603,8 @@ function cancel_execute() {
     do_not_in_turn = 0;
     path_mode = false;
     playingCard = false;
+    player_deck_id = 0;
+    currently_played_card_id = 0;
 }
 
 function eval_post_function(func_name) {
@@ -717,12 +721,16 @@ function post_put_building() {
 
 function post_buy_card() {
     if (error_procedure == '') {
+        if (!realtime_cards) {
+            card_action_done_in_this_turn = 1;
+        }
         setTimeout("deactivate_buy_ressurect_play_card();", 1000);
     }
 }
 
 function post_player_resurrect() {
     if (error_procedure == '') {
+        card_action_done_in_this_turn = 1;
         setTimeout("deactivate_buy_ressurect_play_card();", 1000);
     }
 }
@@ -908,7 +916,7 @@ function on_building_select() {
         var coords = building.toString().split(',');
         var bx = coords[0].toInt();
         var by = coords[1].toInt();
-        card = board_buildings[board[bx][by]['ref']]['card_id'];
+        currently_played_card_id = board_buildings[board[bx][by]['ref']]['card_id'];
         pre_put_building();
     }
     if (isPutBuildingInEmptyCoord(executable_procedure)) {

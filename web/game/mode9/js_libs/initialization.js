@@ -7,6 +7,7 @@ var was_active = 0; //state of player
 var shieldInterval;
 var titleInterval;
 var realtime_cards;
+var card_action_done_in_this_turn = 0;
 
 var time_delay_from_server = 0;
 

@@ -2412,6 +2412,7 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
     }
     if (player_num == my_player_num) {
         turn_state = MY_TURN;
+        card_action_done_in_this_turn = card_played_flag;
         movedUnits = units_moves_flag.toInt();
         activate_controls();
         if (players_by_num[my_player_num]['gold'].toInt() < mode_config["card cost"]) { //deactivate buy card if units moved or money<cost
