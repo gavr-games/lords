@@ -6,6 +6,7 @@ var turn_state = NOT_MY_TURN; //state of client
 var was_active = 0; //state of player
 var shieldInterval;
 var titleInterval;
+var realtime_cards;
 
 var time_delay_from_server = 0;
 
@@ -479,6 +480,7 @@ function initGameFeatures() {
       window.game_features[item['code']] = item;
     }
   });
+  realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
 }
 
 function update_game_info_window() {
@@ -559,7 +561,6 @@ function doSubsidy() {
     if (!chatFocused) {
         cancel_execute();
         execute_procedure('take_subsidy');
-        var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
         if (!realtime_cards || board_buildings[my_castle_id]['health'].toInt() == 2) {
             deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
         }

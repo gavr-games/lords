@@ -21,7 +21,6 @@ var NOT_ENOUGH_GOLD_ERROR_CODE = "2";
 //ask params
 function execute_procedure(name) {
     try {
-        var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
         if (!no_new_execute) if (turn_state == MY_TURN || do_not_in_turn == 1 || realtime_cards) {
             if (procedures_names[name]) {
                 var exec_procedure = procedures_names[name];
@@ -392,7 +391,6 @@ function money_amount_param() {
 
 //execute card click
 function execute_card(pd_id,id) {
-    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
     var i = 0;
     if (turn_state == MY_TURN || realtime_cards) {
         if (players_by_num[my_player_num]["gold"].toInt() >= cards[id]['cost'].toInt()) {

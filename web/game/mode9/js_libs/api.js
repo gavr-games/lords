@@ -30,7 +30,6 @@ function player_set_gold(p_num, amount) {
     publish_api_call();
     players_by_num[p_num]["gold"] = amount;
     update_game_info_window();
-    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
     if (p_num == my_player_num && (turn_state == MY_TURN || realtime_cards) && amount >= mode_config["card cost"]) //activate buy card
         activate_button($('main_buttons').getChildren('.btn_buycard')[0]);
     if (p_num == my_player_num && amount < mode_config["card cost"]) {
@@ -1460,7 +1459,6 @@ function move_anim(x, y, x2, y2, size) {
 
 function deactivate_buy_ressurect_play_card(force) {
     force = force || false;
-    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
     if (force || !realtime_cards) {
       deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
       $('cards_holder').getChildren().each(function(item, index) {
@@ -2407,7 +2405,6 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
     card_played_flag = card_played_flag || 0;
     subsidy_flag = subsidy_flag || 0;
     from_init = from_init || 0;
-    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
     //clean green cells after my move
     if (turn_state == MY_TURN) {
         $$('#board .green').removeClass('green');
@@ -2534,7 +2531,6 @@ function update_next_turn_timer(left_seconds) {
 
 function deactivate_controls(force) {
     force = force || false;
-    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
     var buttons = $('main_buttons').getChildren('a');
     buttons.each(function(item, index) {
         var itemClass =  item.get('class');
