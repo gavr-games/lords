@@ -8,6 +8,7 @@ var shieldInterval;
 var titleInterval;
 var realtime_cards;
 var card_action_done_in_this_turn = 0;
+var subsidy_taken_in_this_turn = 0;
 
 var time_delay_from_server = 0;
 
@@ -562,6 +563,7 @@ function doSubsidy() {
     if (!chatFocused) {
         cancel_execute();
         execute_procedure('take_subsidy');
+        subsidy_taken_in_this_turn = 1;
         if (!realtime_cards || board_buildings[my_castle_id]['health'].toInt() == 2) {
             deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
         }
