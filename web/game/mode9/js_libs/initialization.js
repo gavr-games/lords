@@ -923,8 +923,8 @@ function clean_shoot_radius(x, y) {
 
 function draw_building(x, y) {
     var b = null;
-    if (card != "" && cards[card]["type"] == 'b') {
-        b = buildings[cards[card]["ref"]];
+    if (currently_played_card_id != "" && cards[currently_played_card_id]["type"] == 'b') {
+        b = buildings[cards[currently_played_card_id]["ref"]];
     } else if (building != "") {
         var coords = building.toString().split(',');
         var ux = coords[0].toInt();
@@ -1045,8 +1045,8 @@ function draw_building(x, y) {
 
 function clean_building(x, y) {
     var b = null;
-    if (card != "" && cards[card]["type"] == 'b') {
-        b = buildings[cards[card]["ref"]];
+    if (currently_played_card_id != "" && cards[currently_played_card_id]["type"] == 'b') {
+        b = buildings[cards[currently_played_card_id]["ref"]];
     } else if (building != "") {
         var coords = building.toString().split(',');
         var ux = coords[0].toInt();
