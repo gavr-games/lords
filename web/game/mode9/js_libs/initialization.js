@@ -268,7 +268,7 @@ function initialization() {
             setLoadingText(i18n[USER_LANGUAGE]["loading"]["graveyard_init"]);
             vwGrave.each(function(item, index) {
                 if (item) {
-                    add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size'], item['turn_when_killed']);
+                    add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size'], item['turn_when_killed'], item['player_num_when_killed']);
                 }
             });
             $('graveLink').addEvent('mouseenter', function() {

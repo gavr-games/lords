@@ -129,7 +129,7 @@ function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) 
             });
             if (playingCard && (!realtime_cards || cards[currently_played_card_id]['type'] != 'm')) {
                 card_action_done_in_this_turn = 1;
-                deactivate_buy_ressurect_play_card(true); //force deactivation while playing other card
+                update_controls_activation();
             }
         }
 
@@ -724,23 +724,28 @@ function post_buy_card() {
         if (!realtime_cards) {
             card_action_done_in_this_turn = 1;
         }
-        setTimeout("deactivate_buy_ressurect_play_card();", 1000);
+        setTimeout("update_controls_activation();", 1000);
     }
 }
 
-function post_take_subsudy() {
+function post_take_subsidy() {
     if (error_procedure == '') {
         subsidy_taken_in_this_turn = 1;
-        if (!realtime_cards || board_buildings[my_castle_id]['health'].toInt() == 2) {
-            deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
-        }
+
+        var deactivate_subsidy_button_if_necessary = function () {
+            if (!realtime_cards || board_buildings[my_castle_id]['health'].toInt() < 2) {
+                deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
+            }
+        };
+
+        setTimeout(deactivate_subsidy_button_if_necessary, 1000);
     }
 }
 
 function post_player_resurrect() {
     if (error_procedure == '') {
         card_action_done_in_this_turn = 1;
-        setTimeout("deactivate_buy_ressurect_play_card();", 1000);
+        setTimeout("update_controls_activation();", 1000);
     }
 }
 
