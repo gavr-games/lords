@@ -563,10 +563,6 @@ function doSubsidy() {
     if (!chatFocused) {
         cancel_execute();
         execute_procedure('take_subsidy');
-        subsidy_taken_in_this_turn = 1;
-        if (!realtime_cards || board_buildings[my_castle_id]['health'].toInt() == 2) {
-            deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
-        }
     }
 }
 

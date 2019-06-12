@@ -728,6 +728,15 @@ function post_buy_card() {
     }
 }
 
+function post_take_subsudy() {
+    if (error_procedure == '') {
+        subsidy_taken_in_this_turn = 1;
+        if (!realtime_cards || board_buildings[my_castle_id]['health'].toInt() == 2) {
+            deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
+        }
+    }
+}
+
 function post_player_resurrect() {
     if (error_procedure == '') {
         card_action_done_in_this_turn = 1;
