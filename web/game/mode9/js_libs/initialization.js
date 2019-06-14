@@ -7,7 +7,6 @@ var was_active = 0; //state of player
 var shieldInterval;
 var titleInterval;
 var realtime_cards;
-var card_action_done_in_this_turn = 0;
 var subsidy_taken_in_this_turn = 0;
 
 var time_delay_from_server = 0;
@@ -117,6 +116,7 @@ function initialization() {
     try {
         parent.WSClient.joinGame(game_info["game_id"]);
         //init some variables
+        window.Game = new window.GameMode.Game(game_info, my_player_num)
         time_restriction = game_info["time_restriction"].toInt();
         game_status = game_info["status_id"].toInt();
         initGameFeatures();

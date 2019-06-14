@@ -128,8 +128,8 @@ function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) 
                 'php_time':php_time
             });
             if (playingCard && (!realtime_cards || cards[currently_played_card_id]['type'] != 'm')) {
-                card_action_done_in_this_turn = 1;
-                update_controls_activation();
+              window.Game.CardsController.setCardActionDoneInThisTurn(true);
+              update_controls_activation();
             }
         }
 
@@ -722,7 +722,7 @@ function post_put_building() {
 function post_buy_card() {
     if (error_procedure == '') {
         if (!realtime_cards) {
-            card_action_done_in_this_turn = 1;
+          window.Game.CardsController.setCardActionDoneInThisTurn(true);
         }
         setTimeout("update_controls_activation();", 1000);
     }
@@ -744,8 +744,8 @@ function post_take_subsidy() {
 
 function post_player_resurrect() {
     if (error_procedure == '') {
-        card_action_done_in_this_turn = 1;
-        setTimeout("update_controls_activation();", 1000);
+      window.Game.CardsController.setCardActionDoneInThisTurn(true);
+      setTimeout("update_controls_activation();", 1000);
     }
 }
 

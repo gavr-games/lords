@@ -29,6 +29,7 @@ function publish_api_call() {
 function player_set_gold(p_num, amount) {
     publish_api_call();
     players_by_num[p_num]["gold"] = amount;
+    window.Game.PlayersController.getPlayerByNum(p_num).setGold(amount)
     update_game_info_window();
     if (p_num == my_player_num && (turn_state == MY_TURN || realtime_cards)) {
         update_controls_activation();
@@ -74,6 +75,7 @@ function add_player(p_num, name, gold, owner, team) {
     players_by_num[p_num]['gold'] = gold;
     players_by_num[p_num]['owner'] = owner;
     players_by_num[p_num]['team'] = team;
+    window.Game.PlayersController.addPlayer(players_by_num[p_num]);
     if (p_num < 10) { //not neutral
         var myP = new Element('p', {
             'html': name + ":",
@@ -109,6 +111,7 @@ function add_player(p_num, name, gold, owner, team) {
 function delete_player(p_num) {
     publish_api_call();
     delete players_by_num[p_num];
+    window.Game.PlayersController.removePlayer(p_num);
     if (p_num < 10) { //not neutral
         if ($('player' + p_num)) {
             $('player' + p_num).destroy();
@@ -1463,28 +1466,19 @@ function move_anim(x, y, x2, y2, size) {
 
 function is_active_card(cardDiv) {
     var card_id = cardDiv.attributes.card_id.value;
-    if (players_by_num[my_player_num]["gold"].toInt() < cards[card_id]['cost'].toInt()) {
+    if (window.Game.PlayersController.getMyPlayer()["gold"].toInt() < cards[card_id]['cost'].toInt()) {
         return false;
     }
     if (realtime_cards && cards[card_id]['type'] == 'm') {
         return true;
     }
-    return can_make_card_action();
-}
-
-function can_make_card_action() {
-    return (turn_state == MY_TURN && !card_action_done_in_this_turn);
+    return window.Game.CardsController.canMakeAction();
 }
 
 function is_active_grave(graveDiv) {
-    return can_make_card_action()
+    return window.Game.CardsController.canMakeAction()
         && (graveDiv.attributes.turn_when_killed.value != active_players['turn'] || graveDiv.attributes.player_num_when_killed.value != active_players['player_num'])
         && players_by_num[my_player_num]["gold"].toInt() >= cards[graveDiv.attributes.card_id.value]['cost'].toInt() * 2;
-}
-
-function is_active_buy_card_button() {
-    return players_by_num[my_player_num]['gold'].toInt() >= mode_config["card cost"]
-        && (realtime_cards || can_make_card_action());
 }
 
 function is_active_subsidy_button() {
@@ -2204,6 +2198,7 @@ function end_game() {
     clearInterval(shieldInterval);
     clearInterval(titleInterval);
     turn_state = NOT_MY_TURN;
+    window.Game.TurnController.setMyTurn(false)
     deactivate_controls();
     var text = '<a href="#" onclick="get_stats();return false;">' + i18n[USER_LANGUAGE]['game']['show_statistic'] + '</a><br><a href="#" onclick="execute_exit();return false;">' + i18n[USER_LANGUAGE]['game']['exit'] + '</a>';
     noCloseWindow = true;
@@ -2438,13 +2433,14 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
     subsidy_flag = subsidy_flag || 0;
     from_init = from_init || 0;
     //clean green cells after my move
-    if (turn_state == MY_TURN) {
+    if (window.Game.TurnController.myTurn) {
         $$('#board .green').removeClass('green');
         $$('#board .activeUnit').removeClass('activeUnit');
     }
-    if (player_num == my_player_num) {
+    if (window.Game.PlayersController.isMyPlayer(player_num)) {
         turn_state = MY_TURN;
-        card_action_done_in_this_turn = card_played_flag.toInt();
+        window.Game.TurnController.setMyTurn(true);
+        window.Game.CardsController.setCardActionDoneInThisTurn(card_played_flag.toInt() == 1);
         subsidy_taken_in_this_turn = subsidy_flag.toInt();
         movedUnits = units_moves_flag.toInt();
         activateMyMove();
@@ -2454,6 +2450,7 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
         movedUnits = false;
         clearTimeout(remindMoveTimer);
         turn_state = NOT_MY_TURN;
+        window.Game.TurnController.setMyTurn(false)
         clean_everything();
         stopShield();
         if (game_state != 'WAITTING') cancel_execute(); //for interrupting of polza choosing params
@@ -2532,7 +2529,7 @@ function update_next_turn_timer(left_seconds) {
 }
 
 function update_controls_activation() {
-    button_set_availability($('main_buttons').getChildren('.btn_buycard')[0], is_active_buy_card_button());
+    button_set_availability($('main_buttons').getChildren('.btn_buycard')[0], window.Game.CardsController.canBuy());
     button_set_availability($('main_buttons').getChildren('.btn_subs')[0], is_active_subsidy_button());
     button_set_availability($('main_buttons').getChildren('.btn_sendm')[0], is_active_send_button());
     button_set_availability($('main_buttons').getChildren('.btn_end_turn')[0], turn_state == MY_TURN);
