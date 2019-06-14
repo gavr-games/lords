@@ -29,7 +29,7 @@ wsClientConfig = extend(commonConfig, {
   }
 })
 
-// Compile Ws client for game
+// Compile mode classes for game
 gameModeConfig = extend(commonConfig, {
   entry: './game/mode/js/mode.js',
   output: {

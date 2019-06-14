@@ -6,6 +6,8 @@ var turn_state = NOT_MY_TURN; //state of client
 var was_active = 0; //state of player
 var shieldInterval;
 var titleInterval;
+var realtime_cards;
+var subsidy_taken_in_this_turn = 0;
 
 var time_delay_from_server = 0;
 
@@ -114,8 +116,10 @@ function initialization() {
     try {
         parent.WSClient.joinGame(game_info["game_id"]);
         //init some variables
+        window.Game = new window.GameMode.Game(game_info, my_player_num)
         time_restriction = game_info["time_restriction"].toInt();
         game_status = game_info["status_id"].toInt();
+        initGameFeatures();
 
         setLoadingText(i18n[USER_LANGUAGE]["loading"]["initialization"]);
         if (!Browser.ie) document.body.setStyle('overflow', 'visible');
@@ -264,7 +268,7 @@ function initialization() {
             setLoadingText(i18n[USER_LANGUAGE]["loading"]["graveyard_init"]);
             vwGrave.each(function(item, index) {
                 if (item) {
-                    add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size'], item['turn_when_killed']);
+                    add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size'], item['turn_when_killed'], item['player_num_when_killed']);
                 }
             });
             $('graveLink').addEvent('mouseenter', function() {
@@ -470,6 +474,17 @@ function initialization() {
     }
 }
 
+function initGameFeatures() {
+  window.game_features = {}
+  games_features_usage.each(function(item, index) {
+    if (item) {
+      item['code'] = games_features[item['feature_id'].toInt()]['code'];
+      window.game_features[item['code']] = item;
+    }
+  });
+  realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
+}
+
 function update_game_info_window() {
     var game_info_html = '<b>' + i18n[USER_LANGUAGE]["game"]["game_name"] + ': </b>' + game_info['title'] + '<br /><b>' + i18n[USER_LANGUAGE]["game"]["creation_date"] + ': </b>' + game_info['creation_date'] + '<br /><hr /><table><tr><th>' + i18n[USER_LANGUAGE]["game"]["player"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["team"] + ':</th><th>' + i18n[USER_LANGUAGE]["game"]["gold"] + ':</th></tr>'
     players_by_num.each(function(item, index) {
@@ -548,7 +563,6 @@ function doSubsidy() {
     if (!chatFocused) {
         cancel_execute();
         execute_procedure('take_subsidy');
-        deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
     }
 }
 
@@ -909,8 +923,8 @@ function clean_shoot_radius(x, y) {
 
 function draw_building(x, y) {
     var b = null;
-    if (card != "" && cards[card]["type"] == 'b') {
-        b = buildings[cards[card]["ref"]];
+    if (currently_played_card_id != "" && cards[currently_played_card_id]["type"] == 'b') {
+        b = buildings[cards[currently_played_card_id]["ref"]];
     } else if (building != "") {
         var coords = building.toString().split(',');
         var ux = coords[0].toInt();
@@ -1031,8 +1045,8 @@ function draw_building(x, y) {
 
 function clean_building(x, y) {
     var b = null;
-    if (card != "" && cards[card]["type"] == 'b') {
-        b = buildings[cards[card]["ref"]];
+    if (currently_played_card_id != "" && cards[currently_played_card_id]["type"] == 'b') {
+        b = buildings[cards[currently_played_card_id]["ref"]];
     } else if (building != "") {
         var coords = building.toString().split(',');
         var ux = coords[0].toInt();

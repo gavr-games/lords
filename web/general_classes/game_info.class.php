@@ -1,44 +1,21 @@
 <?php
 class GameInfo {
     public static function getGameConfig() {
-        return Array(
-            Array(
-                'name' =>'game_info',
-            ),
-            Array(
-                'name' =>'init_board_buildings',
-            ),
-            Array(
-                'name' =>'init_board_units',
-            ),
-            Array(
-                'name'=>'active_players',
-            ),
-            Array(
-                'name'=>'players',
-            ),
-            Array(
-                'name'=>'board_buildings',
-            ),
-            Array(
-                'name' =>'board_buildings_features',
-            ),
-            Array(
-                'name'=>'board_units',
-            ),
-            Array(
-                'name' =>'board_units_features',
-            ),
-            Array(
-                'name' =>'vwGrave',
-            ),
-            Array(
-                'name'=>'player_deck',
-            ),
-            Array(
-                'name'=>'vw_command_log',
-            )
-        );
+        return [
+            ['name' =>'game_info'],
+            ['name' =>'games_features_usage'],
+            ['name' =>'init_board_buildings'],
+            ['name' =>'init_board_units'],
+            ['name'=>'active_players'],
+            ['name'=>'players'],
+            ['name'=>'board_buildings'],
+            ['name' =>'board_buildings_features'],
+            ['name'=>'board_units'],
+            ['name' =>'board_units_features'],
+            ['name' =>'vwGrave'],
+            ['name'=>'player_deck'],
+            ['name'=>'vw_command_log']
+          ];
     }
     
     public static function generateJS($tables, $game_id, $player_num) {

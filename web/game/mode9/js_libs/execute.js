@@ -8,16 +8,21 @@ var error_msg = '';
 var error_procedure = '';
 var no_new_execute = false;
 var player_deck_id = 0;
+var currently_played_card_id = 0;
 
 var last_executed_procedure = '';
 var start_proc_time = 0;
 var need_answer = false;
 
 var proc_uid = 0; //need to mark answer
+
+var NOT_YOUR_TURN_ERROR_CODE = "1";
+var NOT_ENOUGH_GOLD_ERROR_CODE = "2";
+
 //ask params
 function execute_procedure(name) {
     try {
-        if (!no_new_execute) if (turn_state == MY_TURN || do_not_in_turn == 1) {
+        if (!no_new_execute) if (turn_state == MY_TURN || do_not_in_turn == 1 || realtime_cards) {
             if (procedures_names[name]) {
                 var exec_procedure = procedures_names[name];
                 last_executed_procedure = name;
@@ -74,7 +79,7 @@ function execute_procedure(name) {
                     }
                 } // end of process
             } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], i18n[USER_LANGUAGE]['game']['wrong_action'] + ': ' + name, 200, 40, false);
-        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("1"), 200, 20, false); // Not your turn
+        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message(NOT_YOUR_TURN_ERROR_CODE), 200, 20, false); // Not your turn
     } catch (e) {
         if (DEBUG_MODE) {
             displayLordsError(e, 'execute_procedure(' + name + ');selected_params=' + selected_params + ';');
@@ -122,8 +127,9 @@ function proc_answer(pr_uid, suc, error_code, error_params, ape_time, php_time) 
                 'ape_time':ape_time/1000,
                 'php_time':php_time
             });
-            if (playingCard) {
-                deactivate_buy_ressurect_play_card();
+            if (playingCard && (!realtime_cards || cards[currently_played_card_id]['type'] != 'm')) {
+              window.Game.CardsController.setCardActionDoneInThisTurn(true);
+              update_controls_activation();
             }
         }
 
@@ -388,11 +394,11 @@ function money_amount_param() {
 //execute card click
 function execute_card(pd_id,id) {
     var i = 0;
-    if (turn_state == MY_TURN) {
+    if (turn_state == MY_TURN || realtime_cards) {
         if (players_by_num[my_player_num]["gold"].toInt() >= cards[id]['cost'].toInt()) {
             cancel_execute()
             pre_defined_param = '';
-            card = id;
+            currently_played_card_id = id;
             player_deck_id = pd_id;
             playingCard = true;
             i = 0;
@@ -423,8 +429,8 @@ function execute_card(pd_id,id) {
             } else if (cards[id]['type'] == 'm') {
               EventBus.publish('execute_magic_card', [id, procedures]);
             }
-        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("2"), 200, 20, false); // Not enough gold
-    } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message("1"), 200, 20, false); // Not your turn
+        } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message(NOT_ENOUGH_GOLD_ERROR_CODE), 200, 20, false); // Not enough gold
+    } else showWindow(i18n[USER_LANGUAGE]['game']['sorry'], error_message(NOT_YOUR_TURN_ERROR_CODE), 200, 20, false); // Not your turn
 }
 
 function check_next_available_unit() {
@@ -597,6 +603,8 @@ function cancel_execute() {
     do_not_in_turn = 0;
     path_mode = false;
     playingCard = false;
+    player_deck_id = 0;
+    currently_played_card_id = 0;
 }
 
 function eval_post_function(func_name) {
@@ -713,13 +721,31 @@ function post_put_building() {
 
 function post_buy_card() {
     if (error_procedure == '') {
-        setTimeout("deactivate_buy_ressurect_play_card();", 1000);
+        if (!realtime_cards) {
+          window.Game.CardsController.setCardActionDoneInThisTurn(true);
+        }
+        setTimeout("update_controls_activation();", 1000);
+    }
+}
+
+function post_take_subsidy() {
+    if (error_procedure == '') {
+        subsidy_taken_in_this_turn = 1;
+
+        var deactivate_subsidy_button_if_necessary = function () {
+            if (!realtime_cards || board_buildings[my_castle_id]['health'].toInt() < 2) {
+                deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
+            }
+        };
+
+        setTimeout(deactivate_subsidy_button_if_necessary, 1000);
     }
 }
 
 function post_player_resurrect() {
     if (error_procedure == '') {
-        setTimeout("deactivate_buy_ressurect_play_card();", 1000);
+      window.Game.CardsController.setCardActionDoneInThisTurn(true);
+      setTimeout("update_controls_activation();", 1000);
     }
 }
 
@@ -904,7 +930,7 @@ function on_building_select() {
         var coords = building.toString().split(',');
         var bx = coords[0].toInt();
         var by = coords[1].toInt();
-        card = board_buildings[board[bx][by]['ref']]['card_id'];
+        currently_played_card_id = board_buildings[board[bx][by]['ref']]['card_id'];
         pre_put_building();
     }
     if (isPutBuildingInEmptyCoord(executable_procedure)) {
