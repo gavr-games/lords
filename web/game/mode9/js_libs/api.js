@@ -29,12 +29,10 @@ function publish_api_call() {
 function player_set_gold(p_num, amount) {
     publish_api_call();
     players_by_num[p_num]["gold"] = amount;
+    window.Game.PlayersController.getPlayerByNum(p_num).setGold(amount)
     update_game_info_window();
-    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
-    if (p_num == my_player_num && (turn_state == MY_TURN || realtime_cards) && amount >= mode_config["card cost"]) //activate buy card
-        activate_button($('main_buttons').getChildren('.btn_buycard')[0]);
-    if (p_num == my_player_num && amount < mode_config["card cost"]) {
-        deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
+    if (p_num == my_player_num && (turn_state == MY_TURN || realtime_cards)) {
+        update_controls_activation();
     }
     if (p_num < 10) { //not neutral
         if ($('money' + p_num))
@@ -77,6 +75,7 @@ function add_player(p_num, name, gold, owner, team) {
     players_by_num[p_num]['gold'] = gold;
     players_by_num[p_num]['owner'] = owner;
     players_by_num[p_num]['team'] = team;
+    window.Game.PlayersController.addPlayer(players_by_num[p_num]);
     if (p_num < 10) { //not neutral
         var myP = new Element('p', {
             'html': name + ":",
@@ -112,6 +111,7 @@ function add_player(p_num, name, gold, owner, team) {
 function delete_player(p_num) {
     publish_api_call();
     delete players_by_num[p_num];
+    window.Game.PlayersController.removePlayer(p_num);
     if (p_num < 10) { //not neutral
         if ($('player' + p_num)) {
             $('player' + p_num).destroy();
@@ -962,7 +962,8 @@ function add_card(pd_id, card_id, no_anim) {
     no_anim = no_anim || false;
     var myDiv = new Element('div', {
         'class': 'card',
-        'id': 'card_' + pd_id
+        'id': 'card_' + pd_id,
+        'card_id': card_id
     }); //create div with card
     var myImg = new Element('img', {
         'src': '../../design/images/cards/' + cards[card_id]['image'],
@@ -975,6 +976,9 @@ function add_card(pd_id, card_id, no_anim) {
     myDiv.grab(cardPriceDiv(cards[card_id]['cost']), 'bottom');
     myDiv.grab(myImg, 'bottom');
     $('cards_holder').grab(myDiv, 'bottom');
+    if (!is_active_card(myDiv)) {
+        myDiv.fade(unactive_card)
+    }
     addCardTip('card_' + pd_id, card_id);
     if (cardsCarousel)
         cardsCarousel.toLast();
@@ -984,7 +988,9 @@ function add_card(pd_id, card_id, no_anim) {
         newItem.setStyle('left', '');
         newItem.setStyle('position', 'relative');
         $('fullsize_holder').grab(newItem);
-        if (movedUnits || players_by_num[my_player_num]['gold'].toInt() < mode_config["card cost"]) newItem.fade(unactive_card);
+        if (!is_active_card(newItem)) {
+            newItem.fade(unactive_card)
+        }
     }
     //anim of new card
     if (!no_anim) {
@@ -1458,22 +1464,36 @@ function move_anim(x, y, x2, y2, size) {
     after_commands_anims += "move_anims[" + uid + "].move({relativeTo: $('board_" + x2 + "_" + y2 + "'),position: 'bottomRight',edge:'bottomRight',offset:{x:1,y:1}});";
 }
 
-function deactivate_buy_ressurect_play_card(force) {
-    force = force || false;
-    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
-    if (force || !realtime_cards) {
-      deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
-      $('cards_holder').getChildren().each(function(item, index) {
-          if (item) {
-              item.fade(unactive_card);
-          }
-      });
+function is_active_card(cardDiv) {
+    var card_id = cardDiv.attributes.card_id.value;
+    if (window.Game.PlayersController.getMyPlayer()["gold"].toInt() < cards[card_id]['cost'].toInt()) {
+        return false;
     }
-    $('grave_holder').getChildren().each(function(item, index) {
-        if (item) {
-            item.fade(unactive_card);
-        }
-    });
+    if (realtime_cards && cards[card_id]['type'] == 'm') {
+        return true;
+    }
+    return window.Game.CardsController.canMakeAction();
+}
+
+function is_active_grave(graveDiv) {
+    return window.Game.CardsController.canMakeAction()
+        && (graveDiv.attributes.turn_when_killed.value != active_players['turn'] || graveDiv.attributes.player_num_when_killed.value != active_players['player_num'])
+        && players_by_num[my_player_num]["gold"].toInt() >= cards[graveDiv.attributes.card_id.value]['cost'].toInt() * 2;
+}
+
+function is_active_subsidy_button() {
+    if (board_buildings[my_castle_id] && board_buildings[my_castle_id]['health'].toInt() < 2) {
+        return false;
+    }
+    if (realtime_cards) {
+        return true;
+    }
+    return turn_state == MY_TURN && subsidy_taken_in_this_turn == 0;
+}
+
+function is_active_send_button() {
+    return players_by_num[my_player_num]['gold'].toInt() > 0
+        && (realtime_cards || turn_state == MY_TURN);
 }
 
 function building_set_health(x, y, health) {
@@ -1494,6 +1514,9 @@ function building_set_health(x, y, health) {
                     }
             });
     });
+    if (id == my_castle_id) {
+        button_set_availability($('main_buttons').getChildren('.btn_subs')[0], is_active_subsidy_button());
+    }
 }
 
 function building_set_owner(x, y, p_num, new_income) {
@@ -1847,16 +1870,17 @@ function add_building_cell(id, p_num, mx, my, b, card_id, nrotation, nflip, i) {
     myDiv.fade('in');
 }
 
-function add_to_grave(grave_id, card_id, x, y, size, turn_when_killed) {
+function add_to_grave(grave_id, card_id, x, y, size, turn_when_killed, player_num_when_killed) {
     publish_api_call();
     turn_when_killed = turn_when_killed || active_players['turn'];
+    player_num_when_killed = player_num_when_killed || active_players['player_num'];
     var myDiv = new Element('div', {
         'html': '',
         'class': 'dead_unit',
         'id': 'dead_unit' + grave_id,
-        styles: {
-            opacity: (turn_when_killed.toInt() == active_players['turn'].toInt()) ? '0.5' : '1.0'
-        },
+        'card_id': card_id,
+        'turn_when_killed': turn_when_killed,
+        'player_num_when_killed': player_num_when_killed,
         'onclick': 'if (game_state=="WAITTING") execute_resurrect(' + grave_id + '); else param_clicked(this); hide_grave(' + grave_id + ',' + x + ',' + y + ',' + size + ');return false;'
     }); //create div with dead_unit
     var myImg = new Element('img', {
@@ -1896,12 +1920,12 @@ function add_to_grave(grave_id, card_id, x, y, size, turn_when_killed) {
     vwGrave[grave_id]["size"] = size;
     if (graveCarousel)
         graveCarousel.toLast();
-    if (turn_state == NOT_MY_TURN) myDiv.fade(unactive_card);
+    if (!is_active_grave(myDiv)) myDiv.fade(unactive_card);
     //all cards view is opened and grave
     if (allCardsSlider.open && $('graveLink').hasClass('cementary')) {
         var newItem = myImg.clone().cloneEvents(myDiv);
         $('fullsize_holder').grab(newItem);
-        if (turn_state == NOT_MY_TURN) newItem.fade(unactive_card);
+        if (!is_active_grave(newItem)) newItem.fade(unactive_card);
     }
 }
 
@@ -2174,7 +2198,8 @@ function end_game() {
     clearInterval(shieldInterval);
     clearInterval(titleInterval);
     turn_state = NOT_MY_TURN;
-    deactivate_controls(true);
+    window.Game.TurnController.setMyTurn(false)
+    deactivate_controls();
     var text = '<a href="#" onclick="get_stats();return false;">' + i18n[USER_LANGUAGE]['game']['show_statistic'] + '</a><br><a href="#" onclick="execute_exit();return false;">' + i18n[USER_LANGUAGE]['game']['exit'] + '</a>';
     noCloseWindow = true;
     if ($('window_m').getStyle('display') == 'block')
@@ -2407,37 +2432,17 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
     card_played_flag = card_played_flag || 0;
     subsidy_flag = subsidy_flag || 0;
     from_init = from_init || 0;
-    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
     //clean green cells after my move
-    if (turn_state == MY_TURN) {
+    if (window.Game.TurnController.myTurn) {
         $$('#board .green').removeClass('green');
         $$('#board .activeUnit').removeClass('activeUnit');
     }
-    if (player_num == my_player_num) {
+    if (window.Game.PlayersController.isMyPlayer(player_num)) {
         turn_state = MY_TURN;
+        window.Game.TurnController.setMyTurn(true);
+        window.Game.CardsController.setCardActionDoneInThisTurn(card_played_flag.toInt() == 1);
+        subsidy_taken_in_this_turn = subsidy_flag.toInt();
         movedUnits = units_moves_flag.toInt();
-        activate_controls();
-        if (players_by_num[my_player_num]['gold'].toInt() < mode_config["card cost"]) { //deactivate buy card if units moved or money<cost
-            deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
-        }
-        if ((subsidy_flag.toInt() == 1 && !realtime_cards) || board_buildings[my_castle_id]['health'].toInt() < 2) { //deac subsidy if castle health<2
-            deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
-        }
-        if (card_played_flag.toInt() == 1) { //disable cards, grave and buy card button
-            if (!realtime_cards) {
-                deactivate_button($('main_buttons').getChildren('.btn_buycard')[0]);
-                $('cards_holder').getChildren().each(function(item, index) {
-                    if (item) {
-                        item.fade(unactive_card);
-                    }
-                });
-            }
-            $('grave_holder').getChildren().each(function(item, index) {
-                if (item) {
-                    item.fade(unactive_card);
-                }
-            });
-        }
         activateMyMove();
         was_active = 0;
         remindMoveTimer = setTimeout('was_active=0;activateMyMove();newRemindTimer();', remindTime);
@@ -2445,21 +2450,12 @@ function set_active_player(player_num, last_end_turn, turn, npc_flag, units_move
         movedUnits = false;
         clearTimeout(remindMoveTimer);
         turn_state = NOT_MY_TURN;
-        deactivate_controls();
+        window.Game.TurnController.setMyTurn(false)
         clean_everything();
         stopShield();
-        $('cards_holder').getChildren().each(function(item, index) {
-            if (item) {
-                item.fade(1);
-            }
-        });
-        $('grave_holder').getChildren().each(function(item, index) {
-            if (item) {
-                item.fade(1);
-            }
-        });
         if (game_state != 'WAITTING') cancel_execute(); //for interrupting of polza choosing params
     }
+    update_controls_activation();
     players_by_num.each(function(item, index) {
         if (item) {
             if (item['player_num'].toInt() < 10) { //not neutral
@@ -2532,27 +2528,53 @@ function update_next_turn_timer(left_seconds) {
     }
 }
 
-function deactivate_controls(force) {
-    force = force || false;
-    var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
-    var buttons = $('main_buttons').getChildren('a');
-    buttons.each(function(item, index) {
-        var itemClass =  item.get('class');
-        var deactivateBuyCard = itemClass.includes('btn_buycard') && players_by_num[my_player_num]["gold"] < mode_config["card cost"]
-        var deactivateSubsidy = itemClass.includes('btn_subs') && board_buildings[my_castle_id]['health'].toInt() < 2
-        console.log(itemClass)
-        if (!realtime_cards || force || itemClass.includes('btn_end_turn') || deactivateBuyCard || deactivateSubsidy) {
-          console.log(itemClass)
-          item.addClass('unactive');
+function update_controls_activation() {
+    button_set_availability($('main_buttons').getChildren('.btn_buycard')[0], window.Game.CardsController.canBuy());
+    button_set_availability($('main_buttons').getChildren('.btn_subs')[0], is_active_subsidy_button());
+    button_set_availability($('main_buttons').getChildren('.btn_sendm')[0], is_active_send_button());
+    button_set_availability($('main_buttons').getChildren('.btn_end_turn')[0], turn_state == MY_TURN);
+
+    $('cards_holder').getChildren().each(function(item, index) {
+        if (item) {
+            if (is_active_card(item)) {
+                item.fade(1);
+            } else {
+                item.fade(unactive_card);
+            }
         }
     });
+
+    $('grave_holder').getChildren().each(function(item, index) {
+        if (item) {
+            if (is_active_grave(item)) {
+                item.fade(1);
+            } else {
+                item.fade(unactive_card);
+            }
+        }
+    });
+
+    if (allCardsSlider.open) {
+        var graveyard_open = $('graveLink').hasClass('cementary');
+        var fun_check_active = graveyard_open ? is_active_grave : is_active_card;
+        $('fullsize_holder').getChildren().each(function(item, index) {
+            if (item) {
+                if (fun_check_active(item)) {
+                    item.fade(1);
+                } else {
+                    item.fade(unactive_card);
+                }
+            }
+        });
+    }
 }
 
-function activate_controls() {
-    var buttons = $('main_buttons').getChildren('a');
-    buttons.each(function(item, index) {
-        item.removeClass('unactive');
-    });
+function button_set_availability(btn, active) {
+    if (active) {
+        activate_button(btn);
+    } else {
+        deactivate_button(btn);
+    }
 }
 
 function deactivate_button(but) {
@@ -2561,6 +2583,13 @@ function deactivate_button(but) {
 
 function activate_button(but) {
     if (but.hasClass('unactive')) but.removeClass('unactive');
+}
+
+function deactivate_controls() {
+    var buttons = $('main_buttons').getChildren('a');
+    buttons.each(function(item, index) {
+        item.addClass('unactive');
+    });
 }
 
 function refresh() {

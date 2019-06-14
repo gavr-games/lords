@@ -6,6 +6,8 @@ var turn_state = NOT_MY_TURN; //state of client
 var was_active = 0; //state of player
 var shieldInterval;
 var titleInterval;
+var realtime_cards;
+var subsidy_taken_in_this_turn = 0;
 
 var time_delay_from_server = 0;
 
@@ -114,6 +116,7 @@ function initialization() {
     try {
         parent.WSClient.joinGame(game_info["game_id"]);
         //init some variables
+        window.Game = new window.GameMode.Game(game_info, my_player_num)
         time_restriction = game_info["time_restriction"].toInt();
         game_status = game_info["status_id"].toInt();
         initGameFeatures();
@@ -265,7 +268,7 @@ function initialization() {
             setLoadingText(i18n[USER_LANGUAGE]["loading"]["graveyard_init"]);
             vwGrave.each(function(item, index) {
                 if (item) {
-                    add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size'], item['turn_when_killed']);
+                    add_to_grave(item['grave_id'], item['card_id'], item['x'], item['y'], item['size'], item['turn_when_killed'], item['player_num_when_killed']);
                 }
             });
             $('graveLink').addEvent('mouseenter', function() {
@@ -479,6 +482,7 @@ function initGameFeatures() {
       window.game_features[item['code']] = item;
     }
   });
+  realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
 }
 
 function update_game_info_window() {
@@ -559,10 +563,6 @@ function doSubsidy() {
     if (!chatFocused) {
         cancel_execute();
         execute_procedure('take_subsidy');
-        var realtime_cards = game_features.realtime_cards["param"].toInt() == 1;
-        if (!realtime_cards || board_buildings[my_castle_id]['health'].toInt() == 2) {
-            deactivate_button($('main_buttons').getChildren('.btn_subs')[0]);
-        }
     }
 }
 
@@ -923,8 +923,8 @@ function clean_shoot_radius(x, y) {
 
 function draw_building(x, y) {
     var b = null;
-    if (card != "" && cards[card]["type"] == 'b') {
-        b = buildings[cards[card]["ref"]];
+    if (currently_played_card_id != "" && cards[currently_played_card_id]["type"] == 'b') {
+        b = buildings[cards[currently_played_card_id]["ref"]];
     } else if (building != "") {
         var coords = building.toString().split(',');
         var ux = coords[0].toInt();
@@ -1045,8 +1045,8 @@ function draw_building(x, y) {
 
 function clean_building(x, y) {
     var b = null;
-    if (card != "" && cards[card]["type"] == 'b') {
-        b = buildings[cards[card]["ref"]];
+    if (currently_played_card_id != "" && cards[currently_played_card_id]["type"] == 'b') {
+        b = buildings[cards[currently_played_card_id]["ref"]];
     } else if (building != "") {
         var coords = building.toString().split(',');
         var ux = coords[0].toInt();

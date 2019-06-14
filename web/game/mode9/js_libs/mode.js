@@ -46,13 +46,23 @@
 
 	"use strict";
 	
-	var _unit = __webpack_require__(1);
+	var _game = __webpack_require__(1);
 	
-	var _building = __webpack_require__(2);
+	var _player = __webpack_require__(2);
 	
-	var _board_object = __webpack_require__(3);
+	var _players_controller = __webpack_require__(3);
 	
-	var _cell = __webpack_require__(4);
+	var _cards_controller = __webpack_require__(4);
+	
+	var _turn_controller = __webpack_require__(5);
+	
+	var _unit = __webpack_require__(6);
+	
+	var _building = __webpack_require__(7);
+	
+	var _board_object = __webpack_require__(8);
+	
+	var _cell = __webpack_require__(9);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -63,12 +73,212 @@
 	  this.Building = _building.Building;
 	  this.BoardObject = _board_object.BoardObject;
 	  this.Cell = _cell.Cell;
+	  this.Game = _game.Game;
+	  this.Player = _player.Player;
+	  this.PlayersController = _players_controller.PlayersController;
+	  this.CardsController = _cards_controller.CardsController;
+	  this.TurnController = _turn_controller.TurnController;
 	};
 	
 	window.GameMode = new GameMode();
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Game = exports.Game = function Game(gameData, myPlayerNum) {
+	  _classCallCheck(this, Game);
+	
+	  this.creation_date = gameData['creation_date'];
+	  this.game_id = gameData['game_id'];
+	  this.mode_id = gameData['mode_id'];
+	  this.owner_id = gameData['owner_id'];
+	  this.status_id = gameData['status_id'];
+	  this.time_restriction = gameData['time_restriction'];
+	  this.title = gameData['title'];
+	  this.type_id = gameData['type_id'];
+	
+	  this.PlayersController = new window.GameMode.PlayersController(myPlayerNum);
+	  this.CardsController = new window.GameMode.CardsController();
+	  this.TurnController = new window.GameMode.TurnController();
+	};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Player = exports.Player = function () {
+	  function Player(data) {
+	    _classCallCheck(this, Player);
+	
+	    this.player_num = data['player_num'].toInt();
+	    this.name = data['name'];
+	    this.gold = data['gold'].toInt();
+	    this.owner = data['owner'].toInt();
+	    this.team = data['team'].toInt();
+	  }
+	
+	  _createClass(Player, [{
+	    key: 'setGold',
+	    value: function setGold(gold) {
+	      this.gold = gold.toInt();
+	    }
+	  }]);
+
+	  return Player;
+	}();
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var PlayersController = exports.PlayersController = function () {
+	  function PlayersController(myPlayerNum) {
+	    _classCallCheck(this, PlayersController);
+	
+	    this.players = [];
+	    this.myPlayerNum = myPlayerNum.toInt();
+	  }
+	
+	  _createClass(PlayersController, [{
+	    key: "addPlayer",
+	    value: function addPlayer(playerData) {
+	      player = new window.GameMode.Player(playerData);
+	      this.players.push(player);
+	    }
+	  }, {
+	    key: "removePlayer",
+	    value: function removePlayer(playerNum) {
+	      this.players = this.players.filter(function (player, _index, _arr) {
+	        return player.num != playerNum;
+	      });
+	    }
+	  }, {
+	    key: "getMyPlayer",
+	    value: function getMyPlayer() {
+	      return this.getPlayerByNum(this.myPlayerNum);
+	    }
+	  }, {
+	    key: "isMyPlayer",
+	    value: function isMyPlayer(playerNum) {
+	      return playerNum.toInt() == this.myPlayerNum;
+	    }
+	  }, {
+	    key: "getPlayerByNum",
+	    value: function getPlayerByNum(playerNum) {
+	      return this.players.find(function (player) {
+	        return player.player_num == playerNum;
+	      });
+	    }
+	  }]);
+
+	  return PlayersController;
+	}();
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var CardsController = exports.CardsController = function () {
+	  function CardsController() {
+	    _classCallCheck(this, CardsController);
+	
+	    this.cards = [];
+	    this.cardActionDoneInThisTurn = false;
+	  }
+	
+	  _createClass(CardsController, [{
+	    key: "setCardActionDoneInThisTurn",
+	    value: function setCardActionDoneInThisTurn(cardActionDoneInThisTurn) {
+	      this.cardActionDoneInThisTurn = cardActionDoneInThisTurn;
+	    }
+	  }, {
+	    key: "canMakeAction",
+	    value: function canMakeAction() {
+	      var game = window.Game;
+	      return game.TurnController.myTurn && !game.CardsController.cardActionDoneInThisTurn;
+	    }
+	  }, {
+	    key: "canBuy",
+	    value: function canBuy() {
+	      return window.Game.PlayersController.getMyPlayer()['gold'].toInt() >= mode_config["card cost"] && (realtime_cards || this.canMakeAction());
+	    }
+	  }]);
+
+	  return CardsController;
+	}();
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var TurnController = exports.TurnController = function () {
+	  function TurnController() {
+	    _classCallCheck(this, TurnController);
+	
+	    this.myTurn = false;
+	  }
+	
+	  _createClass(TurnController, [{
+	    key: "setMyTurn",
+	    value: function setMyTurn(myTurn) {
+	      this.myTurn = myTurn;
+	    }
+	  }]);
+
+	  return TurnController;
+	}();
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -578,7 +788,7 @@
 	}();
 
 /***/ }),
-/* 2 */
+/* 7 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -618,7 +828,7 @@
 	}();
 
 /***/ }),
-/* 3 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -630,9 +840,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _unit = __webpack_require__(1);
+	var _unit = __webpack_require__(6);
 	
-	var _building = __webpack_require__(2);
+	var _building = __webpack_require__(7);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -667,7 +877,7 @@
 	}();
 
 /***/ }),
-/* 4 */
+/* 9 */
 /***/ (function(module, exports) {
 
 	"use strict";
