@@ -33,7 +33,7 @@ defmodule LordsWs.NextTurn.Timer do
       0 ->
         Logger.info "End turn by timeout for game #{game["game_id"]} with p_num #{game["active_player_num"]}"
         broadcast game["game_id"], "update_next_turn_timer(0);"
-        url = "http://web-internal/internal/ajax/end_turn_timeout.php?game_id=#{game["game_id"]}&player_num=#{game["active_player_num"]}"
+        url = "http://api/internal/ajax/end_turn_timeout.php?game_id=#{game["game_id"]}&player_num=#{game["active_player_num"]}"
         case HTTPoison.get(url) do
           {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
             Logger.info "Answer from end_turn_timeout #{body}"

@@ -12,7 +12,7 @@ defmodule LordsWs.Starter do
   end
 
   def handle_info(:start_children, state) do
-    url = "http://web-internal/internal/ajax/get_games_info.php"
+    url = "http://api/internal/ajax/get_games_info.php"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: games_body}} ->
         Logger.info "Received get_games_info answer #{games_body}"
@@ -38,7 +38,7 @@ defmodule LordsWs.Starter do
         {:stop, "failed to get games info", state}       
     end
     # Init bots
-    url = "http://web-internal/internal/ajax/get_bots_info.php"
+    url = "http://api/internal/ajax/get_bots_info.php"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: bots_body}} ->
         Logger.info "Received get_bots_info answer #{bots_body}"

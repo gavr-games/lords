@@ -13,7 +13,7 @@ defmodule LordsWs.Bot.Ai do
   end
 
   def create_for_game(game) do
-    url = "http://web-internal/internal/ajax/get_bots_info.php?game_id=#{game["game_id"]}"
+    url = "http://api/internal/ajax/get_bots_info.php?game_id=#{game["game_id"]}"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: bots_body}} ->
         Logger.info "Received get_bots_info answer #{bots_body}"
@@ -32,7 +32,7 @@ defmodule LordsWs.Bot.Ai do
 
   def stop_for_game(game) do
     Logger.info "Stop bots for game #{game["game_id"]}"
-    url = "http://web-internal/internal/ajax/get_bots_info.php?game_id=#{game["game_id"]}"
+    url = "http://api/internal/ajax/get_bots_info.php?game_id=#{game["game_id"]}"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: bots_body}} ->
         Logger.info "Received get_bots_info answer #{bots_body}"
@@ -65,7 +65,7 @@ defmodule LordsWs.Bot.Ai do
 
   def handle_info(:post_init, state) do
     # Current game info
-    url = "http://web-internal/internal/ajax/get_game_info.php?game_id=#{state["game_id"]}"
+    url = "http://api/internal/ajax/get_game_info.php?game_id=#{state["game_id"]}"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
         Logger.info "Answer from get_game_info #{game_body}"
@@ -81,7 +81,7 @@ defmodule LordsWs.Bot.Ai do
       LordsWs.Endpoint.subscribe "bot:#{state["game_id"]}_#{state["player_num"]}", []
       # Static info
       static_info = nil
-      url = "http://web-internal/internal/ajax/get_static_info.php?mode_id=#{state["mode_id"]}"
+      url = "http://api/internal/ajax/get_static_info.php?mode_id=#{state["mode_id"]}"
       case HTTPoison.get(url, [], [timeout: 20_000, recv_timeout: 20_000]) do
         {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
           Logger.info "Answer from get_static_info.php"

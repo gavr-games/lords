@@ -39,14 +39,18 @@ Everyday Usage
 ---------------
 - to launch containers run `docker-compose up -d`
 - to stop containers run `docker-compose stop`
-- to run command inside running container `docker exec web COMMAND`
-- to login into container `docker-compose exec web /bin/bash`
-- to run command in separate container instance `docker-compose run web COMMAND`
-- to completely remove container `docker-compose kill web` + `docker-compose rm web` (it could be useful to recreate container when something went wrong).
+- to run command inside running container `docker exec api COMMAND`
+- to login into container `docker-compose exec api /bin/bash`
+- to run command in separate container instance `docker-compose run --rm api COMMAND`
+- to completely remove container `docker-compose kill api` + `docker-compose rm api` (it could be useful to recreate container when something went wrong).
 
-
-You can change `web` to any container name, see `docker-compose.yml`.
+You can change `api` to any container name, see `docker-compose.yml`.
 Each container syncs required folders in both directions (see `docker-compose.yml` -> `volumes` sections).
+
+Generate static JS libs
+---------------
+- `dc run --rm api sh -c "cd cron &&  php ./generate_static_js_libs.php"`
+- `dc run --rm api sh -c "cd cron &&  php ./generate_static_js_libs_site.php"`
 
 Connecting to the database
 ---------------

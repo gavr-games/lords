@@ -9,7 +9,7 @@ defmodule LordsWs.Arena.PlayerOnlineOffline do
     end
 
     def change_status(%{user_id: user_id, flag: flag}) do
-        url = "http://web/site/ajax/base_protocol.php"
+        url = "http://api/site/ajax/base_protocol.php"
         params = "{\"action\":\"player_online_offline\",\"params\":{\"user_id\":#{user_id},\"flag\":#{flag}}}"
         case HTTPoison.post(url, params, [{"Content-Type", "application/json"}]) do
             {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->

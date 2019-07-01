@@ -28,7 +28,7 @@ defmodule LordsWs.SendPhrase.Timer do
 
   def handle_info(:send_phrase, %{game: game}) do
     Logger.info "Send phrase for game #{game["game_id"]}"
-    url = "http://web-internal/internal/ajax/get_unit_phrase.php?game_id=#{game["game_id"]}"
+    url = "http://api/internal/ajax/get_unit_phrase.php?game_id=#{game["game_id"]}"
     ref = nil
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: phrase_body}} ->

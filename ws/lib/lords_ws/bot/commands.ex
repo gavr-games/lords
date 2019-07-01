@@ -87,7 +87,7 @@ defmodule LordsWs.Bot.Commands do
 
     def exec_cmd(game, cmd) do
         Logger.info("Executing bot cmd for game #{game["game_id"]} cmd: #{cmd}")
-        url = "http://web-internal/internal/ajax/bot.php"
+        url = "http://api/internal/ajax/bot.php"
         case HTTPoison.post(url, Jason.encode!(%{cmd: cmd}), [{"Content-Type", "application/json"}], [timeout: 20_000, recv_timeout: 20_000]) do
             {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
                 Logger.info "Received bot.php answer #{body}"

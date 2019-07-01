@@ -1,0 +1,15 @@
+lords.local:443 {
+  proxy /socket ws:4000 {
+    websocket
+  }
+  proxy /sockjs-node ui:80 {
+    websocket
+  }
+  proxy / ui:80 {
+    transparent
+  }
+  
+	log stdout
+	errors stdout
+  tls self_signed
+}

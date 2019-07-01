@@ -41,7 +41,7 @@ defmodule LordsWs.UserChannel do
   end
 
   def handle_in("logged_protocol_cmd", %{"json_params" => json_params}, socket) do
-    url = "http://web/site/ajax/logged_protocol.php?phpsessid=#{socket.assigns.token}"
+    url = "http://api/site/ajax/logged_protocol.php?phpsessid=#{socket.assigns.token}"
     params = Jason.decode!(json_params)
     case HTTPoison.post(url, json_params, [{"Content-Type", "application/json"}], [timeout: 50_000, recv_timeout: 50_000]) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
@@ -54,10 +54,10 @@ defmodule LordsWs.UserChannel do
 
   def handle_in("game_protocol_cmd", %{"json_params" => json_params}, socket) do
     start = :os.system_time(:millisecond)
-    url = "http://web/site/ajax/game_protocol.php?phpsessid=#{socket.assigns.token}"
+    url = "http://api/site/ajax/game_protocol.php?phpsessid=#{socket.assigns.token}"
     params = Jason.decode!(json_params)
     if params["proc_name"] == "multi" do
-        url = "http://web/site/ajax/multi_game_protocol.php?phpsessid=#{socket.assigns.token}"
+        url = "http://api/site/ajax/multi_game_protocol.php?phpsessid=#{socket.assigns.token}"
     end
     case HTTPoison.post(url, json_params, [{"Content-Type", "application/json"}]) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
@@ -69,7 +69,7 @@ defmodule LordsWs.UserChannel do
   end
 
   def handle_in("get_game_info", _, socket) do
-    url = "http://web-internal/internal/ajax/get_all_game_info.php?game_id=#{socket.assigns.game_id}&player_num=#{socket.assigns.player_num}"
+    url = "http://api/internal/ajax/get_all_game_info.php?game_id=#{socket.assigns.game_id}&player_num=#{socket.assigns.player_num}"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
         game_body = game_body |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()
@@ -79,7 +79,7 @@ defmodule LordsWs.UserChannel do
   end
 
   def handle_in("get_game_statistic", _, socket) do
-    url = "http://web/site/ajax/get_statistic.php?phpsessid=#{socket.assigns.token}"
+    url = "http://api/site/ajax/get_statistic.php?phpsessid=#{socket.assigns.token}"
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
         game_body = game_body |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()
@@ -89,7 +89,7 @@ defmodule LordsWs.UserChannel do
   end
 
   def handle_in("performance", %{"json_params" => json_params}, socket) do
-    url = "http://web/site/ajax/call_save_perfomance.php"
+    url = "http://api/site/ajax/call_save_perfomance.php"
     json_params = json_params
       |> Jason.decode!
       |> Map.put(:game_id, socket.assigns.game_id)

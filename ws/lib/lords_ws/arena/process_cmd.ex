@@ -12,14 +12,17 @@ defmodule LordsWs.Arena.ProcessCmd do
             error_params = req["header_result"]["error_params"]
         end
         case params["action"] do
+          "get_my_location" ->
+            user_id = socket.assigns.user_id
+            LordsWs.Endpoint.broadcast "user:#{user_id}", "protocol_raw", Map.put(req, :action, params["action"])
           "logout" -> 
             if req["header_result"]["success"] == "1" do
-                eval_cmds = "#{eval_cmds}#{URI.encode("parent.load_window(\"site/login.php\", \"left\"); parent.WSClient.disconnect();")}";
+                eval_cmds = "#{eval_cmds}#{URI.encode("logout(); parent.WSClient.disconnect();")}";
             end
           "arena_enter" -> 
             if req["header_result"]["success"] == "1" do
                 LordsWs.Endpoint.broadcast "arena", "protocol_raw", %{commands: "arena_player_add(#{socket.assigns.user_id}, \"#{URI.decode(req["data_result"]["nick"])}\", \"#{URI.decode(req["data_result"]["avatar_filename"])}\", 1);"}
-                eval_cmds = "#{eval_cmds}#{URI.encode("parent.load_window(\"arena/arena.php\", \"right\");")}"
+                eval_cmds = "#{eval_cmds}#{URI.encode("go_to_arena();")}"
             end
           "chat_create_private" ->
             if req["header_result"]["success"] == "1" do
@@ -50,7 +53,7 @@ defmodule LordsWs.Arena.ProcessCmd do
                 chat_id = params["params"]["chat_id"]
                 user_id = params["params"]["user_id"]
                 LordsWs.Endpoint.broadcast "chat:#{chat_id}", "protocol_raw", %{commands: "chat_add_player(#{chat_id},#{user_id});"}
-                url = "http://web/site/ajax/get_chat_users.php?phpsessid=#{socket.assigns.token}"
+                url = "http://api/site/ajax/get_chat_users.php?phpsessid=#{socket.assigns.token}"
                 user_cmds = URI.encode("chat_create(#{chat_id},\"#{URI.decode(params["help_params"]["topic"])}\");")
                 case HTTPoison.post(url, Jason.encode!(params["params"]), [{"Content-Type", "application/json"}]) do
                 {:ok, %HTTPoison.Response{status_code: 200, body: chat_users_body}} ->
@@ -62,7 +65,7 @@ defmodule LordsWs.Arena.ProcessCmd do
             if req["header_result"]["success"] == "1" do
                 game_id = req["data_result"]["game_id"]
                 owner_id = socket.assigns.user_id
-                url = "http://web/site/ajax/logged_protocol.php?phpsessid=#{socket.assigns.token}"
+                url = "http://api/site/ajax/logged_protocol.php?phpsessid=#{socket.assigns.token}"
                 case HTTPoison.post(url, Jason.encode!(%{action: "arena_game_enter", params: %{game_id: game_id, pass: params["params"]["pass"]}}), [{"Content-Type", "application/json"}]) do
                     {:ok, %HTTPoison.Response{status_code: 200, body: enter_body}} ->
                         Logger.info "Received arena_game_enter answer #{enter_body}"
@@ -174,7 +177,7 @@ defmodule LordsWs.Arena.ProcessCmd do
                     "arena_player_set_status(#{u_id}, 3);"
                 end))
                 arena_cmds = "#{arena_cmds}arena_game_set_status(#{game_id}, 2);"
-                url = "http://web-internal/internal/ajax/get_game_info.php?game_id=#{game_id}"
+                url = "http://api/internal/ajax/get_game_info.php?game_id=#{game_id}"
                 case HTTPoison.get(url) do
                     {:ok, %HTTPoison.Response{status_code: 200, body: game_body}} ->
                         Logger.info "Received get_game_info answer #{game_body}"
@@ -201,10 +204,10 @@ defmodule LordsWs.Arena.ProcessCmd do
 
         if eval_cmds != "" do
             Logger.info "CMDS: #{eval_cmds}"
-            LordsWs.Endpoint.broadcast "user:#{socket.assigns.user_id}", "protocol_raw", %{commands: eval_cmds}
+            LordsWs.Endpoint.broadcast "user:#{socket.assigns.user_id}", "protocol_raw", %{commands: eval_cmds, action: params["action"]}
         end
         if arena_cmds != "" do
-            LordsWs.Endpoint.broadcast "arena", "protocol_raw", %{commands: URI.encode(arena_cmds)}
+            LordsWs.Endpoint.broadcast "arena", "protocol_raw", %{commands: URI.encode(arena_cmds), action: params["action"]}
         end
     end
 end

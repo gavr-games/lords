@@ -1,6 +1,19 @@
 version: '3.4'
 
 services:
+  caddy:
+    image: abiosoft/caddy:0.10.14
+    volumes:
+      - ./caddy/Caddyfile.dev:/etc/Caddyfile:cached
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - ACME_AGREE=true
+    restart: always
+    networks:
+      - lords-network
+
   db:
     image: "mysql:5.5"
     ports:
@@ -10,45 +23,29 @@ services:
       MYSQL_CLIENT_PASSWORD: ${MYSQL_CLIENT_PASSWORD}
       MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
     volumes:
-      - ./database:/database
+      - ./database:/database:cached
     networks:
       - lords-network
   
   ws:
+    container_name: ws
     build:
       context: ws
       dockerfile: Dockerfile
     command: bash -c "mix deps.get && mix phx.server"
     ports:
-      - "4000:4000"
+      - 4000
     environment:
       MIX_ENV: dev
       PORT: 4000
     volumes:
-      - ./ws:/app
-      - ./log/ws:/var/log/ws/
-    networks:
-      - lords-network
-
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    environment:
-      LORDS_DOMAIN: ${LORDS_DOMAIN}
-      REVISION: ${REVISION}
-      MYSQL_CLIENT_PASSWORD: ${MYSQL_CLIENT_PASSWORD}
-      MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
-      VISIBILITY: public
-    volumes:
-      - ./web:/var/www/html
-      - ./log/web:/var/log/apache2
+      - ./ws:/app:cached
+      - ./log/ws:/var/log/ws/:cached
     networks:
       - lords-network
   
-  web-internal:
+  api:
+    container_name: api
     build:
       context: .
       dockerfile: Dockerfile
@@ -58,9 +55,11 @@ services:
       MYSQL_CLIENT_PASSWORD: ${MYSQL_CLIENT_PASSWORD}
       MYSQL_READER_PASSWORD: ${MYSQL_READER_PASSWORD}
       VISIBILITY: internal
+    ports:
+      - 80
     volumes:
-      - ./web:/var/www/html
-      - ./log/web-internal:/var/log/apache2
+      - ./api:/var/www/html:cached
+      - ./log/api:/var/log/apache2:cached
     networks:
       - lords-network
 
@@ -69,10 +68,24 @@ services:
     ports:
       - "5600:5600"
     volumes:
-      - ./deployment:/deployment
-      - ./ai:/ai
-      - ./log/ai:/tmp/log
+      - ./deployment:/deployment:cached
+      - ./ai:/ai:cached
+      - ./log/ai:/tmp/log:cached
     command: bash -c "cd /deployment ; chmod 755 ./deploy_ai.sh ; ./deploy_ai.sh"
+    networks:
+      - lords-network
+  
+  ui:
+    container_name: ui
+    build:
+      context: ui
+      dockerfile: Dockerfile
+    ports:
+      - 80
+    volumes:
+      - ./ui:/usr/src/app:cached
+      - ./api/static_js:/usr/src/app/src/lib/static_js
+    command: npm run serve
     networks:
       - lords-network
 

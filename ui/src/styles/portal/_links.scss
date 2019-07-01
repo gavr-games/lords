@@ -1,0 +1,37 @@
+.portal-link {
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  color: #000000;
+  letter-spacing: 2px;
+  font-size: 17px;
+  line-height: 35px;
+  font-weight: 900;
+  &:hover {
+    span {
+      box-shadow: inset 0px 0px 6px 4px #965834;
+      border-radius: 13px;
+    }
+  }
+  span {
+    padding: 10px 15px;
+  }
+  &.line {
+    display: inline;
+    font-weight: 500;
+  }
+  &.monogram {
+    &:before {
+      content: url('assets/monogram_left.png');
+      position: absolute;
+      margin-left: -60px;
+      margin-top: -5px;
+    }
+    &:after {
+      content: url('assets/monogram_right.png');
+      position: absolute;
+      margin-left: 0px;
+      margin-top: -5px;
+    }
+  }
+}

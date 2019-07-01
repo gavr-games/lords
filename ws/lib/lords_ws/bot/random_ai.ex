@@ -5,7 +5,7 @@ defmodule LordsWs.Bot.RandomAi do
     def move(state = %{game: game, static_info: static_info}) do
         game_info = nil
         Logger.info "Moving random bot #{game["game_id"]}_#{game["player_num"]}"
-        url = "http://web-internal/internal/ajax/get_all_game_info.php?game_id=#{game["game_id"]}&player_num=#{game["player_num"]}&format=json"
+        url = "http://api/internal/ajax/get_all_game_info.php?game_id=#{game["game_id"]}&player_num=#{game["player_num"]}&format=json"
         case HTTPoison.get(url, [], [timeout: 20_000, recv_timeout: 20_000]) do
         {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
             Logger.info "Answer from get_all_game_info.php"

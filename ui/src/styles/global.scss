@@ -1,0 +1,25 @@
+@import "font";
+@import "./portal/links";
+@import "./portal/inputs";
+@import "./portal/errors";
+
+html, body, #app {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+  font-family: 'Calibri', Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}

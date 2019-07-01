@@ -2,7 +2,10 @@ lords.world:443 {
   proxy /socket ws:4000 {
     websocket
   }
-  proxy / web:80 {
+  proxy /api api:80 {
+    transparent
+  }
+  proxy / ui:80 {
     transparent
   }
 	log stdout
@@ -14,7 +17,10 @@ gavr.games:443 {
   proxy /socket ws:4000 {
     websocket
   }
-  proxy / web:80 {
+  proxy /api api:80 {
+    transparent
+  }
+  proxy / ui:80 {
     transparent
   }
 	log stdout
