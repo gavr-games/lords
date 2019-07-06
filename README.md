@@ -28,6 +28,7 @@ Once you have all of those installed you should:
 - cd to project's root folder and run `docker-compose build`. It will build all Dockerfiles and create images for containers.
 - run `docker-compose up -d` to start all services.
 - Setup db with the following command `docker-compose exec db /database/bin/lords_db_init.sh`
+- Install npm packages for ui `docker-compose run --rm ui npm install`. Remember you might need to run this after `git pull` too.
 - Add the lines below to your `/etc/hosts` (domain name `lords.local` is specified in `.env`):
 ```
 # Lords

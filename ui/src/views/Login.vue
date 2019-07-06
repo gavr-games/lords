@@ -28,7 +28,7 @@
             <p>
               {{ I18n.getText('login', 'guest_help') }}
             </p>
-            <a href="" class="portal-link monogram"><span>{{ I18n.getText('rules', 'rules') }}</span></a>
+            <a href="#" class="portal-link monogram" @click="showRules"><span>{{ I18n.getText('rules', 'rules') }}</span></a>
             <div class="user-language">
               <a href="#" class="portal-link line" @click="setEn"><span>En</span></a>|<a href="#" class="portal-link line" @click="setRu"><span>Ru</span></a>
             </div>
@@ -36,6 +36,7 @@
         </div>
       </div>
     </ui-two-pages>
+    <ui-rules></ui-rules>
   </ui-cards-pile>
 </template>
 
@@ -131,6 +132,9 @@
         this.showGuestLoginError = false
         authenticateUser(this, payload.data_result)
         redirectUser(this, payload.data_result)
+      },
+      showRules() {
+        EventBus.$emit('show-rules');
       }
     }
   }
