@@ -3049,6 +3049,11 @@ dic_unit_phrases[224]["mode_id"] = "9";
 dic_unit_phrases[224]["id"] = "224";
 dic_unit_phrases[224]["unit_id"] = "30";
 dic_unit_phrases[224]["phrase"] = "At your command";
+dic_unit_phrases[225] = new Array();
+dic_unit_phrases[225]["mode_id"] = "9";
+dic_unit_phrases[225]["id"] = "225";
+dic_unit_phrases[225]["unit_id"] = "16";
+dic_unit_phrases[225]["phrase"] = "Ni!";
 
 var units_levels = new Array();
 units_levels[14] = new Array();
@@ -3146,11 +3151,6 @@ games_features["5"]["id"] = "5";
 games_features["5"]["code"] = "realtime_cards";
 games_features["5"]["default_param"] = "1";
 games_features["5"]["feature_type"] = "bool";
-games_features["6"] = new Array();
-games_features["6"]["id"] = "6";
-games_features["6"]["code"] = "realtime_cards";
-games_features["6"]["default_param"] = "1";
-games_features["6"]["feature_type"] = "bool";
 
 var procedures_params = new Array();
 procedures_params["1"] = new Array();
