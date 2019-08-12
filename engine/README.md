@@ -10,6 +10,6 @@ To start a web server for the application, run:
 
 ## Running from REPL
 
-`(ns engine.handler)`
-`(use 'ring.adapter.jetty)`
-`(run-jetty app {:port 3000 :join? false})`
+    (ns engine.handler)
+    (use 'ring.adapter.jetty)
+    (run-jetty app {:port 3000 :join? false})
