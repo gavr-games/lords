@@ -10,12 +10,6 @@
   [m v]
   (map #(dot % v) m))
 
-(defn m*m
-  "Multiplies two matrices.
-  In m1 elements are rows, in m2 and the result elements are columns."
-  [m1 m2]
-  (map #(m*v m1 %) m2))
-
 (defn v+v
   "Adds two vectors."
   [v1 v2]
@@ -27,38 +21,42 @@
 (def rot270-matrix [[0 1] [-1 0]])
 
 (defn flip
-  "Flips coordinates along vertical axis if flag is positive."
-  [coords flag]
-  (if (pos? flag)
-    (m*m flip-matrix coords)
-    coords))
+  "Flips a coordinate along vertical axis if flag is positive."
+  [coord flag]
+  (if (pos? (or flag 0))
+    (m*v flip-matrix coord)
+    coord))
 
 (defn rotate
-  "Rotates coordinates clockwise (0 for no rotation, 1 for 90 degrees, 2 for 180, 3 for 270)."
-  [coords rotation]
-  (case rotation
-    0 coords
-    1 (m*m rot90-matrix coords)
-    2 (m*m rot180-matrix coords)
-    3 (m*m rot270-matrix coords)))
+  "Rotates a coordinate clockwise (0 for no rotation, 1 for 90 degrees, 2 for 180, 3 for 270)."
+  [coord rotation]
+  (case (or rotation 0)
+    0 coord
+    1 (m*v rot90-matrix coord)
+    2 (m*v rot180-matrix coord)
+    3 (m*v rot270-matrix coord)))
 
-(defn transform
-  "Applies first flip then rotation to the passed coordinates."
-  [coords flip-flag rotation]
+(defn flip-rotate
+  "Applies first flip then rotation to a coordinate."
+  [coord flip-flag rotation]
   (->
-   coords
+   coord
    (flip flip-flag)
    (rotate rotation)))
 
 (defn translate
-  "Adds vector t elementwise to every coord."
-  [coords t]
-  (map #(v+v % t) coords))
+  "Adds vector t to a coordinate."
+  [coord t]
+  (v+v coord t))
 
-(defn place
-  "Flips, rotates and translates coords."
-  [coords flip-flag rotation translation]
+(defn transform
+  "Transforms a coord."
+  [coord flip-flag rotation translation]
   (->
-   coords
-   (transform flip-flag rotation)
+   coord
+   (flip-rotate flip-flag rotation)
    (translate translation)))
+
+(defn transform-coords
+  [coords flip-flag rotation translation]
+  (map #(transform % flip-flag rotation translation) coords))

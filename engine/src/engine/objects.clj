@@ -1,14 +1,26 @@
 (ns engine.objects)
 
-(def objects {
-           :castle
-           {:health 10
-            :coords {
-                     [0 0] {:fill :solid}
-                     [0 1] {:fill :solid}
-                     [1 0] {:fill :solid}
-                     [1 1] {:fill :floor :spawn true}}}
-           :tree
-           {:health 2
-            :coords {
-                     [0 0] {:fill :solid}}}})
+
+(defn activate
+  "Refills object moves."
+  [obj]
+  (if (obj :moves)
+    (assoc obj :moves (obj :max-moves))
+    obj))
+
+(defn deactivate
+  "Sets object moves to zero."
+  [obj]
+  (if (obj :moves)
+    (assoc obj :moves 0)
+    obj))
+
+(defn active?
+  [obj]
+  (pos? (or (obj :moves) 0)))
+
+(defn belongs-to?
+  "Checks if obj belongs to player p."
+  [p obj]
+  (= p (obj :player)))
+
