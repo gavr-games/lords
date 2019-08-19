@@ -1,6 +1,7 @@
 (ns engine.core
   (:require [engine.object-dic :refer [objects]])
   (:require [engine.objects :as obj])
+  (:require [engine.commands :as cmd :refer [add-command]])
   (:require [engine.transformations :refer [transform-coords]])
   (:require [engine.utils :refer [deep-merge]]))
 
@@ -18,6 +19,8 @@
    :turn-order []
    :active-player nil
    :objects {}
+   :actions []
+   :commands []
    :next-object-id 0})
 
 (defn add-player
@@ -25,24 +28,26 @@
   [g p player-data]
   (assoc-in g [:players p] player-data))
 
+(defn set-object-placement
+  "Updates object flip, rotation (if given and not nil) and position."
+  ([obj position] (set-object-placement obj nil nil position))
+  ([obj flip rotation position]
+   (cond-> obj
+     true (assoc :position position)
+     flip (assoc :flip flip)
+     rotation (assoc :rotation rotation))))
+
 (defn create-new-object
   "Creates and returns a new object of type obj-key with player p at given position optionally with flip and rotation."
   ([p obj-key position] (create-new-object p obj-key nil nil position))
   ([p obj-key flip rotation position]
-   (as-> (objects obj-key) new-obj
-     (dissoc new-obj :coords)
-     (assoc new-obj :player p)
-     (assoc new-obj :type obj-key)
-     (assoc new-obj :position position)
-     (if flip
-       (assoc new-obj :flip flip)
-       new-obj)
-     (if rotation
-       (assoc new-obj :rotation rotation)
-       new-obj)
-     (if (new-obj :max-moves)
-       (assoc new-obj :moves 0)
-       new-obj))))
+   (as-> (objects obj-key) obj
+     (dissoc obj :coords)
+     (assoc obj :player p)
+     (assoc obj :type obj-key)
+     (if (obj :max-moves)
+       (assoc obj :moves 0)
+       obj))))
 
 (defn transform-coords-map
   "Transforms every key in coords (every key should be a coord)."
@@ -79,23 +84,62 @@
      (-> g
          (assoc-in [:objects new-obj-id] new-obj)
          (update :next-object-id inc)
-         (place-object-on-board new-obj-id)))))
+         (place-object-on-board new-obj-id)
+         (add-command (cmd/add-obj new-obj-id new-obj))))))
+
+(defn remove-object-coords
+  "Removes object from board"
+  [g obj-id]
+  (let [obj (get-in g [:objects obj-id])
+        obj-coords (keys (get-object-coords-map obj))]
+    (reduce
+     (fn [game coord]
+       (update-in game [:board coord] dissoc obj-id))
+     g
+     obj-coords)))
 
 (defn remove-object
   "Removes object from the game."
   [g obj-id]
-  (let [obj (get-in g [:objects obj-id])
-        obj-coords (keys (get-object-coords-map obj))]
-    (as-> g game
-      (update-in game [:objects] dissoc obj-id)
-      (reduce
-       (fn [gm coord]
-         (update-in gm [:board coord] dissoc obj-id))
-       game
-       obj-coords))))
+  (-> g
+      (update-in [:objects] dissoc obj-id)
+      (remove-object-coords obj-id)
+      (add-command (cmd/remove-obj obj-id))))
+
+(defn coord-params-compatible
+  [p1 p2]
+  (let [fills (set [(p1 :fill) (p2 :fill)])]
+    (= fills #{:unit :floor})))
+
+(defn can-add-coordinate
+  [g [coord params]]
+  (let [current-params (vals (get-in g [:board coord]))]
+    (every? #(coord-params-compatible params %) current-params)))
 
 (defn can-place-object?
-  [g obj])
+  [g obj]
+  (let [coords (get-object-coords-map obj)]
+    (every? #(can-add-coordinate g %) coords)))
+
+(defn assert-can-place-object
+  [g obj]
+  (assert (can-place-object? g obj)
+          (str "Object " obj " cannot be placed on the board"))
+  g)
+
+(defn move-object
+  "Moves object to the given position.
+  Assumes that it is a valid move."
+  ([g obj-id position] (move-object g obj-id nil nil position))
+  ([g obj-id flip rotation position]
+   (let [obj (get-in g [:objects obj-id])
+         moved-obj (set-object-placement obj flip rotation position)]
+     (-> g
+         (remove-object-coords obj-id)
+         (assoc-in [:objects obj-id] moved-obj)
+         (assert-can-place-object moved-obj)
+         (place-object-on-board obj-id)
+         (add-command (cmd/move-obj obj-id obj moved-obj))))))
 
 (defn update-objects
   "Performs function f on every object in the game that satisfies pred."
