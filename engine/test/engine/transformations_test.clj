@@ -25,3 +25,12 @@
   (is (= [[0 0]] (transform-coords [[0 0]] 0 0 [0 0])))
   (is (= [[1 2]] (transform-coords [[0 0]] 0 0 [1 2])))
   (is (= [[10 19] [8 20]] (transform-coords [[1 0] [0 2]] 1 1 [10 20]))))
+
+(deftest test-distance
+  (is (= 0 (distance [2 3] [2 3])))
+  (is (= 1 (distance [1 2] [1 1])))
+  (is (= 1 (distance [1 1] [1 2])))
+  (is (= 1 (distance [0 0] [-1 0])))
+  (is (= 1 (distance [0 0] [1 0])))
+  (is (= 2 (distance [1 1] [2 2])))
+  (is (= 5 (distance [2 3] [0 0]))))

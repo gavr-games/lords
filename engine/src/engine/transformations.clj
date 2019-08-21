@@ -60,3 +60,13 @@
 (defn transform-coords
   [coords flip-flag rotation translation]
   (map #(transform % flip-flag rotation translation) coords))
+
+(defn difference
+  "Returns absolute value of the difference between two numbers."
+  [a b]
+  (Math/abs (- a b)))
+
+(defn distance
+  "Returns manhattan distance between two coordinates"
+  [c1 c2]
+  (reduce + (map difference c1 c2)))

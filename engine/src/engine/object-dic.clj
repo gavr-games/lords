@@ -4,6 +4,7 @@
  objects
  {:castle
   {:health 10
+   :class :building
    :coords
    {[0 0] {:fill :solid}
     [0 1] {:fill :solid}
@@ -12,6 +13,7 @@
 
   :tree
   {:health 2
+   :class :building
    :coords
    {[0 0] {:fill :solid}}}
 
@@ -19,7 +21,8 @@
   {:health 1
    :max-moves 2
    :attack 1
+   :class :unit
    :coords
    {[0 0] {:fill :unit}}
    :actions
-   [:move :attack]}})
+   #{:move :attack}}})

@@ -47,7 +47,8 @@
      (assoc obj :type obj-key)
      (if (obj :max-moves)
        (assoc obj :moves 0)
-       obj))))
+       obj)
+     (set-object-placement obj flip rotation position))))
 
 (defn transform-coords-map
   "Transforms every key in coords (every key should be a coord)."
@@ -114,7 +115,8 @@
 (defn can-add-coordinate
   [g [coord params]]
   (let [current-params (vals (get-in g [:board coord]))]
-    (every? #(coord-params-compatible params %) current-params)))
+    (and current-params
+         (every? #(coord-params-compatible params %) current-params))))
 
 (defn can-place-object?
   [g obj]
@@ -126,6 +128,16 @@
   (assert (can-place-object? g obj)
           (str "Object " obj " cannot be placed on the board"))
   g)
+
+(defn can-move-object?
+  "Checks if the object can be moved to the given position."
+  ([g obj-id position] (can-move-object? g obj-id nil nil position))
+  ([g obj-id flip rotation position]
+   (let [obj (get-in g [:objects obj-id])
+         moved-obj (set-object-placement obj flip rotation position)]
+     (can-place-object?
+      (remove-object-coords g obj-id)
+      moved-obj))))
 
 (defn move-object
   "Moves object to the given position.
@@ -141,25 +153,63 @@
          (place-object-on-board obj-id)
          (add-command (cmd/move-obj obj-id obj moved-obj))))))
 
-(defn update-objects
-  "Performs function f on every object in the game that satisfies pred."
-  [g f pred]
-  (reduce
-   (fn [game obj]
-     (update-in game [:objects obj] f))
-   g
-   (map first 
-        (filter #(pred (second %)) (g :objects)))))
+(defn get-objects
+  "Returns map id->object for all objects that satisfy pred."
+  [g pred]
+  (into {} (filter #(-> % val pred) (g :objects))))
 
-(defn set-turn
-  "Sets turn to player p.
-  Activates all their objects and deactivates all other's objects."
+(defn update-object
+  "Performs function f on object and adds a command created by cmd-f.
+  Function cmd-f should have signature [obj-id obj-old obj-new]."
+  [g obj-id f cmd-f]
+  (let [obj (get-in g [:objects obj-id])
+        updated-obj (f obj)]
+    (if (not= obj updated-obj)
+      (-> g
+          (assoc-in [:objects obj-id] updated-obj)
+          (add-command (cmd-f obj-id obj updated-obj)))
+      g)))
+
+(defn update-objects
+  "Performs function f on every object in the game that satisfies pred.
+  For every update also adds a command (cmd-f obj-id obj-old obj-new)."
+  [g pred f cmd-f]
+  (reduce
+   (fn [game obj-id]
+     (update-object game obj-id f cmd-f))
+   g
+   (keys (get-objects g pred))))
+
+
+(defn set-active-player
+  "Sets turn to player p and activetes all their objects."
   [g p]
   (let [belongs-to-p? (partial obj/belongs-to? p)]
     (-> g
         (assoc :active-player p)
-        (update-objects obj/deactivate (comp belongs-to-p?))
-        (update-objects obj/activate belongs-to-p?))))
+        (update-objects (complement belongs-to-p?) obj/deactivate cmd/set-moves)
+        (update-objects belongs-to-p? obj/activate cmd/set-moves)
+        ;; TODO income, building effects etc.
+        (add-command (cmd/set-active-player p)))))
+
+(defn get-next-player
+  "Returns player number whose turn is after p."
+  [g p]
+  (let [player-pos (.indexOf (g :turn-order) p)
+        next-pos (mod (inc player-pos) (count (g :turn-order)))]
+    (assert (>= player-pos 0))
+    (get-in g [:turn-order next-pos])))
+
+(defn set-next-player-active
+  [g]
+  (let [p (g :active-player)
+        next-p (get-next-player g p)]
+    (set-active-player g next-p)))
+
+(defn has-active-objects?
+  [g p]
+  (seq
+   (get-objects g #(and (obj/belongs-to? p %) (obj/active? %)))))
 
 (defn create-new-game []
   (-> (create-empty-game)
@@ -172,4 +222,4 @@
       (add-object 2 :castle 0 2 [(dec board-size-x) (dec board-size-y)])
       (add-object 2 :spearman [(dec board-size-x) (- board-size-y 3)])
       (add-object 2 :spearman [(- board-size-x 3) (dec board-size-y)])
-      (set-turn 0)))
+      (set-active-player 0)))

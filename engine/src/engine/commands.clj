@@ -18,3 +18,16 @@
 (defn move-obj
   [obj-id old-obj new-obj]
   {:move-object-id obj-id})
+
+(defn set-moves
+  ([obj-id old-obj obj] (set-moves obj-id obj))
+  ([obj-id obj]
+   {:set-moves obj-id :moves (obj :moves)}))
+
+(defn set-active-player
+  [p]
+  {:set-active-player p})
+
+(defn end-turn
+  [p]
+  {:end-turn p})
