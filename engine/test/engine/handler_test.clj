@@ -11,3 +11,8 @@
   (testing "not-found route"
     (let [response (app (mock/request :get "/invalid"))]
       (is (= (:status response) 404)))))
+
+(deftest test-create-game
+  (let [response (app (mock/request :get "/newgame"))]
+    (is (= (:status response) 200))
+    (is (.contains (:body response) "new-game-id"))))

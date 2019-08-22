@@ -1,5 +1,6 @@
 (ns engine.actions
   (:require [engine.object-dic :refer [objects]])
+  (:require [engine.objects :as obj])
   (:require [engine.core :refer :all])
   (:require [engine.commands :as cmd :refer [add-command]])
   (:require [engine.transformations :refer [distance]]))
@@ -16,12 +17,12 @@
       ;; TODO test paralysis
       (not (get-in objects [(obj :type) :actions action])) :invalid-action)))
 
-(defn check-one-step-away
+(defn check-coord-one-step-away
   [obj coord]
   (let [obj-current-coords (keys (get-object-coords-map obj))
         dist-one? #(= 1 (distance % coord))]
     (if (not-any? dist-one? obj-current-coords)
-      :target-not-reachable))) ;; TODO knight
+      :target-coord-not-reachable))) ;; TODO knight
 
 (defn check-valid-coord
   [g coord]
@@ -37,8 +38,8 @@
   [g p obj-id new-position]
   (or
    (check-object-action g p obj-id :move)
-   (check-valid-coord g) new-position
-   (check-one-step-away (get-in g [:objects obj-id]) new-position)
+   (check-valid-coord g new-position)
+   (check-coord-one-step-away (get-in g [:objects obj-id]) new-position)
    (check-can-move-to g obj-id new-position)))
 
 (defn check-my-turn
@@ -61,13 +62,40 @@
       (add-command (cmd/end-turn p))
       (set-next-player-active)))
 
-(defn attack [] nil)
+(defn check-valid-attack-target
+  [g target-id]
+  (if (not (get-in g [:objects target-id :health]))
+    :invalid-attack-target))
+
+(defn check-obj-one-step-away
+  [o1 o2]
+  (if (not= 1 (obj-distance o1 o2))
+    :target-object-is-not-reachable))
+
+(defn check-attack
+  [g p obj-id target-id]
+  (or
+   (check-object-action g p obj-id :attack)
+   (check-valid-attack-target g target-id)
+   (check-obj-one-step-away
+    (get-in g [:objects obj-id])
+    (get-in g [:objects target-id]))))
+
+(defn attack
+  [g p obj-id target-id]
+  (let [damage (get-in g [:objects obj-id :attack])]
+    (-> g
+        (update-object obj-id obj/deactivate cmd/set-moves)
+        (add-command (cmd/attack obj-id target-id damage))
+        (damage-obj target-id damage))))
 
 (def actions-dic
   {:move {:check check-move
           :do move}
    :end-turn {:check check-my-turn
               :do end-turn}
+   :attack {:check check-attack
+            :do attack}
    })
 
 (defn auto-end-turn

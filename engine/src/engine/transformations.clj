@@ -67,6 +67,6 @@
   (Math/abs (- a b)))
 
 (defn distance
-  "Returns manhattan distance between two coordinates"
+  "Returns distance between two coordinates (allowing diagonal moves)."
   [c1 c2]
-  (reduce + (map difference c1 c2)))
+  (apply max (map difference c1 c2)))

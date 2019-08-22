@@ -2,12 +2,6 @@
   (:require [engine.core :refer :all]
             [clojure.test :refer :all]))
 
-(defn get-object-at
-  [g coord]
-  (let [obj-ids (keys (get-in g [:board coord]))]
-    (assert (= 1 (count obj-ids)))
-    (get-in g [:objects (first obj-ids)])))
-
 (deftest test-get-next-player
   (let [g (create-new-game)]
     (is (= 0 (g :active-player)))
@@ -25,3 +19,11 @@
     (is (= 0 ((get-object-at g [0 2]) :player)))
     (is (= :spearman ((get-object-at g [2 0]) :type)))
     (is (= 0 ((get-object-at g [2 0]) :player)))))
+
+(deftest test-distance
+  (let [c (create-new-object 0 :castle [0 0])
+        s1 (create-new-object 0 :spearman [2 2])
+        s2 (create-new-object 0 :spearman [0 2])]
+    (is (= 2 (obj-distance c s1)))
+    (is (= 2 (obj-distance s1 s2)))
+    (is (= 1 (obj-distance c s2)))))

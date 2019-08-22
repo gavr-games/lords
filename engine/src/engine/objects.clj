@@ -24,3 +24,8 @@
   [p obj]
   (= p (obj :player)))
 
+(defn set-health
+  "Sets health."
+  [obj health]
+  {:pre [(pos? health)]}
+  (assoc obj :health health))

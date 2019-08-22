@@ -15,6 +15,10 @@
   [obj-id]
   {:remove-object-id obj-id})
 
+(defn kill-obj
+  [obj-id]
+  {:kill-object-id obj-id})
+
 (defn move-obj
   [obj-id old-obj new-obj]
   {:move-object-id obj-id})
@@ -31,3 +35,12 @@
 (defn end-turn
   [p]
   {:end-turn p})
+
+(defn set-health
+  ([obj-id old-obj obj] (set-health obj-id obj))
+  ([obj-id obj]
+   {:set-health obj-id :health (obj :health)}))
+
+(defn attack
+  [obj-id target-id damage]
+  {:attacker obj-id :damage damage})

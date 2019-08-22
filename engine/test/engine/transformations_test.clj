@@ -32,5 +32,5 @@
   (is (= 1 (distance [1 1] [1 2])))
   (is (= 1 (distance [0 0] [-1 0])))
   (is (= 1 (distance [0 0] [1 0])))
-  (is (= 2 (distance [1 1] [2 2])))
-  (is (= 5 (distance [2 3] [0 0]))))
+  (is (= 1 (distance [1 1] [2 2])))
+  (is (= 3 (distance [2 3] [0 0]))))

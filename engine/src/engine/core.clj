@@ -2,7 +2,7 @@
   (:require [engine.object-dic :refer [objects]])
   (:require [engine.objects :as obj])
   (:require [engine.commands :as cmd :refer [add-command]])
-  (:require [engine.transformations :refer [transform-coords]])
+  (:require [engine.transformations :refer [transform-coords distance]])
   (:require [engine.utils :refer [deep-merge]]))
 
 (def board-size-x 20)
@@ -103,8 +103,8 @@
   "Removes object from the game."
   [g obj-id]
   (-> g
-      (update-in [:objects] dissoc obj-id)
       (remove-object-coords obj-id)
+      (update-in [:objects] dissoc obj-id)
       (add-command (cmd/remove-obj obj-id))))
 
 (defn coord-params-compatible
@@ -210,6 +210,45 @@
   [g p]
   (seq
    (get-objects g #(and (obj/belongs-to? p %) (obj/active? %)))))
+
+(defn filled-cell?
+  [[coord properties]]
+  (not= :floor (properties :fill)))
+
+(defn obj-distance
+  "Returns minimal distance between two objects.
+  Counts only filled cells (except :floor)"
+  [obj1 obj2]
+  (let [coords1 (keys (filter filled-cell? (get-object-coords-map obj1)))
+        coords2 (keys (filter filled-cell? (get-object-coords-map obj2)))]
+    (apply min
+           (for [c1 coords1 c2 coords2]
+             (distance c1 c2)))))
+
+(defn get-object-id-at
+  "Gets object id at a given coordinate."
+  [g coord]
+  (let [obj-ids (keys (filter filled-cell? (get-in g [:board coord])))]
+    (assert (<= 0 (count obj-ids) 1))
+    (first obj-ids))
+  )
+
+(defn get-object-at
+  "Gets object at a given coordinate."
+  [g coord]
+  (let [obj-id (get-object-id-at g coord)]
+    (get-in g [:objects obj-id])))
+
+(defn damage-obj
+  "Deals damage to an object."
+  [g obj-id damage]
+  (let [health (get-in g [:objects obj-id :health])
+        health-after (- health damage)]
+    (if (pos? health-after)
+      (update-object g obj-id #(obj/set-health % health-after) cmd/set-health)
+      (-> g
+          (add-command (cmd/kill-obj obj-id))
+          (remove-object obj-id)))))
 
 (defn create-new-game []
   (-> (create-empty-game)
