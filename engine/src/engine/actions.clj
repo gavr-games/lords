@@ -91,11 +91,14 @@
 
 (def actions-dic
   {:move {:check check-move
-          :do move}
+          :do move
+          :params [:obj-id :new-position]}
    :end-turn {:check check-my-turn
-              :do end-turn}
+              :do end-turn
+              :params []}
    :attack {:check check-attack
-            :do attack}
+            :do attack
+            :params [:obj-id :target-id]}
    })
 
 (defn auto-end-turn
@@ -110,10 +113,33 @@
          (set-next-player-active g-after)
          g-after)))))
 
-(defn act
-  "Performs check and action. Returns error or resulting state of the game."
-  [g p action & params]
+(defn check
+  "Checks if an action can be performed.
+  Returns nil (on valid action) or error.
+  Params should be a map of keyword arguments."
+  [g p action params]
   (let [check-fn (get-in actions-dic [action :check])
-        act-fn (get-in actions-dic [action :do])]
-    (or (apply check-fn g p params)
-        (apply (auto-end-turn act-fn) g p params))))
+        param-keys (get-in actions-dic [action :params])
+        param-values (vals (select-keys params param-keys))]
+    (apply check-fn g p param-values)))
+
+(defn act
+  "Performs action and returns the resulting game state.
+  Assumes that the action is valid.
+  Params should be a map of keyword arguments."
+  [g p action params]
+  (let [act-fn (get-in actions-dic [action :do])
+        param-keys (get-in actions-dic [action :params])
+        param-values (vals (select-keys params param-keys))
+        act-call #(apply (auto-end-turn act-fn) % p param-values)
+        action-log {:player p :action action :params params}]
+    (-> g
+        (update-in [:actions] conj action-log)
+        act-call)))
+
+(defn check-and-act
+  "Performs check and action. Returns error or resulting state of the game.
+  Params should be a map of keyword arguments."
+  [g p action params]
+  (or (check g p action params)
+      (act g p action params)))

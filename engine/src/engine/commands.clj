@@ -15,7 +15,7 @@
   [obj-id]
   {:remove-object-id obj-id})
 
-(defn kill-obj
+(defn destroy-obj
   [obj-id]
   {:kill-object-id obj-id})
 

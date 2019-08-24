@@ -239,6 +239,13 @@
   (let [obj-id (get-object-id-at g coord)]
     (get-in g [:objects obj-id])))
 
+(defn destroy-obj
+  "Destroys an object."
+  [g obj-id]
+  (-> g
+      (add-command (cmd/destroy-obj obj-id))
+      (remove-object obj-id)))
+
 (defn damage-obj
   "Deals damage to an object."
   [g obj-id damage]
@@ -246,9 +253,7 @@
         health-after (- health damage)]
     (if (pos? health-after)
       (update-object g obj-id #(obj/set-health % health-after) cmd/set-health)
-      (-> g
-          (add-command (cmd/kill-obj obj-id))
-          (remove-object obj-id)))))
+      (destroy-obj g obj-id))))
 
 (defn create-new-game []
   (-> (create-empty-game)
