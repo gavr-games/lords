@@ -5,9 +5,10 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [compojure "1.6.1"]
                  [ring/ring-defaults "0.3.2"]
-                 [ring/ring-json "0.5.0"]
-                 [ring/ring-jetty-adapter "1.7.1"]]
+                 [ring/ring-json "0.5.0"]]
   :plugins [[lein-ring "0.12.5"]]
   :ring {:handler engine.handler/app}
   :profiles
-  {:dev {:dependencies [[ring/ring-mock "0.3.2"]]}})
+  {:dev {:dependencies [[ring/ring-mock "0.3.2"]
+                        [ring/ring-devel "1.7.1"]
+                        [ring/ring-jetty-adapter "1.7.1"]]}})

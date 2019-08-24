@@ -12,4 +12,9 @@ To start a web server for the application, run:
 
     (ns engine.handler)
     (use 'ring.adapter.jetty)
-    (run-jetty app {:port 3000 :join? false})
+    (use 'ring.middleware.reload)
+    (def srv (run-jetty (wrap-reload #'app) {:port 3000 :join? false}))
+
+To stop:
+
+    (.stop srv)
