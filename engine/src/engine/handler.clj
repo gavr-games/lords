@@ -3,7 +3,7 @@
             [engine.actions :as action]
             [compojure.core :refer :all]
             [compojure.route :as route]
-            [compojure.coercions :refer [as-int as-uuid]]
+            [compojure.coercions :refer [as-int]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
             [ring.util.response :refer [response]]))
@@ -24,9 +24,10 @@
 
 (defn deep-to-int [x]
   (cond
-    (string? x) (Long/parseLong x)
     (vector? x) (vec (map deep-to-int x))
-    (map? x) (into {} (for [[k v] x] [k (deep-to-int v)]))))
+    (map? x) (into {} (for [[k v] x] [k (deep-to-int v)]))
+    (as-int x) (Long/parseLong x)
+    :else x))
 
 (defn act! [g-id p action params]
   (let [params (deep-to-int params)
@@ -40,7 +41,20 @@
                new-commands (subvec (g-after :commands) (count (g :commands)))]
            (alter games assoc g-id g-after)
            (response {:success true :commands new-commands :game g-after})))
-     ))))
+       ))))
+
+(defn whatif [g-id p action params]
+  "Copypaste from act!"
+  (let [params (deep-to-int params)
+        action (keyword action)]
+    (let [g (@games g-id)
+          err (action/check g p action params)]
+      (if err
+        (response {:success false :error err})
+        (let [g-after (action/act g p action params)
+              new-commands (subvec (g-after :commands) (count (g :commands)))]
+          (response {:success true :commands new-commands :game g-after})))
+      )))
 
 (defroutes app-routes
   (GET "/" [] "Please call /newgame to create game or /list to list existing games")
@@ -49,6 +63,8 @@
   (GET "/game/:g-id" [g-id] (get-game g-id))
   (GET "/game/:g-id/:p/act" [g-id p :<< as-int action & params]
        (act! g-id p action params))
+  (GET "/game/:g-id/:p/whatif" [g-id p :<< as-int action & params]
+       (whatif g-id p action params))
   (route/not-found "Not Found"))
 
 (def app (->
