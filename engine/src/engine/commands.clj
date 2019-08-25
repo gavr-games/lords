@@ -44,3 +44,12 @@
 (defn attack
   [obj-id target-id damage]
   {:attacker obj-id :damage damage})
+
+(defn player-lost
+  [p]
+  {:player-lost p})
+
+(defn player-won
+  [p]
+  {:player-won p})
+

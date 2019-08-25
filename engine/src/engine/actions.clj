@@ -5,6 +5,18 @@
   (:require [engine.commands :as cmd :refer [add-command]])
   (:require [engine.transformations :refer [distance]]))
 
+(defn check-game
+  [g]
+  (cond
+    (nil? g) :invalid-game
+    (= :over (g :status)) :game-over))
+
+(defn check-player
+  [g p]
+  (let [player (get-in g [:players p])]
+    (cond
+      (nil? player) :invalid-player
+      (not= :active (player :status)) :player-not-active)))
 
 (defn check-object-action
   "Checks that player can do given action on the object."
@@ -121,7 +133,10 @@
   (let [check-fn (get-in actions-dic [action :check])
         param-keys (get-in actions-dic [action :params])
         param-values (vals (select-keys params param-keys))]
-    (apply check-fn g p param-values)))
+    (or
+     (check-game g)
+     (check-player g p)
+     (apply check-fn g p param-values))))
 
 (defn act
   "Performs action and returns the resulting game state.

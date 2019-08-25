@@ -20,3 +20,14 @@
     (is (check g 2 :move {:obj-id 4 :new-position [18 18]}))
     (is (check g 0 :move {:obj-id 1 :new-position [1 0]}))
     (is (check g 2 :attack {:obj-id 1 :target-id 2}))))
+
+(deftest test-end-game
+  (let [ng (create-new-game)
+        sp (get-object-id-at ng [2 0])
+        castle (get-object-id-at ng [0 0])
+        g (damage-obj ng castle 9)
+        go (check-and-act g 0 :attack {:obj-id sp :target-id castle})]
+    (is (check go 0 :move {:obj-id 2 :new-position [1 1]}))
+    (is (= :over (go :status)))
+    (is (= :lost (get-in go [:players 0 :status])))
+    (is (= :won (get-in go [:players 2 :status])))))

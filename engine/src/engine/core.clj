@@ -21,7 +21,12 @@
    :objects {}
    :actions []
    :commands []
+   :status :active
    :next-object-id 0})
+
+(defn create-player
+  [team gold]
+  {:gold gold :team team :status :active})
 
 (defn add-player
   "Adds a player with a given number p and player data."
@@ -239,12 +244,30 @@
   (let [obj-id (get-object-id-at g coord)]
     (get-in g [:objects obj-id])))
 
+(defn player-lost
+  [g p]
+  (-> g
+      (add-command (cmd/player-lost p))
+      (assoc-in [:players p :status] :lost)))
+
+(defn player-won
+  [g p]
+  (-> g
+      (add-command (cmd/player-won p))
+      (assoc-in [:players p :status] :won)))
+
+(declare handlers)
+
 (defn destroy-obj
   "Destroys an object."
   [g obj-id]
-  (-> g
-      (add-command (cmd/destroy-obj obj-id))
-      (remove-object obj-id)))
+  (let [obj-type (get-in g [:objects obj-id :type])
+        destruction-handler (get-in handlers [:on-destruction obj-type]
+                                    (handlers :pass))]
+    (-> g
+        (destruction-handler obj-id)
+        (add-command (cmd/destroy-obj obj-id))
+        (remove-object obj-id))))
 
 (defn damage-obj
   "Deals damage to an object."
@@ -257,8 +280,8 @@
 
 (defn create-new-game []
   (-> (create-empty-game)
-      (add-player 0 {:gold 100 :team 0})
-      (add-player 2 {:gold 100 :team 1})
+      (add-player 0 (create-player 0 100))
+      (add-player 2 (create-player 1 100))
       (update :turn-order conj 0 2)
       (add-object 0 :castle 0 0 [0 0])
       (add-object 0 :spearman [2 0])
@@ -267,3 +290,24 @@
       (add-object 2 :spearman [(dec board-size-x) (- board-size-y 3)])
       (add-object 2 :spearman [(- board-size-x 3) (dec board-size-y)])
       (set-active-player 0)))
+
+
+(defn castle-destroyed
+  [g obj-id]
+  (let [p-lost (get-in g [:objects obj-id :player])
+        remaining-players (dissoc (g :players) p-lost)
+        remaining-teams
+        (set (map :team (filter
+                         #(= :active (% :status))
+                         (vals remaining-players))))
+        p-won (if (= 1 (count remaining-teams))
+                (keys remaining-players)
+                [])]
+    (as-> g game
+      (player-lost game p-lost)
+      (reduce player-won (assoc game :status :over) p-won))))
+
+(def handlers
+  {:on-destruction
+   {:castle castle-destroyed}
+   :pass (fn [g & args] g)})
