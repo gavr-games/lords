@@ -278,6 +278,13 @@
       (update-object g obj-id #(obj/set-health % health-after) cmd/set-health)
       (destroy-obj g obj-id))))
 
+(defn end-game
+  "Marks game as over."
+  [g]
+  (-> g
+      (assoc :status :over)
+      (add-command (cmd/game-over))))
+
 (defn create-new-game []
   (-> (create-empty-game)
       (add-player 0 (create-player 0 100))
@@ -305,7 +312,7 @@
                 [])]
     (as-> g game
       (player-lost game p-lost)
-      (reduce player-won (assoc game :status :over) p-won))))
+      (reduce player-won (end-game game) p-won))))
 
 (def handlers
   {:on-destruction

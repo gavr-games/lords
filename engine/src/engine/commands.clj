@@ -53,3 +53,6 @@
   [p]
   {:player-won p})
 
+(defn game-over
+  []
+  {:game-over true})
