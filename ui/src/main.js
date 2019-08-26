@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import {WSClient}  from './lib/ws/wsclient'
 import '@/components/ui/loader'
+import '@/components/arena/loader'
 
 Vue.config.productionTip = false
 Vue.prototype.$WSClient = new WSClient()

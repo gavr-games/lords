@@ -15,7 +15,14 @@ class BaseProtocol {
 		}
 	}
 	private static function isCustomLogic($action) {
-		return in_array($action, ['user_authorize', 'guest_user_authorize', 'get_my_location']);
+    $customActions = [
+      'user_authorize',
+      'guest_user_authorize',
+      'get_my_location',
+      'get_arena_games_info',
+      'get_user_profile'
+    ];
+		return in_array($action, $customActions);
 	}
 	private static function customLogic($action, $params) {
 		$results = array();
@@ -76,6 +83,21 @@ class BaseProtocol {
         }
         return $res;
       break;
+      case 'get_user_profile':
+        $params = [$params['player_id']];
+      case 'get_arena_games_info':
+        $query = self::prepareQuery($action, $params);
+        $res = self::execQuery($query, true);
+        if ($res['success']) {
+          $res['results']['data_result'] = $res['results']['data_result'];
+          $res['results']['header_result'] = [
+            'success' => "1",
+            'error_code' => null,
+            'error_params' => null
+          ];
+        }
+        return $res;
+      break;
 		}
 		return ["success" => $success, "results" => $results, "error" => $error];
 	}
@@ -106,7 +128,7 @@ class BaseProtocol {
 		) , $param);
 		return $param;
 	}
-	private static function execQuery($query) {
+	private static function execQuery($query, $plainResult = false) {
 		global $dataBase, $mysqli;
 		//execute query
 		Logger::info('base_protocol -> ' . $query);
@@ -117,7 +139,11 @@ class BaseProtocol {
 			do {
 				if ($result = $mysqli->store_result()) {
 					while ($row = mysqli_fetch_assoc($result)) {
-						Logger::info('base_protocol row -> ' . json_encode($row));
+            Logger::info('base_protocol row -> ' . json_encode($row));
+            if ($plainResult) { // process cmds without header row in result
+              $results['data_result'][] = $row;
+              continue;
+            }
 						if ($i == 0) {
 							$results['header_result'] = $row;
 						}

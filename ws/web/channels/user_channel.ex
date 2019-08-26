@@ -52,6 +52,16 @@ defmodule LordsWs.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("get_arena_info", _, socket) do
+    url = "http://api/internal/ajax/get_arena_info.php?phpsessid=#{socket.assigns.token}"
+    case HTTPoison.get(url) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: arena_info_body}} ->
+        arena_info = Jason.decode!(arena_info_body)
+        push socket, "arena_info_raw", %{action: "arena_info", info: arena_info}
+    end
+    {:noreply, socket}
+  end
+
   def handle_in("game_protocol_cmd", %{"json_params" => json_params}, socket) do
     start = :os.system_time(:millisecond)
     url = "http://api/site/ajax/game_protocol.php?phpsessid=#{socket.assigns.token}"

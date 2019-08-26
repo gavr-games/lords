@@ -12,13 +12,13 @@
                 <label for="pass">{{ I18n.getText('login', 'password') }}</label>
                 <input type="password" name="pass" id="pass" v-model="pass">
             </div>
-            <a href="#" class="portal-link monogram" @click="doLogin"><span>{{ I18n.getText('login', 'enter') }}</span></a>
+            <a href="#" class="portal-link green-button" @click="doLogin">{{ I18n.getText('login', 'enter') }}</a>
             <p v-bind:class="['portal-error', showLoginError ? 'show' : '']" class="portal-error">{{ loginError }}</p>
             <div class="portal-input guest-input">
                 <label for="name">{{ I18n.getText('login', 'name') }}</label>
                 <input type="text" name="name" id="name" v-model="name">
             </div>
-            <a href="#" class="portal-link monogram" @click="doGuestLogin"><span>{{ I18n.getText('login', 'guest_enter') }}</span></a>
+            <a href="#" class="portal-link green-button" @click="doGuestLogin">{{ I18n.getText('login', 'guest_enter') }}</a>
             <p v-bind:class="['portal-error', showGuestLoginError ? 'show' : '']" class="portal-error">{{ guestLoginError }}</p>
             <router-link to="signup" class="portal-link signup-link"><span>{{ I18n.getText('login', 'want_signup') }}</span></router-link>
           </div>
@@ -28,7 +28,7 @@
             <p>
               {{ I18n.getText('login', 'guest_help') }}
             </p>
-            <a href="#" class="portal-link monogram" @click="showRules"><span>{{ I18n.getText('rules', 'rules') }}</span></a>
+            <a href="#" class="portal-link green-button" @click="showRules">{{ I18n.getText('rules', 'rules') }}</a>
             <div class="user-language">
               <a href="#" class="portal-link line" @click="setEn"><span>En</span></a>|<a href="#" class="portal-link line" @click="setRu"><span>Ru</span></a>
             </div>
@@ -78,7 +78,7 @@
             login: '"' + Chars.convertChars(this.login) + '"',
             pass: '"' + this.pass.replace(new RegExp('"', 'g'), '\\"') + '"'
           }
-        });
+        })
       },
       doGuestLogin() {
         this.$WSClient.sendBaseProtocolCmd({
@@ -86,7 +86,7 @@
           params: {
             name: '"' + Chars.convertChars(this.name) + '"'
           }
-        });
+        })
       },
       handleProtocolRaw(payload) {
         switch(payload["action"]) {
@@ -110,7 +110,6 @@
             this.$router.push('arena')
             break;
           case "get_my_location":
-            console.log(payload.data_result)
             redirectUser(this, payload.data_result)
             break;
         }
@@ -125,6 +124,12 @@
         I18n.setUserLanguage(language)
         this.showLoginError = false
         this.showGuestLoginError = false
+        this.$WSClient.sendLoggedProtocolCmd({
+          action: 'user_language_change',
+          params: {
+            language: '"' + language + '"'
+          }
+        });
         this.$forceUpdate()
       },
       handleSuccesfullLogin(payload) {
@@ -134,7 +139,7 @@
         redirectUser(this, payload.data_result)
       },
       showRules() {
-        EventBus.$emit('show-rules');
+        EventBus.$emit('show-rules')
       }
     }
   }
@@ -146,7 +151,7 @@
     p {
       margin-top: 10px;
       margin-left: 10px;
-      height: 260px;
+      height: 240px;
       overflow: hidden;
     }
     .user-language {

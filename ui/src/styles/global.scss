@@ -2,6 +2,7 @@
 @import "./portal/links";
 @import "./portal/inputs";
 @import "./portal/errors";
+@import "./arena/windows";
 
 html, body, #app {
   width: 100%;
@@ -9,7 +10,7 @@ html, body, #app {
   margin: 0px;
   padding: 0px;
   overflow: hidden;
-  font-family: 'Calibri', Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+  @include lato-font('black');
 }
 .row {
   display: flex;

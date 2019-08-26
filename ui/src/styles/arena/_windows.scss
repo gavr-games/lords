@@ -1,0 +1,22 @@
+@mixin arena-heading{
+  text-align: center;
+  font-size: 18px;
+  line-height: 21px;
+  background: center url('assets/arena_heading_background.png') no-repeat;
+  color: rgb(218, 228, 240);
+}
+
+.arena-window-container {
+  padding: 70px 75px 50px 40px;
+    .heading {
+      @include arena-heading;
+      text-align: center;
+    }
+}
+#arena-content-window {
+  .heading {
+    @include arena-heading;
+    padding-left: 120px;
+    background: 90px url('assets/arena_heading_background.png') no-repeat;
+  }
+}

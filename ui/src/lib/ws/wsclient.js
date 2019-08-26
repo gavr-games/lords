@@ -137,6 +137,13 @@ export class WSClient {
             this.handleProtocolRawMessage(payload)
         })
 
+        channel.on("arena_info_raw", payload => {
+            if (this.debug) {
+                console.log(payload)
+            }
+            EventBus.$emit('received-arena-info-raw', payload);
+        })
+
         channel.on("game_raw", payload => {
             if (this.debug) {
                 console.log(payload)

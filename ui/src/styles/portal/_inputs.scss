@@ -1,8 +1,8 @@
 .portal-input {
   display: flex;
   width: 230px;
-  font-size: 18px;
-  letter-spacing: 2px;
+  font-size: 16px;
+  letter-spacing: 1px;
   font-weight: 500;
   margin-bottom: 20px;
   label {
@@ -12,8 +12,8 @@
   }
   input {
     flex: 2;
-    background: center 14px url('assets/input_line.png') no-repeat;
-    font-size: 18px;
+    background: center 12px url('assets/input_line.png') no-repeat;
+    font-size: 16px;
     margin-top: auto;
     width: 160px;
     text-align: center;

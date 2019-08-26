@@ -6,9 +6,9 @@
 
 <style lang="scss">
   .two-pages {
-    width: 657px;
-    height: 451px;
+    width: 660px;
+    height: 432px;
     background: url('../../assets/two_pages.png') no-repeat;
-    padding: 130px 110px 0px 110px;
+    padding: 146px 80px 0px 120px;
   }
 </style>

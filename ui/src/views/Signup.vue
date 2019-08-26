@@ -20,7 +20,7 @@
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" v-model="email">
             </div>
-            <a href="#" class="portal-link monogram" @click="doSignup"><span>{{ I18n.getText('signup', 'do_signup') }}</span></a>
+            <a href="#" class="portal-link green-button" @click="doSignup">{{ I18n.getText('signup', 'do_signup') }}</a>
             <p v-bind:class="['portal-error', showError ? 'show' : '']" class="portal-error">{{ error }}</p>
             <router-link to="/" class="portal-link signup-link"><span>{{ I18n.getText('back') }}</span></router-link>
           </div>
@@ -30,7 +30,7 @@
             <p>
               {{ I18n.getText('signup', 'email_help') }}
             </p>
-            <a href="#" class="portal-link monogram" @click="showRules"><span>{{ I18n.getText('rules', 'rules') }}</span></a>
+            <a href="#" class="portal-link green-button" @click="showRules">{{ I18n.getText('rules', 'rules') }}</a>
             <div class="user-language">
               <a href="#" class="portal-link line" @click="setEn"><span>En</span></a>|<a href="#" class="portal-link line" @click="setRu"><span>Ru</span></a>
             </div>
@@ -117,6 +117,12 @@
       setLang(language) {
         I18n.setUserLanguage(language)
         this.showError = false
+        this.$WSClient.sendLoggedProtocolCmd({
+          action: 'user_language_change',
+          params: {
+            language: '"' + language + '"'
+          }
+        });
         this.$forceUpdate()
       },
       showRules() {
@@ -132,7 +138,7 @@
     p {
       margin-top: 10px;
       margin-left: 10px;
-      height: 260px;
+      height: 240px;
       overflow: hidden;
     }
     .user-language {

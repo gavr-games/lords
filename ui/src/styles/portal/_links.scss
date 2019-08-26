@@ -3,8 +3,7 @@
   text-decoration: none;
   text-align: center;
   color: #000000;
-  letter-spacing: 2px;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 35px;
   font-weight: 900;
   &:hover {
@@ -20,18 +19,16 @@
     display: inline;
     font-weight: 500;
   }
-  &.monogram {
-    &:before {
-      content: url('assets/monogram_left.png');
-      position: absolute;
-      margin-left: -60px;
-      margin-top: -5px;
+  &.green-button {
+    height: 48px;
+    line-height: 48px;
+    opacity: 0.9;
+    background: center url('assets/button_green.png') no-repeat;
+    &:hover {
+      opacity: 1;
     }
-    &:after {
-      content: url('assets/monogram_right.png');
-      position: absolute;
-      margin-left: 0px;
-      margin-top: -5px;
+    &:active {
+      background: center url('assets/button_green_pressed.png') no-repeat;
     }
   }
 }

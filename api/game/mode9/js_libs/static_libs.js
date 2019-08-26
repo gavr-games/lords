@@ -3120,6 +3120,20 @@ units_levels[30][1] = 5;
 units_levels[30][2] = 11;
 units_levels[30][3] = 18;
 
+export {
+cards,
+units,
+buildings,
+procedures_mode_1,
+cards_procedures_1,
+units_procedures_1,
+buildings_procedures_1,
+mode_config,
+unit_features_usage,
+building_default_features,
+dic_unit_phrases,
+units_levels
+}
 var games_features = new Array();
 games_features["1"] = new Array();
 games_features["1"]["id"] = "1";
@@ -7058,6 +7072,26 @@ var target_unit="";
 var my_unit="";
 var shoot_target="";
 
+export {
+games_features,
+procedures_params,
+procedures_params_descriptions,
+unit_features,
+building_features,
+error_dictionary,
+error_dictionary_messages,
+dic_colors,
+unit_names,
+unit_feature_names,
+card_names,
+building_names,
+buildings_feature_names,
+npc_player_name_modificators,
+videos_titles,
+shooting_params,
+statistics_names,
+log_message_texts
+}
 var i18n = new Array();
 i18n[1] = new Array();
 i18n[1]['back'] = 'Back';
@@ -7150,6 +7184,8 @@ i18n[1]['arena_chat']['entered_arena'] = ' entered the Arena.';
 i18n[1]['arena_players'] = new Array();
 i18n[1]['arena_players']['help'] = 'Double click player to open private chat. Drag and drop player to create group chat.';
 i18n[1]['arena_players']['lords'] = 'Lords';
+i18n[1]['arena_players']['level'] = 'Level';
+i18n[1]['arena_players']['nickname'] = 'Nickname';
 i18n[1]['game'] = new Array();
 i18n[1]['game']['page_structure_load'] = 'Page structure load';
 i18n[1]['game']['highlight_board_cells'] = 'Highlight board cells';
@@ -7330,7 +7366,7 @@ i18n[2]['profile']['new_coat_of_arms'] = 'Выбрать новый герб';
 i18n[2]['profile']['last_game_date'] = 'Дата последней игры';
 i18n[2]['profile']['statistics'] = 'Статистика';
 i18n[2]['profile']['mode'] = 'Мод';
-i18n[2]['profile']['total_games'] = 'Все игр';
+i18n[2]['profile']['total_games'] = 'Все игры';
 i18n[2]['profile']['victories'] = 'Победы';
 i18n[2]['profile']['defeats'] = 'Поражения';
 i18n[2]['profile']['draws'] = 'Ничьи';
@@ -7390,6 +7426,8 @@ i18n[2]['arena_chat']['entered_arena'] = ' вошел в Арену.';
 i18n[2]['arena_players'] = new Array();
 i18n[2]['arena_players']['help'] = 'Двойной клик - приватный. Перетянуть в чат для создания группового чата.';
 i18n[2]['arena_players']['lords'] = 'Лорды';
+i18n[2]['arena_players']['level'] = 'Уровень';
+i18n[2]['arena_players']['nickname'] = 'Имя игрока';
 i18n[2]['game'] = new Array();
 i18n[2]['game']['page_structure_load'] = 'Загрузка структуры страницы';
 i18n[2]['game']['highlight_board_cells'] = 'Подсветка клеток поля';
