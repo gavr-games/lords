@@ -12,6 +12,7 @@
   import Errors from '../../lib/utils/errors'
   import I18n from '../../lib/utils/i18n'
   import checkUserLocation from '../../lib/concepts/user/check_location'
+  import getMyId from '../../lib/concepts/user/get_my_id'
   
   export default {
     data() {
@@ -38,12 +39,11 @@
         }
       },
       exitGame() {
-        let my_id = window.localStorage.getItem('userId')
         this.$WSClient.sendLoggedProtocolCmd({
           action: 'arena_game_player_remove',
           params: {
             'game_id': this.currentGameId,
-            'user_id': my_id
+            'user_id': getMyId()
           }
         })
       }

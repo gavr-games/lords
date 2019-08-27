@@ -30,6 +30,8 @@
   import I18n from '../lib/utils/i18n'
   import redirectUser from '../lib/concepts/user/redirect'
   import checkUserLocation from '../lib/concepts/user/check_location'
+  import getMyId from '../lib/concepts/user/get_my_id'
+  import processCommands from '../lib/concepts/arena/process_commands'
   
   export default {
     data() {
@@ -42,6 +44,7 @@
     created() {
       checkUserLocation(this)
       this.$WSClient.joinArena()
+      EventBus.$on('arena-command', this.executeCmd)
       EventBus.$on('join-channel-error', this.goToLogin)
       EventBus.$on('received-protocol-raw', this.handleProtocolRaw)
       this.$WSClient.sendLoggedProtocolCmd({}, "get_arena_info")
@@ -49,16 +52,38 @@
     beforeDestroy () {
       EventBus.$off('received-protocol-raw', this.handleProtocolRaw)
       EventBus.$off('join-channel-error', this.goToLogin)
+      EventBus.$off('arena-command', this.executeCmd)
     },
     methods: {
       handleProtocolRaw(payload) {
-        //TODO: handle payload.commands case - commands parser
+        processCommands(payload)
         switch(payload["action"]) {
           case "get_my_location":
             redirectUser(this, payload.data_result)
             if (payload.data_result.game_id && payload.data_result.game_id != '') {
               this.currentGameId = payload.data_result.game_id
               this.currentContentComponent = 'arena-game'
+            }
+            break;
+        }
+      },
+      executeCmd(payload) {
+        let gameId = null
+        let userId = null
+        switch(payload.cmd) {
+          case "arena_game_add_player":
+            gameId = payload.params[0]
+            userId = payload.params[1]
+            if (userId == getMyId()) {
+              this.currentGameId = payload.params[0]
+              this.currentContentComponent = 'arena-game'
+            }
+            break;
+          case "arena_game_delete":
+            gameId = payload.params[0]
+            if (this.currentGameId == gameId) {
+              this.currentGameId = null
+              this.showGamesList()
             }
             break;
         }
