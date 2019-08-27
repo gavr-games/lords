@@ -2,7 +2,10 @@
 @import "./portal/links";
 @import "./portal/inputs";
 @import "./portal/errors";
+
 @import "./arena/windows";
+@import "./arena/inputs";
+@import "./arena/buttons";
 
 html, body, #app {
   width: 100%;

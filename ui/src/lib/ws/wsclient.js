@@ -232,11 +232,13 @@ export class WSClient {
             .receive("ok", resp => {
                 if (this.debug) {
                     console.log("Joined successfully " + channelName, resp)
+                    EventBus.$emit('joined-channel', {channel: channelName})
                 }
             })
             .receive("error", resp => {
                 if (this.debug) {
                     console.log("Unable to join " + channelName, resp)
+                    EventBus.$emit('join-channel-error', {channel: channelName})
                 }
             })
 
@@ -253,9 +255,9 @@ export class WSClient {
     }
     handleProtocolRawMessage(payload) {
         if (this.debug) {
-            console.log(payload);
+            console.log(payload)
         }
-        EventBus.$emit('received-protocol-raw', payload);
+        EventBus.$emit('received-protocol-raw', payload)
     }
 
     convertFromChars(s) {

@@ -1,0 +1,35 @@
+@mixin arena-button{
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  color: rgb(245, 161, 80);
+  font-size: 16px;
+  line-height: 35px;
+  height: 48px;
+  line-height: 48px;
+  opacity: 0.9;
+}
+#arena-cont {
+  .green-button {
+    @include arena-button;
+    background: center url('assets/button_green.png') no-repeat;
+    &:hover {
+      opacity: 1;
+    }
+    &:active {
+      background: center url('assets/button_green_pressed.png') no-repeat;
+      color: black;
+    }
+  }
+  .red-button {
+    @include arena-button;
+    background: center url('assets/button_red.png') no-repeat;
+    &:hover {
+      opacity: 1;
+    }
+    &:active {
+      background: center url('assets/button_red_pressed.png') no-repeat;
+      color: black;
+    }
+  }
+}

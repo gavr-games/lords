@@ -42,19 +42,22 @@
     created() {
       checkUserLocation(this)
       this.$WSClient.joinArena()
+      EventBus.$on('join-channel-error', this.goToLogin)
       EventBus.$on('received-protocol-raw', this.handleProtocolRaw)
       this.$WSClient.sendLoggedProtocolCmd({}, "get_arena_info")
     },
     beforeDestroy () {
       EventBus.$off('received-protocol-raw', this.handleProtocolRaw)
+      EventBus.$off('join-channel-error', this.goToLogin)
     },
     methods: {
       handleProtocolRaw(payload) {
+        //TODO: handle payload.commands case - commands parser
         switch(payload["action"]) {
           case "get_my_location":
             redirectUser(this, payload.data_result)
-            if (payload.game_id && payload.game_id != '') {
-              this.currentGameId = payload.game_id
+            if (payload.data_result.game_id && payload.data_result.game_id != '') {
+              this.currentGameId = payload.data_result.game_id
               this.currentContentComponent = 'arena-game'
             }
             break;
@@ -79,6 +82,9 @@
       },
       showRules() {
         EventBus.$emit('show-rules')
+      },
+      goToLogin() {
+        this.$router.push('/')
       }
     }
   }

@@ -20,7 +20,8 @@ class BaseProtocol {
       'guest_user_authorize',
       'get_my_location',
       'get_arena_games_info',
-      'get_user_profile'
+      'get_user_profile',
+      'get_create_game_modes'
     ];
 		return in_array($action, $customActions);
 	}
@@ -85,6 +86,7 @@ class BaseProtocol {
       break;
       case 'get_user_profile':
         $params = [$params['player_id']];
+      case 'get_create_game_modes':
       case 'get_arena_games_info':
         $query = self::prepareQuery($action, $params);
         $res = self::execQuery($query, true);

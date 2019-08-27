@@ -26,7 +26,7 @@
       this.$WSClient.sendLoggedProtocolCmd({
         action: 'get_arena_games_info',
         params: {}
-      });
+      })
     },
     beforeDestroy () {
       EventBus.$off('received-protocol-raw', this.handleProtocolRaw)

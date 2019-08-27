@@ -21,6 +21,9 @@ defmodule LordsWs.Arena.ProcessCmd do
           "get_user_profile" ->
             user_id = socket.assigns.user_id
             LordsWs.Endpoint.broadcast "user:#{user_id}", "protocol_raw", Map.put(req, :action, params["action"])
+          "get_create_game_modes" ->
+            user_id = socket.assigns.user_id
+            LordsWs.Endpoint.broadcast "user:#{user_id}", "protocol_raw", Map.put(req, :action, params["action"])
           "logout" -> 
             if req["header_result"]["success"] == "1" do
                 eval_cmds = "#{eval_cmds}#{URI.encode("logout(); parent.WSClient.disconnect();")}";
