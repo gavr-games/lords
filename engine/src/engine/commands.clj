@@ -9,50 +9,50 @@
 
 (defn add-obj
   [obj-id obj]
-  {:new-object-id obj-id})
+  {:command :add-object :object-id obj-id})
 
 (defn remove-obj
   [obj-id]
-  {:remove-object-id obj-id})
+  {:command :remove-object :object-id obj-id})
 
 (defn destroy-obj
   [obj-id]
-  {:kill-object-id obj-id})
+  {:command :destroy-object :object-id obj-id})
 
 (defn move-obj
   [obj-id old-obj new-obj]
-  {:move-object-id obj-id})
+  {:command :move-object :object-id obj-id})
 
 (defn set-moves
   ([obj-id old-obj obj] (set-moves obj-id obj))
   ([obj-id obj]
-   {:set-moves obj-id :moves (obj :moves)}))
+   {:command :set-moves :object-id obj-id :moves (obj :moves)}))
 
 (defn set-active-player
   [p]
-  {:set-active-player p})
+  {:command :set-active-player :player p})
 
 (defn end-turn
   [p]
-  {:end-turn p})
+  {:command :end-turn :player p})
 
 (defn set-health
   ([obj-id old-obj obj] (set-health obj-id obj))
   ([obj-id obj]
-   {:set-health obj-id :health (obj :health)}))
+   {:command :set-health :object-id obj-id :health (obj :health)}))
 
 (defn attack
   [obj-id target-id damage]
-  {:attacker obj-id :damage damage})
+  {:command :attack :attacker obj-id :target target-id :damage damage})
 
 (defn player-lost
   [p]
-  {:player-lost p})
+  {:command :player-lost :player p})
 
 (defn player-won
   [p]
-  {:player-won p})
+  {:command :player-won :player p})
 
 (defn game-over
   []
-  {:game-over true})
+  {:command :game-over})
