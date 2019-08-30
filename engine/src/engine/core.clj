@@ -112,21 +112,24 @@
       (update-in [:objects] dissoc obj-id)
       (add-command (cmd/remove-obj obj-id))))
 
-(defn coord-params-compatible
+(defn coord-params-compatible?
   [p1 p2]
+  (assert (seq p1))
+  (assert (seq p2))
   (let [fills (set [(p1 :fill) (p2 :fill)])]
     (= fills #{:unit :floor})))
 
-(defn can-add-coordinate
+(defn can-add-coordinate?
   [g [coord params]]
-  (let [current-params (vals (get-in g [:board coord]))]
-    (and current-params
-         (every? #(coord-params-compatible params %) current-params))))
+  (let [current-objs (get-in g [:board coord])
+        current-params (vals current-objs)]
+    (and current-objs
+         (every? #(coord-params-compatible? params %) current-params))))
 
 (defn can-place-object?
   [g obj]
   (let [coords (get-object-coords-map obj)]
-    (every? #(can-add-coordinate g %) coords)))
+    (every? #(can-add-coordinate? g %) coords)))
 
 (defn assert-can-place-object
   [g obj]

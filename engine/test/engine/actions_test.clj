@@ -31,3 +31,9 @@
     (is (= :over (go :status)))
     (is (= :lost (get-in go [:players 0 :status])))
     (is (= :won (get-in go [:players 2 :status])))))
+
+(deftest test-move-to-empty-cell
+  (let [g (create-new-game)
+        sp1-id (get-object-id-at g [2 0])
+        g-moved (check-and-act g 0 :move {:obj-id sp1-id :new-position [3 1]})]
+    (is (= [3 1] (get-in g-moved [:objects sp1-id :position])))))
