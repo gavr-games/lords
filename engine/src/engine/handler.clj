@@ -38,8 +38,11 @@
        (if err
          (response {:success false :error err})
          (let [g-after (action/act g p action params)
-               new-commands (subvec (g-after :commands) (count (g :commands)))]
-           (alter games assoc g-id g-after)
+               new-commands (subvec (g-after :commands) (count (g :commands)))
+               over (= :over (g-after :status))]
+           (if over
+             (alter games dissoc g-id)
+             (alter games assoc g-id g-after))
            (response {:success true :commands new-commands :game g-after})))
        ))))
 
