@@ -1,28 +1,13 @@
 (ns engine.core
-  (:require [engine.object-dic :refer [objects]])
-  (:require [engine.objects :as obj])
+  (:require [engine.object-utils :as obj])
   (:require [engine.commands :as cmd :refer [add-command]])
   (:require [engine.transformations :refer [transform-coords distance]])
   (:require [engine.utils :refer [deep-merge]]))
 
-(def board-size-x 20)
-(def board-size-y 20)
-
-(defn create-empty-board
-  [size-x size-y]
-  (zipmap (for [x (range size-x) y (range size-y)] [x y]) (repeat {})))
-
-(defn create-empty-game []
-  {:board
-   (create-empty-board board-size-x board-size-y)
-   :players {}
-   :turn-order []
-   :active-player nil
-   :objects {}
-   :actions []
-   :commands []
-   :status :active
-   :next-object-id 0})
+(defn pass
+  "Dummy handler that does nothing and returns game."
+  [g &more]
+  g)
 
 (defn create-player
   [team gold]
@@ -42,19 +27,6 @@
      flip (assoc :flip flip)
      rotation (assoc :rotation rotation))))
 
-(defn create-new-object
-  "Creates and returns a new object of type obj-key with player p at given position optionally with flip and rotation."
-  ([p obj-key position] (create-new-object p obj-key nil nil position))
-  ([p obj-key flip rotation position]
-   (as-> (objects obj-key) obj
-     (dissoc obj :coords)
-     (assoc obj :player p)
-     (assoc obj :type obj-key)
-     (if (obj :max-moves)
-       (assoc obj :moves 0)
-       obj)
-     (set-object-placement obj flip rotation position))))
-
 (defn transform-coords-map
   "Transforms every key in coords (every key should be a coord)."
   [coords flip rotation position]
@@ -64,8 +36,7 @@
 
 (defn get-object-coords-map
   [obj]
-  (let [obj-key (obj :type)
-        coords (get-in objects [obj-key :coords])]
+  (let [coords (obj :coords)]
     (transform-coords-map coords (obj :flip) (obj :rotation) (obj :position))))
 
 (defn place-object-on-board
@@ -80,13 +51,11 @@
 
 (defn add-object
   "Adds a new object to the game."
-  ([g p obj-key position] (add-object g p obj-key nil nil position))
-  ([g p obj-key flip rotation position]
-   {:pre [(contains? objects obj-key)
-          (contains? (g :players) p)]}
-   (let [new-obj (create-new-object p obj-key flip rotation position)
-         new-obj-id (g :next-object-id)
-         ]
+  ([g p obj position] (add-object g p obj nil nil position))
+  ([g p obj flip rotation position]
+   (let [owned-obj (assoc obj :player p)
+         new-obj (set-object-placement owned-obj flip rotation position)
+         new-obj-id (g :next-object-id)]
      (-> g
          (assoc-in [:objects new-obj-id] new-obj)
          (update :next-object-id inc)
@@ -259,14 +228,12 @@
       (add-command (cmd/player-won p))
       (assoc-in [:players p :status] :won)))
 
-(declare handlers)
-
 (defn destroy-obj
   "Destroys an object."
   [g obj-id]
-  (let [obj-type (get-in g [:objects obj-id :type])
-        destruction-handler (get-in handlers [:on-destruction obj-type]
-                                    (handlers :pass))]
+  (let [obj (get-in g [:objects obj-id])
+        destruction-handler (get-in obj [:handlers :on-destruction]
+                                    pass)]
     (-> g
         (destruction-handler obj-id)
         (add-command (cmd/destroy-obj obj-id))
@@ -288,36 +255,32 @@
       (assoc :status :over)
       (add-command (cmd/game-over))))
 
-(defn create-new-game []
-  (-> (create-empty-game)
-      (add-player 0 (create-player 0 100))
-      (add-player 2 (create-player 1 100))
-      (update :turn-order conj 0 2)
-      (add-object 0 :castle 0 0 [0 0])
-      (add-object 0 :spearman [2 0])
-      (add-object 0 :spearman [0 2])
-      (add-object 2 :castle 0 2 [(dec board-size-x) (dec board-size-y)])
-      (add-object 2 :spearman [(dec board-size-x) (- board-size-y 3)])
-      (add-object 2 :spearman [(- board-size-x 3) (dec board-size-y)])
-      (set-active-player 0)))
 
+(defn activate
+  "Refills object moves."
+  [obj]
+  (if (obj :moves)
+    (assoc obj :moves (obj :max-moves))
+    obj))
 
-(defn castle-destroyed
-  [g obj-id]
-  (let [p-lost (get-in g [:objects obj-id :player])
-        remaining-players (dissoc (g :players) p-lost)
-        remaining-teams
-        (set (map :team (filter
-                         #(= :active (% :status))
-                         (vals remaining-players))))
-        p-won (if (= 1 (count remaining-teams))
-                (keys remaining-players)
-                [])]
-    (as-> g game
-      (player-lost game p-lost)
-      (reduce player-won (end-game game) p-won))))
+(defn deactivate
+  "Sets object moves to zero."
+  [obj]
+  (if (obj :moves)
+    (assoc obj :moves 0)
+    obj))
 
-(def handlers
-  {:on-destruction
-   {:castle castle-destroyed}
-   :pass (fn [g & args] g)})
+(defn active?
+  [obj]
+  (pos? (or (obj :moves) 0)))
+
+(defn belongs-to?
+  "Checks if obj belongs to player p."
+  [p obj]
+  (= p (obj :player)))
+
+(defn set-health
+  "Sets health."
+  [obj health]
+  {:pre [(pos? health)]}
+  (assoc obj :health health))

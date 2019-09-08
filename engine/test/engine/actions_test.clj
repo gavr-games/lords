@@ -1,6 +1,7 @@
 (ns engine.actions-test
   (:require [engine.actions :refer :all]
             [engine.core :refer :all]
+            [engine.newgame :refer [create-new-game]]
             [clojure.test :refer :all]))
 
 (deftest test-move-attack

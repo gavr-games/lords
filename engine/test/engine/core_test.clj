@@ -1,5 +1,7 @@
 (ns engine.core-test
   (:require [engine.core :refer :all]
+            [engine.objects :refer [get-new-object]]
+            [engine.newgame :refer [create-new-game]]
             [clojure.test :refer :all]))
 
 (deftest test-get-next-player
@@ -21,9 +23,9 @@
     (is (= 0 ((get-object-at g [2 0]) :player)))))
 
 (deftest test-distance
-  (let [c (create-new-object 0 :castle [0 0])
-        s1 (create-new-object 0 :spearman [2 2])
-        s2 (create-new-object 0 :spearman [0 2])]
+  (let [c (set-object-placement (get-new-object :castle) [0 0])
+        s1 (set-object-placement (get-new-object :spearman) [2 2])
+        s2 (set-object-placement (get-new-object :spearman) [0 2])]
     (is (= 2 (obj-distance c s1)))
     (is (= 2 (obj-distance s1 s2)))
     (is (= 1 (obj-distance c s2)))))

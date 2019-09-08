@@ -1,6 +1,5 @@
 (ns engine.actions
-  (:require [engine.object-dic :refer [objects]])
-  (:require [engine.objects :as obj])
+  (:require [engine.object-utils :as obj])
   (:require [engine.core :refer :all])
   (:require [engine.commands :as cmd :refer [add-command]])
   (:require [engine.transformations :refer [distance]]))
@@ -27,7 +26,7 @@
       (not= p (obj :player)) :not-owner
       (zero? (or (obj :moves) 0)) :object-inactive
       ;; TODO test paralysis
-      (not (get-in objects [(obj :type) :actions action])) :invalid-action)))
+      (not (get-in obj [:actions action])) :invalid-action)))
 
 (defn check-coord-one-step-away
   [obj coord]

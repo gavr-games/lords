@@ -1,5 +1,5 @@
 (ns engine.handler
-  (:require [engine.core :as core]
+  (:require [engine.newgame :refer [create-new-game]]
             [engine.actions :as action]
             [compojure.core :refer :all]
             [compojure.route :as route]
@@ -12,7 +12,7 @@
 
 (defn new-game! []
   (let [id (.. (java.util.UUID/randomUUID) toString)
-        new-game (core/create-new-game)]
+        new-game (create-new-game)]
     (dosync (alter games assoc id new-game))
     (response {:new-game-id id})))
 
