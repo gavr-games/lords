@@ -228,25 +228,37 @@
       (add-command (cmd/player-won p))
       (assoc-in [:players p :status] :won)))
 
+
+(defn destruction-reward
+  "Give playe p reward for destroying object."
+  [g obj-id p]
+  (let [reward (get-in g [:objects obj-id :reward])]
+    (if reward
+      (-> g
+          (update-in [:players p :gold] + reward)
+          (add-command (cmd/change-gold p reward obj-id)))
+      g)))
+
 (defn destroy-obj
-  "Destroys an object."
-  [g obj-id]
+  "Destroys an object, p is a player who destroyed it."
+  [g obj-id p]
   (let [obj (get-in g [:objects obj-id])
         destruction-handler (get-in obj [:handlers :on-destruction]
                                     pass)]
     (-> g
         (destruction-handler obj-id)
+        (destruction-reward obj-id p)
         (add-command (cmd/destroy-obj obj-id))
         (remove-object obj-id))))
 
 (defn damage-obj
   "Deals damage to an object."
-  [g obj-id damage]
+  [g obj-id p damage]
   (let [health (get-in g [:objects obj-id :health])
         health-after (- health damage)]
     (if (pos? health-after)
       (update-object g obj-id #(obj/set-health % health-after) cmd/set-health)
-      (destroy-obj g obj-id))))
+      (destroy-obj g obj-id p))))
 
 (defn end-game
   "Marks game as over."

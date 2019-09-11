@@ -36,6 +36,14 @@
   [p]
   {:command :end-turn :player p})
 
+(defn change-gold
+  ([p amount] (set-gold p amount nil))
+  ([p amount obj-id]
+   (let [cmd {:command :set-gold :player p :amount amount}]
+     (if obj-id
+       (assoc cmd :object-id obj-id)
+       cmd))))
+
 (defn set-health
   ([obj-id old-obj obj] (set-health obj-id obj))
   ([obj-id obj]

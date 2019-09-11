@@ -26,7 +26,7 @@
   (let [ng (create-new-game)
         sp (get-object-id-at ng [2 0])
         castle (get-object-id-at ng [0 0])
-        g (damage-obj ng castle 9)
+        g (damage-obj ng castle 0 9)
         go (check-and-act g 0 :attack {:obj-id sp :target-id castle})]
     (is (check go 0 :move {:obj-id 2 :new-position [1 1]}))
     (is (= :over (go :status)))
@@ -38,3 +38,16 @@
         sp1-id (get-object-id-at g [2 0])
         g-moved (check-and-act g 0 :move {:obj-id sp1-id :new-position [3 1]})]
     (is (= [3 1] (get-in g-moved [:objects sp1-id :position])))))
+
+(deftest test-reward
+  (let [r 10
+        g (create-new-game)
+        sp1-id (get-object-id-at g [2 0])
+        sp2-id (get-object-id-at g [0 2])
+        gold-before (get-in g [:players 0 :gold])
+        g-after (-> g
+                    (assoc-in [:objects sp1-id :reward] r)
+                    (check-and-act 0 :move {:obj-id sp1-id :new-position [1 1]})
+                    (check-and-act 0 :attack {:obj-id sp2-id :target-id sp1-id}))
+        gold-after (get-in g-after [:players 0 :gold])]
+    (is (= gold-after (+ gold-before r)))))

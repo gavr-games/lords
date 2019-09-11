@@ -98,7 +98,7 @@
     (-> g
         (update-object obj-id obj/deactivate cmd/set-moves)
         (add-command (cmd/attack obj-id target-id damage))
-        (damage-obj target-id damage))))
+        (damage-obj target-id p damage))))
 
 (def actions-dic
   {:move {:check check-move
