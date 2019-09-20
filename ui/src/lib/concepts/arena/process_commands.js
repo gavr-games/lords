@@ -9,7 +9,7 @@ export default function (payload) {
     if (command == "") {
       return
     }
-    command = command.replace(/^\(+|\)+$/g, '') //remove ")"
+    command = decodeURIComponent(command.replace(/^\(+|\)+$/g, '')) //remove ")"
     let startParamsPos = command.indexOf("(")
     let commandName = command.substr(0,startParamsPos)
     let commandParams = command.substr(startParamsPos + 1, command.length).split(",")

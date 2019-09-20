@@ -12,9 +12,9 @@
           <component :is="currentContentComponent"></component>
         </div>
         <div id="arena-main-menu">
-          <div class="icon newgame" @click="showCreateGame"></div>
+          <div v-bind:class="['icon', 'newgame', currentGameId === null ? '' : 'active']" @click="showCreateGame"></div>
           <div class="icon games" @click="showGamesList"></div>
-          <div class="icon profile"></div>
+          <div class="icon profile" @click="showMyProfile"></div>
           <div class="icon rules" @click="showRules"></div>
         </div>
       </div>
@@ -89,20 +89,16 @@
         }
       },
       showMyProfile() {
-
+        this.currentContentComponent = 'arena-my-profile'
       },
       showGamesList() {
-        if (this.currentGameId === null) {
-          this.currentContentComponent = 'arena-games-list'
-        } else {
-          // show error first exit game
-        }
+        this.currentContentComponent = 'arena-games-list'
       },
       showCreateGame() {
         if (this.currentGameId === null) {
           this.currentContentComponent = 'arena-create-game'
         } else {
-          // show error first exit game
+          this.currentContentComponent = 'arena-game'
         }
       },
       showRules() {
@@ -164,9 +160,13 @@
       &:hover{
         opacity: 1;
       }
+      
     }
     .newgame {
       background: url('../assets/arena_icon_newgame.png') center no-repeat;
+      &.active {
+        background: url('../assets/arena_icon_newgame.png') center no-repeat, radial-gradient(50% 50%, white, rgba(255,0,0,0));
+      }
     }
     .games {
       background: url('../assets/arena_icon_games.png') center no-repeat;

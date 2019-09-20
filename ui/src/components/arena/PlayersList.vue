@@ -31,28 +31,62 @@
 
 <script>
   import { EventBus } from '../../lib/event_bus'
+  import { mapState, mapActions } from 'vuex'
   import Errors from '../../lib/utils/errors'
   import I18n from '../../lib/utils/i18n'
   
   export default {
+    computed: mapState({
+      players: state => state.players.all
+    }),
     data() {
       return {
-        players: [],
         I18n: I18n
       }
     },
     created() {
-      //EventBus.$on('received-protocol-raw', this.handleProtocolRaw)
+      EventBus.$on('arena-command', this.executeCmd)
       EventBus.$on('received-arena-info-raw', this.handleArenaInfoRaw)
     },
     beforeDestroy () {
-      //EventBus.$off('received-protocol-raw', this.handleProtocolRaw)
+      EventBus.$off('arena-command', this.executeCmd)
       EventBus.$off('received-arena-info-raw', this.handleArenaInfoRaw)
     },
     methods: {
+      ...mapActions('players', [
+        'addPlayer',
+        'removePlayer',
+        'updatePlayer',
+        'setPlayers'
+      ]),
       handleArenaInfoRaw(payload) {
-        this.players = payload.info.players
+        this.setPlayers(payload.info.players)
       },
+      executeCmd(payload) {
+        let nick = null
+        let userId = null
+        let avatarFilename = null
+        let statusId = null
+        switch(payload.cmd) {
+          case "arena_player_add":
+            userId = payload.params[0]
+            nick = payload.params[1].replace(/^\"+|\"+$/g, '')
+            avatarFilename = payload.params[2]
+            statusId = payload.params[3]
+            this.addPlayer({user_id: userId, nick: nick, avater_filename: avatarFilename, status_id: statusId})
+            break;
+          case "arena_player_remove":
+            userId = payload.params[0]
+            this.removePlayer(userId)
+            break;
+          case "arena_player_set_status":
+            userId = payload.params[0]
+            statusId = payload.params[1]
+            this.updatePlayer({user_id: userId, status_id: statusId})
+            break;
+        }
+      },
+      
       showPlayerProfile(playerId) {
         EventBus.$emit('show-player-profile', playerId)
       },
