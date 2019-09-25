@@ -20,8 +20,8 @@ const actions = {
     commit('addGame', game)
   },
 
-  removeGame ({ commit }, game) {
-    commit('removeGame', game)
+  removeGame ({ commit }, id) {
+    commit('removeGame', id)
   },
 
   updateGame ({ commit }, game) {

@@ -72,43 +72,51 @@
         }
       },
       executeCmd(payload) {
-        let gameId = null
-        let ownerUserId = null
-        let title = null
-        let passFlag = null
-        let modeId = null
-        let modeName = ''
-        let ownerName = ''
-        let spectatorCount = 0
-        let playerCount = 0
-        switch(payload.cmd) {
-          case "arena_game_add": //game_id, owner_user_id, title, pass_flag, mode_id
-            gameId = payload.params[0]
-            ownerUserId = payload.params[1]
-            title = payload.params[2].replace(/^\"+|\"+$/g, '')
-            passFlag = payload.params[3]
-            modeId = payload.params[4]
-            ownerName = this.$store.getters["players/getPlayer"](ownerUserId).nick
-            modeName = modes[modeId].name
-            this.addGame({
-              title: title,
-              player_count: playerCount,
-              spectator_count: spectatorCount,
-              pass_flag: passFlag,
-              mode_id: modeId,
-              mode_name: modeName,
-              owner_id: ownerUserId,
-              owner_name: ownerName
-            })
-            break;
-          case "arena_game_set_player_spectator_count":
-            gameId = payload.params[0]
-            playerCount = payload.params[1]
-            spectatorCount = payload.params[2]
-            this.updatePlayer({game_id: gameId, player_count: playerCount, spectator_count: spectatorCount})
-            break;
+        if (this[payload.cmd] !== undefined) {
+          this[payload.cmd](...payload.params)
         }
       },
+      arena_game_add(gameId, ownerUserId, title, passFlag, modeId) {
+        title = title.replace(/^\"+|\"+$/g, '')
+        let ownerName = this.$store.getters["players/getPlayer"](ownerUserId).nick
+        let modeName = modes[modeId].name
+        this.addGame({
+          game_id: gameId,
+          title: title,
+          player_count: 0,
+          spectator_count: 0,
+          pass_flag: passFlag,
+          mode_id: modeId,
+          mode_name: modeName,
+          owner_id: ownerUserId,
+          owner_name: ownerName
+        })
+      },
+      arena_game_set_player_spectator_count(gameId, playerCount, spectatorCount) {
+        this.updateGame({game_id: gameId, player_count: playerCount, spectator_count: spectatorCount})
+      },
+      arena_game_inc_spectator_count(gameId) {
+        let spectatorCount = this.$store.getters["games/getGame"](gameId).spectator_count
+        this.updateGame({game_id: gameId, spectator_count: spectatorCount + 1})
+      },
+      arena_game_dec_spectator_count(gameId) {
+        let spectatorCount = this.$store.getters["games/getGame"](gameId).spectator_count
+        this.updateGame({game_id: gameId, spectator_count: spectatorCount - 1})
+      },
+      arena_game_inc_player_count(gameId) {
+        let playerCount = this.$store.getters["games/getGame"](gameId).player_count
+        this.updateGame({game_id: gameId, player_count: playerCount + 1})
+      },
+      arena_game_dec_player_count(gameId) {
+        let playerCount = this.$store.getters["games/getGame"](gameId).player_count
+        this.updateGame({game_id: gameId, player_count: playerCount + 1})
+      },
+      arena_game_set_status(gameId, statusId) {
+        this.updateGame({game_id: gameId, status_id: statusId})
+      },
+      arena_game_delete(gameId) {
+        this.removeGame(gameId)
+      }
     }
   }
 </script>

@@ -70,7 +70,7 @@
         switch(payload.cmd) {
           case "arena_player_add":
             userId = payload.params[0]
-            nick = payload.params[1].replace(/^\"+|\"+$/g, '')
+            nick = payload.params[1].trim().replace(/^\"+|\"+$/g, '')
             avatarFilename = payload.params[2]
             statusId = payload.params[3]
             this.addPlayer({user_id: userId, nick: nick, avater_filename: avatarFilename, status_id: statusId})

@@ -3,6 +3,7 @@
     <div class="heading">
       - {{ I18n.getText('profile', 'profile') }} -
     </div>
+    <a href="#" class="red-button" @click="exitArena">{{ I18n.getText('game', 'exit') }}</a>
   </div>
 </template>
 
@@ -28,6 +29,12 @@
     methods: {
       handleArenaInfoRaw(payload) {
         
+      },
+      exitArena() {
+        this.$WSClient.sendLoggedProtocolCmd({
+            action: 'arena_exit',
+            params: {}
+        });
       }
     }
   }

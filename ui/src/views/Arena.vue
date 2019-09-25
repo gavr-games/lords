@@ -31,6 +31,7 @@
   import redirectUser from '../lib/concepts/user/redirect'
   import checkUserLocation from '../lib/concepts/user/check_location'
   import getMyId from '../lib/concepts/user/get_my_id'
+  import logout from '../lib/concepts/user/logout'
   import processCommands from '../lib/concepts/arena/process_commands'
   
   export default {
@@ -79,6 +80,12 @@
               this.currentContentComponent = 'arena-game'
             }
             break;
+          case "arena_player_remove":
+            userId = payload.params[0]
+            if (userId == getMyId()) {
+              this.goToLogin()
+            }
+            break;
           case "arena_game_delete":
             gameId = payload.params[0]
             if (this.currentGameId == gameId) {
@@ -105,6 +112,7 @@
         EventBus.$emit('show-rules')
       },
       goToLogin() {
+        logout(this)
         this.$router.push('/')
       }
     }
