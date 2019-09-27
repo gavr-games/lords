@@ -19,8 +19,14 @@
 (defn list-games []
   (response (keys @games)))
 
+(defn game-data
+  "Returns game data without functions ready for json serialization."
+  [g]
+  (update g :objects
+          #(into {} (for [[k v] %] [k (dissoc v :handlers)]))))
+
 (defn get-game [g-id]
-  (response (@games g-id)))
+  (response (game-data (@games g-id))))
 
 (defn deep-to-int [x]
   (cond
@@ -43,7 +49,8 @@
            (if over
              (alter games dissoc g-id)
              (alter games assoc g-id g-after))
-           (response {:success true :commands new-commands :game g-after})))
+           (response
+            {:success true :commands new-commands :game (game-data g-after)})))
        ))))
 
 (defn whatif [g-id p action params]
@@ -56,7 +63,8 @@
         (response {:success false :error err})
         (let [g-after (action/act g p action params)
               new-commands (subvec (g-after :commands) (count (g :commands)))]
-          (response {:success true :commands new-commands :game g-after})))
+          (response
+           {:success true :commands new-commands :game (game-data g-after)})))
       )))
 
 (defroutes app-routes

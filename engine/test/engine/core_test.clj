@@ -1,6 +1,6 @@
 (ns engine.core-test
   (:require [engine.core :refer :all]
-            [engine.objects :refer [get-new-object]]
+            [engine.objects :refer [get-new-object add-new-object]]
             [engine.newgame :refer [create-new-game]]
             [clojure.test :refer :all]))
 
@@ -29,3 +29,31 @@
     (is (= 2 (obj-distance c s1)))
     (is (= 2 (obj-distance s1 s2)))
     (is (= 1 (obj-distance c s2)))))
+
+
+(deftest test-object-placement
+  (let [ng (create-new-game)
+        g (add-new-object ng :puddle [3 3])
+        can-place? (fn [obj coord]
+                     (can-place-object? g
+                                        (set-object-placement
+                                         (get-new-object obj) coord)))]
+    (are [obj coord] (not (can-place? obj coord))
+      :tree [0 0]
+      :tree [0 2]
+      :tree [1 1]
+      :tree [3 3]
+      :spearman [0 0]
+      :spearman [2 0]
+      :puddle [0 0]
+      :puddle [1 1]
+      :puddle [3 3]
+      :bridge [4 4]
+      )
+    (are [obj coord] (can-place? obj coord)
+      :tree [2 2]
+      :spearman [1 1]
+      :spearman [2 2]
+      :spearman [3 3]
+      :puddle [4 4]
+      :bridge [3 3])))

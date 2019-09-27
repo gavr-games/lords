@@ -1,6 +1,6 @@
 (ns engine.newgame
   (:require [engine.core :refer :all])
-  (:require [engine.objects :refer [get-new-object]]))
+  (:require [engine.objects :refer [add-new-object]]))
 
 (def board-size-x 20)
 (def board-size-y 20)
@@ -26,13 +26,10 @@
       (add-player 0 (create-player 0 100))
       (add-player 2 (create-player 1 100))
       (update :turn-order conj 0 2)
-      (add-object 0 (get-new-object :castle) 0 0 [0 0])
-      (add-object 0 (get-new-object :spearman) [2 0])
-      (add-object 0 (get-new-object :spearman) [0 2])
-      (add-object 2 (get-new-object :castle) 0 2
-                  [(dec board-size-x) (dec board-size-y)])
-      (add-object 2 (get-new-object :spearman)
-                  [(dec board-size-x) (- board-size-y 3)])
-      (add-object 2 (get-new-object :spearman)
-                  [(- board-size-x 3) (dec board-size-y)])
+      (add-new-object 0 :castle [0 0] 0 0)
+      (add-new-object 0 :spearman [2 0])
+      (add-new-object 0 :spearman [0 2])
+      (add-new-object 2 :castle [(dec board-size-x) (dec board-size-y)] 0 2)
+      (add-new-object 2 :spearman [(dec board-size-x) (- board-size-y 3)])
+      (add-new-object 2 :spearman [(- board-size-x 3) (dec board-size-y)])
       (set-active-player 0)))

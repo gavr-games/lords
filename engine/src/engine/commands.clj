@@ -19,6 +19,10 @@
   [obj-id]
   {:command :destroy-object :object-id obj-id})
 
+(defn drown-obj
+  [obj-id]
+  {:command :drown-object :object-id obj-id})
+
 (defn move-obj
   [obj-id old-obj new-obj]
   {:command :move-object :object-id obj-id})
@@ -37,7 +41,7 @@
   {:command :end-turn :player p})
 
 (defn change-gold
-  ([p amount] (set-gold p amount nil))
+  ([p amount] (change-gold p amount nil))
   ([p amount obj-id]
    (let [cmd {:command :set-gold :player p :amount amount}]
      (if obj-id

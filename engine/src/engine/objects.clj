@@ -3,14 +3,27 @@
 
 (declare objects)
 
+
 (defn get-new-object
   "Gets a new object of a given type."
   [obj-type]
   (as-> (objects obj-type) obj
-     (assoc obj :type obj-type)
-     (if (obj :max-moves)
-       (assoc obj :moves 0)
-       obj)))
+    (assoc obj :type obj-type)
+    (if (obj :max-moves)
+      (assoc obj :moves 0)
+      obj)))
+
+
+(defn add-new-object
+  "Convenience function that creates a new object and adds it to the game."
+  ([g obj-type position]
+   (add-new-object g nil obj-type position nil nil))
+  ([g obj-type position flip rotation]
+   (add-new-object g nil obj-type position flip rotation))
+  ([g p obj-type position]
+   (add-new-object g p obj-type position nil nil))
+  ([g p obj-type position flip rotation]
+   (add-object g p (get-new-object obj-type) position flip rotation)))
 
 (defn castle-destroyed
   [g obj-id]
@@ -46,6 +59,19 @@
    :class :building
    :coords
    {[0 0] {:fill :solid}}}
+
+  :puddle
+  {:class :building
+   :coords
+   {[0 0] {:fill :water}}}
+
+  :bridge
+  {:class :building
+   :health 10
+   :coords
+   {[0 0] {:fill :bridge}
+    [0 1] {:fill :solid}
+    [1 0] {:fill :solid}}}
 
   :spearman
   {:health 1

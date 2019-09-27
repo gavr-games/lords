@@ -61,11 +61,8 @@
 (defn move
   [g p obj-id new-position]
   (as-> g game
-    ;; TODO remove bind target
-    (move-object game obj-id new-position)
     (update-object game obj-id #(update % :moves dec) cmd/set-moves)
-    ;; TODO move bound unit
-    ))
+    (move-object game p obj-id new-position)))
 
 (defn end-turn
   [g p]
