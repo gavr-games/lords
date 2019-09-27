@@ -19,8 +19,12 @@
         <td>{{ game.mode_name }}</td>
         <td>{{ game.player_count }}</td>
         <td>{{ game.spectator_count }}</td>
-        <td>{{ game.pass_flag }}</td>
-        <td></td>
+        <td>
+          <div v-bind:class="['pass-flag', parseInt(game.pass_flag) == 1 ? 'closed' : 'open']"></div>
+        </td>
+        <td>
+          <a href="#" class="join-game" @click="joinGame(game.game_id)"></a>
+        </td>
       </tr>
     </table>
     
@@ -116,6 +120,30 @@
       },
       arena_game_delete(gameId) {
         this.removeGame(gameId)
+      },
+      joinGame(gameId) {
+        let game = this.$store.getters["games/getGame"](gameId)
+        if (parseInt(game.pass_flag) == 0) { // no password
+          if (parseInt(game.status_id) == 1) { // not started game
+            this.$WSClient.sendLoggedProtocolCmd({
+              action: 'arena_game_enter',
+              params: {
+                'game_id': gameId,
+                'pass': 'null'
+              }
+            })
+          } else if (parseInt(game.status_id) == 2) { // started game
+            this.$WSClient.sendLoggedProtocolCmd({
+              action: 'arena_game_spectator_enter',
+              params: {
+                'game_id': gameId,
+                'pass': 'null'
+              }
+            })
+          }
+        } else {
+          // ask password
+        }
       }
     }
   }
@@ -136,6 +164,26 @@
       td {
         border-right: 2px solid rgba($color: #ffffff, $alpha: 0.1);
       }
+    }
+
+    .pass-flag {
+      &.open {
+        width: 20px;
+        height: 20px;
+        background: right url('../../assets/arena_open_game_icon.png') no-repeat;
+      }
+      &.closed {
+        width: 14px;
+        height: 18px;
+        background: right url('../../assets/arena_closed_game_icon.png') no-repeat;
+      }
+    }
+
+    .join-game {
+      display: block;
+      width: 19px;
+      height: 19px;
+      background: right url('../../assets/arena_join_game_icon.png') no-repeat;
     }
   }
 </style>

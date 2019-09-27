@@ -52,16 +52,19 @@ export class WSClient {
     }
 
     joinChat(chatId) {
-        this.joinChannel("chat:" + chatId);
+        this.joinChannel("chat:" + chatId)
     }
     joinArena() {
-        this.joinChannel("arena");
+        this.joinChannel("arena")
     }
     joinGame(gameId) {
-        this.joinChannel("game:" + gameId);
+        this.joinChannel("game:" + gameId)
+    }
+    leaveGame(gameId) {
+      this.leaveChannel("game:" + gameId)
     }
     joinPersonalChannel(user_id) {
-        this.joinChannel("user:" + user_id);
+        this.joinChannel("user:" + user_id)
     }
     
     sendChatMessage(chatId, msg) {
@@ -142,6 +145,13 @@ export class WSClient {
                 console.log(payload)
             }
             EventBus.$emit('received-arena-info-raw', payload);
+        })
+
+        channel.on("arena_current_game_info_raw", payload => {
+          if (this.debug) {
+              console.log(payload)
+          }
+          EventBus.$emit('received-arena-current-game-info-raw', payload);
         })
 
         channel.on("game_raw", payload => {
@@ -247,7 +257,7 @@ export class WSClient {
     leaveChannel(channelName) {
         if (this.channels[channelName]) {
             this.channels[channelName].leave()
-            this.channels[channelName] = null
+            this.channels[channelName] = undefined
             if (this.debug) {
                 console.log("Leave channel " + channelName)
             }

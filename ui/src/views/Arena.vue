@@ -69,6 +69,9 @@
         }
       },
       executeCmd(payload) {
+        if (this[payload.cmd] !== undefined) {
+          this[payload.cmd](...payload.params)
+        }
         let gameId = null
         let userId = null
         switch(payload.cmd) {
@@ -93,6 +96,12 @@
               this.showGamesList()
             }
             break;
+        }
+      },
+      arena_game_remove_player(gameId, userId) {
+        if (gameId == this.currentGameId && userId == getMyId()) {
+          this.currentGameId = null
+          this.showGamesList()
         }
       },
       showMyProfile() {
