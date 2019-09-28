@@ -855,7 +855,7 @@ CREATE TABLE `games_features` (
   `default_param` int(11) NOT NULL,
   `feature_type` enum('bool','int') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -864,7 +864,7 @@ CREATE TABLE `games_features` (
 
 LOCK TABLES `games_features` WRITE;
 /*!40000 ALTER TABLE `games_features` DISABLE KEYS */;
-INSERT INTO `games_features` VALUES (1,'random_teams',0,'bool'),(2,'all_versus_all',0,'bool'),(3,'number_of_teams',2,'int'),(4,'teammates_in_random_castles',0,'bool');
+INSERT INTO `games_features` VALUES (1,'random_teams',0,'bool'),(2,'all_versus_all',0,'bool'),(3,'number_of_teams',2,'int'),(4,'teammates_in_random_castles',0,'bool'),(5,'realtime_cards',1,'bool');
 /*!40000 ALTER TABLE `games_features` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -883,7 +883,7 @@ CREATE TABLE `games_features_i18n` (
   PRIMARY KEY (`id`),
   KEY `feature_id` (`feature_id`),
   CONSTRAINT `games_features_i18n_ibfk_1` FOREIGN KEY (`feature_id`) REFERENCES `games_features` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -892,7 +892,7 @@ CREATE TABLE `games_features_i18n` (
 
 LOCK TABLES `games_features_i18n` WRITE;
 /*!40000 ALTER TABLE `games_features_i18n` DISABLE KEYS */;
-INSERT INTO `games_features_i18n` VALUES (1,1,2,'Случайные союзы'),(2,2,2,'Каждый сам за себя'),(3,3,2,'Количество команд'),(4,4,2,'Союзники не напротив, а случайным образом'),(5,1,1,'Random teams'),(6,2,1,'No teams (free-for-all)'),(7,3,1,'Number of teams'),(8,4,1,'Allies are placed randomly instead of opposite');
+INSERT INTO `games_features_i18n` VALUES (1,1,2,'Случайные союзы'),(2,2,2,'Каждый сам за себя'),(3,3,2,'Количество команд'),(4,4,2,'Союзники не напротив, а случайным образом'),(5,1,1,'Random teams'),(6,2,1,'No teams (free-for-all)'),(7,3,1,'Number of teams'),(8,4,1,'Allies are placed randomly instead of opposite'),(9,5,1,'Realtime cards'),(10,5,2,'Карты можно играть в любой ход');
 /*!40000 ALTER TABLE `games_features_i18n` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2915,15 +2915,17 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` FUNCTION `check_play_card`(g_id INT,p_num INT,player_deck_id INT,sender VARCHAR(30)) RETURNS int(11)
 BEGIN
   DECLARE crd_id INT;
-  
-  IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id LIMIT 1) THEN RETURN 1; END IF;
-  IF (SELECT nonfinished_action_id FROM active_players WHERE game_id=g_id LIMIT 1)<>0 THEN RETURN 28; END IF;
-  IF (SELECT card_played_flag FROM active_players WHERE game_id=g_id LIMIT 1)=1 THEN RETURN 42; END IF;
-  IF NOT EXISTS(SELECT id FROM player_deck WHERE game_id=g_id AND player_num=p_num AND id=player_deck_id) THEN RETURN 10; END IF;
-  
+
   SELECT card_id INTO crd_id FROM player_deck WHERE id=player_deck_id;
   IF (SELECT gold FROM players WHERE game_id=g_id AND player_num=p_num LIMIT 1)<(SELECT cost FROM cards WHERE id=crd_id LIMIT 1) THEN RETURN 2; END IF;
   IF NOT EXISTS(SELECT cp.id FROM player_deck pd JOIN cards_procedures cp ON pd.card_id=cp.card_id JOIN procedures pm ON cp.procedure_id=pm.id WHERE pd.id=player_deck_id AND pm.name=sender LIMIT 1) THEN RETURN 15; END IF;
+  IF NOT EXISTS(SELECT id FROM player_deck WHERE game_id=g_id AND player_num=p_num AND id=player_deck_id) THEN RETURN 10; END IF;
+
+  IF game_feature_get_param(g_id, 'realtime_cards') = 0 OR (SELECT `type` FROM cards WHERE id=crd_id LIMIT 1) <> 'm' THEN
+    IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id LIMIT 1) THEN RETURN 1; END IF;
+    IF (SELECT nonfinished_action_id FROM active_players WHERE game_id=g_id LIMIT 1)<>0 THEN RETURN 28; END IF;
+    IF (SELECT card_played_flag FROM active_players WHERE game_id=g_id LIMIT 1)=1 THEN RETURN 42; END IF;
+  END IF;
 
   UPDATE active_players SET current_procedure=sender WHERE game_id=g_id;
 
@@ -3254,6 +3256,25 @@ BEGIN
   END IF;
 
   RETURN experience;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `get_game_lock_name` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `get_game_lock_name`(g_id INT) RETURNS varchar(20) CHARSET utf8
+BEGIN
+  RETURN CONCAT('lock_game_', g_id);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -3822,6 +3843,9 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agree_draw`(g_id INT,  p_num INT)
 BEGIN
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   CALL user_action_begin(g_id, p_num);
 
   UPDATE players SET agree_draw=1 WHERE game_id=g_id AND player_num=p_num;
@@ -3833,6 +3857,9 @@ BEGIN
   END IF;
 
   CALL user_action_end(g_id, p_num);
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -3864,6 +3891,8 @@ BEGIN
         AND b.x BETWEEN x2 AND x2+size-1 AND b.y BETWEEN y2 AND y2+size-1
         AND NOT(b.`type`='unit' AND b.ref=board_unit_id);
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_unit_can_do_action(g_id,p_num,x,y,'attack'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -3910,6 +3939,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -4346,17 +4378,22 @@ BEGIN
   DECLARE new_card INT;
   DECLARE first_card_id INT;
   DECLARE player_deck_id INT;
+  DECLARE can_buy_only_in_my_turn INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
+  SET can_buy_only_in_my_turn = 1 - game_feature_get_param(g_id, 'realtime_cards');
 
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id=g_id LIMIT 1;
   SELECT cfg.`value` INTO card_cost FROM mode_config cfg WHERE cfg.param='card cost' AND cfg.mode_id=mode_id;
 
-  IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
+  IF can_buy_only_in_my_turn AND NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
   ELSE
-    IF (SELECT nonfinished_action_id FROM active_players WHERE game_id=g_id LIMIT 1)<>0 THEN
+    IF can_buy_only_in_my_turn AND (SELECT nonfinished_action_id FROM active_players WHERE game_id=g_id LIMIT 1)<>0 THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=28;
     ELSE
-      IF (SELECT card_played_flag FROM active_players WHERE game_id=g_id)=1 THEN
+      IF can_buy_only_in_my_turn AND (SELECT card_played_flag FROM active_players WHERE game_id=g_id)=1 THEN
         SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=42;
       ELSE
         IF (SELECT gold FROM players WHERE game_id=g_id AND player_num=p_num)<card_cost THEN
@@ -4383,7 +4420,10 @@ BEGIN
             CALL cmd_log_add_independent_message_hidden(g_id, p_num, 'card_name', new_card);
 
             INSERT INTO statistic_game_actions(game_id,player_num,`action`,`value`) VALUES(g_id,p_num,'buy_card',new_card);
-            CALL end_cards_phase(g_id,p_num);
+            
+            IF can_buy_only_in_my_turn THEN
+              CALL end_cards_phase(g_id,p_num);
+            END IF;
 
             CALL user_action_end(g_id, p_num);
           END IF;
@@ -4391,6 +4431,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4514,6 +4557,7 @@ BEGIN
   DECLARE cur2 CURSOR FOR SELECT bb.id FROM board_buildings bb JOIN buildings b ON (bb.building_id=b.id) WHERE bb.game_id=g_id AND b.`type`<>'castle';
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_armageddon');
   IF err_code<>0 THEN
@@ -4554,6 +4598,9 @@ BEGIN
 
     CALL user_action_end(g_id, p_num);
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4579,6 +4626,8 @@ BEGIN
   DECLARE bandit_owner INT DEFAULT 4;
   DECLARE new_player INT;
   DECLARE bandit_name VARCHAR(45) CHARSET utf8;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id=g_id LIMIT 1;
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_bandit');
@@ -4611,6 +4660,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4632,6 +4684,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
   DECLARE bonus INT DEFAULT 2;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_berserk');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -4658,6 +4712,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4679,6 +4736,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE board_building_id INT;
   DECLARE log_msg_code VARCHAR(50) CHARSET utf8 DEFAULT 'building_captured';
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_capture');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -4714,6 +4773,9 @@ BEGIN
         CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4736,6 +4798,8 @@ BEGIN
   DECLARE board_building_id INT;
   DECLARE demolition_damage INT DEFAULT 4;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_demolition');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -4751,6 +4815,9 @@ BEGIN
         CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4771,6 +4838,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_fireball`(g_id INT,   p_num IN
 BEGIN
   DECLARE err_code INT;
   DECLARE fb_damage INT DEFAULT 1;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_fireball');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -4793,6 +4862,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4813,6 +4885,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_flight`(g_id INT, p_num INT, p
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_flight');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -4840,6 +4914,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4864,6 +4941,8 @@ BEGIN
   DECLARE tree_building_id INT;
   DECLARE tree_x, tree_y INT;
   DECLARE new_bb_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_forest');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -4899,6 +4978,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4923,6 +5005,8 @@ BEGIN
   DECLARE done INT DEFAULT 0;
   DECLARE cur CURSOR FOR SELECT p.player_num FROM players p WHERE p.game_id=g_id AND owner<>0 AND gold>0;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_half_money');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -4950,6 +5034,9 @@ BEGIN
     CALL user_action_end(g_id, p_num);
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -4971,6 +5058,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE hp_heal INT DEFAULT 1;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_healing');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -4989,6 +5078,9 @@ BEGIN
       CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -5010,6 +5102,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_horseshoe`(g_id INT,  p_num IN
 BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_horseshoe');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5040,6 +5134,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5061,6 +5158,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
   DECLARE bonus INT DEFAULT 2;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_iron_skin');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5087,6 +5186,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5107,6 +5209,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_lightening_max`(g_id INT,   p_
 BEGIN
   DECLARE err_code INT;
   DECLARE li_damage INT DEFAULT 3;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_lightening_max');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5133,6 +5237,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5153,6 +5260,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_lightening_min`(g_id INT,   p_
 BEGIN
   DECLARE err_code INT;
   DECLARE li_damage INT DEFAULT 2;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_lightening_min');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5175,6 +5284,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5196,6 +5308,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
   DECLARE shield INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_madness');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5227,6 +5341,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5256,6 +5373,8 @@ BEGIN
   DECLARE done INT DEFAULT 0;
   DECLARE cur CURSOR FOR SELECT b.x,b.y,b.`type`,b.ref FROM board b WHERE b.game_id=g_id AND b.`type` IN ('unit','building') AND b.x BETWEEN x AND x+meteor_size-1 AND b.y BETWEEN y AND y+meteor_size-1;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_meteor_shower');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5287,6 +5406,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5311,6 +5433,8 @@ BEGIN
   DECLARE shield INT;
   DECLARE npc_gold INT;
   DECLARE log_msg_code VARCHAR(50) CHARSET utf8 DEFAULT 'mind_control';
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_mind_control');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5387,6 +5511,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5408,6 +5535,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
   DECLARE shield INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_o_d');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5444,6 +5573,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5466,6 +5598,8 @@ BEGIN
   DECLARE board_unit_id INT;
   DECLARE shield INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_paralich');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -5485,6 +5619,9 @@ BEGIN
       CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -5511,6 +5648,8 @@ BEGIN
   DECLARE riching_sum INT DEFAULT 60;
   DECLARE take_cards_qty INT DEFAULT 2;
   DECLARE cmd VARCHAR(1000) CHARSET utf8 DEFAULT 'execute_procedure("$cmd_name")';
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_polza_main');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5599,6 +5738,9 @@ BEGIN
     CALL user_action_end(g_id, p_num);
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5620,6 +5762,8 @@ BEGIN
   DECLARE nonfinished_action INT DEFAULT 3;
   DECLARE board_building_id INT;
   DECLARE p2_num INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
@@ -5673,6 +5817,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5697,6 +5844,8 @@ BEGIN
   DECLARE size INT;
   DECLARE u_id INT;
   DECLARE dead_card_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id=g_id LIMIT 1;
 
@@ -5732,6 +5881,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5751,6 +5903,8 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_polza_units_from_zone`(g_id INT,  p_num INT,  zone INT)
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 2;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
@@ -5775,6 +5929,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5795,6 +5952,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_pooring`(g_id INT,  p_num INT,
 BEGIN
   DECLARE err_code INT;
   DECLARE pooring_sum INT DEFAULT 50;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_pooring');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5818,6 +5977,9 @@ BEGIN
       CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5839,6 +6001,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE board_building_id INT;
   DECLARE log_msg_code VARCHAR(50) CHARSET utf8 DEFAULT 'building_moved';
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_relocation');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -5880,6 +6044,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -5900,6 +6067,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_repair_buildings`(g_id INT, p_
 BEGIN
   DECLARE err_code INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_repair_buildings');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -5914,6 +6083,9 @@ BEGIN
 
     CALL user_action_end(g_id, p_num);
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -5936,6 +6108,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE riching_sum INT DEFAULT 50;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_riching');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -5952,6 +6126,9 @@ BEGIN
 
     CALL user_action_end(g_id, p_num);
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -5974,6 +6151,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_shield');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -5994,6 +6173,9 @@ BEGIN
       CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -6020,6 +6202,7 @@ BEGIN
   DECLARE cur CURSOR FOR SELECT pd.card_id FROM player_deck pd WHERE pd.game_id=g_id AND pd.player_num=p2_num;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_show_cards');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -6049,6 +6232,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6070,6 +6256,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE board_unit_id INT;
   DECLARE speed_bonus INT DEFAULT 2;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_speeding');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -6096,6 +6284,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6118,6 +6309,8 @@ BEGIN
   DECLARE rand_card INT;
   DECLARE big_dice INT;
   DECLARE stolen_card_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_telekinesis');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -6153,6 +6346,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6177,6 +6373,8 @@ BEGIN
   DECLARE size INT;
   DECLARE target INT;
   DECLARE binded_unit_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_teleport');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -6219,6 +6417,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6242,6 +6443,8 @@ BEGIN
   DECLARE speed_bonus INT DEFAULT 1;
   DECLARE health_bonus INT DEFAULT 1;
   DECLARE attack_bonus INT DEFAULT 1;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_unit_upgrade_all');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -6270,6 +6473,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6294,6 +6500,8 @@ BEGIN
   DECLARE speed_bonus INT DEFAULT 3;
   DECLARE health_bonus INT DEFAULT 3;
   DECLARE attack_bonus INT DEFAULT 3;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_unit_upgrade_random');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -6329,6 +6537,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6354,6 +6565,8 @@ BEGIN
   DECLARE vamp_owner INT DEFAULT 4;
   DECLARE new_player INT;
   DECLARE vamp_name VARCHAR(45) CHARSET utf8;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id=g_id LIMIT 1;
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_vampire');
@@ -6385,6 +6598,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6405,6 +6621,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_destroy_building`(g_id IN
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 6;
   DECLARE board_building_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
@@ -6430,6 +6648,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6450,6 +6671,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_kill_unit`(g_id INT,  p_n
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 5;
   DECLARE board_unit_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
@@ -6476,6 +6699,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6500,6 +6726,8 @@ BEGIN
   DECLARE pooring_sum INT DEFAULT 60;
   DECLARE take_cards_qty INT DEFAULT 1;
   DECLARE cmd VARCHAR(1000) CHARSET utf8 DEFAULT 'execute_procedure("$cmd_name")';
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_vred_main');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -6564,6 +6792,9 @@ BEGIN
   END IF;
 
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6586,6 +6817,8 @@ BEGIN
   DECLARE board_building_id INT;
   DECLARE p2_num INT;
   DECLARE building_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
@@ -6638,6 +6871,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6657,6 +6893,8 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_vred_pooring`(g_id INT,  p_num INT,  p2_num INT)
 BEGIN
   DECLARE nonfinished_action INT DEFAULT 4;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
@@ -6681,6 +6919,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6701,6 +6942,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_zone_express_into`(g_id INT, p
 BEGIN
   DECLARE err_code INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_zone_express_into');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -6717,6 +6960,9 @@ BEGIN
         CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -6737,6 +6983,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cast_zone_express_out`(g_id INT, p_
 BEGIN
   DECLARE err_code INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'cast_zone_express_out');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -6753,6 +7001,9 @@ BEGIN
         CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -8429,12 +8680,18 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `disagree_draw`(g_id INT,  p_num INT)
 BEGIN
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   CALL user_action_begin(g_id, p_num);
 
   UPDATE players SET agree_draw=0 WHERE game_id=g_id AND player_num=p_num;
   CALL cmd_log_add_independent_message(g_id, p_num, 'disagrees_to_draw', NULL);
 
   CALL user_action_end(g_id, p_num);
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -8494,12 +8751,16 @@ DELIMITER ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `end_cards_phase`(g_id INT,p_num INT)
-BEGIN
+this_procedure:BEGIN
   DECLARE g_mode INT;
   DECLARE two_phase_turn INT;
 
   SELECT g.mode_id INTO g_mode FROM games g WHERE g.id=g_id LIMIT 1;
   SELECT cfg.`value` INTO two_phase_turn FROM mode_config cfg WHERE cfg.param='two_phase_turn' AND cfg.mode_id=g_mode;
+
+  IF (game_feature_get_param(g_id, 'realtime_cards') AND @current_card_type = 'm') THEN
+    LEAVE this_procedure;
+  END IF;
 
   IF(two_phase_turn IS NULL OR two_phase_turn=0)THEN
     CALL end_turn(g_id,p_num);
@@ -8925,6 +9186,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_game_info`(g_id INT,  p_num
 BEGIN
 
   SELECT g.title,g.owner_id,g.time_restriction,g.status_id,g.`date` AS `creation_date`,g.mode_id,g.type_id FROM games g WHERE g.id=g_id;
+  
+  SELECT gfu.feature_id, gfu.param FROM games_features_usage gfu WHERE gfu.game_id=g_id;
 
   SELECT b.id,MIN(b.x) as `x`,MIN(b.y) as `y`,b.ref,b.`type` FROM board b WHERE b.game_id=g_id AND b.`type`<>'unit' GROUP BY b.ref,b.`type`;
 
@@ -9200,6 +9463,8 @@ BEGIN
   DECLARE p_num INT;
   DECLARE lang_id INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   IF EXISTS(SELECT 1 FROM board_units bu WHERE bu.game_id=g_id LIMIT 1)THEN
     CREATE TEMPORARY TABLE tmp_units (id_rand INT AUTO_INCREMENT PRIMARY KEY)AUTO_INCREMENT=1
       SELECT
@@ -9229,6 +9494,9 @@ BEGIN
 
     END IF;
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -10948,6 +11216,8 @@ BEGIN
   DECLARE resur_cost INT;
   DECLARE grave_x, grave_y INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_unit_can_do_action(g_id,p_num,x,y,'necromancer_resurrect'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -11005,6 +11275,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -11028,6 +11301,8 @@ BEGIN
   DECLARE target_bu_id INT;
   DECLARE board_unit_id INT;
   DECLARE sacr_health INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_unit_can_do_action(g_id,p_num,x,y,'necromancer_sacrifice'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -11078,6 +11353,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -11248,6 +11526,8 @@ BEGIN
   DECLARE taken_subsidy INT;
   DECLARE owner INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
   ELSE
@@ -11273,6 +11553,9 @@ BEGIN
 
     CALL user_action_end(g_id, p_num);
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -11292,6 +11575,8 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `player_end_turn_by_timeout`(g_id INT,  p_num INT)
 BEGIN
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
   ELSE
@@ -11308,6 +11593,9 @@ BEGIN
 
     CALL user_action_end(g_id, p_num);
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -11334,6 +11622,8 @@ BEGIN
   DECLARE player_online_status_id INT DEFAULT 1; 
   DECLARE mode_id INT;
   DECLARE game_type_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   CALL user_action_begin(g_id, p_num);
 
@@ -11379,6 +11669,9 @@ BEGIN
   CALL user_action_end(g_id, p_num);
   
   DELETE FROM players WHERE game_id=g_id AND player_num=p_num;  
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -11409,6 +11702,8 @@ BEGIN
   DECLARE taran_unit_id INT;
   DECLARE taran_x,taran_y,taran_prev_x,taran_prev_y INT;
   DECLARE x0,y0 INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_unit_can_do_action(g_id,p_num,x,y,'player_move_unit'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -11480,6 +11775,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -11507,6 +11805,8 @@ BEGIN
   DECLARE size INT;
   DECLARE u_id INT;
   DECLARE new_bu_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id=g_id LIMIT 1;
   SELECT cfg.`value` INTO resurrection_cost_coefficient FROM mode_config cfg WHERE cfg.param='resurrection cost coefficient' AND cfg.mode_id=mode_id;
@@ -11566,6 +11866,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -11591,7 +11894,6 @@ BEGIN
 
   SELECT card_id INTO crd_id FROM player_deck WHERE id=player_deck_id;
 
-
   SELECT cost,`type` INTO card_cost,card_type FROM cards WHERE id=crd_id LIMIT 1;
   IF card_cost>0 THEN
     UPDATE players SET gold=gold-card_cost WHERE game_id=g_id AND player_num=p_num;
@@ -11606,6 +11908,9 @@ BEGIN
 
   CALL cmd_log_add_container(g_id, p_num, 'plays_card', crd_id);
   INSERT INTO statistic_game_actions(game_id,player_num,`action`,`value`) VALUES(g_id,p_num,'play_card',crd_id);
+
+  SET @current_card_type = card_type;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -11629,6 +11934,8 @@ BEGIN
   DECLARE x_len,y_len INT;
   DECLARE x2,y2 INT; 
   DECLARE new_building_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'put_building');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -11669,6 +11976,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -11893,9 +12203,14 @@ BEGIN
 
   DECLARE conversion_error INT DEFAULT 0;
   DECLARE bandit_bu_id INT;
+  DECLARE can_only_in_my_turn INT;
   DECLARE CONTINUE HANDLER FOR SQLSTATE '22007' SET conversion_error = 1;
 
-  IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
+  SET can_only_in_my_turn = 1 - game_feature_get_param(g_id, 'realtime_cards');
+
+  IF can_only_in_my_turn AND NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE ed.code='not_your_turn';
   ELSE
     SET amount=CAST(amount_input_str AS SIGNED INTEGER);
@@ -11936,6 +12251,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -12311,6 +12629,8 @@ BEGIN
   DECLARE new_unit_id INT;
   DECLARE u_id INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code=check_play_card(g_id,p_num,player_deck_id,'summon_unit');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -12341,6 +12661,9 @@ BEGIN
     END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -12364,15 +12687,19 @@ BEGIN
   DECLARE subsidy_damage INT;
   DECLARE board_castle_id INT;
   DECLARE health_remaining INT;
+  DECLARE can_only_in_my_turn INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id=g_id LIMIT 1;
   SELECT cfg.`value` INTO subsidy_amt FROM mode_config cfg WHERE cfg.param='subsidy amount' AND cfg.mode_id=mode_id;
   SELECT cfg.`value` INTO subsidy_damage FROM mode_config cfg WHERE cfg.param='subsidy castle damage' AND cfg.mode_id=mode_id;
+  SET can_only_in_my_turn = 1 - game_feature_get_param(g_id, 'realtime_cards');
 
-  IF NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
+  IF can_only_in_my_turn AND NOT p_num=(SELECT player_num FROM active_players WHERE game_id=g_id) THEN
     SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=1;
   ELSE
-    IF (SELECT subsidy_flag FROM active_players WHERE game_id=g_id)=1 THEN
+    IF can_only_in_my_turn AND (SELECT subsidy_flag FROM active_players WHERE game_id=g_id)=1 THEN
       SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=5;
     ELSE
       IF (SELECT bb.health FROM board_buildings bb JOIN buildings b ON bb.building_id=b.id WHERE bb.game_id=g_id AND bb.player_num=p_num AND b.`type`='castle' LIMIT 1)<=subsidy_damage THEN
@@ -12383,8 +12710,11 @@ BEGIN
         SELECT bb.id INTO board_castle_id FROM board_buildings bb JOIN board b ON bb.id=b.ref WHERE b.`type`='castle' AND b.game_id=g_id AND bb.player_num=p_num LIMIT 1;
         UPDATE players SET gold=gold+subsidy_amt WHERE game_id=g_id AND player_num=p_num;
         UPDATE board_buildings SET health=health-subsidy_damage WHERE id=board_castle_id;
-        UPDATE active_players SET subsidy_flag=1 WHERE game_id=g_id;
-        
+
+        IF can_only_in_my_turn THEN
+          UPDATE active_players SET subsidy_flag=1 WHERE game_id=g_id;
+        END IF;
+
         SELECT health INTO health_remaining FROM board_buildings WHERE id=board_castle_id;
 
         CALL cmd_player_set_gold(g_id,p_num);
@@ -12396,6 +12726,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -12418,6 +12751,8 @@ BEGIN
   DECLARE err_code INT;
   DECLARE aim_bu_id INT;
   DECLARE board_unit_id INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_unit_can_do_action(g_id,p_num,x,y,'taran_bind'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -12444,6 +12779,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -12859,6 +13197,8 @@ BEGIN
   DECLARE log_msg_code_part VARCHAR(50) CHARSET utf8 DEFAULT 'unit_levelup_';
   DECLARE cmd VARCHAR(1000) CHARSET utf8 DEFAULT 'unit_level_up_$stat($x,$y)';
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SET err_code = check_unit_can_do_action(g_id, p_num, x, y, '_applcable_for_any_unit_');
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
   ELSE
@@ -12898,6 +13238,9 @@ BEGIN
       CALL unit_action_end(g_id, p_num);
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -13144,6 +13487,8 @@ BEGIN
   DECLARE health_before_hit,experience INT;
   DECLARE aim_no_exp INT DEFAULT 0;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SELECT g.mode_id INTO mode_id FROM games g WHERE g.id = g_id LIMIT 1;
   SET err_code = check_unit_can_do_action(g_id,p_num,x,y,'unit_shoot'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -13235,6 +13580,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -13457,6 +13805,8 @@ BEGIN
   DECLARE new_wall_building_id INT;
   DECLARE rotation,flip,x_min,y_min INT;
 
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
+
   SELECT g.mode_id INTO g_mode FROM games g WHERE g.id=g_id LIMIT 1;
 
   SET err_code=check_building_can_do_action(g_id,p_num,x,y,'wall_close'); 
@@ -13501,6 +13851,9 @@ BEGIN
       CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -13526,6 +13879,8 @@ BEGIN
   DECLARE old_wall_building_id INT;
   DECLARE new_wall_building_id INT;
   DECLARE rotation,flip,x_min,y_min INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SELECT g.mode_id INTO g_mode FROM games g WHERE g.id=g_id LIMIT 1;
 
@@ -13571,6 +13926,9 @@ BEGIN
       CALL user_action_end(g_id, p_num);
     END IF;
   END IF;
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -13595,6 +13953,8 @@ BEGIN
   DECLARE dice INT;
   DECLARE fb_damage INT DEFAULT 1;
   DECLARE health_before_hit,experience INT;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_unit_can_do_action(g_id,p_num,x,y,'wizard_fireball'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -13644,6 +14004,9 @@ BEGIN
       END IF;
   END IF;
 
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -13666,6 +14029,8 @@ BEGIN
   DECLARE aim_bu_id INT;
   DECLARE board_unit_id INT;
   DECLARE hp_heal INT DEFAULT 1;
+
+  SELECT GET_LOCK(get_game_lock_name(g_id), 10) INTO @tmp;
 
   SET err_code=check_unit_can_do_action(g_id,p_num,x,y,'wizard_heal'); 
   IF err_code<>0 THEN SELECT 0 AS `success`, ed.id as `error_code`, null as `error_params` FROM error_dictionary ed WHERE id=err_code;
@@ -13691,6 +14056,9 @@ BEGIN
       END IF;
     END IF;
   END IF;
+
+
+  SELECT RELEASE_LOCK(get_game_lock_name(g_id)) INTO @tmp;
 
 END ;;
 DELIMITER ;
@@ -16227,4 +16595,4 @@ USE `lords_site`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-24 13:06:54
+-- Dump completed on 2019-09-28 16:34:48
