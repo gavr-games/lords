@@ -54,8 +54,8 @@
    {:command :set-health :object-id obj-id :health (obj :health)}))
 
 (defn attack
-  [obj-id target-id damage]
-  {:command :attack :attacker obj-id :target target-id :damage damage})
+  [obj-id target-id params]
+  {:command :attack :attacker obj-id :target target-id :params params})
 
 (defn player-lost
   [p]

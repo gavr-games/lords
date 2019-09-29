@@ -1,8 +1,9 @@
 (ns engine.actions
-  (:require [engine.object-utils :as obj])
+  (:require [engine.object-utils :as obj-utils])
   (:require [engine.core :refer :all])
   (:require [engine.commands :as cmd :refer [add-command]])
-  (:require [engine.transformations :refer [distance]]))
+  (:require [engine.transformations :refer [distance]])
+  (:require [engine.utils :refer [weighted-random-choice]]))
 
 (defn check-game
   [g]
@@ -89,13 +90,28 @@
     (get-in g [:objects obj-id])
     (get-in g [:objects target-id]))))
 
+(defn default-attack-possibilities
+  [obj]
+  (let [damage (obj :attack)]
+    [{:weight 5 :damage damage :type :hit}
+     {:weight 1 :damage (inc damage) :type :critical}]))
+
+(defn get-attack-possibilities
+  [obj target]
+  (-> (default-attack-possibilities obj)
+      ((get-modifier obj :attacks) obj target)
+      ((get-modifier target :attacked) obj target)))
+
 (defn attack
   [g p obj-id target-id]
-  (let [damage (get-in g [:objects obj-id :attack])]
+  (let [obj (get-in g [:objects obj-id])
+        target (get-in g [:objects target-id])
+        attack-params (weighted-random-choice
+                       (get-attack-possibilities obj target))]
     (-> g
-        (update-object obj-id obj/deactivate cmd/set-moves)
-        (add-command (cmd/attack obj-id target-id damage))
-        (damage-obj target-id p damage))))
+        (update-object obj-id obj-utils/deactivate cmd/set-moves)
+        (add-command (cmd/attack obj-id target-id attack-params))
+        (damage-obj target-id p (attack-params :damage)))))
 
 (def actions-dic
   {:move {:check check-move

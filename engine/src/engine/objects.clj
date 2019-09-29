@@ -1,29 +1,7 @@
 (ns engine.objects
-  (:require [engine.core :refer :all]))
-
-(declare objects)
-
-
-(defn get-new-object
-  "Gets a new object of a given type."
-  [obj-type]
-  (as-> (objects obj-type) obj
-    (assoc obj :type obj-type)
-    (if (obj :max-moves)
-      (assoc obj :moves 0)
-      obj)))
-
-
-(defn add-new-object
-  "Convenience function that creates a new object and adds it to the game."
-  ([g obj-type position]
-   (add-new-object g nil obj-type position nil nil))
-  ([g obj-type position flip rotation]
-   (add-new-object g nil obj-type position flip rotation))
-  ([g p obj-type position]
-   (add-new-object g p obj-type position nil nil))
-  ([g p obj-type position flip rotation]
-   (add-object g p (get-new-object obj-type) position flip rotation)))
+  (:require [engine.core :refer :all]
+            [engine.object-utils :refer [unit? is-type?]]
+            [clojure.set :as set]))
 
 (defn castle-destroyed
   [g obj-id]
@@ -40,6 +18,16 @@
       (player-lost game p-lost)
       (reduce player-won (end-game game) p-won))))
 
+(defn damage-bonus-against
+  "Returns attack modifier that adds bonus to damage for target of given type."
+  [obj-type bonus]
+  (fn [attack-params attacker target]
+    (if (is-type? target obj-type)
+      (map #(update % :damage + bonus) attack-params)
+      attack-params)))
+
+
+(def default-unit-actions #{:move :levelup})
 
 (def
  objects
@@ -52,7 +40,7 @@
     [1 0] {:fill :solid}
     [1 1] {:fill :floor :spawn true}}
    :handlers
-   {:on-destruction castle-destroyed}},
+   {:on-destruction [castle-destroyed]}},
 
   :tree
   {:health 2
@@ -81,4 +69,45 @@
    :coords
    {[0 0] {:fill :unit}}
    :actions
-   #{:move :attack}}})
+   #{:attack}
+   :modifiers
+   {:attacks [(damage-bonus-against :chevalier 1)]}}
+
+  :chevalier
+  {:health 3
+   :max-moves 4
+   :attack 2
+   :class :unit
+   :coords
+   {[0 0] {:fill :unit}}
+   :actions
+   #{:attack}
+   :modifiers
+   {:attacks [(damage-bonus-against :dragon 2)]}}
+
+  })
+
+
+(defn get-new-object
+  "Gets a new object of a given type."
+  [obj-type]
+  (as-> (objects obj-type) obj
+    (assoc obj :type obj-type)
+    (if (obj :max-moves)
+      (assoc obj :moves 0)
+      obj)
+    (if (unit? obj)
+      (update obj :actions set/union default-unit-actions)
+      obj)))
+
+
+(defn add-new-object
+  "Convenience function that creates a new object and adds it to the game."
+  ([g obj-type position]
+   (add-new-object g nil obj-type position nil nil))
+  ([g obj-type position flip rotation]
+   (add-new-object g nil obj-type position flip rotation))
+  ([g p obj-type position]
+   (add-new-object g p obj-type position nil nil))
+  ([g p obj-type position flip rotation]
+   (add-object g p (get-new-object obj-type) position flip rotation)))

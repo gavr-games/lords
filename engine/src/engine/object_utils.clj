@@ -19,6 +19,14 @@
   [obj]
   (pos? (or (obj :moves) 0)))
 
+(defn unit?
+  [obj]
+  (= :unit (obj :class)))
+
+(defn is-type?
+  [obj t]
+  (= t (obj :type)))
+
 (defn belongs-to?
   "Checks if obj belongs to player p."
   [p obj]

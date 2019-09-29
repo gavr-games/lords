@@ -13,3 +13,18 @@
   (if (map? a)
     (merge-with deep-merge a b)
     b))
+
+
+(defn weighted-random-choice
+  "Takes a collection of maps, where every element has :weight value.
+  Returns a random element from the collection with probabilities proportional to weights."
+  [coll]
+  (if (= 1 (count coll))
+    (first coll)
+    (let [weights (map :weight coll)
+          cumulative-weights (reductions + weights)
+          total-weight (last cumulative-weights)
+          normed-weights (map #(/ % total-weight) cumulative-weights)
+          r (rand)
+          i (first (keep-indexed #(if (> %2 r) %1) normed-weights))]
+      (nth coll i))))
