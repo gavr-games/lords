@@ -45,6 +45,7 @@
   :tree
   {:health 2
    :class :building
+   :no-experience true
    :coords
    {[0 0] {:fill :solid}}}
 
@@ -56,6 +57,7 @@
   :bridge
   {:class :building
    :health 10
+   :no-experience true
    :coords
    {[0 0] {:fill :bridge}
     [0 1] {:fill :solid}

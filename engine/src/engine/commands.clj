@@ -53,6 +53,11 @@
   ([obj-id obj]
    {:command :set-health :object-id obj-id :health (obj :health)}))
 
+(defn set-experience
+  ([obj-id old-obj obj] (set-experience obj-id obj))
+  ([obj-id obj]
+   {:command :set-experience :object-id obj-id :experience (obj :experience)}))
+
 (defn attack
   [obj-id target-id params]
   {:command :attack :attacker obj-id :target target-id :params params})

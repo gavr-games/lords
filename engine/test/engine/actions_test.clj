@@ -75,3 +75,16 @@
         modified (get-attack-possibilities sp ch)]
     (is (= #{1 2} (set (map :damage normal))))
     (is (= #{2 3} (set (map :damage modified))))))
+
+(deftest test-experience
+  (let [g (-> (create-new-game)
+              (add-new-object :tree [3 0]))
+        sp1-id (get-object-id-at g [2 0])
+        sp2-id (get-object-id-at g [0 2])
+        castle-id (get-object-id-at g [0 0])
+        tree-id (get-object-id-at g [3 0])
+        g-after (-> g
+                    (attack 0 sp1-id tree-id)
+                    (attack 0 sp2-id castle-id))]
+    (is (zero? (get-in g-after [:objects sp1-id :experience] 0)))
+    (is (pos? (get-in g-after [:objects sp2-id :experience])))))

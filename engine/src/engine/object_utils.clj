@@ -37,3 +37,9 @@
   [obj health]
   {:pre [(pos? health)]}
   (assoc obj :health health))
+
+(defn add-experience
+  "Adds experience."
+  [obj exp]
+  {:pre [(pos? exp)]}
+  (update obj :experience (fnil + 0) exp))

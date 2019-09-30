@@ -93,14 +93,32 @@
 (defn default-attack-possibilities
   [obj]
   (let [damage (obj :attack)]
-    [{:weight 5 :damage damage :type :hit}
-     {:weight 1 :damage (inc damage) :type :critical}]))
+    [{:weight 5 :damage damage :outcome :hit}
+     {:weight 1 :damage (inc damage) :outcome :critical}]))
 
 (defn get-attack-possibilities
   [obj target]
   (-> (default-attack-possibilities obj)
       ((get-modifier obj :attacks) obj target)
       ((get-modifier target :attacked) obj target)))
+
+(defn calculate-experience
+  "Calculates how much experience should be given for attacking target."
+  [g target-id target-before]
+  (if (target-before :no-experience)
+    0
+    (let [health-after (get-in g [:objects target-id :health] 0)
+          damage (- (target-before :health) health-after)
+          kill-bonus (if (get-in g [:objects target-id]) 0 1)]
+      (+ damage kill-bonus))))
+
+(defn add-experience
+  [g obj-id target-id target]
+  (let [exp (calculate-experience g target-id target)]
+    (if (pos? exp)
+      (update-object g obj-id
+                     #(obj-utils/add-experience % exp) cmd/set-experience)
+      g)))
 
 (defn attack
   [g p obj-id target-id]
@@ -111,7 +129,8 @@
     (-> g
         (update-object obj-id obj-utils/deactivate cmd/set-moves)
         (add-command (cmd/attack obj-id target-id attack-params))
-        (damage-obj target-id p (attack-params :damage)))))
+        (damage-obj target-id p (attack-params :damage))
+        (add-experience obj-id target-id target))))
 
 (def actions-dic
   {:move {:check check-move
