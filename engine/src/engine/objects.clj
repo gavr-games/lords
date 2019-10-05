@@ -60,6 +60,16 @@
    :actions
    #{:attack}}
 
+  :ram
+  {:health 2
+   :max-moves 1
+   :attack 5
+   :class :unit
+   :coords
+   {[0 0] {:fill :unit}}
+   :actions
+   #{:attack :bind}}
+
   })
 
 (create-handler :castle-destroyed

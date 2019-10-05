@@ -121,6 +121,29 @@
         (damage-obj target-id p (attack-params :damage))
         (add-experience obj-id target-id target))))
 
+(defn check-is-unit
+  [g target-id]
+  (if (not (obj-utils/unit? (get-in g [:objects target-id])))
+    :target-should-be-a-unit))
+
+(defn check-objects-near
+  "Checks that o1 is near o2 (distance between them is 1)."
+  [o1 o2]
+  (if (not= 1 (obj-distance o1 o2))
+    :target-object-is-not-reachable))
+
+(defn check-bind
+  [g p obj-id target-id]
+  (or
+   (check-object-action g p obj-id :bind)
+   (check-is-unit g target-id)
+   (check-objects-near
+    (get-in g [:objects obj-id])
+    (get-in g [:objects target-id]))))
+
+(defn bind [] nil)
+
+
 (def actions-dic
   {:move {:check check-move
           :do move
@@ -131,6 +154,9 @@
    :attack {:check check-attack
             :do attack
             :params [:obj-id :target-id]}
+   :bind {:check check-bind
+          :do bind
+          :params [:obj-id :target-id]}
    })
 
 (defn auto-end-turn
