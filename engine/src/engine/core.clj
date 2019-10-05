@@ -10,6 +10,13 @@
   "Generic handler differentiated by a keyword code."
   identity)
 
+(defmacro create-handler
+  "Creates and registers given handler metgod for the given code."
+  [code & fn-tail]
+  `(defmethod handler ~code
+     [_#]
+     (fn ~@fn-tail)))
+
 (defn pass
   "Dummy handler that does nothing and returns first argument."
   [g & more]
