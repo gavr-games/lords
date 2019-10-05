@@ -3,7 +3,7 @@
   (:require [engine.core :refer :all])
   (:require [engine.commands :as cmd :refer [add-command]])
   (:require [engine.transformations :refer [distance]])
-  (:require [engine.utils :refer [weighted-random-choice]]))
+  (:require [engine.attack :refer [get-attack-params]]))
 
 (defn check-game
   [g]
@@ -77,9 +77,10 @@
     :invalid-attack-target))
 
 (defn check-obj-one-step-away
+  "Checks that o1 can step on o2 in one step."
   [o1 o2]
   (if (not= 1 (obj-distance o1 o2))
-    :target-object-is-not-reachable))
+    :target-object-is-not-reachable)) ;TODO knight
 
 (defn check-attack
   [g p obj-id target-id]
@@ -90,17 +91,6 @@
     (get-in g [:objects obj-id])
     (get-in g [:objects target-id]))))
 
-(defn default-attack-possibilities
-  [obj]
-  (let [damage (obj :attack)]
-    [{:weight 5 :damage damage :outcome :hit}
-     {:weight 1 :damage (inc damage) :outcome :critical}]))
-
-(defn get-attack-possibilities
-  [obj target]
-  (-> (default-attack-possibilities obj)
-      ((get-modifier obj :attacks) obj target)
-      ((get-modifier target :attacked) obj target)))
 
 (defn calculate-experience
   "Calculates how much experience should be given for attacking target."
@@ -124,8 +114,7 @@
   [g p obj-id target-id]
   (let [obj (get-in g [:objects obj-id])
         target (get-in g [:objects target-id])
-        attack-params (weighted-random-choice
-                       (get-attack-possibilities obj target))]
+        attack-params (get-attack-params obj target)]
     (-> g
         (update-object obj-id obj-utils/deactivate cmd/set-moves)
         (add-command (cmd/attack obj-id target-id attack-params))

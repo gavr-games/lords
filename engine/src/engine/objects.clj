@@ -1,6 +1,6 @@
 (ns engine.objects
   (:require [engine.core :refer :all]
-            [engine.object-utils :refer [unit? is-type?]]
+            [engine.object-utils :refer [unit?]]
             [clojure.set :as set]))
 
 (defn castle-destroyed
@@ -17,14 +17,6 @@
     (as-> g game
       (player-lost game p-lost)
       (reduce player-won (end-game game) p-won))))
-
-(defn damage-bonus-against
-  "Returns attack modifier that adds bonus to damage for target of given type."
-  [obj-type bonus]
-  (fn [attack-params attacker target]
-    (if (is-type? target obj-type)
-      (map #(update % :damage + bonus) attack-params)
-      attack-params)))
 
 
 (def default-unit-actions #{:move :levelup})
@@ -71,9 +63,7 @@
    :coords
    {[0 0] {:fill :unit}}
    :actions
-   #{:attack}
-   :modifiers
-   {:attacks [(damage-bonus-against :chevalier 1)]}}
+   #{:attack}}
 
   :chevalier
   {:health 3
@@ -83,9 +73,7 @@
    :coords
    {[0 0] {:fill :unit}}
    :actions
-   #{:attack}
-   :modifiers
-   {:attacks [(damage-bonus-against :dragon 2)]}}
+   #{:attack}}
 
   })
 
