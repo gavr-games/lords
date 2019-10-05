@@ -5,6 +5,11 @@
   (:require [engine.transformations :refer [transform-coords distance]])
   (:require [engine.utils :refer [deep-merge]]))
 
+(defmulti
+  handler
+  "Generic handler differentiated by a keyword code."
+  identity)
+
 (defn pass
   "Dummy handler that does nothing and returns first argument."
   [g & more]
@@ -20,7 +25,7 @@
   [obj event]
   (let [handlers (get-in obj [:handlers event])]
     (if handlers
-      (reduce chain-handlers handlers)
+      (reduce chain-handlers (map handler handlers))
       pass)))
 
 (defn create-player

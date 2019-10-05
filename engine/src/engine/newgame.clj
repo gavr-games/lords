@@ -5,11 +5,11 @@
 (def board-size-x 20)
 (def board-size-y 20)
 
-(defn create-empty-board
+(defn- create-empty-board
   [size-x size-y]
   (zipmap (for [x (range size-x) y (range size-y)] [x y]) (repeat {})))
 
-(defn create-empty-game []
+(defn- create-empty-game []
   {:board
    (create-empty-board board-size-x board-size-y)
    :players {}
