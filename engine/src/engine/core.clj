@@ -6,34 +6,22 @@
   (:require [engine.utils :refer [deep-merge]]))
 
 (defn pass
-  "Dummy handler/modifier that does nothing and returns first argument."
+  "Dummy handler that does nothing and returns first argument."
   [g & more]
   g)
 
 (defn- chain-handlers
-  "Chains two handlers or modifiers."
+  "Chains two handlers."
   [h1 h2]
   (fn [g & more]
     (apply h2 (apply h1 g more) more)))
 
-(defn- get-handler-or-modifier
-  "Gets object's handler/modifier for the event.
-  h-type should be either :handlers or :modifiers.
-  If there is no handler, returns do-nothing handler.
-  If there are multiple, returns one chained handler."
-  [obj h-type event]
-  (let [handlers (get-in obj [h-type event])]
+(defn get-handler
+  [obj event]
+  (let [handlers (get-in obj [:handlers event])]
     (if handlers
       (reduce chain-handlers handlers)
       pass)))
-
-(defn get-handler
-  [obj event]
-  (get-handler-or-modifier obj :handlers event))
-
-(defn get-modifier
-  [obj event]
-  (get-handler-or-modifier obj :modifiers event))
 
 (defn create-player
   [team gold]
