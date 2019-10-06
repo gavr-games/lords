@@ -1,5 +1,6 @@
-(ns engine.actions-test
-  (:require [engine.actions :refer :all]
+(ns engine.abilities-test
+  (:require [engine.actions :refer [act check]]
+            [engine.abilities]
             [engine.core :refer :all]
             [engine.newgame :refer [create-new-game]]
             [engine.objects :refer [add-new-object get-new-object]]
