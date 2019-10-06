@@ -240,16 +240,19 @@
   (into {} (filter #(-> % val pred) (g :objects))))
 
 (defn update-object
-  "Performs function f on object and adds a command created by cmd-f.
+  "Performs function f on object and optionally adds a command created by cmd-f.
   Function cmd-f should have signature [obj-id obj-old obj-new]."
-  [g obj-id f cmd-f]
-  (let [obj (get-in g [:objects obj-id])
-        updated-obj (f obj)]
-    (if (not= obj updated-obj)
-      (-> g
-          (assoc-in [:objects obj-id] updated-obj)
-          (cmd/add-command (cmd-f obj-id obj updated-obj)))
-      g)))
+  ([g obj-id f] (update-object g obj-id f nil))
+  ([g obj-id f cmd-f]
+   (let [obj (get-in g [:objects obj-id])
+         updated-obj (f obj)]
+     (if (not= obj updated-obj)
+       (as-> g game
+         (assoc-in game [:objects obj-id] updated-obj)
+         (if cmd-f
+           (cmd/add-command game (cmd-f obj-id obj updated-obj))
+           game))
+       g))))
 
 (defn update-objects
   "Performs function f on every object in the game that satisfies pred.

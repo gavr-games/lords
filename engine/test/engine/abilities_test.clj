@@ -4,7 +4,8 @@
             [engine.core :refer :all]
             [engine.newgame :refer [create-new-game]]
             [engine.objects :refer [add-new-object get-new-object]]
-            [clojure.test :refer :all]))
+            [clojure.test :refer :all]
+            [engine.object-utils :as obj]))
 
 (deftest test-move-attack
   (let [g (create-new-game)
@@ -81,3 +82,50 @@
                     (act 0 :attack {:obj-id sp2-id :target-id castle-id}))]
     (is (zero? (get-in g-after [:objects sp1-id :experience] 0)))
     (is (pos? (get-in g-after [:objects sp2-id :experience])))))
+
+(deftest test-binding
+  (let [g (-> (create-new-game)
+              (add-new-object :ram 0 [2 1] nil nil {:moves 1}))
+        sp1-id (get-object-id-at g [2 0])
+        ram-id (get-object-id-at g [2 1])
+        castle-id (get-object-id-at g [0 0])
+        g (-> g
+              (act 0 :bind {:obj-id ram-id :target-id sp1-id})
+              (act 0 :move {:obj-id sp1-id :new-position [3 0]})
+              (update-object ram-id obj/activate))
+        unbound? (fn [g]
+                   (let [ram-pos (get-in g [:objects ram-id :position])
+                         [sp-x sp-y] (get-in g [:objects sp1-id :position])
+                         g (act
+                            0
+                            :move
+                            {:obj-id sp1-id :new-position [(inc sp-x) sp-y]})
+                         ram-pos-after (get-in g [:objects ram-id :position])]
+                     (= ram-pos ram-pos-after)))]
+    (is (= [2 0] (get-in g [:objects ram-id :position])))
+    (is (unbound? (act g 0 :move {:obj-id ram-id :new-position [1 1]})))
+    (is (unbound? (act g 0 :attack {:obj-id ram-id :target-id castle-id})))
+    (is (unbound? (move-object g 0 ram-id [5 5])))
+    (is (unbound? (move-object g 0 sp1-id [5 5])))
+    (is (map? (-> g
+                  (destroy-obj 0 sp1-id)
+                  (act 0 :move {:obj-id ram-id :new-position [1 1]}))))
+    (is (map? (-> g
+                  (destroy-obj 0 ram-id)
+                  (act 0 :move {:obj-id sp1-id :new-position [4 0]}))))))
+
+(deftest test-binding-to-dragon
+  (let [g (-> (create-new-game)
+              (add-new-object :ram 0 [2 2] nil nil {:moves 1})
+              (add-new-object :dragon 0 [3 3] nil nil {:moves 2}))
+        ram-id (get-object-id-at g [2 2])
+        dragon-id (get-object-id-at g [3 3])
+        g (-> g
+              (act 0 :bind {:obj-id ram-id :target-id dragon-id})
+              (act 0 :move {:obj-id dragon-id :new-position [3 2]})
+              )
+        ram-pos-2 (get-in g [:objects ram-id :position])
+        g (act g 0 :move {:obj-id dragon-id :new-position [4 2]})
+        ram-pos-3 (get-in g [:objects ram-id :position])]
+    (is (= [3 4] ram-pos-2))
+    (is (= [3 3] ram-pos-3))))

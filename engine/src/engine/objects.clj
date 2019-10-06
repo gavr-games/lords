@@ -70,6 +70,18 @@
    :actions
    #{:attack :bind}}
 
+  :dragon
+  {:health 5
+   :max-moves 6
+   :attack 5
+   :class :unit
+   :coords
+   {[0 0] {:fill :unit}
+    [0 1] {:fill :unit}
+    [1 0] {:fill :unit}
+    [1 1] {:fill :unit}}
+   :actions
+   #{:splash-attack}}
   })
 
 (create-handler
@@ -102,7 +114,8 @@
 
 
 (defn add-new-object
-  "Convenience function that creates a new object and adds it to the game."
+  "Convenience function that creates a new object and adds it to the game.
+  If field map is given, it adds/overrides to defauld fields of the new object."
   ([g obj-type position]
    (add-new-object g nil obj-type position nil nil))
   ([g obj-type position flip rotation]
@@ -110,4 +123,8 @@
   ([g p obj-type position]
    (add-new-object g p obj-type position nil nil))
   ([g p obj-type position flip rotation]
-   (add-object g p (get-new-object obj-type) position flip rotation)))
+   (add-new-object g p obj-type position flip rotation nil))
+  ([g p obj-type position flip rotation fields]
+   (add-object g p
+               (merge (get-new-object obj-type) fields)
+               position flip rotation)))
