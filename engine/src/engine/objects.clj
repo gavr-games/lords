@@ -72,20 +72,21 @@
 
   })
 
-(create-handler :castle-destroyed
-  [g obj-id]
-  (let [p-lost (get-in g [:objects obj-id :player])
-        remaining-players (dissoc (g :players) p-lost)
-        remaining-teams
-        (set (map :team (filter
-                         #(= :active (% :status))
-                         (vals remaining-players))))
-        p-won (if (= 1 (count remaining-teams))
-                (keys remaining-players)
-                [])]
-    (as-> g game
-      (player-lost game p-lost)
-      (reduce player-won (end-game game) p-won))))
+(create-handler
+ :castle-destroyed
+ [g obj-id]
+ (let [p-lost (get-in g [:objects obj-id :player])
+       remaining-players (dissoc (g :players) p-lost)
+       remaining-teams
+       (set (map :team (filter
+                        #(= :active (% :status))
+                        (vals remaining-players))))
+       p-won (if (= 1 (count remaining-teams))
+               (keys remaining-players)
+               [])]
+   (as-> g game
+     (player-lost game p-lost)
+     (reduce player-won (end-game game) p-won))))
 
 (defn get-new-object
   "Gets a new object of a given type."

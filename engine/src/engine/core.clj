@@ -11,13 +11,14 @@
   identity)
 
 (defmacro create-handler
-  "Creates and registers given handler method for the given code."
+  "Creates and registers given handler method for the given code.
+  Handler should have arguments [game object-id & h-args]."
   [code & fn-tail]
   `(defmethod handler ~code
      [_#]
      (fn ~@fn-tail)))
 
-(defn pass
+(defn- pass
   "Dummy handler that does nothing and returns first argument."
   [g & more]
   g)
@@ -28,12 +29,20 @@
   (fn [g & more]
     (apply h2 (apply h1 g more) more)))
 
-(defn get-handler
+(defn- get-handler
   [obj event]
   (let [handlers (get-in obj [:handlers event])]
     (if handlers
       (reduce chain-handlers (map handler handlers))
       pass)))
+
+(defn handle
+  "Gets the approppriate handler for the object and calls it
+  with arguments [g obj-id & h-args]."
+  [g obj-id event & h-args]
+  (let [obj (get-in g [:objects obj-id])
+        handler-fn (get-handler obj event)]
+    (apply handler-fn g obj-id h-args)))
 
 (defn create-player
   [team gold]
@@ -179,13 +188,11 @@
 (defn destroy-obj
   "Destroys an object, p is a player who destroyed it."
   [g p obj-id]
-  (let [obj (get-in g [:objects obj-id])
-        destruction-handler (get-handler obj :on-destruction)]
-    (-> g
-        (destruction-handler obj-id)
-        (destruction-reward obj-id p)
-        (add-command (cmd/destroy-obj obj-id))
-        (remove-object obj-id))))
+  (-> g
+      (handle obj-id :on-destruction)
+      (destruction-reward obj-id p)
+      (add-command (cmd/destroy-obj obj-id))
+      (remove-object obj-id)))
 
 (defn drown-object
   [g p obj-id]
