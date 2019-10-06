@@ -1,7 +1,7 @@
 (ns engine.core
   (:require [engine.object-utils :as obj]
             [clojure.set :as set])
-  (:require [engine.commands :as cmd :refer [add-command]])
+  (:require [engine.commands :as cmd])
   (:require [engine.transformations :refer [transform-coords distance]])
   (:require [engine.utils :refer [deep-merge]]))
 
@@ -43,6 +43,12 @@
   (let [obj (get-in g [:objects obj-id])
         handler-fn (get-handler obj event)]
     (apply handler-fn g obj-id h-args)))
+
+
+(defn add-handler
+  [g obj-id event handler-code]
+  (update-in g [:objects obj-id :handlers event] conj handler-code))
+
 
 (defn create-player
   [team gold]
@@ -107,7 +113,7 @@
   (-> g
       (remove-object-coords obj-id)
       (update-in [:objects] dissoc obj-id)
-      (add-command (cmd/remove-obj obj-id))))
+      (cmd/add-command (cmd/remove-obj obj-id))))
 
 
 (defn get-fills-in-cell
@@ -154,7 +160,7 @@
          (assoc-in [:objects new-obj-id] new-obj)
          (update :next-object-id inc)
          (place-object-on-board new-obj-id)
-         (add-command (cmd/add-obj new-obj-id new-obj))))))
+         (cmd/add-command (cmd/add-obj new-obj-id new-obj))))))
 
 (defn can-move-object?
   "Checks if the object can be moved to the given position."
@@ -181,7 +187,7 @@
     (if reward
       (-> g
           (update-in [:players p :gold] + reward)
-          (add-command (cmd/change-gold p reward obj-id)))
+          (cmd/add-command (cmd/change-gold p reward obj-id)))
       g)))
 
 
@@ -191,13 +197,13 @@
   (-> g
       (handle obj-id :on-destruction)
       (destruction-reward obj-id p)
-      (add-command (cmd/destroy-obj obj-id))
+      (cmd/add-command (cmd/destroy-obj obj-id))
       (remove-object obj-id)))
 
 (defn drown-object
   [g p obj-id]
   (-> g
-      (add-command (cmd/drown-obj obj-id))
+      (cmd/add-command (cmd/drown-obj obj-id))
       (destroy-obj p obj-id)))
 
 (defn drown-handler
@@ -225,7 +231,7 @@
          (assoc-in [:objects obj-id] moved-obj)
          (assert-can-place-object moved-obj)
          (place-object-on-board obj-id)
-         (add-command (cmd/move-obj obj-id obj moved-obj))
+         (cmd/add-command (cmd/move-obj obj-id obj moved-obj))
          (after-move-handler p obj-id)))))
 
 (defn get-objects
@@ -242,7 +248,7 @@
     (if (not= obj updated-obj)
       (-> g
           (assoc-in [:objects obj-id] updated-obj)
-          (add-command (cmd-f obj-id obj updated-obj)))
+          (cmd/add-command (cmd-f obj-id obj updated-obj)))
       g)))
 
 (defn update-objects
@@ -265,7 +271,7 @@
         (update-objects (complement belongs-to-p?) obj/deactivate cmd/set-moves)
         (update-objects belongs-to-p? obj/activate cmd/set-moves)
         ;; TODO income, building effects etc.
-        (add-command (cmd/set-active-player p)))))
+        (cmd/add-command (cmd/set-active-player p)))))
 
 (defn get-next-player
   "Returns player number whose turn is after p."
@@ -317,13 +323,13 @@
 (defn player-lost
   [g p]
   (-> g
-      (add-command (cmd/player-lost p))
+      (cmd/add-command (cmd/player-lost p))
       (assoc-in [:players p :status] :lost)))
 
 (defn player-won
   [g p]
   (-> g
-      (add-command (cmd/player-won p))
+      (cmd/add-command (cmd/player-won p))
       (assoc-in [:players p :status] :won)))
 
 (defn damage-obj
@@ -340,7 +346,7 @@
   [g]
   (-> g
       (assoc :status :over)
-      (add-command (cmd/game-over))))
+      (cmd/add-command (cmd/game-over))))
 
 
 (defn activate
