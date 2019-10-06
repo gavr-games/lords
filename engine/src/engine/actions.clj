@@ -5,6 +5,24 @@
   (:require [engine.transformations :refer [distance]])
   (:require [engine.attack :refer [get-attack-params]]))
 
+
+(defmulti
+  action
+  "Player action distinguished by a keyword code."
+  identity)
+
+(defmacro create-action
+  "Creates and registers action method for the given code.
+  Action method should take game and player-num as first two arguments.
+  This method should either return a keyword for an error, or a modified game."
+  [code args body]
+  `(defmethod action ~code
+     [_#]
+     (with-meta
+       (fn ~args ~body)
+       {:args ~(mapv keyword (drop 2 args))})))
+
+
 (defn check-game
   [g]
   (cond
@@ -18,16 +36,61 @@
       (nil? player) :invalid-player
       (not= :active (player :status)) :player-not-active)))
 
+
+(defn auto-end-turn
+  "Ends turn if p is active and does not have active objects."
+  [g p]
+  (if
+      (and
+       (= p (g :active-player))
+       (not (has-active-objects? g p)))
+    (set-next-player-active g)
+    g))
+
+
+(defn act
+  "Performs action and returns the resulting game state or error keyword.
+  Params should be a map of keyword arguments."
+  [g p action-code params]
+  (let [act-fn (action action-code)
+        param-keys ((meta act-fn) :args)
+        param-values (vals (select-keys params param-keys))
+        act-call #(apply act-fn % p param-values)
+        action-log {:player p :action action :params params}
+        prechecks-fail (or
+                        (check-game g)
+                        (check-player g p))]
+    (or
+     prechecks-fail
+     (let [g-after (-> g
+                       (update-in [:actions] conj action-log)
+                       act-call)
+           invalid-action (keyword? g-after)]
+       (if invalid-action
+         g-after
+         (auto-end-turn g-after p))))))
+
+(defn check
+  "Checks if an action can be performed.
+  Returns nil (on valid action) or error keyword.
+  Params should be a map of keyword arguments."
+  [g p action-code params]
+  (let [g-after (act g p action-code params)]
+    (if (keyword? g-after)
+      g-after
+      nil)))
+
+
 (defn check-object-action
   "Checks that player can do given action on the object."
-  [g p obj-id action]
+  [g p obj-id action-code]
   (let [obj (get-in g [:objects obj-id])]
     (cond
       (not obj) :invalid-obj-id
       (not= p (obj :player)) :not-owner
       (zero? (or (obj :moves) 0)) :object-inactive
       ;; TODO test paralysis
-      (not (get-in obj [:actions action])) :invalid-action)))
+      (not (get-in obj [:actions action-code])) :invalid-action)))
 
 (defn check-coord-one-step-away
   [obj coord]
@@ -46,30 +109,6 @@
   (if (not (can-move-object? g obj-id position))
     :place-occupied))
 
-(defn check-move
-  [g p obj-id new-position]
-  (or
-   (check-object-action g p obj-id :move)
-   (check-valid-coord g new-position)
-   (check-coord-one-step-away (get-in g [:objects obj-id]) new-position)
-   (check-can-move-to g obj-id new-position)))
-
-(defn check-my-turn
-  [g p]
-  (if (not= p (g :active-player))
-    :not-your-turn))
-
-(defn move
-  [g p obj-id new-position]
-  (as-> g game
-    (update-object game obj-id #(update % :moves dec) cmd/set-moves)
-    (move-object game p obj-id new-position)))
-
-(defn end-turn
-  [g p]
-  (-> g
-      (add-command (cmd/end-turn p))
-      (set-next-player-active)))
 
 (defn check-valid-attack-target
   [g target-id]
@@ -81,15 +120,6 @@
   [o1 o2]
   (if (not= 1 (obj-distance o1 o2))
     :target-object-is-not-reachable)) ;TODO knight
-
-(defn check-attack
-  [g p obj-id target-id]
-  (or
-   (check-object-action g p obj-id :attack)
-   (check-valid-attack-target g target-id)
-   (check-obj-one-step-away
-    (get-in g [:objects obj-id])
-    (get-in g [:objects target-id]))))
 
 
 (defn calculate-experience
@@ -109,17 +139,6 @@
       (update-object g obj-id
                      #(obj-utils/add-experience % exp) cmd/set-experience)
       g)))
-
-(defn attack
-  [g p obj-id target-id]
-  (let [obj (get-in g [:objects obj-id])
-        target (get-in g [:objects target-id])
-        attack-params (get-attack-params obj target)]
-    (-> g
-        (update-object obj-id obj-utils/deactivate cmd/set-moves)
-        (add-command (cmd/attack obj-id target-id attack-params))
-        (damage-obj target-id p (attack-params :damage))
-        (add-experience obj-id target-id target))))
 
 (defn check-is-unit
   [g target-id]
@@ -144,63 +163,44 @@
 (defn bind [] nil)
 
 
-(def actions-dic
-  {:move {:check check-move
-          :do move
-          :params [:obj-id :new-position]}
-   :end-turn {:check check-my-turn
-              :do end-turn
-              :params []}
-   :attack {:check check-attack
-            :do attack
-            :params [:obj-id :target-id]}
-   :bind {:check check-bind
-          :do bind
-          :params [:obj-id :target-id]}
-   })
+(create-action
+ :end-turn
+ [g p]
+ (if (not= p (g :active-player))
+   :not-your-turn
+   (-> g
+      (add-command (cmd/end-turn p))
+      (set-next-player-active))))
 
-(defn auto-end-turn
-  "Performs action and if current player has no active objects, ends turn."
-  [f]
-  (fn
-    ([g p & params]
-     (let [g-after (apply f g p params)]
-       (if (and
-            (= p (g-after :active-player))
-            (not (has-active-objects? g-after p)))
-         (set-next-player-active g-after)
-         g-after)))))
 
-(defn check
-  "Checks if an action can be performed.
-  Returns nil (on valid action) or error.
-  Params should be a map of keyword arguments."
-  [g p action params]
-  (let [check-fn (get-in actions-dic [action :check])
-        param-keys (get-in actions-dic [action :params])
-        param-values (vals (select-keys params param-keys))]
-    (or
-     (check-game g)
-     (check-player g p)
-     (apply check-fn g p param-values))))
+(create-action
+ :move
+ [g p obj-id new-position]
+ (or
+   (check-object-action g p obj-id :move)
+   (check-valid-coord g new-position)
+   (check-coord-one-step-away (get-in g [:objects obj-id]) new-position)
+   (check-can-move-to g obj-id new-position)
+   (-> g
+       (update-object obj-id #(update % :moves dec) cmd/set-moves)
+       (move-object p obj-id new-position))))
 
-(defn act
-  "Performs action and returns the resulting game state.
-  Assumes that the action is valid.
-  Params should be a map of keyword arguments."
-  [g p action params]
-  (let [act-fn (get-in actions-dic [action :do])
-        param-keys (get-in actions-dic [action :params])
-        param-values (vals (select-keys params param-keys))
-        act-call #(apply (auto-end-turn act-fn) % p param-values)
-        action-log {:player p :action action :params params}]
+
+(create-action
+ :attack
+ [g p obj-id target-id]
+ (or
+   (check-object-action g p obj-id :attack)
+   (check-valid-attack-target g target-id)
+   (check-obj-one-step-away
+    (get-in g [:objects obj-id])
+    (get-in g [:objects target-id]))
+
+   (let [obj (get-in g [:objects obj-id])
+        target (get-in g [:objects target-id])
+        attack-params (get-attack-params obj target)]
     (-> g
-        (update-in [:actions] conj action-log)
-        act-call)))
-
-(defn check-and-act
-  "Performs check and action. Returns error or resulting state of the game.
-  Params should be a map of keyword arguments."
-  [g p action params]
-  (or (check g p action params)
-      (act g p action params)))
+        (update-object obj-id obj-utils/deactivate cmd/set-moves)
+        (add-command (cmd/attack obj-id target-id attack-params))
+        (damage-obj p target-id (attack-params :damage))
+        (add-experience obj-id target-id target)))))

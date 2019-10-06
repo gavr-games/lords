@@ -11,7 +11,7 @@
   identity)
 
 (defmacro create-handler
-  "Creates and registers given handler metgod for the given code."
+  "Creates and registers given handler method for the given code."
   [code & fn-tail]
   `(defmethod handler ~code
      [_#]
@@ -321,7 +321,7 @@
 
 (defn damage-obj
   "Deals damage to an object."
-  [g obj-id p damage]
+  [g p obj-id damage]
   (let [health (get-in g [:objects obj-id :health])
         health-after (- health damage)]
     (if (pos? health-after)

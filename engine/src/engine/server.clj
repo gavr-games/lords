@@ -29,15 +29,15 @@
     (as-int x) (Long/parseLong x)
     :else x))
 
-(defn act! [g-id p action params]
+(defn act! [g-id p action-code params]
   (let [params (deep-to-int params)
-        action (keyword action)]
+        action-code (keyword action-code)]
     (dosync
      (let [g (@games g-id)
-           err (action/check g p action params)]
-       (if err
-         (response {:success false :error err})
-         (let [g-after (action/act g p action params)
+           action-result (action/act g p action-code params)]
+       (if (keyword? action-result)
+         (response {:success false :error action-result})
+         (let [g-after action-result
                new-commands (subvec (g-after :commands) (count (g :commands)))
                over (= :over (g-after :status))]
            (if over
@@ -47,15 +47,15 @@
             {:success true :commands new-commands :game g-after})))
        ))))
 
-(defn whatif [g-id p action params]
+(defn whatif [g-id p action-code params]
   "Copypaste from act!"
   (let [params (deep-to-int params)
-        action (keyword action)]
+        action-code (keyword action-code)]
     (let [g (@games g-id)
-          err (action/check g p action params)]
-      (if err
-        (response {:success false :error err})
-        (let [g-after (action/act g p action params)
+          action-result (action/act g p action-code params)]
+      (if (keyword? action-result)
+        (response {:success false :error action-result})
+        (let [g-after action-result
               new-commands (subvec (g-after :commands) (count (g :commands)))]
           (response
            {:success true :commands new-commands :game g-after})))
