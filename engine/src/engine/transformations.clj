@@ -15,6 +15,11 @@
   [v1 v2]
   (map + v1 v2))
 
+(defn v-v
+  "Subtracts second vector from the first."
+  [v1 v2]
+  (map - v1 v2))
+
 (def flip-matrix [[-1 0] [0 1]])
 (def rot90-matrix [[0 -1] [1 0]])
 (def rot180-matrix [[-1 0] [0 -1]])
@@ -70,3 +75,9 @@
   "Returns distance between two coordinates (allowing diagonal moves)."
   [c1 c2]
   (apply max (map difference c1 c2)))
+
+(defn eu-distance
+  "Returns euclidean distance between two coordinates."
+  [c1 c2]
+  (let [delta (v-v c1 c2)]
+    (Math/sqrt (dot delta delta))))
