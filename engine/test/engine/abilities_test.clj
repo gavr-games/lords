@@ -85,11 +85,12 @@
 
 (deftest test-binding
   (let [g (-> (create-new-game)
-              (add-new-object :ram 0 [2 1] nil nil {:moves 1}))
+              (add-new-object 0 :ram [2 1]))
         sp1-id (get-object-id-at g [2 0])
         ram-id (get-object-id-at g [2 1])
         castle-id (get-object-id-at g [0 0])
         g (-> g
+              (update-object ram-id obj/activate)
               (act 0 :bind {:obj-id ram-id :target-id sp1-id})
               (act 0 :move {:obj-id sp1-id :new-position [3 0]})
               (update-object ram-id obj/activate))
@@ -97,6 +98,7 @@
                    (let [ram-pos (get-in g [:objects ram-id :position])
                          [sp-x sp-y] (get-in g [:objects sp1-id :position])
                          g (act
+                            g
                             0
                             :move
                             {:obj-id sp1-id :new-position [(inc sp-x) sp-y]})
@@ -116,14 +118,15 @@
 
 (deftest test-binding-to-dragon
   (let [g (-> (create-new-game)
-              (add-new-object :ram 0 [2 2] nil nil {:moves 1})
-              (add-new-object :dragon 0 [3 3] nil nil {:moves 2}))
+              (add-new-object 0 :ram [2 2])
+              (add-new-object 0 :dragon [3 3]))
         ram-id (get-object-id-at g [2 2])
         dragon-id (get-object-id-at g [3 3])
         g (-> g
+              (update-object ram-id obj/activate)
+              (update-object dragon-id obj/activate)
               (act 0 :bind {:obj-id ram-id :target-id dragon-id})
-              (act 0 :move {:obj-id dragon-id :new-position [3 2]})
-              )
+              (act 0 :move {:obj-id dragon-id :new-position [3 2]}))
         ram-pos-2 (get-in g [:objects ram-id :position])
         g (act g 0 :move {:obj-id dragon-id :new-position [4 2]})
         ram-pos-3 (get-in g [:objects ram-id :position])]

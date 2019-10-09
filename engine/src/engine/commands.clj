@@ -73,3 +73,11 @@
 (defn game-over
   []
   {:command :game-over})
+
+(defn binds
+  [obj-id target-id]
+  {:command :binds :object-id obj-id :target target-id})
+
+(defn unbinds
+  [obj-id target-id]
+  {:command :unbinds :object-id obj-id :target target-id})

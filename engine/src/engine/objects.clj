@@ -17,7 +17,7 @@
     [1 0] {:fill :solid}
     [1 1] {:fill :floor :spawn true}}
    :handlers
-   {:on-destruction [:castle-destroyed]}},
+   {:before-destruction [:castle-destroyed]}},
 
   :tree
   {:health 2

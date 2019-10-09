@@ -32,7 +32,7 @@
 (defn- get-handler
   [obj event]
   (let [handlers (get-in obj [:handlers event])]
-    (if handlers
+    (if (seq handlers)
       (reduce chain-handlers (map handler handlers))
       pass)))
 
@@ -48,6 +48,11 @@
 (defn add-handler
   [g obj-id event handler-code]
   (update-in g [:objects obj-id :handlers event] conj handler-code))
+
+
+(defn remove-handler
+  [g obj-id event handler-code]
+  (update-in g [:objects obj-id :handlers event] #(remove #{handler-code} %)))
 
 
 (defn create-player
@@ -195,7 +200,7 @@
   "Destroys an object, p is a player who destroyed it."
   [g p obj-id]
   (-> g
-      (handle obj-id :on-destruction)
+      (handle obj-id :before-destruction)
       (destruction-reward obj-id p)
       (cmd/add-command (cmd/destroy-obj obj-id))
       (remove-object obj-id)))
@@ -214,10 +219,6 @@
       (drown-object g p obj-id)
       g)))
 
-(defn after-move-handler
-  [g p obj-id]
-  (-> g
-      (drown-handler p obj-id)))
 
 (defn move-object
   "Moves object to the given position.
@@ -225,6 +226,9 @@
   ([g p obj-id position] (move-object g p obj-id position nil nil))
   ([g p obj-id position flip rotation]
    (let [obj (get-in g [:objects obj-id])
+         old-position (obj :position)
+         old-flip (obj :flip)
+         old-rotation (obj :rotation)
          moved-obj (set-object-placement obj position flip rotation)]
      (-> g
          (remove-object-coords obj-id)
@@ -232,7 +236,11 @@
          (assert-can-place-object moved-obj)
          (place-object-on-board obj-id)
          (cmd/add-command (cmd/move-obj obj-id obj moved-obj))
-         (after-move-handler p obj-id)))))
+         (handle obj-id :after-moved
+                 old-position position
+                 old-flip flip
+                 old-rotation rotation)
+         (drown-handler p obj-id)))))
 
 (defn get-objects
   "Returns map id->object for all objects that satisfy pred."
