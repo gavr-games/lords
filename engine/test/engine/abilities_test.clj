@@ -132,3 +132,21 @@
         ram-pos-3 (get-in g [:objects ram-id :position])]
     (is (= [3 4] ram-pos-2))
     (is (= [3 3] ram-pos-3))))
+
+(deftest test-dragon-move
+  (let [g (-> (create-new-game)
+              (add-new-object 0 :dragon [3 3]))
+        dragon-id (get-object-id-at g [3 3])
+        g (-> g
+              (update-object dragon-id obj/activate))]
+    (is (not (check g 0 :move {:obj-id dragon-id :new-position [2 2]})))
+    (is (not (check g 0 :move {:obj-id dragon-id :new-position [2 3]})))
+    (is (not (check g 0 :move {:obj-id dragon-id :new-position [2 4]})))
+    (is (not (check g 0 :move {:obj-id dragon-id :new-position [3 2]})))
+    (is (not (check g 0 :move {:obj-id dragon-id :new-position [3 4]})))
+    (is (not (check g 0 :move {:obj-id dragon-id :new-position [4 2]})))
+    (is (not (check g 0 :move {:obj-id dragon-id :new-position [4 3]})))
+    (is (not (check g 0 :move {:obj-id dragon-id :new-position [4 4]})))
+    (is (check g 0 :move {:obj-id dragon-id :new-position [3 3]}))
+    (is (check g 0 :move {:obj-id dragon-id :new-position [5 3]}))
+    (is (check g 0 :move {:obj-id dragon-id :new-position [5 5]}))))

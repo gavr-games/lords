@@ -33,10 +33,8 @@
 
 (defn coord-one-step-away
   [obj coord]
-  (let [obj-current-coords (keys (get-object-coords-map obj))
-        dist-one? #(= 1 (distance % coord))]
-    (if (not-any? dist-one? obj-current-coords)
-      :target-coord-not-reachable))) ; TODO chess knight
+  (if (not= 1 (distance (obj :position) coord))
+    :target-coord-not-reachable)) ; TODO chess knight
 
 
 (defn obj-one-step-away
