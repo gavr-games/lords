@@ -43,3 +43,7 @@
   [obj exp]
   {:pre [(pos? exp)]}
   (update obj :experience (fnil + 0) exp))
+
+(defn damaged?
+  [obj]
+  (and (obj :health) (< (obj :health) (obj :max-health))))

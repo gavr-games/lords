@@ -74,3 +74,7 @@
   (if (not= 1 (obj-distance o1 o2))
     :target-object-is-not-reachable))
 
+(defn splash-attack-any-targets
+  [targets]
+  (if (empty? targets)
+    :no-objects-to-attack))

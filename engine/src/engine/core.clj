@@ -318,7 +318,7 @@
              (distance c1 c2)))))
 
 (defn get-object-id-at
-  "Gets object id at a given coordinate."
+  "Gets id of the filling object at a given coordinate."
   [g coord]
   (let [obj-ids (keys (filter filled-cell? (get-in g [:board coord])))]
     (assert (<= 0 (count obj-ids) 1))

@@ -150,3 +150,25 @@
     (is (check g 0 :move {:obj-id dragon-id :new-position [3 3]}))
     (is (check g 0 :move {:obj-id dragon-id :new-position [5 3]}))
     (is (check g 0 :move {:obj-id dragon-id :new-position [5 5]}))))
+
+(deftest test-dragon-splash-attack
+  (let [g (-> (create-new-game)
+              (add-new-object 0 :dragon [1 1]))
+        dragon-id (get-object-id-at g [1 1])
+        sp1-id (get-object-id-at g [2 0])
+        castle-id (get-object-id-at g [0 0])
+        g (-> g
+              (update-object dragon-id obj/activate))
+        g-castle (act g 0 :splash-attack
+                      {:obj-id dragon-id :attack-position [0 0]})
+        g-both (act g 0 :splash-attack
+                    {:obj-id dragon-id :attack-position [1 0]})
+        g-sp (act g 0 :splash-attack
+                  {:obj-id dragon-id :attack-position [2 0]})
+        castle-damaged? #(obj/damaged? (get-in % [:objects castle-id]))
+        spearman_killed? #(not (get-in % [:objects sp1-id]))]
+    (is (and (castle-damaged? g-castle) (not (spearman_killed? g-castle))))
+    (is (and (castle-damaged? g-both) (spearman_killed? g-both)))
+    (is (and (not (castle-damaged? g-sp)) (spearman_killed? g-sp)))
+    (is (check g 0 :splash-attack {:obj-id dragon-id :attack-position [1 1]}))
+    (is (check g 0 :splash-attack {:obj-id dragon-id :attack-position [2 2]}))))

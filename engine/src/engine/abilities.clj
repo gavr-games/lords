@@ -44,6 +44,20 @@
        (move-object p obj-id new-position))))
 
 
+(defn attack
+  "Performs attack actions."
+  [g p obj-id target-id]
+  (let [obj (get-in g [:objects obj-id])
+        target (get-in g [:objects target-id])
+        attack-params (get-attack-params obj target)]
+    (-> g
+        (handle obj-id :before-attacks target-id)
+        (update-object obj-id obj-utils/deactivate cmd/set-moves)
+        (cmd/add-command (cmd/attack obj-id target-id attack-params))
+        (damage-obj p target-id (attack-params :damage))
+        (add-experience obj-id target-id target))))
+
+
 (create-action
  :attack
  [g p obj-id target-id]
@@ -54,15 +68,7 @@
     (get-in g [:objects obj-id])
     (get-in g [:objects target-id]))
 
-   (let [obj (get-in g [:objects obj-id])
-        target (get-in g [:objects target-id])
-        attack-params (get-attack-params obj target)]
-    (-> g
-        (handle obj-id :before-attacks target-id)
-        (update-object obj-id obj-utils/deactivate cmd/set-moves)
-        (cmd/add-command (cmd/attack obj-id target-id attack-params))
-        (damage-obj p target-id (attack-params :damage))
-        (add-experience obj-id target-id target)))))
+   (attack g p obj-id target-id)))
 
 
 (create-action
@@ -116,6 +122,19 @@
  [g obj-id & _]
  (get-unbound g obj-id))
 
+
+(defn object-coords
+  "Returns a set of object coordinates."
+  [obj]
+  (set (keys (get-object-coords-map obj))))
+
+(defn object-coords-at-position
+  "Returns a set of object coordinates
+  if it would be moved to the given position."
+  [obj position]
+  (object-coords (assoc obj :position position)))
+
+
 (create-handler
  :binding-drag
  [g obj-id old-position new-position & _]
@@ -125,10 +144,9 @@
      (let [obj (get-in g [:objects obj-id])
            dragged-obj-id (obj :binding-from)
            dragged-obj-position (get-in g [:objects dragged-obj-id :position])
-           coords (set (keys (get-object-coords-map obj)))
-           move-delta (v-v old-position new-position)
-           old-coords (set (map #(translate % move-delta) coords))
-           freed-coords (set/difference old-coords coords)
+           freed-coords (set/difference
+                         (object-coords-at-position obj old-position)
+                         (object-coords obj))
            closest-coord (apply min-key
                                 #(eu-distance dragged-obj-position %)
                                 freed-coords)]
@@ -142,3 +160,24 @@
    (if (> (obj-distance obj bound-obj) 1)
      (unbind g obj-id)
      g)))
+
+
+(create-action
+ :splash-attack
+ [g p obj-id attack-position]
+ (or
+  (check/object-action g p obj-id :splash-attack)
+  (check/coord-one-step-away (get-in g [:objects obj-id]) attack-position)
+  (let [obj (get-in g [:objects obj-id])
+        attacked-coords (object-coords-at-position obj attack-position)
+        target-ids (->> attacked-coords
+                        (map #(get-object-id-at g %))
+                        (filter identity)
+                        (filter #(not= % obj-id))
+                        (filter #(get-in g [:objects % :health]))
+                        set)]
+    (or
+     (check/splash-attack-any-targets target-ids)
+     (reduce
+      (fn [game target-id] (attack game p obj-id target-id))
+      g target-ids)))))
