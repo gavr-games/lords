@@ -3,7 +3,7 @@
             [engine.abilities]
             [engine.core :refer :all]
             [engine.newgame :refer [create-new-game]]
-            [engine.objects :refer [add-new-object get-new-object]]
+            [engine.objects :refer [add-new-object add-new-active-object get-new-object]]
             [clojure.test :refer :all]
             [engine.object-utils :as obj]))
 
@@ -85,12 +85,11 @@
 
 (deftest test-binding
   (let [g (-> (create-new-game)
-              (add-new-object 0 :ram [2 1]))
+              (add-new-active-object 0 :ram [2 1]))
         sp1-id (get-object-id-at g [2 0])
         ram-id (get-object-id-at g [2 1])
         castle-id (get-object-id-at g [0 0])
         g (-> g
-              (update-object ram-id obj/activate)
               (act 0 :bind {:obj-id ram-id :target-id sp1-id})
               (act 0 :move {:obj-id sp1-id :new-position [3 0]})
               (update-object ram-id obj/activate))
@@ -118,13 +117,11 @@
 
 (deftest test-binding-to-dragon
   (let [g (-> (create-new-game)
-              (add-new-object 0 :ram [2 2])
-              (add-new-object 0 :dragon [3 3]))
+              (add-new-active-object 0 :ram [2 2])
+              (add-new-active-object 0 :dragon [3 3]))
         ram-id (get-object-id-at g [2 2])
         dragon-id (get-object-id-at g [3 3])
         g (-> g
-              (update-object ram-id obj/activate)
-              (update-object dragon-id obj/activate)
               (act 0 :bind {:obj-id ram-id :target-id dragon-id})
               (act 0 :move {:obj-id dragon-id :new-position [3 2]}))
         ram-pos-2 (get-in g [:objects ram-id :position])
@@ -135,10 +132,8 @@
 
 (deftest test-dragon-move
   (let [g (-> (create-new-game)
-              (add-new-object 0 :dragon [3 3]))
-        dragon-id (get-object-id-at g [3 3])
-        g (-> g
-              (update-object dragon-id obj/activate))]
+              (add-new-active-object 0 :dragon [3 3]))
+        dragon-id (get-object-id-at g [3 3])]
     (is (not (check g 0 :move {:obj-id dragon-id :new-position [2 2]})))
     (is (not (check g 0 :move {:obj-id dragon-id :new-position [2 3]})))
     (is (not (check g 0 :move {:obj-id dragon-id :new-position [2 4]})))
@@ -153,12 +148,10 @@
 
 (deftest test-dragon-splash-attack
   (let [g (-> (create-new-game)
-              (add-new-object 0 :dragon [1 1]))
+              (add-new-active-object 0 :dragon [1 1]))
         dragon-id (get-object-id-at g [1 1])
         sp1-id (get-object-id-at g [2 0])
         castle-id (get-object-id-at g [0 0])
-        g (-> g
-              (update-object dragon-id obj/activate))
         g-castle (act g 0 :splash-attack
                       {:obj-id dragon-id :attack-position [0 0]})
         g-both (act g 0 :splash-attack
@@ -172,3 +165,18 @@
     (is (and (not (castle-damaged? g-sp)) (spearman_killed? g-sp)))
     (is (check g 0 :splash-attack {:obj-id dragon-id :attack-position [1 1]}))
     (is (check g 0 :splash-attack {:obj-id dragon-id :attack-position [2 2]}))))
+
+
+(deftest test-shoot
+  (let [g (-> (create-new-game)
+              (add-new-active-object 0 :marksman [3 0]))
+        sp1-id (get-object-id-at g [2 0])
+        sp2-id (get-object-id-at g [0 2])
+        sp3-id (get-object-id-at g [19 17])
+        castle-id (get-object-id-at g [0 0])
+        marksman-id (get-object-id-at g [3 0])
+        g-after (act g 0 :shoot {:obj-id marksman-id :target-id sp2-id})]
+    (is (not (get-in g-after [:objects sp2-id])))
+    (is (check g 0 :shoot {:obj-id marksman-id :target-id sp1-id}))
+    (is (check g 0 :shoot {:obj-id marksman-id :target-id sp3-id}))
+    (is (check g 0 :shoot {:obj-id marksman-id :target-id castle-id}))))

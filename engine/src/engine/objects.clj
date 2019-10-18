@@ -1,6 +1,6 @@
 (ns engine.objects
   (:require [engine.core :refer :all]
-            [engine.object-utils :refer [unit?]]
+            [engine.object-utils :refer [unit? is-type?]]
             [clojure.set :as set]))
 
 
@@ -17,7 +17,7 @@
     [1 0] {:fill :solid}
     [1 1] {:fill :floor :spawn true}}
    :handlers
-   {:before-destruction [:castle-destroyed]}},
+   {:before-destruction [:castle-destroyed]}}
 
   :tree
   {:health 2
@@ -82,6 +82,39 @@
     [1 1] {:fill :unit}}
    :actions
    #{:splash-attack}}
+
+  :archer
+  {:health 1
+   :max-moves 2
+   :attack 1
+   :class :unit
+   :coords
+   {[0 0] {:fill :unit}}
+   :actions
+   #{:shoot}
+   :handlers
+   {:after-successfully-range-attacks [:get-exp-for-tree]}}
+
+  :marksman
+  {:health 2
+   :max-moves 2
+   :attack 2
+   :class :unit
+   :coords
+   {[0 0] {:fill :unit}}
+   :actions
+   #{:shoot}}
+
+  :catapult
+  {:health 2
+   :max-moves 1
+   :attack 3
+   :class :unit
+   :coords
+   {[0 0] {:fill :unit}}
+   :actions
+   #{:shoot :bind}}
+
   })
 
 (create-handler
@@ -99,6 +132,16 @@
    (as-> g game
      (player-lost game p-lost)
      (reduce player-won (end-game game) p-won))))
+
+
+(create-handler
+ :get-exp-for-tree
+ [g obj-id target-id]
+ (let [target (get-in g [:objects target-id])]
+   (if (and target (is-type? target :tree))
+     (add-experience g obj-id 1)
+     g)))
+
 
 (defn get-new-object
   "Gets a new object of a given type."
@@ -131,3 +174,9 @@
    (add-object g p
                (merge (get-new-object obj-type) fields)
                position flip rotation)))
+
+(defn add-new-active-object
+  [g p obj-type position]
+  (add-new-object
+   g p obj-type position nil nil
+   {:moves (get-in objects [obj-type :max-moves])}))

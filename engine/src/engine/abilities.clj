@@ -4,7 +4,7 @@
             [engine.core :refer :all]
             [engine.object-utils :as obj-utils]
             [engine.commands :as cmd]
-            [engine.attack :refer [get-attack-params]]
+            [engine.attack :refer [get-attack-params get-shooting-range get-shot-params]]
             [engine.transformations :refer [distance v-v translate eu-distance]]
             [clojure.set :as set]))
 
@@ -20,12 +20,11 @@
       (+ damage kill-bonus))))
 
 
-(defn- add-experience
+(defn- add-attack-experience
   [g obj-id target-id target]
   (let [exp (calculate-experience g target-id target)]
     (if (pos? exp)
-      (update-object g obj-id
-                     #(obj-utils/add-experience % exp) cmd/set-experience)
+      (add-experience g obj-id exp)
       g)))
 
 
@@ -45,17 +44,39 @@
 
 
 (defn attack
-  "Performs attack actions."
+  "Performs attack actions for both melee attack or shooting."
+  [g p obj-id target-id attack-params]
+  (let [obj (get-in g [:objects obj-id])
+        target (get-in g [:objects target-id])]
+    (as-> g game
+        (update-object game obj-id obj-utils/deactivate cmd/set-moves)
+        (cmd/add-command game (cmd/attack obj-id target-id attack-params))
+        (if (not= :miss (attack-params :outcome))
+          (-> game
+            (damage-obj p target-id (attack-params :damage))
+            (add-attack-experience obj-id target-id target))
+          game))))
+
+
+(defn melee-attack
+  "Performs melee attack actions."
   [g p obj-id target-id]
   (let [obj (get-in g [:objects obj-id])
         target (get-in g [:objects target-id])
-        attack-params (get-attack-params obj target)]
+        attack-params (assoc (get-attack-params obj target) :type :melee)]
     (-> g
-        (handle obj-id :before-attacks target-id)
-        (update-object obj-id obj-utils/deactivate cmd/set-moves)
-        (cmd/add-command (cmd/attack obj-id target-id attack-params))
-        (damage-obj p target-id (attack-params :damage))
-        (add-experience obj-id target-id target))))
+        (handle obj-id :before-melee-attacks target-id)
+        (attack p obj-id target-id attack-params))))
+
+
+(defn range-attack
+  "Performs range attack actions."
+  [g p obj-id target-id params]
+  (as-> g game
+    (attack game p obj-id target-id (assoc params :type :range))
+    (if (not= :miss (params :outcome))
+      (handle game obj-id :after-successfully-range-attacks target-id)
+      game)))
 
 
 (create-action
@@ -68,7 +89,25 @@
     (get-in g [:objects obj-id])
     (get-in g [:objects target-id]))
 
-   (attack g p obj-id target-id)))
+   (melee-attack g p obj-id target-id)))
+
+
+(create-action
+ :shoot
+ [g p obj-id target-id]
+ (or
+   (check/object-action g p obj-id :shoot)
+   (check/valid-attack-target g target-id)
+   (let [obj (get-in g [:objects obj-id])
+         target (get-in g [:objects target-id])
+         distance (obj-distance obj target)
+         shot-params (get-shot-params obj target distance)]
+     (or
+      (check/shooting-distance-in-range distance (get-shooting-range obj))
+      (check/shooting-valid-outcome shot-params)
+
+      (range-attack g p obj-id target-id shot-params))
+     )))
 
 
 (create-action
@@ -89,7 +128,7 @@
        (add-handler target-id :after-moved :binding-drag)
        (add-handler obj-id :after-moved :binding-unbind-if-not-near)
        (add-handler obj-id :before-walks :binding-unbind)
-       (add-handler obj-id :before-attacks :binding-unbind)
+       (add-handler obj-id :before-melee-attacks :binding-unbind)
        (add-handler obj-id :before-destruction :binding-unbind)
        (add-handler target-id :before-destruction :binding-get-unbound))))
 
@@ -103,7 +142,7 @@
         (remove-handler target-id :after-moved :binding-drag)
         (remove-handler obj-id :after-moved :binding-unbind-if-not-near)
         (remove-handler obj-id :before-walks :binding-unbind)
-        (remove-handler obj-id :before-attacks :binding-unbind)
+        (remove-handler obj-id :before-melee-attacks :binding-unbind)
         (remove-handler obj-id :before-destruction :binding-unbind)
         (remove-handler target-id :before-destruction :binding-get-unbound))))
 
@@ -179,5 +218,5 @@
     (or
      (check/splash-attack-any-targets target-ids)
      (reduce
-      (fn [game target-id] (attack game p obj-id target-id))
+      (fn [game target-id] (melee-attack game p obj-id target-id))
       g target-ids)))))

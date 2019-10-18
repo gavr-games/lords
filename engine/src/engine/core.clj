@@ -388,3 +388,10 @@
   [obj health]
   {:pre [(pos? health)]}
   (assoc obj :health health))
+
+
+(defn add-experience
+  "Adds experience to the object."
+  [g obj-id experience]
+  (update-object g obj-id
+                 #(obj/add-experience % experience) cmd/set-experience))

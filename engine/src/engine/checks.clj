@@ -78,3 +78,13 @@
   [targets]
   (if (empty? targets)
     :no-objects-to-attack))
+
+(defn shooting-distance-in-range
+  [distance [min-distance max-distance]]
+  (cond (< distance min-distance) :target-too-close
+        (> distance max-distance) :target-too-far))
+
+(defn shooting-valid-outcome
+  [params]
+  (if (nil? params)
+    :shooting-target-not-applicable))

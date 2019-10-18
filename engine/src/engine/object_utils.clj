@@ -23,6 +23,10 @@
   [obj]
   (= :unit (obj :class)))
 
+(defn building?
+  [obj]
+  (= :building (obj :class)))
+
 (defn is-type?
   [obj t]
   (= t (obj :type)))
