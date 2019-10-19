@@ -6,6 +6,7 @@
             [engine.commands :as cmd]
             [engine.attack :refer [get-attack-params get-shooting-range get-shot-params]]
             [engine.transformations :refer [distance v-v translate eu-distance]]
+            [engine.utils :refer [average abs]]
             [clojure.set :as set]))
 
 
@@ -54,7 +55,8 @@
         (if (not= :miss (attack-params :outcome))
           (-> game
             (damage-obj p target-id (attack-params :damage))
-            (add-attack-experience obj-id target-id target))
+            (add-attack-experience obj-id target-id target)
+            (handle obj-id :after-successfully-attacks target-id p))
           game))))
 
 
@@ -72,11 +74,7 @@
 (defn range-attack
   "Performs range attack actions."
   [g p obj-id target-id params]
-  (as-> g game
-    (attack game p obj-id target-id (assoc params :type :range))
-    (if (not= :miss (params :outcome))
-      (handle game obj-id :after-successfully-range-attacks target-id)
-      game)))
+  (attack g p obj-id target-id (assoc params :type :range)))
 
 
 (create-action
@@ -162,16 +160,24 @@
  (get-unbound g obj-id))
 
 
-(defn object-coords
+(defn object-filled-coords
   "Returns a set of object coordinates."
   [obj]
-  (set (keys (get-object-coords-map obj))))
+  (set (keys (filter filled-cell? (get-object-coords-map obj)))))
 
-(defn object-coords-at-position
+(defn object-filled-coords-at-position
   "Returns a set of object coordinates
   if it would be moved to the given position."
   [obj position]
-  (object-coords (assoc obj :position position)))
+  (object-filled-coords (assoc obj :position position)))
+
+(defn object-new-filled-coords-at-position
+  "Returns a set of coords that the object would cover at the given position
+  but does not cover at the current position."
+  [obj position]
+  (set/difference
+   (object-filled-coords-at-position obj position)
+   (object-filled-coords obj)))
 
 
 (create-handler
@@ -183,9 +189,7 @@
      (let [obj (get-in g [:objects obj-id])
            dragged-obj-id (obj :binding-from)
            dragged-obj-position (get-in g [:objects dragged-obj-id :position])
-           freed-coords (set/difference
-                         (object-coords-at-position obj old-position)
-                         (object-coords obj))
+           freed-coords (object-new-filled-coords-at-position obj old-position)
            closest-coord (apply min-key
                                 #(eu-distance dragged-obj-position %)
                                 freed-coords)]
@@ -201,6 +205,15 @@
      g)))
 
 
+(defn conflicting-objects-at-position
+  "Returns set of obj-ids that would collide with obj if it moved to position."
+  [g obj position]
+  (->> (object-new-filled-coords-at-position obj position)
+       (map #(get-object-id-at g %))
+       (filter identity)
+       set))
+
+
 (create-action
  :splash-attack
  [g p obj-id attack-position]
@@ -208,15 +221,71 @@
   (check/object-action g p obj-id :splash-attack)
   (check/coord-one-step-away (get-in g [:objects obj-id]) attack-position)
   (let [obj (get-in g [:objects obj-id])
-        attacked-coords (object-coords-at-position obj attack-position)
-        target-ids (->> attacked-coords
-                        (map #(get-object-id-at g %))
-                        (filter identity)
-                        (filter #(not= % obj-id))
-                        (filter #(get-in g [:objects % :health]))
-                        set)]
+        target-ids (->> (conflicting-objects-at-position g obj attack-position)
+                        (filter #(get-in g [:objects % :health])))]
     (or
      (check/splash-attack-any-targets target-ids)
      (reduce
       (fn [game target-id] (melee-attack game p obj-id target-id))
       g target-ids)))))
+
+
+(defn center
+  "Returns the center (of mass) point of the object."
+  [obj]
+  (if (== 1 (count (obj :coords)))
+    (obj :position)
+    (let [coords (keys (filter filled-cell? (obj :coords)))
+          x (average (map first coords))
+          y (average (map second coords))]
+      (translate (obj :position) [x y]))))
+
+
+(defn push-direction
+  "Determines the direction the pushed object should move."
+  [center-pushing center-pushed]
+  (let [direction (v-v center-pushed center-pushing)
+        max-delta (apply max (map abs direction))
+        normed-dir (map #(/ % max-delta) direction)
+        manhattan-dir (map #(if (< (abs %) 1) 0 %) normed-dir)]
+    manhattan-dir))
+
+
+(defn domino-push-unit
+  "If possible, pushes object in the direction, propagates push to next uints.
+  If not possible, returns nil.
+  Buildings are not pushable."
+  [g p obj-id direction]
+  (let [obj (get-in g [:objects obj-id])]
+    (if (obj-utils/building? obj)
+      nil
+      (let [new-pos (translate (obj :position) direction)
+            new-coords (object-new-filled-coords-at-position obj new-pos)]
+        (if-not (every? (g :board) new-coords)
+          nil
+          (let [blocking-ids (conflicting-objects-at-position g obj new-pos)
+                g-cleared (reduce
+                           (fn [game blocking-id]
+                             (let [g-pushed (domino-push-unit
+                                             game p blocking-id direction)]
+                               (if-not g-pushed
+                                 (reduced nil)
+                                 g-pushed)))
+                           g blocking-ids)]
+            (if-not g-cleared
+              nil
+              (move-object g-cleared p obj-id new-pos))))))))
+
+
+(create-handler
+ :push-unit
+ [g obj-id target-id p]
+ (let [target (get-in g [:objects target-id])]
+   (if-not target
+     g
+     (let [obj (get-in g [:objects obj-id])
+           push-dir (push-direction (center obj) (center target))
+           g-pushed (domino-push-unit g p target-id push-dir)]
+       (if g-pushed
+         g-pushed
+         g)))))

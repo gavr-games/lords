@@ -28,3 +28,14 @@
           r (rand)
           i (first (keep-indexed #(if (> %2 r) %1) normed-weights))]
       (nth coll i))))
+
+
+(defn average [coll]
+  (/ (reduce + coll) (count coll)))
+
+(defn abs
+  "Platform-independent absolute value."
+  [x]
+  (if (< x 0)
+    (* x -1)
+    x))

@@ -180,3 +180,94 @@
     (is (check g 0 :shoot {:obj-id marksman-id :target-id sp1-id}))
     (is (check g 0 :shoot {:obj-id marksman-id :target-id sp3-id}))
     (is (check g 0 :shoot {:obj-id marksman-id :target-id castle-id}))))
+
+
+(deftest test-shoot-tree
+  (let [g (-> (create-new-game)
+              (add-new-active-object 0 :archer [3 0])
+              (add-new-object :tree [3 1])
+              (add-new-object :tree [3 2])
+              (add-new-object :tree [3 3])
+              (add-new-object :tree [3 4])
+              (add-new-object :tree [3 5]))
+        archer-id (get-object-id-at g [3 0])
+        t1-id (get-object-id-at g [3 1])
+        t2-id (get-object-id-at g [3 2])
+        t3-id (get-object-id-at g [3 3])
+        t4-id (get-object-id-at g [3 4])
+        t5-id (get-object-id-at g [3 5])
+        shoot-tree (fn [game]
+                     (-> game
+                         (act 0 :shoot {:obj-id archer-id :target-id t4-id})
+                         (update-object archer-id obj/activate)))
+        g-after (first (drop-while
+                        #(nil? (get-in % [:objects archer-id :experience]))
+                        (take 1000 (iterate shoot-tree g))))]
+    (is (check g 0 :shoot {:obj-id archer-id :target-id t1-id}))
+    (is (check g 0 :shoot {:obj-id archer-id :target-id t2-id}))
+    (is (check g 0 :shoot {:obj-id archer-id :target-id t3-id}))
+    (is (check g 0 :shoot {:obj-id archer-id :target-id t5-id}))
+    (is (nil? (check g 0 :shoot {:obj-id archer-id :target-id t4-id})))
+    (is (< 0 (count (g-after :actions)) 1000))
+    ))
+
+(deftest test-ram-push
+  (let [g (-> (create-new-game)
+              (add-new-active-object 0 :ram [5 5])
+              (add-new-object :tree [4 6])
+              (add-new-object :spearman [5 4])
+              (add-new-object :spearman [4 4])
+              (add-new-object :puddle [5 3]))
+        ram-id (get-object-id-at g [5 5])
+        tree-id (get-object-id-at g [4 6])
+        s-n-drowns-id (get-object-id-at g [5 4])
+        s-nw-id (get-object-id-at g [4 4])
+        ram-attack (fn [game obj-id]
+                     (-> game
+                         (act 0 :attack {:obj-id ram-id :target-id obj-id})
+                         (update-object ram-id obj/activate)))
+        g-after (-> g
+                    (ram-attack tree-id)
+                    (ram-attack s-n-drowns-id)
+                    (ram-attack s-nw-id))]
+    (is (nil? (get-in g-after [:objects tree-id])))
+    (is (nil? (get-in g-after [:objects s-n-drowns-id])))
+    (is (= [3 3] (get-in g-after [:objects s-nw-id :position])))))
+
+(deftest test-ram-domino-push
+  (let [g (-> (create-new-game)
+              (add-new-active-object 0 :ram [5 5])
+              (add-new-object :dragon [6 6])
+              (add-new-object :spearman [8 7])
+              (add-new-object :spearman [8 8])
+              (add-new-object :spearman [7 8])
+              (add-new-object :dragon [9 8]))
+        ram-id (get-object-id-at g [5 5])
+        d1-id (get-object-id-at g [6 6])
+        d2-id (get-object-id-at g [9 8])
+        s1-id (get-object-id-at g [8 7])
+        s2-id (get-object-id-at g [8 8])
+        s3-id (get-object-id-at g [7 8])
+        g-after (act g 0 :attack {:obj-id ram-id :target-id d1-id})
+        pos-after #(get-in g-after [:objects % :position])]
+    (is (= [7 7] (pos-after d1-id)))
+    (is (= [10 9] (pos-after d2-id)))
+    (is (= [9 8] (pos-after s1-id)))
+    (is (= [9 9] (pos-after s2-id)))
+    (is (= [8 9] (pos-after s3-id)))))
+
+((deftest test-ram-blocked-push
+  (let [g (-> (create-new-game)
+              (add-new-active-object 0 :ram [2 1])
+              (add-new-object :spearman [3 1])
+              (add-new-object :tree [4 1]))
+        ram-id (get-object-id-at g [2 1])
+        s1-id (get-object-id-at g [2 0])
+        s2-id (get-object-id-at g [3 1])
+        g-after (-> g
+                    (act 0 :attack {:obj-id ram-id :target-id s1-id})
+                    (update-object ram-id obj/activate)
+                    (act 0 :attack {:obj-id ram-id :target-id s2-id}))
+        pos-after #(get-in g-after [:objects % :position])]
+    (is (= [2 0] (pos-after s1-id)))
+    (is (= [3 1] (pos-after s2-id))))))

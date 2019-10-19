@@ -68,7 +68,9 @@
    :coords
    {[0 0] {:fill :unit}}
    :actions
-   #{:attack :bind}}
+   #{:attack :bind}
+   :handlers
+   {:after-successfully-attacks [:push-unit]}}
 
   :dragon
   {:health 5
@@ -93,7 +95,7 @@
    :actions
    #{:shoot}
    :handlers
-   {:after-successfully-range-attacks [:get-exp-for-tree]}}
+   {:after-successfully-attacks [:get-exp-for-tree]}}
 
   :marksman
   {:health 2
@@ -136,7 +138,7 @@
 
 (create-handler
  :get-exp-for-tree
- [g obj-id target-id]
+ [g obj-id target-id & _]
  (let [target (get-in g [:objects target-id])]
    (if (and target (is-type? target :tree))
      (add-experience g obj-id 1)

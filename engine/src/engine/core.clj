@@ -305,7 +305,7 @@
 
 (defn filled-cell?
   [[coord properties]]
-  (not (#{:floor :bridge} (properties :fill))))
+  (not (#{:floor :bridge :water} (properties :fill))))
 
 (defn obj-distance
   "Returns minimal distance between two objects.
