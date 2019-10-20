@@ -215,7 +215,7 @@
   [g p obj-id]
   (let [obj (get-in g [:objects obj-id])]
     (if (and (on-water? g obj-id)
-             (not (:waterwalking obj)))
+             (not (or (:waterwalking obj) (:flying obj))))
       (drown-object g p obj-id)
       g)))
 
@@ -307,15 +307,23 @@
   [[coord properties]]
   (not (#{:floor :bridge :water} (properties :fill))))
 
+
+(defn all-filled-coord-pairs
+  "Gets carthesian product of all filled coordinates of two objects."
+  [obj1 obj2]
+  (let [coords1 (keys (filter filled-cell? (get-object-coords-map obj1)))
+        coords2 (keys (filter filled-cell? (get-object-coords-map obj2)))]
+    (for [c1 coords1 c2 coords2]
+      [c1 c2])))
+
+
 (defn obj-distance
   "Returns minimal distance between two objects.
   Counts only filled cells."
   [obj1 obj2]
-  (let [coords1 (keys (filter filled-cell? (get-object-coords-map obj1)))
-        coords2 (keys (filter filled-cell? (get-object-coords-map obj2)))]
-    (apply min
-           (for [c1 coords1 c2 coords2]
-             (distance c1 c2)))))
+  (apply min
+         (map #(apply distance %) (all-filled-coord-pairs obj1 obj2))))
+
 
 (defn get-object-id-at
   "Gets id of the filling object at a given coordinate."

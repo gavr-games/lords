@@ -141,10 +141,7 @@
     (is (not (check g 0 :move {:obj-id dragon-id :new-position [3 4]})))
     (is (not (check g 0 :move {:obj-id dragon-id :new-position [4 2]})))
     (is (not (check g 0 :move {:obj-id dragon-id :new-position [4 3]})))
-    (is (not (check g 0 :move {:obj-id dragon-id :new-position [4 4]})))
-    (is (check g 0 :move {:obj-id dragon-id :new-position [3 3]}))
-    (is (check g 0 :move {:obj-id dragon-id :new-position [5 3]}))
-    (is (check g 0 :move {:obj-id dragon-id :new-position [5 5]}))))
+    (is (not (check g 0 :move {:obj-id dragon-id :new-position [4 4]})))))
 
 (deftest test-dragon-splash-attack
   (let [g (-> (create-new-game)
@@ -271,3 +268,45 @@
         pos-after #(get-in g-after [:objects % :position])]
     (is (= [2 0] (pos-after s1-id)))
     (is (= [3 1] (pos-after s2-id))))))
+
+
+(deftest test-flying
+  (let [g (-> (create-new-game)
+              (add-new-active-object 0 :dragon [1 1]))
+        d-id (get-object-id-at g [1 1])
+        g-after (act g 0 :move {:obj-id d-id :new-position [3 3]})
+        d-after (get-in g-after [:objects d-id])]
+    (is (= [3 3] (d-after :position)))
+    (is (= (- (d-after :max-moves) 2) (d-after :moves)))
+    (is (not (check g 0 :move {:obj-id d-id :new-position [2 2]})))
+    (is (not (check g 0 :move {:obj-id d-id :new-position [7 7]})))
+    (is (check g 0 :move {:obj-id d-id :new-position [8 8]}))))
+
+(deftest test-chess-knight
+  (let [g (-> (create-new-game)
+              (add-new-object 0 :chevalier [2 1] nil nil
+                              {:chess-knight true :moves 1}))
+        k-id (get-object-id-at g [2 1])
+        s1-id (get-object-id-at g [2 0])
+        s2-id (get-object-id-at g [0 2])
+        c-id (get-object-id-at g [0 0])
+        g-after (act g 0 :move {:obj-id k-id :new-position [3 3]})
+        k-after (get-in g-after [:objects k-id])]
+    (is (= [3 3] (k-after :position)))
+    (is (check g 0 :move {:obj-id k-id :new-position [3 1]}))
+    (is (check g 0 :move {:obj-id k-id :new-position [3 2]}))
+    (is (check g 0 :move {:obj-id k-id :new-position [4 1]}))
+    (is (check g 0 :move {:obj-id k-id :new-position [5 1]}))
+    (is (check g 0 :attack {:obj-id k-id :target-id s1-id}))
+    (is (not (check g 0 :attack {:obj-id k-id :target-id s2-id})))
+    (is (not (check g 0 :attack {:obj-id k-id :target-id c-id})))))
+
+(deftest test-flying-chess-knight
+  (let [g (-> (create-new-game)
+              (add-new-object 0 :dragon [1 1] nil nil
+                              {:chess-knight true :moves 6}))
+        d-id (get-object-id-at g [1 1])]
+    (is (check g 0 :move {:obj-id d-id :new-position [2 2]}))
+    (is (check g 0 :move {:obj-id d-id :new-position [3 3]}))
+    (is (check g 0 :move {:obj-id d-id :new-position [4 4]}))
+    (is (not (check g 0 :move {:obj-id d-id :new-position [3 2]})))))

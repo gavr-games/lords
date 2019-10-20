@@ -35,13 +35,23 @@
  (or
    (check/object-action g p obj-id :move)
    (check/valid-coord g new-position)
-   (check/coord-one-step-away (get-in g [:objects obj-id]) new-position)
    (check/can-move-to g obj-id new-position)
+   (let [obj (get-in g [:objects obj-id])
+         flying (and (obj :flying) (not (obj :chess-knight)))
+         dist (if flying
+                (distance (obj :position) new-position)
+                1)]
+     (or
+      (if flying
+        (check/can-fly-distance obj dist)
+        (check/coord-one-step-away obj new-position))
 
-   (-> g
-       (handle obj-id :before-walks new-position)
-       (update-object obj-id #(update % :moves dec) cmd/set-moves)
-       (move-object p obj-id new-position))))
+      (-> g
+          (handle obj-id :before-walks new-position)
+          (update-object obj-id
+                         #(update % :moves (fn [x] (- x dist)))
+                         cmd/set-moves)
+          (move-object p obj-id new-position))))))
 
 
 (defn attack

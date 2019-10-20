@@ -1,7 +1,8 @@
 (ns engine.checks
   (:require [engine.core :refer :all]
-            [engine.transformations :refer [distance]]
-            [engine.object-utils :refer [unit?]]))
+            [engine.transformations :refer [distance v-v]]
+            [engine.object-utils :refer [unit?]]
+            [engine.utils :refer [abs]]))
 
 
 (defn game
@@ -31,17 +32,32 @@
       (not (get-in obj [:actions action-code])) :invalid-action)))
 
 
+(defn- chess-knight-reachable
+  [c1 c2]
+  (let [deltas (map abs (v-v c1 c2))]
+    (= (set deltas) #{1 2})))
+
+
 (defn coord-one-step-away
   [obj coord]
-  (if (not= 1 (distance (obj :position) coord))
-    :target-coord-not-reachable)) ; TODO chess knight
+  (if (or
+       (and (obj :chess-knight)
+            (not (chess-knight-reachable (obj :position) coord)))
+       (and (not (obj :chess-knight))
+            (not= 1 (distance (obj :position) coord))))
+    :target-coord-not-reachable))
 
 
 (defn obj-one-step-away
   "Checks that o1 can step on o2 in one step."
   [o1 o2]
-  (if (not= 1 (obj-distance o1 o2))
-    :target-object-is-not-reachable)) ; TODO chess knight
+  (if (or
+       (and (o1 :chess-knight)
+            (not-any? #(apply chess-knight-reachable %)
+                      (all-filled-coord-pairs o1 o2)))
+       (and (not (o1 :chess-knight))
+            (not= 1 (obj-distance o1 o2))))
+    :target-object-is-not-reachable))
 
 
 (defn valid-coord
@@ -88,3 +104,8 @@
   [params]
   (if (nil? params)
     :shooting-target-not-applicable))
+
+(defn can-fly-distance
+  [obj dist]
+  (if (> dist (obj :moves))
+    :target-coord-not-reachable))

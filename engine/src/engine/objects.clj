@@ -77,6 +77,7 @@
    :max-moves 6
    :attack 5
    :class :unit
+   :flying true
    :coords
    {[0 0] {:fill :unit}
     [0 1] {:fill :unit}
