@@ -1,6 +1,6 @@
-(ns engine.server-test
+(ns server.server-test
   (:require [clojure.test :refer :all]
-            [engine.server :refer :all]
+            [server.core :refer :all]
             [ring.mock.request :as mock]))
 
 (deftest test-app

@@ -1,11 +1,12 @@
 (ns engine.abilities-test
   (:require [engine.actions :refer [act check]]
             [engine.abilities]
-            [engine.core :refer :all]
+            [engine.core :as core :refer [get-object-id-at update-object]]
             [engine.newgame :refer [create-new-game]]
             [engine.objects :refer [add-new-object add-new-active-object get-new-object]]
-            [clojure.test :refer :all]
-            [engine.object-utils :as obj]))
+            [engine.object-utils :as obj]
+            #?(:clj  [clojure.test :refer [deftest is]]
+               :cljs [cljs.test :refer-macros [deftest is]])))
 
 (deftest test-move-attack
   (let [g (create-new-game)
@@ -29,7 +30,7 @@
   (let [ng (create-new-game)
         sp (get-object-id-at ng [2 0])
         castle (get-object-id-at ng [0 0])
-        g (damage-obj ng 0 castle 9)
+        g (core/damage-obj ng 0 castle 9)
         go (act g 0 :attack {:obj-id sp :target-id castle})]
     (is (check go 0 :move {:obj-id 2 :new-position [1 1]}))
     (is (= :over (go :status)))
@@ -106,13 +107,13 @@
     (is (= [2 0] (get-in g [:objects ram-id :position])))
     (is (unbound? (act g 0 :move {:obj-id ram-id :new-position [1 1]})))
     (is (unbound? (act g 0 :attack {:obj-id ram-id :target-id castle-id})))
-    (is (unbound? (move-object g 0 ram-id [5 5])))
-    (is (unbound? (move-object g 0 sp1-id [5 5])))
+    (is (unbound? (core/move-object g 0 ram-id [5 5])))
+    (is (unbound? (core/move-object g 0 sp1-id [5 5])))
     (is (map? (-> g
-                  (destroy-obj 0 sp1-id)
+                  (core/destroy-obj 0 sp1-id)
                   (act 0 :move {:obj-id ram-id :new-position [1 1]}))))
     (is (map? (-> g
-                  (destroy-obj 0 ram-id)
+                  (core/destroy-obj 0 ram-id)
                   (act 0 :move {:obj-id sp1-id :new-position [4 0]}))))))
 
 (deftest test-binding-to-dragon

@@ -1,9 +1,9 @@
 (ns engine.core
   (:require [engine.object-utils :as obj]
-            [clojure.set :as set])
-  (:require [engine.commands :as cmd])
-  (:require [engine.transformations :refer [transform-coords distance]])
-  (:require [engine.utils :refer [deep-merge]]))
+            [clojure.set :as set]
+            [engine.commands :as cmd]
+            [engine.transformations :refer [transform-coords distance]]
+            [engine.utils :refer [deep-merge]]))
 
 (defmulti
   handler

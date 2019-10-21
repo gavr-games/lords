@@ -1,7 +1,8 @@
 (ns engine.actions
-  (:require [engine.core :refer :all])
-  (:require [engine.commands :as cmd])
-  (:require [engine.checks :as check]))
+  (:require [engine.core :as core]
+            [engine.commands :as cmd]
+            [engine.checks :as check])
+  #?(:cljs (:require-macros [engine.actions :refer [create-action]])))
 
 
 (defmulti
@@ -27,8 +28,8 @@
   (if
       (and
        (= p (g :active-player))
-       (not (has-active-objects? g p)))
-    (set-next-player-active g)
+       (not (core/has-active-objects? g p)))
+    (core/set-next-player-active g)
     g))
 
 
@@ -73,4 +74,4 @@
    :not-your-turn
    (-> g
       (cmd/add-command (cmd/end-turn p))
-      (set-next-player-active))))
+      (core/set-next-player-active))))

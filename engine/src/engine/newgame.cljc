@@ -1,6 +1,6 @@
 (ns engine.newgame
-  (:require [engine.core :refer :all])
-  (:require [engine.objects :refer [add-new-object]]))
+  (:require [engine.core :refer [add-player create-player set-active-player]]
+            [engine.objects :refer [add-new-object]]))
 
 (def board-size-x 20)
 (def board-size-y 20)

@@ -1,7 +1,8 @@
 (ns engine.objects
-  (:require [engine.core :refer :all]
+  (:require [engine.core :as core :refer [create-handler]]
             [engine.object-utils :refer [unit? is-type?]]
-            [clojure.set :as set]))
+            [clojure.set :as set])
+  #?(:cljs (:require-macros [engine.core :refer [create-handler]])))
 
 
 (def default-unit-actions #{:move :levelup})
@@ -133,8 +134,8 @@
                (keys remaining-players)
                [])]
    (as-> g game
-     (player-lost game p-lost)
-     (reduce player-won (end-game game) p-won))))
+     (core/player-lost game p-lost)
+     (reduce core/player-won (core/end-game game) p-won))))
 
 
 (create-handler
@@ -142,7 +143,7 @@
  [g obj-id target-id & _]
  (let [target (get-in g [:objects target-id])]
    (if (and target (is-type? target :tree))
-     (add-experience g obj-id 1)
+     (core/add-experience g obj-id 1)
      g)))
 
 
@@ -174,7 +175,7 @@
   ([g p obj-type position flip rotation]
    (add-new-object g p obj-type position flip rotation nil))
   ([g p obj-type position flip rotation fields]
-   (add-object g p
+   (core/add-object g p
                (merge (get-new-object obj-type) fields)
                position flip rotation)))
 

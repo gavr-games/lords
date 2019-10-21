@@ -1,6 +1,6 @@
 (ns engine.attack
-  (:require [engine.object-utils :refer [unit? building? is-type?]])
-  (:require [engine.utils :refer [weighted-random-choice]]))
+  (:require [engine.object-utils :refer [unit? building? is-type?]]
+            [engine.utils :refer [weighted-random-choice]]))
 
 
 (defmulti attacks-modifier

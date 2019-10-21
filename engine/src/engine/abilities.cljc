@@ -1,13 +1,16 @@
 (ns engine.abilities
   (:require [engine.actions :refer [create-action]]
             [engine.checks :as check]
-            [engine.core :refer :all]
+            [engine.core :as core]
             [engine.object-utils :as obj-utils]
             [engine.commands :as cmd]
-            [engine.attack :refer [get-attack-params get-shooting-range get-shot-params]]
+            [engine.attack :refer [get-attack-params
+                                   get-shooting-range
+                                   get-shot-params]]
             [engine.transformations :refer [distance v-v translate eu-distance]]
             [engine.utils :refer [average abs]]
-            [clojure.set :as set]))
+            [clojure.set :as set])
+  #?(:cljs (:require-macros [engine.actions :refer [create-action]])))
 
 
 (defn- calculate-experience
@@ -25,7 +28,7 @@
   [g obj-id target-id target]
   (let [exp (calculate-experience g target-id target)]
     (if (pos? exp)
-      (add-experience g obj-id exp)
+      (core/add-experience g obj-id exp)
       g)))
 
 
@@ -47,11 +50,11 @@
         (check/coord-one-step-away obj new-position))
 
       (-> g
-          (handle obj-id :before-walks new-position)
-          (update-object obj-id
+          (core/handle obj-id :before-walks new-position)
+          (core/update-object obj-id
                          #(update % :moves (fn [x] (- x dist)))
                          cmd/set-moves)
-          (move-object p obj-id new-position))))))
+          (core/move-object p obj-id new-position))))))
 
 
 (defn attack
@@ -60,13 +63,13 @@
   (let [obj (get-in g [:objects obj-id])
         target (get-in g [:objects target-id])]
     (as-> g game
-        (update-object game obj-id obj-utils/deactivate cmd/set-moves)
+        (core/update-object game obj-id obj-utils/deactivate cmd/set-moves)
         (cmd/add-command game (cmd/attack obj-id target-id attack-params))
         (if (not= :miss (attack-params :outcome))
           (-> game
-            (damage-obj p target-id (attack-params :damage))
+            (core/damage-obj p target-id (attack-params :damage))
             (add-attack-experience obj-id target-id target)
-            (handle obj-id :after-successfully-attacks target-id p))
+            (core/handle obj-id :after-successfully-attacks target-id p))
           game))))
 
 
@@ -77,7 +80,7 @@
         target (get-in g [:objects target-id])
         attack-params (assoc (get-attack-params obj target) :type :melee)]
     (-> g
-        (handle obj-id :before-melee-attacks target-id)
+        (core/handle obj-id :before-melee-attacks target-id)
         (attack p obj-id target-id attack-params))))
 
 
@@ -108,7 +111,7 @@
    (check/valid-attack-target g target-id)
    (let [obj (get-in g [:objects obj-id])
          target (get-in g [:objects target-id])
-         distance (obj-distance obj target)
+         distance (core/obj-distance obj target)
          shot-params (get-shot-params obj target distance)]
      (or
       (check/shooting-distance-in-range distance (get-shooting-range obj))
@@ -129,42 +132,42 @@
     (get-in g [:objects target-id]))
 
    (-> g
-       (update-object obj-id obj-utils/deactivate cmd/set-moves)
+       (core/update-object obj-id obj-utils/deactivate cmd/set-moves)
        (cmd/add-command (cmd/binds obj-id target-id))
-       (update-object obj-id #(assoc % :binding-to target-id))
-       (update-object target-id #(assoc % :binding-from obj-id))
-       (add-handler target-id :after-moved :binding-drag)
-       (add-handler obj-id :after-moved :binding-unbind-if-not-near)
-       (add-handler obj-id :before-walks :binding-unbind)
-       (add-handler obj-id :before-melee-attacks :binding-unbind)
-       (add-handler obj-id :before-destruction :binding-unbind)
-       (add-handler target-id :before-destruction :binding-get-unbound))))
+       (core/update-object obj-id #(assoc % :binding-to target-id))
+       (core/update-object target-id #(assoc % :binding-from obj-id))
+       (core/add-handler target-id :after-moved :binding-drag)
+       (core/add-handler obj-id :after-moved :binding-unbind-if-not-near)
+       (core/add-handler obj-id :before-walks :binding-unbind)
+       (core/add-handler obj-id :before-melee-attacks :binding-unbind)
+       (core/add-handler obj-id :before-destruction :binding-unbind)
+       (core/add-handler target-id :before-destruction :binding-get-unbound))))
 
 (defn unbind
   [g obj-id]
   (let [target-id (get-in g [:objects obj-id :binding-to])]
     (-> g
         (cmd/add-command (cmd/unbinds obj-id target-id))
-        (update-object obj-id #(dissoc % :binding-to))
-        (update-object target-id #(dissoc % :binding-from))
-        (remove-handler target-id :after-moved :binding-drag)
-        (remove-handler obj-id :after-moved :binding-unbind-if-not-near)
-        (remove-handler obj-id :before-walks :binding-unbind)
-        (remove-handler obj-id :before-melee-attacks :binding-unbind)
-        (remove-handler obj-id :before-destruction :binding-unbind)
-        (remove-handler target-id :before-destruction :binding-get-unbound))))
+        (core/update-object obj-id #(dissoc % :binding-to))
+        (core/update-object target-id #(dissoc % :binding-from))
+        (core/remove-handler target-id :after-moved :binding-drag)
+        (core/remove-handler obj-id :after-moved :binding-unbind-if-not-near)
+        (core/remove-handler obj-id :before-walks :binding-unbind)
+        (core/remove-handler obj-id :before-melee-attacks :binding-unbind)
+        (core/remove-handler obj-id :before-destruction :binding-unbind)
+        (core/remove-handler target-id :before-destruction :binding-get-unbound))))
 
 (defn get-unbound
   [g obj-id]
   (let [binding-obj-id (get-in g [:objects obj-id :binding-from])]
    (unbind g binding-obj-id)))
 
-(create-handler
+(core/create-handler
  :binding-unbind
  [g obj-id & _]
  (unbind g obj-id))
 
-(create-handler
+(core/create-handler
  :binding-get-unbound
  [g obj-id & _]
  (get-unbound g obj-id))
@@ -173,7 +176,7 @@
 (defn object-filled-coords
   "Returns a set of object coordinates."
   [obj]
-  (set (keys (filter filled-cell? (get-object-coords-map obj)))))
+  (set (keys (filter core/filled-cell? (core/get-object-coords-map obj)))))
 
 (defn object-filled-coords-at-position
   "Returns a set of object coordinates
@@ -190,7 +193,7 @@
    (object-filled-coords obj)))
 
 
-(create-handler
+(core/create-handler
  :binding-drag
  [g obj-id old-position new-position & _]
  (let [dist (distance old-position new-position)]
@@ -203,14 +206,14 @@
            closest-coord (apply min-key
                                 #(eu-distance dragged-obj-position %)
                                 freed-coords)]
-       (move-object g (obj :player) dragged-obj-id closest-coord)))))
+       (core/move-object g (obj :player) dragged-obj-id closest-coord)))))
 
-(create-handler
+(core/create-handler
  :binding-unbind-if-not-near
  [g obj-id & _]
  (let [obj (get-in g [:objects obj-id])
        bound-obj (get-in g [:objects (obj :binding-to)])]
-   (if (> (obj-distance obj bound-obj) 1)
+   (if (> (core/obj-distance obj bound-obj) 1)
      (unbind g obj-id)
      g)))
 
@@ -219,7 +222,7 @@
   "Returns set of obj-ids that would collide with obj if it moved to position."
   [g obj position]
   (->> (object-new-filled-coords-at-position obj position)
-       (map #(get-object-id-at g %))
+       (map #(core/get-object-id-at g %))
        (filter identity)
        set))
 
@@ -245,7 +248,7 @@
   [obj]
   (if (== 1 (count (obj :coords)))
     (obj :position)
-    (let [coords (keys (filter filled-cell? (obj :coords)))
+    (let [coords (keys (filter core/filled-cell? (obj :coords)))
           x (average (map first coords))
           y (average (map second coords))]
       (translate (obj :position) [x y]))))
@@ -284,10 +287,10 @@
                            g blocking-ids)]
             (if-not g-cleared
               nil
-              (move-object g-cleared p obj-id new-pos))))))))
+              (core/move-object g-cleared p obj-id new-pos))))))))
 
 
-(create-handler
+(core/create-handler
  :push-unit
  [g obj-id target-id p]
  (let [target (get-in g [:objects target-id])]

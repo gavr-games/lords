@@ -1,7 +1,8 @@
 (ns engine.attack-test
   (:require [engine.attack :refer [get-attack-possibilities]]
             [engine.objects :refer [get-new-object]]
-            [clojure.test :refer :all]))
+            #?(:clj  [clojure.test :refer [deftest is]]
+               :cljs [cljs.test :refer-macros [deftest is]])))
 
 (deftest test-attack-modifiers
   (let [sp (get-new-object :spearman)

@@ -1,5 +1,5 @@
 (ns engine.checks
-  (:require [engine.core :refer :all]
+  (:require [engine.core :as core]
             [engine.transformations :refer [distance v-v]]
             [engine.object-utils :refer [unit?]]
             [engine.utils :refer [abs]]))
@@ -54,9 +54,9 @@
   (if (or
        (and (o1 :chess-knight)
             (not-any? #(apply chess-knight-reachable %)
-                      (all-filled-coord-pairs o1 o2)))
+                      (core/all-filled-coord-pairs o1 o2)))
        (and (not (o1 :chess-knight))
-            (not= 1 (obj-distance o1 o2))))
+            (not= 1 (core/obj-distance o1 o2))))
     :target-object-is-not-reachable))
 
 
@@ -68,7 +68,7 @@
 
 (defn can-move-to
   [g obj-id position]
-  (if (not (can-move-object? g obj-id position))
+  (if (not (core/can-move-object? g obj-id position))
     :place-occupied))
 
 
@@ -87,7 +87,7 @@
 (defn objects-near
   "Checks that o1 is near o2 (distance between them is 1)."
   [o1 o2]
-  (if (not= 1 (obj-distance o1 o2))
+  (if (not= 1 (core/obj-distance o1 o2))
     :target-object-is-not-reachable))
 
 (defn splash-attack-any-targets

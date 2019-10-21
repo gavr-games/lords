@@ -1,4 +1,4 @@
-(ns engine.server
+(ns server.core
   (:require [engine.newgame :refer [create-new-game]]
             [engine.actions :as action]
             [compojure.core :refer :all]
@@ -6,7 +6,8 @@
             [compojure.coercions :refer [as-int]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
-            [ring.util.response :refer [response]]))
+            [ring.util.response :refer [response]]
+            [ring.middleware.resource :refer [wrap-resource]]))
 
 (def games (ref {}))
 
@@ -73,7 +74,8 @@
   (route/not-found "Not Found"))
 
 (def app (->
-           app-routes
-           (wrap-json-body {:keywords? true})
-           (wrap-json-response)
-           (wrap-defaults api-defaults)))
+          app-routes
+          (wrap-resource "public")
+          (wrap-json-body {:keywords? true})
+          (wrap-json-response)
+          (wrap-defaults api-defaults)))
