@@ -3,7 +3,7 @@
             [clojure.set :as set]
             [engine.commands :as cmd]
             [engine.transformations :refer [transform-coords distance]]
-            [engine.utils :refer [deep-merge]]))
+            [engine.utils :refer [deep-merge insert-after]]))
 
 (defmulti
   handler
@@ -57,12 +57,25 @@
 
 (defn create-player
   [team gold]
-  {:gold gold :team team :status :active})
+  {:gold gold :team team :status :active :main-object nil})
 
 (defn add-player
-  "Adds a player with a given number p and player data."
-  [g p player-data]
-  (assoc-in g [:players p] player-data))
+  "Adds a player with given player data.
+  Player number is autoincremented and will be (game :last-added-player).
+  In the turn order the new player will be placed after (game :active-player)."
+  [g player-data]
+  (let [p (inc (g :last-added-player))]
+    (-> g
+        (assoc-in [:players p] player-data)
+        (assoc :last-added-player p)
+        (update :turn-order insert-after p (g :active-player)))))
+
+(defn set-last-player-main-object
+  "Sets the main object for the last added player.
+  If no obj-id passed, takes the last added object."
+  ([g] (set-last-player-main-object g (g :last-added-object-id)))
+  ([g obj-id]
+   (assoc-in g [:players (g :last-added-player) :main-object] obj-id)))
 
 (defn set-object-placement
   "Updates object flip, rotation (if given and not nil) and position."
@@ -159,11 +172,11 @@
   ([g p obj position flip rotation]
    (let [owned-obj (if p (assoc obj :player p) obj)
          new-obj (set-object-placement owned-obj position flip rotation)
-         new-obj-id (g :next-object-id)]
+         new-obj-id (inc (g :last-added-object-id))]
      (-> g
          (assert-can-place-object new-obj)
          (assoc-in [:objects new-obj-id] new-obj)
-         (update :next-object-id inc)
+         (assoc :last-added-object-id new-obj-id)
          (place-object-on-board new-obj-id)
          (cmd/add-command (cmd/add-obj new-obj-id new-obj))))))
 

@@ -16,7 +16,7 @@
         g-attacked (act g-moved 0 :attack {:obj-id sp2-id :target-id sp1-id})]
     (is (= [1 1] (get-in g-moved [:objects sp1-id :position])))
     (is (nil? (get-in g-attacked [:objects sp1-id])))
-    (is (= 2 (g-attacked :active-player)))))
+    (is (= 1 (g-attacked :active-player)))))
 
 (deftest test-invalid-actions
   (let [g (create-new-game)]
@@ -35,7 +35,7 @@
     (is (check go 0 :move {:obj-id 2 :new-position [1 1]}))
     (is (= :over (go :status)))
     (is (= :lost (get-in go [:players 0 :status])))
-    (is (= :won (get-in go [:players 2 :status])))))
+    (is (= :won (get-in go [:players 1 :status])))))
 
 (deftest test-move-to-empty-cell
   (let [g (create-new-game)

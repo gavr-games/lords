@@ -2,11 +2,13 @@
 
 (defn insert-after
   "Returns a vector where a new element is inserted after after-element in vector v.
-  If there is no after-element, the new element is inserted at the beginning."
+  If there is no after-element, the new element is inserted at the end."
   [v new-element after-element]
-  (let [i (.indexOf v after-element)
-        [before after] (split-at (inc i) v)]
-    (vec (concat before [new-element] after))))
+  (if (seq v)
+    (let [i (mod (.indexOf v after-element) (count v))
+          [before after] (split-at (inc i) v)]
+      (vec (concat before [new-element] after)))
+    [new-element]))
 
 ;; From https://gist.github.com/danielpcox/c70a8aa2c36766200a95#gistcomment-2759497
 (defn deep-merge [a b]

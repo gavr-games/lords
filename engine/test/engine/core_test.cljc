@@ -2,13 +2,14 @@
   (:require [engine.core :as core]
             [engine.objects :refer [get-new-object add-new-object]]
             [engine.newgame :refer [create-new-game]]
-            [clojure.test :refer [deftest is are]]))
+            #?(:clj  [clojure.test :refer [deftest is are]]
+               :cljs [cljs.test :refer-macros [deftest is are]])))
 
 (deftest test-get-next-player
   (let [g (create-new-game)]
     (is (= 0 (g :active-player)))
-    (is (= 2 (core/get-next-player g 0)))
-    (is (= 0 (core/get-next-player g 2)))))
+    (is (= 1 (core/get-next-player g 0)))
+    (is (= 0 (core/get-next-player g 1)))))
 
 (deftest test-initial-board
   (let [g (create-new-game)]
