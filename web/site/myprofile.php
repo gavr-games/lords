@@ -170,8 +170,6 @@
 		  </form>
 		</div>
 		<span class="topbutton back"><a href="#" id="back_b" onclick="if (!parent.window_loading) {doLoading($('back_b'), '<?= L::loading_text ?>');parent.load_window('<?php echo $back_url; ?>','right');} return false;"><?= L::back ?></a></span>
-		<span class="topbutton en"><a href="/site/lang.php?lang=en">EN</a></span>
-		<span class="topbutton ru"><a href="/site/lang.php?lang=ru">RU</a></span>
 		<span class="topbutton exitbtn"><a href="#" id="logout_b" onclick="doLogout($('logout_b'), '<?= L::loading_text ?>');return false;"><?= L::do_exit ?></a></span>
 	</div>
 </body>

@@ -26,8 +26,6 @@
 </head>
 <body class="rules" onload="current_window.fade(1);current_window.contentWindow.document.body.style.overflow = 'visible';">
 	<a href="<?= $SITE_conf['feedback_url'] ?>" id="feedback" target="_blank"><?= L::feedback ?></a>
-	<span class="topbutton en"><a href="/site/lang.php?lang=en">EN</a></span>
-	<span class="topbutton ru"><a href="/site/lang.php?lang=ru">RU</a></span>
 	<div id="wind">
 		<div id="panor"> 
 				<div class="rel" id="rel">

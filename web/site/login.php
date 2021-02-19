@@ -52,8 +52,6 @@
 		        <a class="link reg" href="#" onclick="if (!parent.window_loading) parent.load_window('site/register.php','right'); return false;"><?= L::login_want_signup ?></a>
 			</div>
 			<span class="topbutton about"><a id="about_b" href="/site/rules.php" target="_blank"><?= L::rules_rules ?></a></span>
-			<span class="topbutton en"><a href="/site/lang.php?lang=en">EN</a></span>
-			<span class="topbutton ru"><a href="/site/lang.php?lang=ru">RU</a></span>
 		</div>
 		<script>
 			var myTips = new Tips('.help');
