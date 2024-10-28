@@ -1,15 +1,3 @@
-lords.world:443 {
-  proxy /socket ws:4000 {
-    websocket
-  }
-  proxy / web:80 {
-    transparent
-  }
-	log stdout
-	errors stdout
-  tls lords.web.game@gmail.com
-}
-
 gavr.games:443 {
   proxy /socket ws:4000 {
     websocket
