@@ -10,7 +10,7 @@
 		    die();
 	}
 	$dataBase = new cDataBase($mysqli);
-	$dataBase->query("SET NAMES 'UTF8'");
+	$dataBase->query("SET NAMES utf8");
 	
   $mode_id = 9;
 

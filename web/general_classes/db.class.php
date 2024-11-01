@@ -21,7 +21,7 @@ class db {
 	function connect()	{
 		MYSQL_CONNECT($this->hostname,$this->username,$this->password) OR DIE("Не могу создать соединение с базой данных.");
 		@mysql_select_db("$this->dbName") or die("Не могу выбрать базу данных.");
-		mysql_query("SET NAMES 'UTF8'"); 
+		mysql_query("SET NAMES utf8"); 
 		$this->mysqli = new mysqli($this->hostname, $this->username, $this->password, "$this->dbName");
 		if (mysqli_connect_errno()) {
 		    printf("Connect failed: %s\n", mysqli_connect_error());

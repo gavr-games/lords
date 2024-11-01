@@ -99,6 +99,9 @@ class BaseProtocol {
 								$results['header_result'] = $row;
 							} else if ($i==1) {
 								if ($row['name']!=''){
+                  if ($row['value'] == null) {
+                    $row['value'] = '';
+                  }
 									$row['value'] = htmlspecialchars($row['value']);
 									$results['data_result'][$row['name']] = $row['value'];
 								}

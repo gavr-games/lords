@@ -12,7 +12,7 @@ if (mysqli_connect_errno()) {
 }
 
 $dataBase = new cDataBase($mysqli);
-$dataBase->query("SET NAMES 'UTF8'");
+$dataBase->query("SET NAMES utf8");
 
 $client = new SoapClient($SITE_conf['ai_service']);
 
