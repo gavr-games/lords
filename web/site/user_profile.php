@@ -12,7 +12,7 @@
   }
 
   $dataBase = new cDataBase($mysqli);
-  $dataBase->query("SET NAMES 'UTF8'");
+  $dataBase->query("SET NAMES utf8");
   $_GET['user_id'] = preg_replace("/[^0-9]/", "", $_GET['user_id']);
   $load_frame = 'profile.php?user_id='.$_GET['user_id'];
 

@@ -8,7 +8,7 @@ if (mysqli_connect_errno()) {
     die();
 }
 $dataBase = new cDataBase($mysqli);
-$dataBase->query("SET NAMES 'UTF8'");
+$dataBase->query("SET NAMES utf8");
 
 $inputJSON = file_get_contents('php://input');
 $input = json_decode($inputJSON, TRUE);

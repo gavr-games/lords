@@ -65,7 +65,7 @@ services:
       - lords-network
 
   ai:
-    image: "java:8"
+    image: "openjdk:8"
     ports:
       - "5600:5600"
     volumes:
