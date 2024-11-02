@@ -1,7 +1,7 @@
 <?php
 class LangUtils {
     public static function replaceTemplateMarkers($template) {
-        $lang_consts = (new ReflectionClass(L))->getConstants();
+        $lang_consts = (new ReflectionClass(L::class))->getConstants();
 		$search = [];
 		$replace = [];
 		foreach($lang_consts as $key => $value) {

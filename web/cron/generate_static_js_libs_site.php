@@ -17,7 +17,7 @@
 	}
 	$message = '';
 	$dataBase = new cDataBase($mysqli);
-	$dataBase->query("SET NAMES 'UTF8'");
+	$dataBase->query("SET NAMES utf8");
 
 	$tables = Array(
 		Array('name'=>'dic_game_types'),

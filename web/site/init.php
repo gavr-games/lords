@@ -28,7 +28,7 @@ if (mysqli_connect_errno()) {
 }
 
 $dataBase = new cDataBase($mysqli);
-$dataBase->query("SET NAMES 'UTF8'");
+$dataBase->query("SET NAMES utf8");
 $load_frame = '';
 
 if (isset($clear_user) && $clear_user==1) $_SESSION['user_id']='';
